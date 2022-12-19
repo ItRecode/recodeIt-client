@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RecoilRoot } from 'recoil'
 
 import React from 'react'
-import Router from './Routes/Routes'
+import Router from './routes/routes'
 
 const queryClient = new QueryClient()
 
