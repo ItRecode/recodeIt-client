@@ -1,7 +1,48 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  theme: {
-    extend: {},
-  },
   plugins: [],
+  theme: {
+    extend: {
+      colors: {
+        'p-1': '#6026DA',
+        'p-2': '#703CDE',
+        'p-3': '#8052E1',
+        'p-4': '#9067E5',
+        'p-5': '#9F7DE9',
+        'p-6': '#AF93EC',
+        'p-7': '#BFA8F0',
+        'p-8': '#CFBEF4',
+        'p-9': '#DFD4F8',
+        'p-10': '#EFE9FB',
+
+        's-1': '#F33D63',
+        's-2': '#F45073',
+        's-3': '#F56482',
+        's-4': '#F77792',
+        's-5': '#F88BA1',
+        's-6': '#F99EB1',
+        's-7': '#FAB1C1',
+        's-8': '#FCC5D0',
+        's-9': '#FDD8E0',
+        's-10': '#FEECEF',
+
+        'g-1': '#FFFFFF',
+        'g-2': '#F1F1F1',
+        'g-3': '#E0E0E0',
+        'g-4': '#CECECE',
+        'g-5': '#B8B8B8',
+        'g-6': '#A0A0A0',
+        'g-7': '#7D7D7D',
+        'g-8': '#656565',
+        'g-9': '#3E3E3E',
+        'g-10': '#121212',
+
+        'i-purple': '#9067E5',
+        'i-yellow': '#F3D06C',
+        'i-pink': '#D78A86',
+        'i-blue': '#6F99F2',
+        'i-green': '#78BCB7',
+      },
+    },
+  },
 }
