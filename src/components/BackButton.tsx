@@ -8,7 +8,7 @@ function BackButton() {
     navigate(-1)
   }
 
-  return <Back onClick={handleLocateBack}></Back>
+  return <Back onClick={handleLocateBack} />
 }
 
 export default BackButton
