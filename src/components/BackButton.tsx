@@ -4,15 +4,11 @@ import { useNavigate } from 'react-router-dom'
 
 function BackButton() {
   const navigate = useNavigate()
-  const locateBack = () => {
+  const handleLocateBack = () => {
     navigate(-1)
   }
 
-  return (
-    <div onClick={locateBack}>
-      <Back></Back>
-    </div>
-  )
+  return <Back onClick={handleLocateBack}></Back>
 }
 
 export default BackButton
