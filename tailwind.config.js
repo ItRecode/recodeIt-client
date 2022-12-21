@@ -42,9 +42,15 @@ module.exports = {
         'icon-pink': '#D78A86',
         'icon-blue': '#6F99F2',
         'icon-green': '#78BCB7',
+
+        danger: '#DA2626',
+        inactive: '#D0D0D0',
       },
       fontFamily: {
         sans: ['San Francisco'],
+      },
+      spacing: {
+        85: '335px',
       },
     },
   },
