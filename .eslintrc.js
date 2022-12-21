@@ -21,7 +21,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    indent: ['error', 2],
+    indent: 'off',
     '@typescript-eslint/no-var-requires': 0,
     'react/self-closing-comp': 'warn', // 셀프 클로징 태그 가능하면 적용
   },
