@@ -52,6 +52,11 @@ module.exports = {
       spacing: {
         85: '335px',
       },
+      screens: {
+        web: { min: '450px' },
+        basic: { min: '375px', max: '450px' },
+        small: { max: '375px' },
+      },
     },
   },
 }
