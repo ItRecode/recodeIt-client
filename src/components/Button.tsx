@@ -1,6 +1,7 @@
 import React from 'react'
 
-interface ButtonPropsType {
+interface ButtonPropsType
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   property?: 'solid' | 'primary' | 'default' | 'danger'
   small?: boolean
   active?: boolean
@@ -12,6 +13,7 @@ export default function Button({
   small = false,
   active = true,
   children,
+  ...props
 }: ButtonPropsType) {
   const setClassNameByProperty = (property: string) => {
     switch (property) {
@@ -42,6 +44,7 @@ export default function Button({
       ${!small && ' w-85'} 
       ${active ? 'cursor-pointer' : 'cursor-not-allowed'} 
       ${setClassNameByProperty(property)}`}
+      {...props}
     >
       {children}
     </button>
