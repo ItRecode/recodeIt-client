@@ -4,17 +4,20 @@ import { RecoilRoot } from 'recoil'
 
 import React from 'react'
 import Router from './routes/routes'
+import Layout from '@components/Layout'
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </RecoilRoot>
+    <Layout>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <Router />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </RecoilRoot>
+    </Layout>
   )
 }
 
