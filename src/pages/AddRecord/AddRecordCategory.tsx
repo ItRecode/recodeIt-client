@@ -1,16 +1,14 @@
 import React from 'react'
-import { RecordType } from './AddRecord'
 import Celebrate from '@assets/celebrate.svg'
 import Happy from '@assets/happy.svg'
 import Cake from '@assets/cake.svg'
 import Love from '@assets/love.svg'
 
-type userProps = {
-  currentRecordType: RecordType
-}
-
-function AddRecordCategory({ currentRecordType }: userProps) {
-  console.log(currentRecordType)
+function AddRecordCategory({
+  currentRecordType,
+}: {
+  currentRecordType: string
+}) {
   const categoryData: any = {
     celebration: [
       { title: '축하해주세요', iconSrc: Celebrate },
@@ -22,11 +20,11 @@ function AddRecordCategory({ currentRecordType }: userProps) {
   }
 
   return (
-    <div className="flex mb-10">
+    <div className="mb-10 flex">
       {categoryData[currentRecordType].map(
         (category: { title: string; iconSrc: string }, index: number) => {
           return (
-            <button className="p-4 bg-primary-2 mr-2" key={index}>
+            <button className="mr-2 bg-primary-2 p-4" key={index}>
               <img src={category.iconSrc} alt="" />
               {category.title}
             </button>

@@ -5,8 +5,8 @@ import AddRecordInput from './AddRecordInput'
 import AddRecordTextArea from './AddRecordTextArea'
 import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
+import AddRecordTitle from './AddRecordTitle'
 
-export type RecordType = string
 export type CheckAllType = {
   input: boolean
   textArea: boolean
@@ -15,12 +15,10 @@ export type CheckAllType = {
 export default function AddRecord() {
   const [recordType, setRecordType] = useState('celebration')
   const [currentCategory, setCurrentCategory] = useState('celebrate')
-  const [checkAllFilled, setCheckAllFilled] = useState({
+  const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,
   })
-
-  console.log(checkAllFilled)
 
   const typeConfig = {
     active: 'text-primary-2 border-b-2 border-current pb-4',
@@ -37,15 +35,12 @@ export default function AddRecord() {
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    console.log(e)
   }
 
-  const titleStyle = 'text-lg font-semibold text-gray-900 mb-6'
-
   return (
-    <div className="pt-16 mb-6">
+    <div className="mb-6 pt-16">
       <BackButton />
-      <div className="mt-6 px-10 flex justify-between text-lg font-semibold  border-b border-gray-300">
+      <div className="mt-6 flex justify-between border-b border-gray-300 px-10  text-lg font-semibold">
         <div
           className={`${
             recordType === 'celebration'
@@ -69,24 +64,25 @@ export default function AddRecord() {
       </div>
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
-        <div className={titleStyle}>레코드 제목</div>
+        {/* <div className={titleStyle}>레코드 제목</div> */}
+        <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
           currentRecordType={recordType}
         />
-        <div className={titleStyle}>레코드 설명</div>
+        <AddRecordTitle title={'레코드 설명'} />
         <AddRecordTextArea
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
           currentRecordType={recordType}
         />
-        <div className={titleStyle}>레코드 컬러</div>
+        <AddRecordTitle title={'레코드 컬러'} />
         <AddRecordColor />
-        <div className={titleStyle}>레코드 아이콘</div>
-        <div className={titleStyle}>레코드 이미지</div>
+        <AddRecordTitle title={'레코드 아이콘'} />
+        <AddRecordTitle title={'레코드 이미지'} />
         <AddRecordFile />
-        <div className="border-t py-4 px-5 border-gray-200">
+        <div className="border-t border-gray-200 py-4 px-5">
           <button className=" text-primary-2" type="submit">
             레코드 추가하기
           </button>

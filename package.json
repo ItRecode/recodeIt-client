@@ -49,6 +49,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-tailwindcss": "^3.7.1",
     "husky": "^8.0.2",
     "jira-prepare-commit-msg": "^1.7.1",
     "postcss": "^8.4.20",

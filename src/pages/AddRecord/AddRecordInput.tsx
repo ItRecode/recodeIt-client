@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { INPUT_DETAILS } from '../../assets/constant/constant'
-import { CheckAllType, RecordType } from './AddRecord'
+import { CheckAllType } from './AddRecord'
 
 type userProps = {
-  currentRecordType: RecordType
-  setCheckAllFilled: (value: any) => void
+  currentRecordType: string
+  setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
 }
 
@@ -13,15 +13,14 @@ function AddRecordInput({
   setCheckAllFilled,
   checkAllFilled,
 }: userProps) {
-  const [inputLength, setInputLength] = useState('')
+  const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
-  console.log(inputFocus)
 
   const handleChange = (e: any) => {
     if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) return
     if (e.target.value.length > 0)
       setCheckAllFilled({ ...checkAllFilled, input: true })
-    setInputLength(e.target.value)
+    setInputValue(e.target.value)
   }
 
   // const
@@ -35,13 +34,13 @@ function AddRecordInput({
       <input
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
-        className=" pb-2 text-gray-900 outline-none text-xs placeholder-gray-400"
+        className=" pb-2 text-xs text-gray-900 outline-none placeholder:text-gray-400"
         placeholder="ex) 5월 5일 내생일"
         onChange={(e) => handleChange(e)}
         type="text"
-        value={inputLength}
+        value={inputValue}
       />
-      <span className="pb-2 text-xs">{`${inputLength.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
+      <span className="pb-2 text-xs">{`${inputValue.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
     </div>
   )
 }

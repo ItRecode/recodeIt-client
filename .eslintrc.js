@@ -11,6 +11,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -19,7 +20,7 @@ module.exports = {
     },
     ecmaVersion: 'latest',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'tailwindcss'],
   rules: {
     indent: ['error', 2],
     '@typescript-eslint/no-var-requires': 0,
