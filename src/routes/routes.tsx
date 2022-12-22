@@ -8,6 +8,8 @@ import Rank from '@pages/Rank/Rank'
 import MyRecord from '@pages/MyRecord/MyRecord'
 import Setting from '@pages/Setting/Setting'
 import NavBar from '@components/Navbar'
+import Login from '@pages/Login/Login'
+
 
 export default function Router() {
   return (
@@ -19,6 +21,7 @@ export default function Router() {
           <Route path="myrecord" element={<MyRecord />} />
           <Route path="setting" element={<Setting />} />
         </Route>
+        <Route path="/login" element={<Login />} />
         <Route path="/record/add" element={<AddRecord />} />
         <Route path="/record/:recordId" element={<DetailRecord />} />
         <Route path="*" element={<NotFound />} />
