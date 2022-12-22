@@ -22,7 +22,7 @@ function AddRecordColor() {
     <div className="mb-10 flex justify-between">
       {colors.map((color, index) => {
         return (
-          <div className="relative" key={index}>
+          <div className="relative" key={color.id}>
             <div
               className={`h-[46px] w-[46px] rounded-full ${color.src}`}
               onClick={() => handleChooseCurrentColor(index)}
