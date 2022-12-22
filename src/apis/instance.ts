@@ -19,7 +19,6 @@ authInstance.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       redirect('/login')
-      return
     }
 
     console.error(error)
