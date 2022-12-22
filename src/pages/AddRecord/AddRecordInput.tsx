@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
-import { CheckAllType } from '@pages/AddRecord/AddRecord'
+import { CheckAllType } from './AddRecord'
 
 type userProps = {
   currentRecordType: string
@@ -16,11 +16,12 @@ function AddRecordInput({
   const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
 
-  const handleChange = (e: any) => {
-    if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValueLength = e.target.value.length
+    if (inputValueLength > INPUT_DETAILS.MAX_INPUT_TYPING) {
       return
     }
-    if (e.target.value.length > 0) {
+    if (inputValueLength > 0) {
       setCheckAllFilled({ ...checkAllFilled, input: true })
     }
     setInputValue(e.target.value)

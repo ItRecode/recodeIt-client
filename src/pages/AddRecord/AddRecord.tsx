@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import BackButton from '@components/BackButton'
-import AddRecordCategory from '@pages/AddRecord/AddRecordCategory'
-import AddRecordInput from '@pages/AddRecord/AddRecordInput'
-import AddRecordTextArea from '@pages/AddRecord/AddRecordTextArea'
-import AddRecordColor from '@pages/AddRecord/AddRecordColor'
-import AddRecordFile from '@pages/AddRecord/AddRecordFile'
-import AddRecordTitle from '@pages/AddRecord/AddRecordTitle'
+import AddRecordCategory from './AddRecordCategory'
+import AddRecordInput from './AddRecordInput'
+import AddRecordTextArea from './AddRecordTextArea'
+import AddRecordColor from './AddRecordColor'
+import AddRecordFile from './AddRecordFile'
+import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 
 export type CheckAllType = {

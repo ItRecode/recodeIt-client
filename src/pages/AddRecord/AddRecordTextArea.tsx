@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
 import { CheckAllType } from './AddRecord'
 
 type userProps = {
   currentRecordType: string
-  setCheckAllFilled: (value: any) => void
+  setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
 }
 
@@ -15,7 +15,9 @@ function AddRecordTextArea({
 }: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
 
-  const handleChangeTextArea = (e: any): void => {
+  const handleChangeTextArea = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
     const inputValueLength = e.target.value.length
     if (inputValueLength > INPUT_DETAILS.MAX_TEXTAREA_TYPING) {
       return

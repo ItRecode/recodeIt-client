@@ -11,9 +11,9 @@ function AddRecordColor() {
   ])
 
   const handleChooseCurrentColor = (index: number): void => {
-    const changeCurrent = colors.map((color, currentIndex) => ({
+    const changeCurrent = colors.map((color) => ({
       ...color,
-      choosed: currentIndex === index,
+      choosed: color.id === index,
     }))
     setColors(changeCurrent)
   }
