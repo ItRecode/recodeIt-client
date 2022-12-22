@@ -16,10 +16,11 @@ function AddRecordTextArea({
   const [textAreaValue, setTextAreaValue] = useState('')
 
   const handleChangeTextArea = (e: any): void => {
-    if (e.target.value.length > INPUT_DETAILS.MAX_TEXTAREA_TYPING) {
+    const inputValueLength = e.target.value.length
+    if (inputValueLength > INPUT_DETAILS.MAX_TEXTAREA_TYPING) {
       return
     }
-    if (e.target.value.length > 0) {
+    if (inputValueLength > 0) {
       setCheckAllFilled({ ...checkAllFilled, textArea: true })
     }
     setTextAreaValue(e.target.value)

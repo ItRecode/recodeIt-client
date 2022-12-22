@@ -6,6 +6,7 @@ import AddRecordTextArea from '@pages/AddRecord/AddRecordTextArea'
 import AddRecordColor from '@pages/AddRecord/AddRecordColor'
 import AddRecordFile from '@pages/AddRecord/AddRecordFile'
 import AddRecordTitle from '@pages/AddRecord/AddRecordTitle'
+import { TEXT_DETAILS } from '../../assets/constant/constant'
 
 export type CheckAllType = {
   input: boolean
@@ -13,10 +14,10 @@ export type CheckAllType = {
 }
 
 export default function AddRecord() {
-  const CELEBRATION = 'celebration'
+  const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
   const CELEBRATE = 'celebrate'
 
-  const [recordType, setRecordType] = useState(CELEBRATION)
+  const [recordType, setRecordType] = useState<string>(CELEBRATION)
   const [currentCategory, setCurrentCategory] = useState(CELEBRATE)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
@@ -29,11 +30,11 @@ export default function AddRecord() {
   }
 
   const handleRecordTypeToCelebration = (): void => {
-    setRecordType('celebration')
+    setRecordType(CELEBRATION)
   }
 
   const handleRecordTypeToConsolation = (): void => {
-    setRecordType('consolation')
+    setRecordType(CONSOLATION)
   }
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -56,9 +57,7 @@ export default function AddRecord() {
         </div>
         <div
           className={`${
-            recordType === 'consolation'
-              ? typeConfig.active
-              : typeConfig.inactive
+            recordType === CONSOLATION ? typeConfig.active : typeConfig.inactive
           }`}
           onClick={handleRecordTypeToConsolation}
         >
@@ -67,7 +66,6 @@ export default function AddRecord() {
       </div>
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
-        {/* <div className={titleStyle}>레코드 제목</div> */}
         <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
           checkAllFilled={checkAllFilled}

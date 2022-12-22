@@ -4,6 +4,7 @@ import Happy from '@assets/happy.svg'
 import Cake from '@assets/cake.svg'
 import Love from '@assets/love.svg'
 import Consolate from '@assets/consolate.svg'
+import { TEXT_DETAILS } from '../../assets/constant/constant'
 
 function AddRecordCategory({
   currentRecordType,
@@ -11,13 +12,13 @@ function AddRecordCategory({
   currentRecordType: string
 }) {
   const categoryData: any = {
-    celebration: [
+    [TEXT_DETAILS.CELEBRATION]: [
       { title: '축하해주세요', iconSrc: Celebrate },
       { title: '행복해요', iconSrc: Happy },
       { title: '기념일이에요', iconSrc: Cake },
       { title: '연애중이에요', iconSrc: Love },
     ],
-    consolation: [{ title: '위로해주세요', iconSrc: Consolate }],
+    [TEXT_DETAILS.CONSOLATION]: [{ title: '위로해주세요', iconSrc: Consolate }],
   }
 
   return (

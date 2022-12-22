@@ -17,13 +17,14 @@ function AddRecordInput({
   const [inputFocus, setInputFocus] = useState(false)
 
   const handleChange = (e: any) => {
-    if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) return
-    if (e.target.value.length > 0)
+    if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
+      return
+    }
+    if (e.target.value.length > 0) {
       setCheckAllFilled({ ...checkAllFilled, input: true })
+    }
     setInputValue(e.target.value)
   }
-
-  // const
 
   return (
     <div

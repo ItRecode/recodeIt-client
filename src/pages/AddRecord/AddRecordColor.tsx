@@ -10,11 +10,11 @@ function AddRecordColor() {
     { src: 'bg-icon-green', choosed: false, id: 4 },
   ])
 
-  const handleCurrentColorChoosing = (index: number): void => {
-    const changeCurrent = colors.map((color, currentIndex) => {
-      if (currentIndex === index) return { ...color, choosed: true }
-      return { ...color, choosed: false }
-    })
+  const handleChooseCurrentColor = (index: number): void => {
+    const changeCurrent = colors.map((color, currentIndex) => ({
+      ...color,
+      choosed: currentIndex === index,
+    }))
     setColors(changeCurrent)
   }
 
@@ -25,7 +25,7 @@ function AddRecordColor() {
           <div className="relative" key={index}>
             <div
               className={`h-[46px] w-[46px] rounded-full ${color.src}`}
-              onClick={() => handleCurrentColorChoosing(index)}
+              onClick={() => handleChooseCurrentColor(index)}
             />
             {color.choosed && (
               <Check
