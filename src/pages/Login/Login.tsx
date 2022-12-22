@@ -6,10 +6,10 @@ import { useLocation } from 'react-router-dom'
 
 export default function Login() {
   const location = useLocation()
-  const code = location.search.split('=')[1]
+  const kakaoAccessCode = location.search.split('=')[1]
 
   useEffect(() => {
-    if (code) {
+    if (kakaoAccessCode) {
       //TODO: 백엔드와 API 통신
     }
   }, [])
