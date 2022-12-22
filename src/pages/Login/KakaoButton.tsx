@@ -6,7 +6,7 @@ const KAKAO_AUTH_URL = `${REACT_APP_KAKAO_OAUTH_URL}/oauth/authorize?client_id=$
 
 export default function KakaoButton() {
   const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL
+    window.location.replace(KAKAO_AUTH_URL)
   }
 
   return (
