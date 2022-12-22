@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { INPUT_DETAILS } from '../../assets/constant/constant'
-import { CheckAllType } from './AddRecord'
+import { INPUT_DETAILS } from '@assets/constant/constant'
+import { CheckAllType } from '@pages/AddRecord/AddRecord'
 
 type userProps = {
   currentRecordType: string

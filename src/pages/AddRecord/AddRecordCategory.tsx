@@ -4,7 +4,7 @@ import Happy from '@assets/happy.svg'
 import Cake from '@assets/cake.svg'
 import Love from '@assets/love.svg'
 import Consolate from '@assets/consolate.svg'
-import { TEXT_DETAILS } from '../../assets/constant/constant'
+import { TEXT_DETAILS } from '@assets/constant/constant'
 
 function AddRecordCategory({
   currentRecordType,

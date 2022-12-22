@@ -6,7 +6,7 @@ import AddRecordTextArea from '@pages/AddRecord/AddRecordTextArea'
 import AddRecordColor from '@pages/AddRecord/AddRecordColor'
 import AddRecordFile from '@pages/AddRecord/AddRecordFile'
 import AddRecordTitle from '@pages/AddRecord/AddRecordTitle'
-import { TEXT_DETAILS } from '../../assets/constant/constant'
+import { TEXT_DETAILS } from '@assets/constant/constant'
 
 export type CheckAllType = {
   input: boolean
