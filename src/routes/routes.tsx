@@ -10,7 +10,6 @@ import Setting from '@pages/Setting/Setting'
 import NavBar from '@components/Navbar'
 import Login from '@pages/Login/Login'
 
-
 export default function Router() {
   return (
     <BrowserRouter>
