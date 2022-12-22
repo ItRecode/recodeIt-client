@@ -3,6 +3,7 @@ import Celebrate from '@assets/celebrate.svg'
 import Happy from '@assets/happy.svg'
 import Cake from '@assets/cake.svg'
 import Love from '@assets/love.svg'
+import Consolate from '@assets/consolate.svg'
 
 function AddRecordCategory({
   currentRecordType,
@@ -16,7 +17,7 @@ function AddRecordCategory({
       { title: '기념일이에요', iconSrc: Cake },
       { title: '연애중이에요', iconSrc: Love },
     ],
-    consolation: [{ title: '위로해주세요', iconSrc: '@assets/consolate' }],
+    consolation: [{ title: '위로해주세요', iconSrc: Consolate }],
   }
 
   return (
@@ -24,8 +25,8 @@ function AddRecordCategory({
       {categoryData[currentRecordType].map(
         (category: { title: string; iconSrc: string }, index: number) => {
           return (
-            <button className="mr-2 bg-primary-2 p-4" key={index}>
-              <img src={category.iconSrc} alt="" />
+            <button className="mr-2 bg-primary-2 p-4" key={`category-${index}`}>
+              <img src={category.iconSrc} alt={`category-${index}-icon`} />
               {category.title}
             </button>
           )

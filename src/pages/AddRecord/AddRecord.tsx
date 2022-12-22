@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import BackButton from '@components/BackButton'
-import AddRecordCategory from './AddRecordCategory'
-import AddRecordInput from './AddRecordInput'
-import AddRecordTextArea from './AddRecordTextArea'
-import AddRecordColor from './AddRecordColor'
-import AddRecordFile from './AddRecordFile'
-import AddRecordTitle from './AddRecordTitle'
+import AddRecordCategory from '@pages/AddRecord/AddRecordCategory'
+import AddRecordInput from '@pages/AddRecord/AddRecordInput'
+import AddRecordTextArea from '@pages/AddRecord/AddRecordTextArea'
+import AddRecordColor from '@pages/AddRecord/AddRecordColor'
+import AddRecordFile from '@pages/AddRecord/AddRecordFile'
+import AddRecordTitle from '@pages/AddRecord/AddRecordTitle'
 
 export type CheckAllType = {
   input: boolean
@@ -13,8 +13,11 @@ export type CheckAllType = {
 }
 
 export default function AddRecord() {
-  const [recordType, setRecordType] = useState('celebration')
-  const [currentCategory, setCurrentCategory] = useState('celebrate')
+  const CELEBRATION = 'celebration'
+  const CELEBRATE = 'celebrate'
+
+  const [recordType, setRecordType] = useState(CELEBRATION)
+  const [currentCategory, setCurrentCategory] = useState(CELEBRATE)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,
