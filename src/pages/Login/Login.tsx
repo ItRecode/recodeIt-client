@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ReactComponent as Firecracker } from '@assets/firecracker.svg'
-
 import GoogleButton from './GoogleButton'
 import KakaoButton from './KakaoButton'
+import { useLocation } from 'react-router-dom'
 
 export default function Login() {
+  const location = useLocation()
+  const code = location.search.split('=')[1]
+
+  useEffect(() => {
+    if (code) {
+      //TODO: 백엔드와 API 통신
+    }
+  }, [])
+
   return (
     <div className="flex h-full flex-col items-center bg-primary-2">
       <div className="flex h-full flex-col items-center justify-center">
