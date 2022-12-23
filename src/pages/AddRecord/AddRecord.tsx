@@ -7,6 +7,7 @@ import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
+import MainCategoryTap from '../../components/MainCategoryTap'
 
 export type CheckAllType = {
   input: boolean
@@ -24,16 +25,11 @@ export default function AddRecord() {
     textArea: false,
   })
 
-  const typeConfig = {
-    active: 'text-primary-2 border-b-2 border-current pb-4',
-    inactive: 'text-gray-600',
-  }
-
-  const handleRecordTypeToCelebration = (): void => {
+  const handleRecordCelebration = (): void => {
     setRecordType(CELEBRATION)
   }
 
-  const handleRecordTypeToConsolation = (): void => {
+  const handleRecordConsolation = (): void => {
     setRecordType(CONSOLATION)
   }
 
@@ -44,26 +40,10 @@ export default function AddRecord() {
   return (
     <div className="mb-6 pt-16">
       <BackButton />
-      <div className="mt-6 flex justify-between border-b border-gray-300 px-10  text-lg font-semibold">
-        <div
-          className={`${
-            recordType === 'celebration'
-              ? typeConfig.active
-              : typeConfig.inactive
-          }`}
-          onClick={handleRecordTypeToCelebration}
-        >
-          축하 레코드
-        </div>
-        <div
-          className={`${
-            recordType === CONSOLATION ? typeConfig.active : typeConfig.inactive
-          }`}
-          onClick={handleRecordTypeToConsolation}
-        >
-          위로 레코드
-        </div>
-      </div>
+      <MainCategoryTap
+        handleRecordCelebration={handleRecordCelebration}
+        handleRecordConsolation={handleRecordConsolation}
+      />
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 제목'} />
