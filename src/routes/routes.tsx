@@ -11,9 +11,10 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/record/add" element={<AddRecord />} />
         <Route path="/record/:recordId" element={<DetailRecord />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
