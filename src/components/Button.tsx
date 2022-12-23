@@ -28,7 +28,7 @@ export default function Button({
       case 'default':
         return active
           ? 'border border-solid border-primary-3 bg-grey-1 text-primary-3 hover:border-primary-1 hover:text-primary-1'
-          : 'border border-solid border-inactive text-inactive'
+          : 'border border-solid border-inactive text-inactive bg-grey-1'
       case 'danger':
         return active
           ? 'border border-solid border-grey-6 bg-grey-1 text-grey-6 hover:border-danger hover:text-danger'
