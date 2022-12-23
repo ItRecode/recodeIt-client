@@ -1,8 +1,8 @@
 import React from 'react'
 import { ReactComponent as KakaoSymbol } from '@assets/kakao.svg'
 
-const { REACT_APP_KAKAO_OAUTH_URL, REACT_APP_REST_API_KEY } = process.env
-const KAKAO_AUTH_URL = `${REACT_APP_KAKAO_OAUTH_URL}/oauth/authorize?client_id=${REACT_APP_REST_API_KEY}&redirect_uri=${window.location.origin}/login&response_type=code`
+const { REACT_APP_KAKAO_OAUTH_URL, REACT_APP_KAKAO_REST_API_KEY } = process.env
+const KAKAO_AUTH_URL = `${REACT_APP_KAKAO_OAUTH_URL}/authorize?client_id=${REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${window.location.origin}/login&response_type=code`
 
 export default function KakaoButton() {
   const handleKakaoLogin = () => {
