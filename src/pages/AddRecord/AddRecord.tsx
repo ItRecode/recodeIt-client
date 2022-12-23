@@ -7,7 +7,7 @@ import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
-import MainCategoryTap from '../../components/MainCategoryTap'
+import MainCategoryTap from '@components/MainCategoryTap'
 
 export type CheckAllType = {
   input: boolean
@@ -25,11 +25,11 @@ export default function AddRecord() {
     textArea: false,
   })
 
-  const handleRecordCelebration = (): void => {
+  const onRecordCelebration = (): void => {
     setRecordType(CELEBRATION)
   }
 
-  const handleRecordConsolation = (): void => {
+  const onRecordConsolation = (): void => {
     setRecordType(CONSOLATION)
   }
 
@@ -41,8 +41,9 @@ export default function AddRecord() {
     <div className="mb-6 pt-16">
       <BackButton />
       <MainCategoryTap
-        handleRecordCelebration={handleRecordCelebration}
-        handleRecordConsolation={handleRecordConsolation}
+        currentRecordType={recordType}
+        onRecordCelebration={onRecordCelebration}
+        onRecordConsolation={onRecordConsolation}
       />
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
