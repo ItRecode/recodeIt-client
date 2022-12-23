@@ -18,20 +18,14 @@ export default function AddRecord() {
   const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
   const CELEBRATE = 'celebrate'
 
-  const [recordType, setRecordType] = useState<string>(CELEBRATION)
+  const [recordType, setRecordType] = useState<'celebration' | 'consolation'>(
+    CELEBRATION
+  )
   const [currentCategory, setCurrentCategory] = useState(CELEBRATE)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,
   })
-
-  const handleRecordCelebration = (): void => {
-    setRecordType(CELEBRATION)
-  }
-
-  const handleRecordConsolation = (): void => {
-    setRecordType(CONSOLATION)
-  }
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -42,8 +36,7 @@ export default function AddRecord() {
       <BackButton />
       <MainCategoryTap
         currentRecordType={recordType}
-        onRecordCelebration={handleRecordCelebration}
-        onRecordConsolation={handleRecordConsolation}
+        onSetRecordType={setRecordType}
       />
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />

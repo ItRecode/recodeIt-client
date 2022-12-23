@@ -1,17 +1,12 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 
-//이 컴포넌트를 호출할때는 위로와 축하로 나눠질 상황에서 실행될 함수들을 꼭 props로 전달해주셔야 합니다.
+//이 컴포넌트를 호출할때는 위로와 축하로 나눠질 상황에서 실행될 setState을 props로 전달해야합니다.
 type MainCategory = {
-  onRecordCelebration: () => void
-  onRecordConsolation: () => void
+  onSetRecordType: Dispatch<SetStateAction<'celebration' | 'consolation'>>
   currentRecordType: string
 }
-function MainCategoryTap({
-  onRecordCelebration,
-  onRecordConsolation,
-  currentRecordType,
-}: MainCategory) {
+function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
   const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
 
   const typeConfig = {
@@ -20,11 +15,11 @@ function MainCategoryTap({
   }
 
   const handleRecordTypeToCelebration = (): void => {
-    onRecordCelebration()
+    onSetRecordType(CELEBRATION)
   }
 
   const handleRecordTypeToConsolation = (): void => {
-    onRecordConsolation()
+    onSetRecordType(CONSOLATION)
   }
 
   return (
