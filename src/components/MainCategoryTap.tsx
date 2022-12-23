@@ -14,14 +14,6 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
     inactive: 'text-gray-600',
   }
 
-  const handleRecordTypeToCelebration = (): void => {
-    onSetRecordType(CELEBRATION)
-  }
-
-  const handleRecordTypeToConsolation = (): void => {
-    onSetRecordType(CONSOLATION)
-  }
-
   return (
     <div className="mt-6 flex justify-between border-b border-gray-300 px-10  text-lg font-semibold">
       <div
@@ -30,7 +22,7 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
             ? typeConfig.active
             : typeConfig.inactive
         }`}
-        onClick={handleRecordTypeToCelebration}
+        onClick={() => onSetRecordType(CELEBRATION)}
       >
         축하 레코드
       </div>
@@ -40,7 +32,7 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
             ? typeConfig.active
             : typeConfig.inactive
         }`}
-        onClick={handleRecordTypeToConsolation}
+        onClick={() => onSetRecordType(CONSOLATION)}
       >
         위로 레코드
       </div>
