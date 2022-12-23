@@ -25,11 +25,11 @@ export default function AddRecord() {
     textArea: false,
   })
 
-  const onRecordCelebration = (): void => {
+  const handleRecordCelebration = (): void => {
     setRecordType(CELEBRATION)
   }
 
-  const onRecordConsolation = (): void => {
+  const handleRecordConsolation = (): void => {
     setRecordType(CONSOLATION)
   }
 
@@ -42,8 +42,8 @@ export default function AddRecord() {
       <BackButton />
       <MainCategoryTap
         currentRecordType={recordType}
-        onRecordCelebration={onRecordCelebration}
-        onRecordConsolation={onRecordConsolation}
+        onRecordCelebration={handleRecordCelebration}
+        onRecordConsolation={handleRecordConsolation}
       />
       <form onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
