@@ -64,10 +64,10 @@ function AddRecordIcon({
 
   return (
     <div className="mb-10 flex justify-between overflow-scroll">
-      {iconState[currentRecordType].map((icon, index) => {
+      {iconState[currentRecordType].map((icon) => {
         return (
           <div
-            onClick={() => handleChooseCurrentIcon(index)}
+            onClick={() => handleChooseCurrentIcon(icon.id)}
             className={`relative mr-[30px] h-[70px] w-[70px] rounded-2xl ${
               icon.choosed && 'border-2 border-primary-3'
             }`}
