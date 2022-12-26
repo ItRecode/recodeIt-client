@@ -7,9 +7,7 @@ import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
-
 import MainCategoryTap from '@components/MainCategoryTap'
-
 import AddRecordIcon, { IconType } from './AddRecordIcon'
 
 export type CheckAllType = {
@@ -18,12 +16,9 @@ export type CheckAllType = {
 }
 
 export default function AddRecord() {
-  const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
-  const CELEBRATE = 'celebrate'
+  const { CELEBRATION } = TEXT_DETAILS
 
   const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
-
-  const [currentCategory, setCurrentCategory] = useState(CELEBRATE)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,

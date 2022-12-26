@@ -29,7 +29,7 @@ function AddRecordInput({
 
   return (
     <div
-      className={` mb-10 flex justify-between border-b border-primary-2 transition-all duration-300 ${
+      className={` mb-10 flex justify-between border-b transition-all duration-300 ${
         inputFocus ? 'border-primary-2' : 'border-gray-400'
       }`}
     >
