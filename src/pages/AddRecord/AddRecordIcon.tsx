@@ -69,7 +69,7 @@ function AddRecordIcon({
           <div
             onClick={() => handleChooseCurrentIcon(index)}
             className={`relative mr-[30px] h-[70px] w-[70px] rounded-2xl ${
-              icon.choosed ? 'border-2 border-primary-3' : ''
+              icon.choosed && 'border-2 border-primary-3'
             }`}
             key={icon.id}
           >
