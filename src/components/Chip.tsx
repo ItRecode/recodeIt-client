@@ -6,7 +6,7 @@ interface chipProps {
   message: string
 }
 
-function Chip({ active, icon, message }: chipProps) {
+function Chip({ active, icon = null, message }: chipProps) {
   return (
     <button
       className={`cursor-pointer rounded-[999px] px-4 py-3 text-sm ${
