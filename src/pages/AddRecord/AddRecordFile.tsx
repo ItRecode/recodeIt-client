@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import Camera from '@assets/camera.svg'
-import { ReactComponent as Xbutton } from '@assets/Xbutton.svg'
+import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
 function AddRecordFile() {
   const [currentImg, setCurrentImg] = useState<null | string>(null)
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
     setCurrentImg(e.target.value)
   }
@@ -24,10 +24,10 @@ function AddRecordFile() {
   return (
     <div className="flex items-center">
       <label htmlFor="file">
-        <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-gray-400 py-3 px-5">
+        <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
           <img className=" mb-1" src={Camera} alt="camera" />
-          <p className=" text-xs text-gray-400">
-            <span className={`text-${!currentImg ? 'gray-400' : 'primary-2'}`}>
+          <p className=" text-xs text-grey-4">
+            <span className={`text-${!currentImg ? 'grey-4' : 'primary-2'}`}>
               {!currentImg ? '0' : '1'}
             </span>
             /1
@@ -36,7 +36,7 @@ function AddRecordFile() {
       </label>
       <input
         disabled={currentImg !== null && true}
-        onChange={handleFile}
+        onChange={handleSelectImageFile}
         className="hidden"
         id="file"
         type={'file'}
@@ -47,9 +47,9 @@ function AddRecordFile() {
           <img
             className=" h-full w-full rounded-2xl"
             src={currentImg}
-            alt={currentImg}
+            alt="user-selected-record-image"
           />
-          <Xbutton
+          <DeleteIcon
             onClick={() => setCurrentImg(null)}
             className=" absolute top-[6px] right-[6px] cursor-pointer"
           />
