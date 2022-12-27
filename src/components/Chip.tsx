@@ -9,8 +9,8 @@ interface chipProps {
 function Chip({ active, icon = null, message }: chipProps) {
   return (
     <button
-      className={`cursor-pointer rounded-[999px] px-4 py-3 text-sm ${
-        active ? ' bg-primary-2 text-gray-100' : ' bg-gray-200 text-gray-400'
+      className={`cursor-pointer rounded-full px-4 py-3 text-sm ${
+        active ? ' bg-primary-2 text-grey-1' : ' bg-grey-2 text-grey-4'
       }`}
     >
       {icon && <img className=" mr-2" src={icon} />}
