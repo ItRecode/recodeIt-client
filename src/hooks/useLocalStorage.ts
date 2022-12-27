@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 const useLocalStorage = () => {
   const getItem = <T>(key: string, defaultValue: T): T => {
     try {

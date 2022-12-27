@@ -4,8 +4,8 @@ import React from 'react'
 
 export default function SignUp() {
   return (
-    <div className="pl-6 pr-6">
-      <h1 className="6 mt-32 mb-32">
+    <div className="px-6">
+      <h1 className="my-32">
         <span className="text-primary-2">레코딧</span>에서 어떤 닉네임을
         <br />
         사용하시겠어요?
