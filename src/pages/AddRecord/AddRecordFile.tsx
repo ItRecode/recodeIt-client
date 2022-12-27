@@ -13,10 +13,14 @@ function AddRecordFile() {
   const encodeFileToBase64 = (fileBlob: File) => {
     const reader = new FileReader()
     reader.readAsDataURL(fileBlob)
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       reader.onload = () => {
-        setCurrentImg(reader.result as string | null)
-        resolve()
+        try {
+          setCurrentImg(reader.result as string | null)
+          resolve()
+        } catch (error) {
+          reject(error)
+        }
       }
     })
   }
@@ -35,7 +39,7 @@ function AddRecordFile() {
         </div>
       </label>
       <input
-        disabled={currentImg !== null && true}
+        disabled={currentImg !== null}
         onChange={handleSelectImageFile}
         className="hidden"
         id="file"
