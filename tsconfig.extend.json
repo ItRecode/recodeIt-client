@@ -5,8 +5,10 @@
       "@app": ["./App.tsx"],
       "@pages/*": ["./pages/*"],
       "@components/*": ["./components/*"],
-      "@routes/*":["./routes/*"],
-      "@assets/*":["./assets/*"]
+      "@routes/*": ["./routes/*"],
+      "@assets/*": ["./assets/*"],
+      "@utils/*": ["./utils/*"],
+      "@apis/*": ["./apis/*"]
     }
   }
 }

@@ -4,6 +4,10 @@ import AddRecord from '@pages/AddRecord/AddRecord'
 import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import Main from '@pages/Main/Main'
 import NotFound from '@pages/NotFound/NotFound'
+import Rank from '@pages/Rank/Rank'
+import MyRecord from '@pages/MyRecord/MyRecord'
+import Setting from '@pages/Setting/Setting'
+import NavBar from '@components/Navbar'
 import Login from '@pages/Login/Login'
 import SignUp from '@pages/SignUp/SignUp'
 
@@ -11,7 +15,13 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<NavBar />}>
+          <Route index element={<Main />} />
+          <Route path="rank" element={<Rank />} />
+          <Route path="myrecord" element={<MyRecord />} />
+          <Route path="setting" element={<Setting />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
         <Route path="/record/add" element={<AddRecord />} />
         <Route path="/record/:recordId" element={<DetailRecord />} />
         <Route path="/login" element={<Login />} />

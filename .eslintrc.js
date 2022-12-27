@@ -11,6 +11,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -19,10 +20,11 @@ module.exports = {
     },
     ecmaVersion: 'latest',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'tailwindcss'],
   rules: {
     indent: 'off',
     '@typescript-eslint/no-var-requires': 0,
     'react/self-closing-comp': 'warn', // 셀프 클로징 태그 가능하면 적용
+    'no-console': 'warn',
   },
 }
