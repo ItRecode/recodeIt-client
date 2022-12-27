@@ -31,10 +31,6 @@ export default function Input({
     return 'border-b-grey-4'
   }
 
-  const setMessageColorByProperty = (property: string) => {
-    return property === 'success' ? 'text-primary-2' : 'text-sub-1'
-  }
-
   return (
     <div>
       {label && <p className="pb-6">{label}</p>}
@@ -54,7 +50,11 @@ export default function Input({
         <CloseIcon className="absolute right-0 hover:cursor-pointer" />
       </div>
       {property !== 'default' && (
-        <p className={`pt-3 text-sm ${setMessageColorByProperty(property)}`}>
+        <p
+          className={`pt-3 text-sm text-${
+            property === 'success' ? 'text-primary-2' : 'text-sub-1'
+          }`}
+        >
           {message}
         </p>
       )}
