@@ -8,6 +8,7 @@ import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import MainCategoryTap from '@components/MainCategoryTap'
+import AddRecordIcon, { IconType } from './AddRecordIcon'
 
 export type CheckAllType = {
   input: boolean
@@ -17,9 +18,7 @@ export type CheckAllType = {
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
 
-  const [recordType, setRecordType] = useState<'celebration' | 'consolation'>(
-    CELEBRATION
-  )
+  const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,
@@ -53,6 +52,7 @@ export default function AddRecord() {
         <AddRecordTitle title={'레코드 컬러'} />
         <AddRecordColor />
         <AddRecordTitle title={'레코드 아이콘'} />
+        <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
         <AddRecordFile />
         <div className="border-t border-gray-200 py-4 px-5">
