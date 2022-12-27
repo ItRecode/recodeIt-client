@@ -5,6 +5,7 @@ interface ButtonPropsType
   property?: 'solid' | 'primary' | 'default' | 'danger'
   small?: boolean
   active?: boolean
+  disabled?: boolean
   children?: string
 }
 
@@ -12,6 +13,7 @@ export default function Button({
   property = 'default',
   small = false,
   active = true,
+  disabled = false,
   children,
   ...props
 }: ButtonPropsType) {
@@ -39,7 +41,7 @@ export default function Button({
   }
   return (
     <button
-      disabled={active}
+      disabled={disabled}
       className={`disabled: flex h-12  items-center justify-center rounded-2xl px-6 py-4 font-semibold
       ${!small && ' w-85'} 
       ${active ? 'cursor-pointer' : 'cursor-not-allowed'} 
