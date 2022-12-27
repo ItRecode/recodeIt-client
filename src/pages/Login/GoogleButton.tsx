@@ -4,9 +4,18 @@ import { ReactComponent as GoogleSymbol } from '@assets/google.svg'
 const { REACT_APP_GOOGLE_OAUTH_URL, REACT_APP_GOOGLE_CLIENT_ID } = process.env
 const GOOGLE_AUTH_URL = `${REACT_APP_GOOGLE_OAUTH_URL}/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=profile`
 
-export default function GoogleButton() {
+export default function GoogleButton({
+  setLoginType,
+}: {
+  setLoginType: (type: string) => void
+}) {
   const handleGoogleLogin = () => {
-    window.location.replace(GOOGLE_AUTH_URL)
+    try {
+      window.location.replace(GOOGLE_AUTH_URL)
+      setLoginType('KAKAO')
+    } catch (e) {
+      alert('구글 로그인에 실패하였습니다. 다시 시도해주세요.')
+    }
   }
 
   return (
