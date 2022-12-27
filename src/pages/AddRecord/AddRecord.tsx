@@ -15,13 +15,11 @@ export type CheckAllType = {
 }
 
 export default function AddRecord() {
-  const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
-  const CELEBRATE = 'celebrate'
+  const { CELEBRATION } = TEXT_DETAILS
 
   const [recordType, setRecordType] = useState<'celebration' | 'consolation'>(
     CELEBRATION
   )
-  const [currentCategory, setCurrentCategory] = useState(CELEBRATE)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
     textArea: false,
