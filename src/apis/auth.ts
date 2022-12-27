@@ -1,8 +1,9 @@
-import { authInstance } from './instance'
+import { baseInstance } from './instance'
 
-// instance 사용 예시
-// export const login = (token: string, type: string) => {
-//   authInstance.post(`/member/oauth/login/${type}`, {
-//     token,
-//   })
-// }
+export const login = (type: string, token: string) => {
+  return baseInstance.post(`/member/oauth/login/${type}`, {
+    oauth_token: token,
+  })
+}
+
+// export const signUp = ()

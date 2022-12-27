@@ -1,17 +1,15 @@
 import { login } from '@apis/auth'
-import { useQuery } from '@tanstack/react-query'
-import { QUERY_KEYS } from '@react-query/queryKeys'
+import { useMutation } from '@tanstack/react-query'
 
 export const useAuth = () => {
-  const oauthLogin = (type: string, token: string) => {
-    const data = useQuery([QUERY_KEYS.user], () => login(type, token), {
+  const oauthLogin = <AxiosError>(type: string, token: string) => {
+    const { data, isLoading } = useMutation({
+      mutationFn: () => login(type, token),
       onSuccess: (data) => {
-        //TODO: 로그인 진행
-        console.log(data)
+        //TODO: 로그인 페이지로 이동
       },
-      onError: (error) => {
+      onError: (error: AxiosError) => {
         //TODO: 회원가입 진행
-        console.log(error)
       },
     })
   }
