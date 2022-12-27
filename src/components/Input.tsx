@@ -42,10 +42,9 @@ export default function Input({
           placeholder={placeholder}
           autoFocus={autoFocus}
           maxLength={maxLength}
-          className={`w-full border-b border-solid py-4 placeholder:text-sm focus:outline-none${setClassNameByProperty(
-            property
-          )}
-        `}
+          className={`w-full border-b border-solid py-4 placeholder:text-sm focus:outline-none
+            ${setClassNameByProperty(property)}
+          `}
           {...props}
         />
         <CloseIcon className="absolute right-0 hover:cursor-pointer" />
