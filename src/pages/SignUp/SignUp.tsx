@@ -1,8 +1,30 @@
+import React from 'react'
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Button from '@components/Button'
 import Input from '@components/Input'
-import React from 'react'
+
+type SingUpUserInfo = {
+  tempId: null | string
+  nickname: string
+}
 
 export default function SignUp() {
+  const location = useLocation()
+  const [userInfo, setUserInfo] = useState<SingUpUserInfo>({
+    tempId: null,
+    nickname: '',
+  })
+
+  useEffect(() => {
+    if (location.state.tempSessionId) {
+      setUserInfo({
+        ...userInfo,
+        tempId: location.state.tempSessionId,
+      })
+    }
+  }, [])
+
   return (
     <div className="px-6">
       <h1 className="my-32">
