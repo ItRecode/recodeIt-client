@@ -15,7 +15,7 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
   }
 
   return (
-    <div className="mt-6 flex justify-between border-b border-grey-3 px-1  text-lg font-semibold">
+    <div className="mt-6 flex justify-between border-b border-grey-3 px-16 text-lg font-semibold">
       <div
         className={`${
           currentRecordType === CELEBRATION
