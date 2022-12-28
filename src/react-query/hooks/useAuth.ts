@@ -8,7 +8,7 @@ export const useAuth = () => {
   const navigate = useNavigate()
 
   const { mutate: oauthLogin } = useMutation(
-    ({ type, token }: IAuth) => login({ type, token }),
+    async ({ type, token }: IAuth) => await login({ type, token }),
     {
       onSuccess: () => {
         //TODO: 세션ID값 저장
@@ -28,7 +28,8 @@ export const useAuth = () => {
   )
 
   const { mutate: oauthSignUp } = useMutation(
-    ({ type, tempId, nickname }: ISignUp) => signUp({ type, tempId, nickname })
+    async ({ type, tempId, nickname }: ISignUp) =>
+      await signUp({ type, tempId, nickname })
   )
 
   return { oauthLogin, oauthSignUp }
