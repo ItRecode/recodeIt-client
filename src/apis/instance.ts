@@ -1,15 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
-import useLocalStorage from '@hooks/useLocalStorage'
 import { redirect } from 'react-router-dom'
 
 const { REACT_APP_DEV_API_END_POINT } = process.env
-const { getItem } = useLocalStorage()
 
 function setInterceptors(instance: AxiosInstance) {
   instance.interceptors.request.use((config) => {
-    config.headers = {
-      authorization: `Bearer ${getItem('token', '')}`,
-    }
     return config
   })
 
