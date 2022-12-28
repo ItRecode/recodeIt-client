@@ -10,28 +10,29 @@ type PropertyType = 'default' | 'success' | 'error'
 export default function SignUp() {
   const location = useLocation()
   const [tempId, setTempId] = useState<null | string>(null)
+  const [checkedNickname, setCheckedNickname] = useState(false)
   const [property, setProperty] = useState<PropertyType>('default')
-  const { errors, handleChange, handleSubmit } = useForm({
-    initialValues: {
-      nickname: '',
-    },
+  const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
+    initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
-      // console.log(nickname)
-      // 닉네임 중복 확인
-      // nickname.trim()
+      if (!checkedNickname) {
+        //닉네임 중복 확인 =>성공
+        // nickname.trim()
+        setCheckedNickname(true)
+      }
+
+      // 회원가입 로직 작성
     },
     validate: ({ nickname }) => {
-      console.log(nickname)
-
       const error: { nickname?: string } = {}
       const spacePattern = /\s/g
-      const nicknamePattern = /^[a-zA-Z\\d`~!@#$%^&*()-_=+]{2,8}$/
+      const nicknamePattern = /^[a-zA-Z\\d`~!@#$%^&*()-_=+]$/
 
-      if (!nickname.match(spacePattern)) {
+      if (nickname.match(spacePattern)) {
         error.nickname = '공백을 제거해주세요'
       }
 
-      if (nicknamePattern.test(nickname)) {
+      if (nickname.match(nicknamePattern)) {
         error.nickname = '국문, 영문, 숫자 포함 2~8자로 입력해주세요'
       }
 
@@ -46,6 +47,12 @@ export default function SignUp() {
     }
   }, [])
 
+  const handleRemoveNickname = (isRemove: boolean) => {
+    if (isRemove) {
+      handleRemove('nickname')
+    }
+  }
+
   return (
     <div className="px-6">
       <h1 className="my-32">
@@ -55,17 +62,19 @@ export default function SignUp() {
       </h1>
       <form onSubmit={handleSubmit}>
         <Input
-          property={property}
+          property={'error'}
           label="닉네임"
+          value={values.nickname}
           name="nickname"
           placeholder="국문, 영문, 숫자 포함 2~8자"
           message={errors.nickname as string}
           maxLength={8}
           onChange={handleChange}
+          onRemove={handleRemoveNickname}
         />
         <div className="mt-[72px] flex flex-col items-center gap-2">
-          <Button active={true}>중복 확인</Button>
-          <Button property="solid" active={false}>
+          <Button active={!checkedNickname}>중복 확인</Button>
+          <Button property="solid" active={checkedNickname}>
             레코딧 입장
           </Button>
         </div>

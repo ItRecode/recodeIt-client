@@ -19,6 +19,10 @@ const useForm = <T extends ObjectType>({
   const [errors, setErrors] = useState<Record<string, unknown>>({})
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleRemove = (name: string) => {
+    setValues({ ...values, [name]: '' })
+  }
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -44,6 +48,7 @@ const useForm = <T extends ObjectType>({
     values,
     errors,
     isLoading,
+    handleRemove,
     handleChange,
     handleSubmit,
   }
