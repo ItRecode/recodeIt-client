@@ -1,27 +1,28 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
 import Input from '@components/Input'
 import useForm from '@hooks/useForm'
+import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
 
 type PropertyType = 'default' | 'success' | 'error'
 
 export default function SignUp() {
   const location = useLocation()
-  const [tempId, setTempId] = useState<null | string>(null)
+  const [nickname, setNickname] = useState('')
   const [checkedNickname, setCheckedNickname] = useState(false)
   const [property, setProperty] = useState<PropertyType>('default')
+
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
+      setNickname(nickname)
       if (!checkedNickname) {
-        //닉네임 중복 확인 =>성공
-        // nickname.trim()
-        setCheckedNickname(true)
+        if (isSuccess) {
+          setCheckedNickname(true)
+        }
       }
-
-      // 회원가입 로직 작성
     },
     validate: ({ nickname }) => {
       const error: { nickname?: string } = {}
@@ -39,11 +40,13 @@ export default function SignUp() {
       return error
     },
   })
+  const { isSuccess } = useGetDuplicateNickname(nickname, checkedNickname)
+
+  const nativate = useNavigate()
 
   useEffect(() => {
-    if (location.state.tempSessionId) {
-      const tempSessionId = location.state.tempSessionId
-      setTempId(tempSessionId)
+    if (!location.state.tempSessionId) {
+      nativate('/login')
     }
   }, [])
 
@@ -61,7 +64,7 @@ export default function SignUp() {
 
   return (
     <div className="px-6">
-      <h1 className="my-32">
+      <h1 className="my-32 text-2xl font-semibold">
         <span className="text-primary-2">레코딧</span>에서 어떤 닉네임을
         <br />
         사용하시겠어요?
