@@ -9,7 +9,7 @@ export default function KakaoButton() {
     try {
       window.location.replace(KAKAO_AUTH_URL)
     } catch (e) {
-      alert('카카오 인증에 실패하였습니다. 다시 시도해주세요')
+      alert('현재 카카오 로그인이 불가합니다. 나중에 다시 시도해주세요')
     }
   }
 

@@ -9,7 +9,7 @@ export default function GoogleButton() {
     try {
       window.location.replace(GOOGLE_AUTH_URL)
     } catch (e) {
-      alert('구글 인증에 실패하였습니다. 다시 시도해주세요')
+      alert('현재 구글 로그인이 불가합니다. 나중에 다시 시도해주세요')
     }
   }
 
