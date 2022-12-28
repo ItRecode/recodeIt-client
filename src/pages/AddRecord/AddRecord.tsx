@@ -9,6 +9,8 @@ import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import MainCategoryTap from '@components/MainCategoryTap'
 import AddRecordIcon, { IconType } from './AddRecordIcon'
+import Button from '@components/Button'
+import { useNavigate } from 'react-router-dom'
 
 export type CheckAllType = {
   input: boolean
@@ -24,24 +26,28 @@ export default function AddRecord() {
     textArea: false,
   })
 
+  const navigate = useNavigate()
+
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
+    navigate('/record/1')
   }
 
   return (
     <div className="mb-6 pt-16">
-      <BackButton />
+      <div className="ml-[18px]">
+        <BackButton />
+      </div>
       <MainCategoryTap
         currentRecordType={recordType}
         onSetRecordType={setRecordType}
       />
-      <form onSubmit={handleSubmitData}>
+      <form className="px-6" onSubmit={handleSubmitData}>
         <AddRecordCategory currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
-          currentRecordType={recordType}
         />
         <AddRecordTitle title={'레코드 설명'} />
         <AddRecordTextArea
@@ -55,12 +61,17 @@ export default function AddRecord() {
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
         <AddRecordFile />
-        <div className="border-t border-gray-200 py-4 px-5">
-          <button className=" text-primary-2" type="submit">
-            레코드 추가하기
-          </button>
-        </div>
       </form>
+      <div className="border-t border-grey-2 py-4 px-5">
+        <Button
+          property={'solid'}
+          active={
+            checkAllFilled.input && checkAllFilled.textArea ? true : false
+          }
+        >
+          레코드 추가하기
+        </Button>
+      </div>
     </div>
   )
 }
