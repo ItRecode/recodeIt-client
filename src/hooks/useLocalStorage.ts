@@ -1,32 +1,30 @@
 /* eslint-disable no-alert, no-console */
-const useLocalStorage = () => {
-  const getItem = <T>(key: string, defaultValue: T): T => {
+import { useState } from 'react'
+
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): [T, typeof setValue] => {
+  const [storedValue, setStoredValue] = useState(() => {
     try {
-      const value = localStorage.getItem(key)
-      return value === null ? defaultValue : (JSON.parse(value) as T)
+      const item = localStorage.getItem(key)
+      return item ? JSON.parse(item) : initialValue
     } catch (error) {
       console.error(error)
-      return defaultValue
+      return initialValue
     }
-  }
+  })
 
-  const setItem = <T>(key: string, value: T) => {
+  const setValue = (value: T) => {
     try {
+      setStoredValue(value)
       localStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
       console.error(error)
     }
   }
 
-  const removeItem = (key: string) => {
-    try {
-      localStorage.removeItem(key)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  return { getItem, setItem, removeItem }
+  return [storedValue, setValue]
 }
 
 export default useLocalStorage
