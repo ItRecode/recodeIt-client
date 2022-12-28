@@ -18,10 +18,8 @@ export default function SignUp() {
 
   useEffect(() => {
     if (location.state.tempSessionId) {
-      setUserInfo({
-        ...userInfo,
-        tempId: location.state.tempSessionId,
-      })
+      const tempId = location.state.tempSessionId
+      setUserInfo({ ...userInfo, tempId })
     }
   }, [])
 

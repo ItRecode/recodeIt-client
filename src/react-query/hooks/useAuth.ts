@@ -1,6 +1,6 @@
 import { login, signUp } from '@apis/auth'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { IAuth, ISignUp } from 'types/auth'
 
@@ -16,10 +16,11 @@ export const useAuth = () => {
       },
       onError: (error: AxiosError) => {
         //TODO: 회원가입 진행
-        const tempId = null
+        const { data } = error.response as AxiosResponse
+
         navigate('/sign-up', {
           state: {
-            tempSessionId: tempId,
+            tempSessionId: data,
           },
         })
       },
