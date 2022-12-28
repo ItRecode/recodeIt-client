@@ -2,11 +2,15 @@ import React from 'react'
 import { ReactComponent as GoogleSymbol } from '@assets/google.svg'
 
 const { REACT_APP_GOOGLE_OAUTH_URL, REACT_APP_GOOGLE_CLIENT_ID } = process.env
-const GOOGLE_AUTH_URL = `${REACT_APP_GOOGLE_OAUTH_URL}/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${window.location.origin}/login&response_type=code&scope=profile`
+const GOOGLE_AUTH_URL = `${REACT_APP_GOOGLE_OAUTH_URL}/v2/auth?client_id=${REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${window.location.origin}/login/GOOGLE&response_type=code&scope=profile`
 
 export default function GoogleButton() {
   const handleGoogleLogin = () => {
-    window.location.replace(GOOGLE_AUTH_URL)
+    try {
+      window.location.replace(GOOGLE_AUTH_URL)
+    } catch (e) {
+      alert('현재 구글 로그인이 불가합니다. 나중에 다시 시도해주세요')
+    }
   }
 
   return (

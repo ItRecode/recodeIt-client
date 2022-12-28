@@ -10,6 +10,7 @@ import Setting from '@pages/Setting/Setting'
 import NavBar from '@components/Navbar'
 import Login from '@pages/Login/Login'
 import SignUp from '@pages/SignUp/SignUp'
+import OauthLogin from '@pages/Login/[type]'
 
 export default function Router() {
   return (
@@ -22,6 +23,7 @@ export default function Router() {
           <Route path="setting" element={<Setting />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/login/:type" element={<OauthLogin />} />
         <Route path="/record/add" element={<AddRecord />} />
         <Route path="/record/:recordId" element={<DetailRecord />} />
         <Route path="/login" element={<Login />} />

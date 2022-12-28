@@ -1,8 +1,15 @@
-import { authInstance } from './instance'
+import { IAuth, ISignUp } from 'types/auth'
+import { baseInstance } from './instance'
 
-// instance 사용 예시
-// export const login = (token: string, type: string) => {
-//   authInstance.post(`/member/oauth/login/${type}`, {
-//     token,
-//   })
-// }
+export const login = async ({ type, token }: IAuth) => {
+  return await baseInstance.post(`/member/oauth/login/${type}`, {
+    oauth_token: token,
+  })
+}
+
+export const signUp = async ({ type, tempId, nickname }: ISignUp) => {
+  return await baseInstance.post(`/member/oauth/register/{${type}`, {
+    nickname: nickname,
+    register_session: tempId,
+  })
+}

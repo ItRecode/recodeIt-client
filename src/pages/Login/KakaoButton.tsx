@@ -2,11 +2,15 @@ import React from 'react'
 import { ReactComponent as KakaoSymbol } from '@assets/kakao.svg'
 
 const { REACT_APP_KAKAO_OAUTH_URL, REACT_APP_KAKAO_REST_API_KEY } = process.env
-const KAKAO_AUTH_URL = `${REACT_APP_KAKAO_OAUTH_URL}/authorize?client_id=${REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${window.location.origin}/login&response_type=code`
+const KAKAO_AUTH_URL = `${REACT_APP_KAKAO_OAUTH_URL}/authorize?client_id=${REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${window.location.origin}/login/KAKAO&response_type=code`
 
 export default function KakaoButton() {
   const handleKakaoLogin = () => {
-    window.location.replace(KAKAO_AUTH_URL)
+    try {
+      window.location.replace(KAKAO_AUTH_URL)
+    } catch (e) {
+      alert('현재 카카오 로그인이 불가합니다. 나중에 다시 시도해주세요')
+    }
   }
 
   return (

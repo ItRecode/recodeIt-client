@@ -1,14 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
-import { getItem } from '@utils/localStorage'
 import { redirect } from 'react-router-dom'
 
 const { REACT_APP_DEV_API_END_POINT } = process.env
 
 function setInterceptors(instance: AxiosInstance) {
   instance.interceptors.request.use((config) => {
-    config.headers = {
-      authorization: `Bearer ${getItem('token', '')}`,
-    }
     return config
   })
 
@@ -19,7 +15,6 @@ function setInterceptors(instance: AxiosInstance) {
         redirect('/login')
       }
 
-      console.error(error)
       return Promise.reject(error)
     }
   )

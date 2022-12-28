@@ -42,16 +42,16 @@ export default function Input({
           placeholder={placeholder}
           autoFocus={autoFocus}
           maxLength={maxLength}
-          className={`w-full border-b border-solid pt-4 pb-4 placeholder:text-sm 
-          focus:outline-none ${setClassNameByProperty(property)}
-        `}
+          className={`w-full border-b border-solid py-4 placeholder:text-sm focus:outline-none
+            ${setClassNameByProperty(property)}
+          `}
           {...props}
         />
         <CloseIcon className="absolute right-0 hover:cursor-pointer" />
       </div>
       {property !== 'default' && (
         <p
-          className={`pt-3 text-sm text-${
+          className={`pt-3 text-sm ${
             property === 'success' ? 'text-primary-2' : 'text-sub-1'
           }`}
         >
