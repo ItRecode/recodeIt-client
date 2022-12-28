@@ -4,7 +4,7 @@ import { noNeedNavbarPages, needNavbarPages } from './page'
 import ProtectedRoute from './protectedRoute'
 import NavBar from '@components/Navbar'
 
-const RootRoute = () => {
+const Router = () => {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
@@ -41,4 +41,4 @@ const RootRoute = () => {
   )
 }
 
-export default RootRoute
+export default Router
