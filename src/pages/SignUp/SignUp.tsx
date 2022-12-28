@@ -26,14 +26,14 @@ export default function SignUp() {
     validate: ({ nickname }) => {
       const error: { nickname?: string } = {}
       const spacePattern = /\s/g
-      const nicknamePattern = /^[a-zA-Z\\d`~!@#$%^&*()-_=+]$/
+      const nicknamePattern = /^.{2,8}$/
 
       if (nickname.match(spacePattern)) {
         error.nickname = '공백을 제거해주세요'
       }
 
-      if (nickname.match(nicknamePattern)) {
-        error.nickname = '국문, 영문, 숫자 포함 2~8자로 입력해주세요'
+      if (!nickname.match(nicknamePattern)) {
+        error.nickname = '국문, 영문, 숫자로 이루어진 2~8자로 입력해주세요'
       }
 
       return error
@@ -47,8 +47,14 @@ export default function SignUp() {
     }
   }, [])
 
+  const setPropertyWithCheckedNickname = () => {
+    if (checkedNickname) return 'success'
+    if (errors.nickname as string) return 'error'
+    return 'default'
+  }
+
   const handleRemoveNickname = (isRemove: boolean) => {
-    if (isRemove) {
+    if (isRemove && !checkedNickname) {
       handleRemove('nickname')
     }
   }
@@ -62,13 +68,18 @@ export default function SignUp() {
       </h1>
       <form onSubmit={handleSubmit}>
         <Input
-          property={'error'}
+          property={setPropertyWithCheckedNickname()}
+          name="nickname"
           label="닉네임"
           value={values.nickname}
-          name="nickname"
-          placeholder="국문, 영문, 숫자 포함 2~8자"
-          message={errors.nickname as string}
           maxLength={8}
+          placeholder="국문, 영문, 숫자 포함 2~8자"
+          disabled={checkedNickname}
+          message={
+            checkedNickname
+              ? '사용가능한 닉네임입니다.'
+              : (errors.nickname as string)
+          }
           onChange={handleChange}
           onRemove={handleRemoveNickname}
         />
