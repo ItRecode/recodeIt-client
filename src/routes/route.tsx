@@ -1,41 +1,31 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { noNeedNavbarPages, needNavbarPages } from './page'
+import { noNeedNavbarPages, needNavbarPages, PageType } from './page'
 import ProtectedRoute from './protectedRoute'
 import NavBar from '@components/Navbar'
+
+const renderRouteWithProtectedRoute = ({
+  pathname,
+  isPublic,
+  element,
+}: PageType) => (
+  <Route
+    key={pathname}
+    path={pathname}
+    element={<ProtectedRoute isPublic={isPublic}>{element()}</ProtectedRoute>}
+  />
+)
 
 const Router = () => {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        {noNeedNavbarPages.map((r) => {
-          return (
-            <Route
-              key={r.pathname}
-              path={r.pathname}
-              element={
-                <ProtectedRoute isPublic={r.isPublic}>
-                  {r.element}
-                </ProtectedRoute>
-              }
-            />
-          )
-        })}
-        {needNavbarPages.map((r) => {
-          return (
-            <Route key={r.pathname} element={<NavBar />}>
-              <Route
-                key={r.pathname}
-                path={r.pathname}
-                element={
-                  <ProtectedRoute isPublic={r.isPublic}>
-                    {r.element}
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-          )
-        })}
+        {noNeedNavbarPages.map((route) => renderRouteWithProtectedRoute(route))}
+        {needNavbarPages.map((route) => (
+          <Route key={route.pathname} element={<NavBar />}>
+            {renderRouteWithProtectedRoute(route)}
+          </Route>
+        ))}
       </Routes>
     </BrowserRouter>
   )
