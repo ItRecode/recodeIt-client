@@ -60,6 +60,7 @@ function AddRecordCategory({
             onClick={() => handleChooseCurrentCategory(category.id)}
           >
             <Chip
+              type="button"
               active={category.choosed}
               message={category.title}
               icon={category.iconSrc}
