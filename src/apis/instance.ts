@@ -1,8 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
-import { getItem } from '@utils/localStorage'
+import useLocalStorage from '@hooks/useLocalStorage'
 import { redirect } from 'react-router-dom'
 
 const { REACT_APP_DEV_API_END_POINT } = process.env
+const { getItem } = useLocalStorage()
 
 function setInterceptors(instance: AxiosInstance) {
   instance.interceptors.request.use((config) => {
@@ -19,7 +20,6 @@ function setInterceptors(instance: AxiosInstance) {
         redirect('/login')
       }
 
-      console.error(error)
       return Promise.reject(error)
     }
   )
