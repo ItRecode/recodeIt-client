@@ -26,7 +26,7 @@ function AddRecordFile() {
   }
 
   return (
-    <div className="flex items-center">
+    <div className="mb-8 flex items-center">
       <label htmlFor="file">
         <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
           <img className=" mb-1" src={Camera} alt="camera" />
@@ -44,7 +44,7 @@ function AddRecordFile() {
         className="hidden"
         id="file"
         type={'file'}
-        accept="image/*;capture=camera"
+        accept="image/gif;capture=camera"
       />
       {currentImg && (
         <div className=" relative h-[66px] w-[66px]">

@@ -144,6 +144,11 @@ table {
   border-spacing: 0;
 }
 
+div {
+  border-style: solid;
+  border-width: 0;
+}
+
 button,
 input,
 textarea {

@@ -25,13 +25,16 @@ function AddRecordTextArea({
     if (inputValueLength > 0) {
       setCheckAllFilled({ ...checkAllFilled, textArea: true })
     }
+    if (inputValueLength === 0) {
+      setCheckAllFilled({ ...checkAllFilled, textArea: false })
+    }
     setTextAreaValue(e.target.value)
   }
 
   return (
-    <div className=" mb-10 rounded-lg bg-gray-200 px-4 pt-4 pb-2 text-sm font-medium text-gray-500">
+    <div className=" mb-10 rounded-lg bg-grey-2 px-4 pt-4 pb-2 text-sm font-medium text-grey-5">
       <textarea
-        className=" min-h-[137px]  w-full resize-none bg-gray-200 focus:outline-none"
+        className=" min-h-[137px]  w-full resize-none bg-grey-2 focus:outline-none"
         onChange={handleChangeTextArea}
         placeholder="ex) 오늘은 나의 생일이에요!모두 축하해주세요!"
       />
