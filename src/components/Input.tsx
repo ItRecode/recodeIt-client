@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 
 interface InputPropsType extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,6 +11,7 @@ interface InputPropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   focus?: boolean
   autoFocus?: boolean
   maxLength?: number
+  onRemove?: (isRemove: boolean) => void
 }
 
 export default function Input({
@@ -22,6 +23,7 @@ export default function Input({
   message,
   autoFocus = true,
   maxLength,
+  onRemove,
   ...props
 }: InputPropsType) {
   const setClassNameByProperty = (property: string) => {
@@ -29,6 +31,12 @@ export default function Input({
     if (property === 'success') return 'border-b-primary-1'
 
     return 'border-b-grey-4'
+  }
+
+  const handleRemove = () => {
+    if (onRemove) {
+      onRemove(true)
+    }
   }
 
   return (
@@ -47,7 +55,10 @@ export default function Input({
           `}
           {...props}
         />
-        <CloseIcon className="absolute right-0 hover:cursor-pointer" />
+        <CloseIcon
+          className="absolute right-0 hover:cursor-pointer"
+          onClick={handleRemove}
+        />
       </div>
       {property !== 'default' && (
         <p
