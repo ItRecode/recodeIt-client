@@ -4,7 +4,9 @@ import { RecoilRoot } from 'recoil'
 
 import React from 'react'
 import Layout from '@components/Layout'
-import Router from '@routes/route'
+import Router from '@routes/router'
+import { RouterProvider } from 'react-router-dom'
+import router from '@routes/router'
 
 const queryClient = new QueryClient()
 
@@ -13,7 +15,7 @@ function App() {
     <Layout>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <Router />
+          <RouterProvider router={router} />
           <ReactQueryDevtools />
         </QueryClientProvider>
       </RecoilRoot>

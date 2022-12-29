@@ -3,9 +3,14 @@ import { ReactComponent as Record_icon } from '@assets/nav_icons/record_icon.svg
 import { Link, Outlet } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
 
-export default function NavBar() {
+export default function NavBar({
+  children,
+}: {
+  children?: React.ReactElement
+}) {
   return (
     <>
+      {children}
       <Outlet />
       <nav className="absolute bottom-0 flex h-[60px] w-[375px] justify-between rounded-t-xl border border-solid border-grey-3 px-3 pt-1.5">
         <nav className="left-3 flex">

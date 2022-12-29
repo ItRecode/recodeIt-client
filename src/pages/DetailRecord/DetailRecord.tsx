@@ -4,9 +4,11 @@ import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
 import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
+
   return (
     <div className="w-full">
       {shareStatus && (
