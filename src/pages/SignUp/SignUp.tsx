@@ -6,8 +6,6 @@ import Input from '@components/Input'
 import useForm from '@hooks/useForm'
 import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
 
-type PropertyType = 'default' | 'success' | 'error'
-
 export default function SignUp() {
   const location = useLocation()
   const [nickname, setNickname] = useState('')
