@@ -5,14 +5,14 @@ import { ReactComponent as Arrow_icon } from '@assets/right_arrow.svg'
 import { copyLink, ShareKakao } from '@apis/share'
 
 interface IModalProps {
-  setShare: Dispatch<SetStateAction<boolean>>
+  setShareStatus: Dispatch<SetStateAction<boolean>>
   recordId: number
   title: string
   description: string
   imageUrl?: string
 }
-export default function Modal({
-  setShare,
+export default function ShareModal({
+  setShareStatus,
   recordId,
   title,
   description,
@@ -26,7 +26,7 @@ export default function Modal({
           <p className="text-lg font-semibold">공유하기</p>
           <button
             className="cursor-pointer bg-grey-1"
-            onClick={() => setShare(false)}
+            onClick={() => setShareStatus(false)}
           >
             <Closed_icon />
           </button>
