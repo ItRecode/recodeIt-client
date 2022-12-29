@@ -12,7 +12,6 @@ export default function SignUp() {
   const location = useLocation()
   const [nickname, setNickname] = useState('')
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
-  const [property, setProperty] = useState<PropertyType>('default')
 
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
