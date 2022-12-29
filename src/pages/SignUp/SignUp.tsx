@@ -11,16 +11,16 @@ type PropertyType = 'default' | 'success' | 'error'
 export default function SignUp() {
   const location = useLocation()
   const [nickname, setNickname] = useState('')
-  const [checkedNickname, setCheckedNickname] = useState(false)
+  const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [property, setProperty] = useState<PropertyType>('default')
 
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
       setNickname(nickname)
-      if (!checkedNickname) {
+      if (!isCheckedNickname) {
         if (isSuccess) {
-          setCheckedNickname(true)
+          setIsCheckedNickname(true)
         }
       }
     },
@@ -40,7 +40,7 @@ export default function SignUp() {
       return error
     },
   })
-  const { isSuccess } = useGetDuplicateNickname(nickname, checkedNickname)
+  const { isSuccess } = useGetDuplicateNickname(nickname, isCheckedNickname)
 
   const navigate = useNavigate()
 
@@ -50,14 +50,14 @@ export default function SignUp() {
     }
   }, [])
 
-  const setPropertyWithCheckedNickname = () => {
-    if (checkedNickname) return 'success'
+  const setPropertyWithisCheckedNickname = () => {
+    if (isCheckedNickname) return 'success'
     if (errors.nickname as string) return 'error'
     return 'default'
   }
 
   const handleRemoveNickname = (isRemove: boolean) => {
-    if (isRemove && !checkedNickname) {
+    if (isRemove && !isCheckedNickname) {
       handleRemove('nickname')
     }
   }
@@ -71,15 +71,15 @@ export default function SignUp() {
       </h1>
       <form onSubmit={handleSubmit}>
         <Input
-          property={setPropertyWithCheckedNickname()}
+          property={setPropertyWithisCheckedNickname()}
           name="nickname"
           label="닉네임"
           value={values.nickname}
           maxLength={8}
           placeholder="국문, 영문, 숫자 포함 2~8자"
-          disabled={checkedNickname}
+          disabled={isCheckedNickname}
           message={
-            checkedNickname
+            isCheckedNickname
               ? '사용가능한 닉네임입니다.'
               : (errors.nickname as string)
           }
@@ -87,8 +87,8 @@ export default function SignUp() {
           onRemove={handleRemoveNickname}
         />
         <div className="mt-[72px] flex flex-col items-center gap-2">
-          <Button active={!checkedNickname}>중복 확인</Button>
-          <Button property="solid" active={checkedNickname}>
+          <Button active={!isCheckedNickname}>중복 확인</Button>
+          <Button property="solid" active={isCheckedNickname}>
             레코딧 입장
           </Button>
         </div>
