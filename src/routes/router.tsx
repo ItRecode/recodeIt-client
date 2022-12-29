@@ -9,6 +9,7 @@ import Login from '@pages/Login/Login'
 import AddRecord from '@pages/AddRecord/AddRecord'
 import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import NotFound from '@pages/NotFound/NotFound'
+import Setting from '@pages/Setting/Setting'
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       { index: true, element: <Main /> },
       { path: 'rank', element: <Rank /> },
       { path: 'myrecord', element: <MyRecord /> },
-      { path: 'setting', element: <MyRecord /> },
+      { path: 'setting', element: <Setting /> },
     ],
   },
   {
