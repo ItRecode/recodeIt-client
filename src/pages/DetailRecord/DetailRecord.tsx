@@ -2,11 +2,21 @@ import BackButton from '@components/BackButton'
 import Button from '@components/Button'
 import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
-import React from 'react'
+import ShareModal from '@components/ShareModal'
+import React, { useState } from 'react'
 
 export default function DetailRecord() {
+  const [shareStatus, setShareStatus] = useState(false)
   return (
     <div className="w-full">
+      {shareStatus && (
+        <ShareModal
+          setShareStatus={setShareStatus}
+          recordId={1}
+          title={''}
+          description={''}
+        />
+      )}
       <header className="h-[60px]" />
       <nav className="flex justify-between px-6">
         <BackButton />
@@ -29,7 +39,7 @@ export default function DetailRecord() {
         className="flex w-full flex-col items-center"
       >
         <div className="my-4 h-[338px] w-[338px] rounded-2xl bg-primary-3"></div>
-        <Button>공유하기</Button>
+        <Button onClick={() => setShareStatus(true)}>공유하기</Button>
         <div className="my-6 w-[327px] text-[14px]">
           <p>레코드 내용은 200자까지 보이도록 합니다.</p>
           <p>레코드 내용은 200자까지 보이도록 합니다.</p>
