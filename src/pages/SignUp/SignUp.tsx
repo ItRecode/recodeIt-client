@@ -42,11 +42,11 @@ export default function SignUp() {
   })
   const { isSuccess } = useGetDuplicateNickname(nickname, checkedNickname)
 
-  const nativate = useNavigate()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!location.state.tempSessionId) {
-      nativate('/login')
+      navigate('/login')
     }
   }, [])
 

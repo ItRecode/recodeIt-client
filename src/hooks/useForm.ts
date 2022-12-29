@@ -7,7 +7,7 @@ interface ObjectType {
 interface UseFormProps<T> {
   initialValues: T
   onSubmit: (values: T) => void
-  validate: (values: T) => T | ObjectType
+  validate?: (values: T) => T | ObjectType
 }
 
 const useForm = <T extends ObjectType>({
@@ -44,6 +44,7 @@ const useForm = <T extends ObjectType>({
     setErrors(newErrors)
     setIsLoading(false)
   }
+
   return {
     values,
     errors,
