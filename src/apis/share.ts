@@ -1,5 +1,3 @@
-const Kakao_API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY
-
 interface IShareDataType {
   recordId: number
   title: string
@@ -10,19 +8,22 @@ export const ShareKakao = ({
   recordId,
   title,
   description,
-  imageUrl,
+  imageUrl = '',
 }: IShareDataType) => {
   const { Kakao }: any = window
-  if (!Kakao.isInitialized()) Kakao.init(Kakao_API_KEY)
+  if (!Kakao.isInitialized()) {
+    Kakao.init(process.env.REACT_APP_KAKAO_REST_API_KEY)
+  }
 
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title,
-      description,
-      imageUrl: '',
+      title: title,
+      description: description,
+      imageUrl: imageUrl,
       link: {
         mobileWebUrl: 'https://developers.kakao.com',
+        androidExecutionParams: 'test',
       },
     },
 
