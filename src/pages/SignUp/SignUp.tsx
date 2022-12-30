@@ -17,7 +17,7 @@ export default function SignUp() {
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
       if (!isCheckedNickname) {
-        if (isSuccess) {
+        if (isSuccess && isDuplicate) {
           setIsCheckedNickname(true)
         }
         return
@@ -39,7 +39,7 @@ export default function SignUp() {
         error.nickname = '공백을 제거해주세요'
       }
 
-      if (isDuplicate) {
+      if (!isDuplicate) {
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
       }
 
@@ -82,7 +82,6 @@ export default function SignUp() {
           value={values.nickname}
           maxLength={8}
           placeholder="국문, 영문, 숫자 포함 2~8자"
-          disabled={isCheckedNickname}
           message={
             isCheckedNickname
               ? '사용가능한 닉네임입니다.'
@@ -92,10 +91,13 @@ export default function SignUp() {
           onRemove={handleRemoveNickname}
         />
         <div className="mt-[72px] flex flex-col items-center gap-2">
-          <Button active={!isCheckedNickname && values.nickname.length > 0}>
+          <Button
+            type="submit"
+            active={!isCheckedNickname && values.nickname.length > 0}
+          >
             중복 확인
           </Button>
-          <Button property="solid" active={isCheckedNickname}>
+          <Button type="submit" property="solid" active={isCheckedNickname}>
             레코딧 입장
           </Button>
         </div>
