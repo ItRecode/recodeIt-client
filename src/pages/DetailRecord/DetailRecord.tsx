@@ -6,15 +6,17 @@ import MoreButton from '@components/MoreButton'
 import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
 import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
+import { getCreatedDate } from './getCreatedDate'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
-
+  const [haveImage, setHaveImage] = useState(false)
+  const [date, setDate] = useState('')
   const [recordData, setRecordData] =
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
   const {
@@ -46,6 +48,15 @@ export default function DetailRecord() {
     }
     getRecordData()
   }, [])
+
+  useEffect(() => {
+    if (image_urls[0]) {
+      setHaveImage(true)
+    }
+    if (created_at) {
+      setDate(getCreatedDate(created_at))
+    }
+  }, [recordData])
 
   const getChipIconName = () => {
     switch (category_name) {
@@ -91,7 +102,7 @@ export default function DetailRecord() {
         </div>
         <div className="mt-4 flex">
           <p className="text-[14px]">{writer}</p>
-          <p className="px-4 text-xs text-grey-5">{created_at}</p>
+          <p className="px-4 text-xs text-grey-5">{date}</p>
         </div>
       </section>
       <section
