@@ -2,14 +2,11 @@ import { getIsDuplicatedNickname } from '@apis/auth'
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 
-export const useGetDuplicateNickname = (
-  nickname: string,
-  isChecked: boolean
-) => {
-  const { isSuccess } = useQuery(
-    [QUERY_KEYS.nickname, isChecked],
+export const useGetDuplicateNickname = (nickname: string) => {
+  const { data, isSuccess } = useQuery(
+    [QUERY_KEYS.nickname, nickname],
     async () => await getIsDuplicatedNickname(nickname)
   )
 
-  return { isSuccess }
+  return { isDuplicate: data?.data, isSuccess }
 }

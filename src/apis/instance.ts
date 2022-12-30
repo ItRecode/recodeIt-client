@@ -21,7 +21,10 @@ function setInterceptors(instance: AxiosInstance) {
   return instance
 }
 
-const baseInstance = axios.create({ baseURL: REACT_APP_DEV_API_END_POINT })
+const baseInstance = axios.create({
+  baseURL: REACT_APP_DEV_API_END_POINT,
+  withCredentials: true,
+})
 const authInstance = setInterceptors(baseInstance)
 
 export { baseInstance, authInstance }

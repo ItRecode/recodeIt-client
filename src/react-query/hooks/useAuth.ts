@@ -1,4 +1,5 @@
 import { login, signUp } from '@apis/auth'
+import useLocalStorage from '@hooks/useLocalStorage'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -12,15 +13,17 @@ export const useAuth = () => {
     {
       onSuccess: () => {
         //TODO: 세션ID값 저장
+        // useLocalStorage('sessionId', '')
         navigate('/')
       },
       onError: (error: AxiosError) => {
-        //TODO: 회원가입 진행
         const { data } = error.response as AxiosResponse
+        const loginType = error.response?.config.url?.split('/')[4]
 
         navigate('/sign-up', {
           state: {
-            tempSessionId: data,
+            tempSessionId: data.register_session,
+            loginType,
           },
         })
       },
@@ -29,7 +32,17 @@ export const useAuth = () => {
 
   const { mutate: oauthSignUp } = useMutation(
     async ({ type, tempId, nickname }: ISignUp) =>
-      await signUp({ type, tempId, nickname })
+      await signUp({ type, tempId, nickname }),
+    {
+      onSuccess: () => {
+        //TODO: 세션ID값 저장
+        // useLocalStorage('sessionId', '')
+        navigate('/')
+      },
+      onError: () => {
+        navigate('/login')
+      },
+    }
   )
 
   return { oauthLogin, oauthSignUp }
