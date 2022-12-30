@@ -10,16 +10,16 @@ export const getCreatedDate = (created_at: string) => {
     )
     return second
   }
-  if (difference_time * 60 < 60) {
+  if (difference_time / 60 < 60) {
     const minute = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.floor(-difference_time * 60),
+      Math.floor(-difference_time / 60),
       'minute'
     )
     return minute
   }
   if (difference_time < 24) {
     const hour = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.floor(-difference_time * 3600),
+      Math.floor(-difference_time / 3600),
       'hour'
     )
     return hour
