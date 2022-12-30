@@ -6,10 +6,10 @@ export const useGetDuplicateNickname = (
   nickname: string,
   isChecked: boolean
 ) => {
-  const { isSuccess } = useQuery(
+  const { data: isDuplicate, isSuccess } = useQuery(
     [QUERY_KEYS.nickname, isChecked],
     async () => await getIsDuplicatedNickname(nickname)
   )
 
-  return { isSuccess }
+  return { isDuplicate, isSuccess }
 }
