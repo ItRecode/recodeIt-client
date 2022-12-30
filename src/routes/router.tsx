@@ -10,6 +10,7 @@ import AddRecord from '@pages/AddRecord/AddRecord'
 import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import NotFound from '@pages/NotFound/NotFound'
 import Setting from '@pages/Setting/Setting'
+import NotService from '@pages/NotService/NotService'
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   { path: 'record/:recordId', element: <DetailRecord /> },
 
   { path: '*', element: <NotFound /> },
+  {
+    path: '/notservice',
+    element: <NotService />,
+  },
 ])
 
 export default router
