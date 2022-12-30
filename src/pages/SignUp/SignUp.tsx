@@ -9,19 +9,13 @@ import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
 
 export default function SignUp() {
   const location = useLocation()
-  const [nickname, setNickname] = useState('')
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const { oauthSignUp } = useAuth()
   const navigate = useNavigate()
-  const { isDuplicate, isSuccess } = useGetDuplicateNickname(
-    nickname,
-    isCheckedNickname
-  )
 
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
-      setNickname(nickname)
       if (!isCheckedNickname) {
         if (isSuccess) {
           setIsCheckedNickname(true)
@@ -35,7 +29,7 @@ export default function SignUp() {
     validate: ({ nickname }) => {
       const error: { nickname?: string } = {}
       const spacePattern = /\s/g
-      const nicknamePattern = /[ㄱ-힣aA-z0-9]{2,8}/
+      const nicknamePattern = /[가-힣aA-z0-9]{2,8}/
 
       if (!nickname.match(nicknamePattern)) {
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
@@ -45,13 +39,14 @@ export default function SignUp() {
         error.nickname = '공백을 제거해주세요'
       }
 
-      // if (isDuplicate) {
-      //   error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
-      // }
+      if (isDuplicate) {
+        error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
+      }
 
       return error
     },
   })
+  const { isDuplicate, isSuccess } = useGetDuplicateNickname(values.nickname)
 
   useEffect(() => {
     if (!location.state?.tempSessionId) {
