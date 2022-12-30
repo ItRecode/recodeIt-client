@@ -6,29 +6,17 @@ import MoreButton from '@components/MoreButton'
 import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-
-const initialRecordData = {
-  record_id: 0,
-  category_id: 0,
-  category_name: '',
-  title: '',
-  content: '',
-  writer: '',
-  color_name: '',
-  icon_name: '',
-  created_at: '',
-  image_urls: [],
-}
+import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
 
   const [recordData, setRecordData] =
-    useState<IRecordDataType>(initialRecordData)
+    useState<IRecordDataType>(INITIAL_RECORD_DATA)
   const {
     record_id,
     category_name,
@@ -42,19 +30,24 @@ export default function DetailRecord() {
   } = recordData
 
   const { recordId } = useParams()
-
-  const getRecordData = async () => {
-    const response = await getRecord(recordId)
-    if (response) {
-      setRecordData(response.data)
-    }
-  }
+  const navigate = useNavigate()
 
   useEffect(() => {
+    const getRecordData = async () => {
+      try {
+        const response = await getRecord(recordId)
+        if (response) {
+          setRecordData(response.data)
+        }
+      } catch (e) {
+        alert('해당 레코드를 찾을 수 없습니다.')
+        navigate('/notFound')
+      }
+    }
     getRecordData()
   }, [])
 
-  const chipIcon = () => {
+  const getChipIconName = () => {
     switch (category_name) {
       case '축하해주세요':
         return Celebrate
@@ -92,7 +85,7 @@ export default function DetailRecord() {
           <p className="flex items-center text-2xl font-semibold">{title}</p>
           <Chip
             active={true}
-            icon={chipIcon()}
+            icon={getChipIconName()}
             message={`${category_name}`}
           ></Chip>
         </div>
