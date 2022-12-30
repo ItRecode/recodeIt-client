@@ -3,12 +3,14 @@ import React from 'react'
 interface chipProps {
   active: boolean
   icon: string | null
+  type?: 'button' | 'submit' | 'reset' | undefined
   message: string
 }
 
-function Chip({ active, icon = null, message }: chipProps) {
+function Chip({ active, icon = null, message, type }: chipProps) {
   return (
     <button
+      type={type}
       className={`cursor-pointer rounded-full px-4 py-3 text-sm ${
         active ? ' bg-primary-2 text-grey-1' : ' bg-grey-2 text-grey-4'
       }`}

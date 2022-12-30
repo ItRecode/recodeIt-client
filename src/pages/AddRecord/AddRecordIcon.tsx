@@ -33,12 +33,12 @@ function AddRecordIcon({
   }
 
   return (
-    <div className="mb-10 flex justify-between overflow-scroll">
+    <div className="mr-[-24px] mb-10 flex w-[calc(100%+24*2)] justify-between gap-x-[30px] overflow-scroll">
       {iconState[currentRecordType].map((icon) => {
         return (
           <div
             onClick={() => handleChooseCurrentIcon(icon.id)}
-            className={`relative mr-[30px] h-[70px] w-[70px] rounded-2xl ${
+            className={`relative h-[70px] w-[70px] rounded-2xl ${
               icon.choosed && 'border-2 border-primary-3'
             }`}
             key={icon.id}

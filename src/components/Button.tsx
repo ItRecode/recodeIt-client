@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 
 interface ButtonPropsType
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -6,6 +6,7 @@ interface ButtonPropsType
   small?: boolean
   active?: boolean
   disabled?: boolean
+  type?: 'button' | 'submit' | 'reset' | undefined
   children?: string
 }
 
@@ -14,6 +15,7 @@ export default function Button({
   small = false,
   active = true,
   disabled = false,
+  type = 'button',
   children,
   ...props
 }: ButtonPropsType) {
@@ -41,6 +43,7 @@ export default function Button({
   }
   return (
     <button
+      type={type}
       disabled={disabled}
       className={`disabled: flex h-12  items-center justify-center rounded-2xl px-6 py-4 font-semibold
       ${!small && ' w-85'} 
