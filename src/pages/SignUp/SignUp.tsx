@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
@@ -46,9 +46,9 @@ export default function SignUp() {
   const { isDuplicate } = useGetDuplicateNickname(values.nickname)
 
   useEffect(() => {
-    if (!location.state?.tempSessionId) {
-      navigate('/login')
-    }
+    // if (!location.state?.tempSessionId) {
+    //   navigate('/login')
+    // }
   }, [])
 
   const setPropertyWithisCheckedNickname = () => {
@@ -61,6 +61,11 @@ export default function SignUp() {
     if (isRemove && !isCheckedNickname) {
       handleRemove('nickname')
     }
+  }
+
+  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
+    handleChange(e)
+    setIsCheckedNickname(false)
   }
 
   const handleSignUp = () => {
@@ -89,7 +94,7 @@ export default function SignUp() {
               ? '사용가능한 닉네임입니다.'
               : (errors.nickname as string)
           }
-          onChange={handleChange}
+          onChange={handleChangeNickname}
           onRemove={handleRemoveNickname}
         />
         <div className="mt-[72px]">
