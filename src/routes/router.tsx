@@ -11,6 +11,8 @@ import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import NotFound from '@pages/NotFound/NotFound'
 import Setting from '@pages/Setting/Setting'
 import NotService from '@pages/NotService/NotService'
+import OauthLogin from '@pages/Login/[type]'
+import SignUp from '@pages/SignUp/SignUp'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/login/:type',
+    element: <OauthLogin />,
+  },
+  {
+    path: '/sign-up',
+    element: <SignUp />,
   },
   {
     path: '/record/add',

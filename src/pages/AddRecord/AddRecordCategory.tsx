@@ -7,6 +7,7 @@ import Consolate from '@assets/consolate.svg'
 import Depress from '@assets/depress.svg'
 import Sympathy from '@assets/sympathy.svg'
 import MySide from '@assets/mySide.svg'
+
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import Chip from '@components/Chip'
 import { useRecoilState } from 'recoil'

@@ -9,7 +9,9 @@
       "@routes/*": ["./routes/*"],
       "@assets/*": ["./assets/*"],
       "@utils/*": ["./utils/*"],
-      "@apis/*": ["./apis/*"]
+      "@apis/*": ["./apis/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@react-query/*": ["./react-query/*"]
     }
   }
 }

@@ -15,7 +15,7 @@ function Chip({ active, icon = null, message, type }: chipProps) {
         active ? ' bg-primary-2 text-grey-1' : ' bg-grey-2 text-grey-4'
       }`}
     >
-      {icon && <img className=" mr-2" src={icon} />}
+      {icon && <img className="mr-2" src={icon} />}
       <span>{message}</span>
     </button>
   )
