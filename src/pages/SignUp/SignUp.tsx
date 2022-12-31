@@ -26,17 +26,14 @@ export default function SignUp() {
       const nicknamePattern = /[가-힣aA-z0-9]{2,8}/
 
       if (!nickname.match(nicknamePattern)) {
-        setIsCheckedNickname(false)
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
       }
 
       if (nickname.match(spacePattern)) {
-        setIsCheckedNickname(false)
         error.nickname = '공백을 제거해주세요'
       }
 
       if (!isDuplicate) {
-        setIsCheckedNickname(false)
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
       }
 
@@ -46,9 +43,9 @@ export default function SignUp() {
   const { isDuplicate } = useGetDuplicateNickname(values.nickname)
 
   useEffect(() => {
-    // if (!location.state?.tempSessionId) {
-    //   navigate('/login')
-    // }
+    if (!location.state?.tempSessionId) {
+      navigate('/login')
+    }
   }, [])
 
   const setPropertyWithisCheckedNickname = () => {
