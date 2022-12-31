@@ -4,8 +4,13 @@ import Happy from '@assets/happy.svg'
 import Cake from '@assets/cake.svg'
 import Love from '@assets/love.svg'
 import Consolate from '@assets/consolate.svg'
+import Depress from '@assets/depress.svg'
+import Sympathy from '@assets/sympathy.svg'
+import MySide from '@assets/mySide.svg'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import Chip from '@components/Chip'
+import { useRecoilState } from 'recoil'
+import { formDataAtom } from '@store/atom'
 
 type CategorySource = {
   title: string
@@ -26,17 +31,21 @@ function AddRecordCategory({
 }) {
   const categoryData: CategoryType = {
     [TEXT_DETAILS.CELEBRATION]: [
-      { title: '축하해주세요', choosed: true, id: 0, iconSrc: Celebrate },
-      { title: '행복해요', choosed: false, id: 1, iconSrc: Happy },
-      { title: '기념일이에요', choosed: false, id: 2, iconSrc: Cake },
-      { title: '연애중이에요', choosed: false, id: 3, iconSrc: Love },
+      { title: '축하해주세요', choosed: true, id: 3, iconSrc: Celebrate },
+      { title: '행복해요', choosed: false, id: 4, iconSrc: Happy },
+      { title: '기념일이에요', choosed: false, id: 5, iconSrc: Cake },
+      { title: '연애중이에요', choosed: false, id: 6, iconSrc: Love },
     ],
     [TEXT_DETAILS.CONSOLATION]: [
-      { title: '위로해주세요', choosed: true, id: 0, iconSrc: Consolate },
+      { title: '위로해주세요', choosed: true, id: 7, iconSrc: Consolate },
+      { title: '우울해요', choosed: false, id: 8, iconSrc: Depress },
+      { title: '공감이 필요해요', choosed: false, id: 9, iconSrc: Sympathy },
+      { title: '내편이 되어주세요', choosed: false, id: 10, iconSrc: MySide },
     ],
   }
 
   const [categoryState, setCategoryState] = useState<CategoryType>(categoryData)
+  const [formData, setFormData] = useRecoilState(formDataAtom)
 
   const handleChooseCurrentCategory = (index: number): void => {
     const currentState = {
@@ -48,6 +57,14 @@ function AddRecordCategory({
         })
       ),
     }
+
+    setFormData({
+      ...formData,
+      selectedCategory:
+        categoryState[currentRecordType][
+          currentRecordType === 'celebration' ? index - 3 : index - 7
+        ].id,
+    })
     setCategoryState(currentState)
   }
 
