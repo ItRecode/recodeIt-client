@@ -48,7 +48,7 @@ export default function SignUp() {
     }
   }, [])
 
-  const setPropertyWithisCheckedNickname = () => {
+  const setPropertyWithIsCheckedNickname = () => {
     if (isCheckedNickname) return 'success'
     if (errors.nickname as string) return 'error'
     return 'default'
@@ -80,7 +80,7 @@ export default function SignUp() {
       </h1>
       <form onSubmit={handleSubmit}>
         <Input
-          property={setPropertyWithisCheckedNickname()}
+          property={setPropertyWithIsCheckedNickname()}
           name="nickname"
           label="닉네임"
           value={values.nickname}
