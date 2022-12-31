@@ -10,21 +10,15 @@ import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
 export default function SignUp() {
   const location = useLocation()
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
+  const [nickname, setNickname] = useState('')
   const { oauthSignUp } = useAuth()
   const navigate = useNavigate()
 
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
-      if (!isCheckedNickname) {
-        if (isSuccess && isDuplicate) {
-          setIsCheckedNickname(true)
-        }
-        return
-      }
-
-      const { tempSessionId, loginType } = location.state
-      oauthSignUp({ type: loginType, tempId: tempSessionId, nickname })
+      setIsCheckedNickname(true)
+      setNickname(nickname)
     },
     validate: ({ nickname }) => {
       const error: { nickname?: string } = {}
@@ -32,21 +26,24 @@ export default function SignUp() {
       const nicknamePattern = /[가-힣aA-z0-9]{2,8}/
 
       if (!nickname.match(nicknamePattern)) {
+        setIsCheckedNickname(false)
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
       }
 
       if (nickname.match(spacePattern)) {
+        setIsCheckedNickname(false)
         error.nickname = '공백을 제거해주세요'
       }
 
       if (!isDuplicate) {
+        setIsCheckedNickname(false)
         error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
       }
 
       return error
     },
   })
-  const { isDuplicate, isSuccess } = useGetDuplicateNickname(values.nickname)
+  const { isDuplicate } = useGetDuplicateNickname(values.nickname)
 
   useEffect(() => {
     if (!location.state?.tempSessionId) {
@@ -64,6 +61,11 @@ export default function SignUp() {
     if (isRemove && !isCheckedNickname) {
       handleRemove('nickname')
     }
+  }
+
+  const handleSignUp = () => {
+    const { tempSessionId, loginType } = location.state
+    oauthSignUp({ type: loginType, tempId: tempSessionId, nickname })
   }
 
   return (
@@ -90,18 +92,22 @@ export default function SignUp() {
           onChange={handleChange}
           onRemove={handleRemoveNickname}
         />
-        <div className="mt-[72px] flex flex-col items-center gap-2">
-          <Button
-            type="submit"
-            active={!isCheckedNickname && values.nickname.length > 0}
-          >
+        <div className="mt-[72px]">
+          <Button type="submit" active={values.nickname.length > 0}>
             중복 확인
-          </Button>
-          <Button type="submit" property="solid" active={isCheckedNickname}>
-            레코딧 입장
           </Button>
         </div>
       </form>
+      <div className="mt-2">
+        <Button
+          type="submit"
+          property="solid"
+          active={isCheckedNickname}
+          onClick={handleSignUp}
+        >
+          레코딧 입장
+        </Button>
+      </div>
     </div>
   )
 }
