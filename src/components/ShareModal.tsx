@@ -20,7 +20,7 @@ export default function ShareModal({
 }: IModalProps) {
   return (
     <div className="absolute left-0 flex h-full w-screen items-center justify-center">
-      <div className="absolute z-10 h-full w-screen bg-grey-10  opacity-50"></div>
+      <div className="absolute z-10 h-full w-screen bg-grey-10  opacity-50" />
       <section className="absolute z-20 h-[187px] w-[270px] rounded-2xl bg-grey-1 py-4 px-3">
         <div className="flex justify-between">
           <p className="text-lg font-semibold">공유하기</p>

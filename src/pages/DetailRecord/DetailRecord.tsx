@@ -6,7 +6,7 @@ import MoreButton from '@components/MoreButton'
 import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
@@ -26,7 +26,7 @@ export default function DetailRecord() {
     color_name,
     icon_name,
     created_at,
-    image_urls,
+    // image_urls,
   } = recordData
 
   const { recordId } = useParams()
@@ -87,7 +87,7 @@ export default function DetailRecord() {
             active={true}
             icon={getChipIconName()}
             message={`${category_name}`}
-          ></Chip>
+          />
         </div>
         <div className="mt-4 flex">
           <p className="text-[14px]">{writer}</p>
@@ -99,7 +99,7 @@ export default function DetailRecord() {
         className="flex w-full flex-col items-center"
       >
         <div
-          className={`my-4 h-[338px] w-[338px] rounded-2xl bg-${color_name} flex items-center justify-center`}
+          className={`my-4 h-[338px] w-[338px] rounded-2xl${color_name} flex items-center justify-center`}
         >
           {icon_name !== '' && <RecordIcon width={160} height={160} />}
         </div>
@@ -130,7 +130,7 @@ export default function DetailRecord() {
           </div>
         </div>
       </section>
-      <footer></footer>
+      <footer />
     </div>
   )
 }
