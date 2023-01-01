@@ -1,5 +1,5 @@
 import { login, signUp } from '@apis/auth'
-import useLocalStorage from '@hooks/useLocalStorage'
+// import useLocalStorage from '@hooks/useLocalStorage'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +11,10 @@ export const useAuth = () => {
   const { mutate: oauthLogin } = useMutation(
     async ({ type, token }: IAuth) => await login({ type, token }),
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         //TODO: 세션ID값 저장
-        // useLocalStorage('sessionId', '')
+        // console.log(data)
+        // useLocalStorage('session', data.headers?.['set-cookie'])
         navigate('/')
       },
       onError: (error: AxiosError) => {
