@@ -11,7 +11,7 @@ export const useAuth = () => {
   const { mutate: oauthLogin } = useMutation(
     async ({ type, token }: IAuth) => await login({ type, token }),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         //TODO: 세션ID값 저장
         // console.log(data)
         // useLocalStorage('session', data.headers?.['set-cookie'])
