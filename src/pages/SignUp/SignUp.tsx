@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
@@ -10,21 +10,15 @@ import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
 export default function SignUp() {
   const location = useLocation()
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
+  const [nickname, setNickname] = useState('')
   const { oauthSignUp } = useAuth()
   const navigate = useNavigate()
 
   const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
     initialValues: { nickname: '' },
     onSubmit: ({ nickname }) => {
-      if (!isCheckedNickname) {
-        if (isSuccess && isDuplicate) {
-          setIsCheckedNickname(true)
-        }
-        return
-      }
-
-      const { tempSessionId, loginType } = location.state
-      oauthSignUp({ type: loginType, tempId: tempSessionId, nickname })
+      setIsCheckedNickname(true)
+      setNickname(nickname)
     },
     validate: ({ nickname }) => {
       const error: { nickname?: string } = {}
@@ -46,7 +40,7 @@ export default function SignUp() {
       return error
     },
   })
-  const { isDuplicate, isSuccess } = useGetDuplicateNickname(values.nickname)
+  const { isDuplicate } = useGetDuplicateNickname(values.nickname)
 
   useEffect(() => {
     if (!location.state?.tempSessionId) {
@@ -54,7 +48,7 @@ export default function SignUp() {
     }
   }, [])
 
-  const setPropertyWithisCheckedNickname = () => {
+  const setPropertyWithIsCheckedNickname = () => {
     if (isCheckedNickname) return 'success'
     if (errors.nickname as string) return 'error'
     return 'default'
@@ -64,6 +58,16 @@ export default function SignUp() {
     if (isRemove && !isCheckedNickname) {
       handleRemove('nickname')
     }
+  }
+
+  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
+    handleChange(e)
+    setIsCheckedNickname(false)
+  }
+
+  const handleSignUp = () => {
+    const { tempSessionId, loginType } = location.state
+    oauthSignUp({ type: loginType, tempId: tempSessionId, nickname })
   }
 
   return (
@@ -76,7 +80,7 @@ export default function SignUp() {
       </h1>
       <form onSubmit={handleSubmit}>
         <Input
-          property={setPropertyWithisCheckedNickname()}
+          property={setPropertyWithIsCheckedNickname()}
           name="nickname"
           label="닉네임"
           value={values.nickname}
@@ -87,21 +91,25 @@ export default function SignUp() {
               ? '사용가능한 닉네임입니다.'
               : (errors.nickname as string)
           }
-          onChange={handleChange}
+          onChange={handleChangeNickname}
           onRemove={handleRemoveNickname}
         />
-        <div className="mt-[72px] flex flex-col items-center gap-2">
-          <Button
-            type="submit"
-            active={!isCheckedNickname && values.nickname.length > 0}
-          >
+        <div className="mt-[72px]">
+          <Button type="submit" active={values.nickname.length > 0}>
             중복 확인
-          </Button>
-          <Button type="submit" property="solid" active={isCheckedNickname}>
-            레코딧 입장
           </Button>
         </div>
       </form>
+      <div className="mt-2">
+        <Button
+          type="submit"
+          property="solid"
+          active={isCheckedNickname}
+          onClick={handleSignUp}
+        >
+          레코딧 입장
+        </Button>
+      </div>
     </div>
   )
 }
