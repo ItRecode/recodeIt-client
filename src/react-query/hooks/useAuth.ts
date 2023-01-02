@@ -14,15 +14,20 @@ export const useAuth = () => {
         navigate('/')
       },
       onError: (error: AxiosError) => {
-        const { data } = error.response as AxiosResponse
-        const loginType = error.response?.config.url?.split('/')[4]
+        if (error.response?.status === 401) {
+          const { data } = error.response as AxiosResponse
+          const loginType = error.response?.config.url?.split('/')[4]
 
-        navigate('/sign-up', {
-          state: {
-            tempSessionId: data.register_session,
-            loginType,
-          },
-        })
+          navigate('/sign-up', {
+            state: {
+              tempSessionId: data.register_session,
+              loginType,
+            },
+          })
+          return
+        }
+
+        navigate('/login')
       },
     }
   )
