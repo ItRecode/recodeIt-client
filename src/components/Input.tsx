@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 
 interface InputPropsType extends React.InputHTMLAttributes<HTMLInputElement> {
