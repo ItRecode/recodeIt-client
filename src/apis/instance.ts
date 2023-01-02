@@ -1,3 +1,4 @@
+import { UNAUTHORIZED_CODE } from '@assets/constant/constant'
 import axios, { AxiosInstance } from 'axios'
 import { redirect } from 'react-router-dom'
 
@@ -11,7 +12,7 @@ function setInterceptors(instance: AxiosInstance) {
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response?.status === 401) {
+      if (error.response?.status === UNAUTHORIZED_CODE) {
         redirect('/login')
       }
 

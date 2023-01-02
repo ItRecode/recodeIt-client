@@ -1,4 +1,5 @@
 import { login, signUp } from '@apis/auth'
+import { UNAUTHORIZED_CODE } from '@assets/constant/constant'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +17,7 @@ export const useAuth = () => {
         })
       },
       onError: (error: AxiosError) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === UNAUTHORIZED_CODE) {
           const { data } = error.response as AxiosResponse
           const loginType = error.response?.config.url?.split('/')[4]
 
