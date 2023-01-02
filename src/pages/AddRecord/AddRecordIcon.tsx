@@ -1,5 +1,7 @@
 import { ADD_RECORD_ICONS } from '@assets/constant/RecordIcons'
+import { formDataAtom } from '@store/atom'
 import React, { useState } from 'react'
+import { useRecoilState } from 'recoil'
 
 type IconSource = {
   src: string
@@ -20,6 +22,7 @@ function AddRecordIcon({
   const icons = ADD_RECORD_ICONS
 
   const [iconState, setIconState] = useState<IconType>(icons)
+  const [formData, setFormData] = useRecoilState(formDataAtom)
 
   const handleChooseCurrentIcon = (index: number): void => {
     const currentState = {
@@ -29,6 +32,12 @@ function AddRecordIcon({
         choosed: icon.id === index,
       })),
     }
+    setFormData({
+      ...formData,
+      selectedIcon: iconState[currentRecordType][index].src
+        .split('/')[3]
+        .split('.')[0],
+    })
     setIconState(currentState)
   }
 

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { ReactComponent as Check } from '@assets/check.svg'
+import { useRecoilState } from 'recoil'
+import { formDataAtom } from '@store/atom'
 
 function AddRecordColor() {
   const [colors, setColors] = useState([
@@ -9,12 +11,18 @@ function AddRecordColor() {
     { src: 'bg-icon-blue', choosed: false, id: 3 },
     { src: 'bg-icon-green', choosed: false, id: 4 },
   ])
+  const [formData, setFormData] = useRecoilState(formDataAtom)
 
   const handleChooseCurrentColor = (index: number): void => {
     const changeCurrent = colors.map((color) => ({
       ...color,
       choosed: color.id === index,
     }))
+    const colorSrc = colors[index].src
+    setFormData({
+      ...formData,
+      selectedColor: colorSrc.slice(colorSrc.indexOf('-') + 1),
+    })
     setColors(changeCurrent)
   }
 

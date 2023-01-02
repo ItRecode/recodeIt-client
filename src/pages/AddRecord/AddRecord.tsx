@@ -11,10 +11,27 @@ import MainCategoryTap from '@components/MainCategoryTap'
 import AddRecordIcon, { IconType } from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
+import { formDataAtom } from '@store/atom'
+import { useRecoilValue } from 'recoil'
+import { enrollRecord } from '@apis/record'
 
 export type CheckAllType = {
   input: boolean
   textArea: boolean
+}
+
+export type FormDataType = {
+  selectedCategory: number
+  selectedColor: string
+  selectedIcon: string
+}
+
+export interface WriteRecordRequestDto {
+  color_name: string
+  content: string
+  icon_name: string
+  record_category_id: number
+  title: string
 }
 
 export default function AddRecord() {
@@ -25,12 +42,37 @@ export default function AddRecord() {
     input: false,
     textArea: false,
   })
-
+  const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
+    useRecoilValue(formDataAtom)
+  const [files, setFiles] = useState('')
   const navigate = useNavigate()
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    navigate('/record/1')
+    const formData = makeFormDatas(e)
+    const enroll = async () => {
+      const response = await enrollRecord(formData)
+      navigate(`/record/${response.data.record_id}`)
+    }
+    enroll()
+  }
+
+  const makeFormDatas = (e: any) => {
+    const formData: WriteRecordRequestDto = {
+      color_name: selectedColor,
+      content: e.target[5].value,
+      icon_name: selectedIcon,
+      record_category_id: selectedCategory,
+      title: e.target[4].value,
+    }
+
+    const data = new FormData()
+    data.append('file', files)
+    data.append(
+      'writeRecordRequestDto',
+      new Blob([JSON.stringify(formData)], { type: 'application/json' })
+    )
+    return data
   }
 
   return (
@@ -42,7 +84,11 @@ export default function AddRecord() {
         currentRecordType={recordType}
         onSetRecordType={setRecordType}
       />
-      <form className="px-6" onSubmit={handleSubmitData}>
+      <form
+        encType="multipart/form-data"
+        className="px-6"
+        onSubmit={handleSubmitData}
+      >
         <AddRecordCategory currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
@@ -60,18 +106,20 @@ export default function AddRecord() {
         <AddRecordTitle title={'레코드 아이콘'} />
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
-        <AddRecordFile />
+        <AddRecordFile setFiles={setFiles} />
+        <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 pl-6">
+          <Button
+            property={'solid'}
+            disabled={false}
+            type="submit"
+            active={
+              checkAllFilled.input && checkAllFilled.textArea ? true : false
+            }
+          >
+            레코드 추가하기
+          </Button>
+        </div>
       </form>
-      <div className="border-t border-grey-2 py-4 px-5">
-        <Button
-          property={'solid'}
-          active={
-            checkAllFilled.input && checkAllFilled.textArea ? true : false
-          }
-        >
-          레코드 추가하기
-        </Button>
-      </div>
     </div>
   )
 }
