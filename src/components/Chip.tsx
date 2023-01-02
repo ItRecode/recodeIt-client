@@ -11,7 +11,7 @@ function Chip({ active, icon = null, message, type }: chipProps) {
   return (
     <button
       type={type}
-      className={`cursor-pointer rounded-full px-4 py-3 text-sm ${
+      className={`flex cursor-pointer items-center rounded-full px-4 py-3 text-sm ${
         active ? ' bg-primary-2 text-grey-1' : ' bg-grey-2 text-grey-4'
       }`}
     >
