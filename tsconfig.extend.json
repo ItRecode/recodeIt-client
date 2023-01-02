@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@app": ["./App.tsx"],
+      "@store/*": ["./store/*"],
       "@pages/*": ["./pages/*"],
       "@components/*": ["./components/*"],
       "@routes/*": ["./routes/*"],

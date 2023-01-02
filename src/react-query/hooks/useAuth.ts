@@ -1,4 +1,5 @@
 import { login, signUp } from '@apis/auth'
+import { UNAUTHORIZED_CODE } from '@assets/constant/constant'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -11,10 +12,12 @@ export const useAuth = () => {
     async ({ type, token }: IAuth) => await login({ type, token }),
     {
       onSuccess: () => {
-        navigate('/')
+        navigate('/', {
+          replace: true,
+        })
       },
       onError: (error: AxiosError) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === UNAUTHORIZED_CODE) {
           const { data } = error.response as AxiosResponse
           const loginType = error.response?.config.url?.split('/')[4]
 
@@ -37,7 +40,9 @@ export const useAuth = () => {
       await signUp({ type, tempId, nickname }),
     {
       onSuccess: () => {
-        navigate('/')
+        navigate('/', {
+          replace: true,
+        })
       },
       onError: () => {
         navigate('/login')

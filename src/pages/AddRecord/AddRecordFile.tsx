@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
-function AddRecordFile() {
+function AddRecordFile({ setFiles }: any) {
   const [currentImg, setCurrentImg] = useState<null | string>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
+    setFiles((e.target.files as FileList)[0])
     setCurrentImg(e.target.value)
   }
 

@@ -20,3 +20,5 @@ export const INITIAL_RECORD_DATA = {
   created_at: '',
   image_urls: [],
 }
+
+export const UNAUTHORIZED_CODE = 401
