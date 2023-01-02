@@ -1,4 +1,4 @@
-import React, { useState } from 're
+import React, { useState } from 'react'
 import Depress from '@assets/depress.svg'
 import Sympathy from '@assets/sympathy.svg'
 import MySide from '@assets/mySide.svg'
@@ -8,7 +8,6 @@ import Chip from '@components/Chip'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-
 
 type CategorySource = {
   title: string

@@ -8,11 +8,7 @@ export const getCategory = () => {
 
 const { REACT_APP_DEV_API_END_POINT } = process.env
 
-export const enrollRecord = async (
-  // writeRecordRequestDto: WriteRecordRequestDto,
-  // file?: any
-  data: any
-) => {
+export const enrollRecord = async (data: any) => {
   try {
     const response = await axios({
       method: 'post',
