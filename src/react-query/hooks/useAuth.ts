@@ -11,7 +11,9 @@ export const useAuth = () => {
     async ({ type, token }: IAuth) => await login({ type, token }),
     {
       onSuccess: () => {
-        navigate('/')
+        navigate('/', {
+          replace: true,
+        })
       },
       onError: (error: AxiosError) => {
         if (error.response?.status === 401) {
@@ -37,7 +39,9 @@ export const useAuth = () => {
       await signUp({ type, tempId, nickname }),
     {
       onSuccess: () => {
-        navigate('/')
+        navigate('/', {
+          replace: true,
+        })
       },
       onError: () => {
         navigate('/login')
