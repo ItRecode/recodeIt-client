@@ -3,18 +3,22 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RecoilRoot } from 'recoil'
 
 import React from 'react'
-import Router from './Routes/Routes'
+import Layout from '@components/Layout'
+import { RouterProvider } from 'react-router-dom'
+import router from '@routes/router'
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-        <ReactQueryDevtools />
-      </QueryClientProvider>
-    </RecoilRoot>
+    <Layout>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </RecoilRoot>
+    </Layout>
   )
 }
 

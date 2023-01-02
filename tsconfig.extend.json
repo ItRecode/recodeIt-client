@@ -3,9 +3,15 @@
     "baseUrl": "./src",
     "paths": {
       "@app": ["./App.tsx"],
+      "@store/*": ["./store/*"],
       "@pages/*": ["./pages/*"],
       "@components/*": ["./components/*"],
-      "@routes/*":["./routes/*"]
+      "@routes/*": ["./routes/*"],
+      "@assets/*": ["./assets/*"],
+      "@utils/*": ["./utils/*"],
+      "@apis/*": ["./apis/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@react-query/*": ["./react-query/*"]
     }
   }
 }
