@@ -12,9 +12,12 @@ import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
 import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
+import ReplyList from './ReplyList'
+import ReplyInput from './ReplyInput'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [haveImage, setHaveImage] = useState(false)
   const [date, setDate] = useState('')
   const [recordData, setRecordData] =
@@ -28,7 +31,7 @@ export default function DetailRecord() {
     color_name,
     icon_name,
     created_at,
-    // image_urls,
+    image_urls,
   } = recordData
 
   const { recordId } = useParams()
@@ -119,29 +122,8 @@ export default function DetailRecord() {
           <p>{content}</p>
         </div>
       </section>
-      <section id="reply" className="px-6">
-        <p>댓글</p>
-        <div className="mt-1.5">
-          <div className="rounded-lg bg-grey-2 p-3">
-            <div className="flex">
-              <p className="text-xs font-medium">익명</p>
-              <p className="mx-1.5 text-xs font-normal text-grey-5">0시간 전</p>
-            </div>
-            <p className="mt-1.5 text-xs font-normal text-grey-8">
-              댓글이 노출됩니다.
-            </p>
-          </div>
-          <div className="flex justify-end">
-            <button className="cursor-pointer bg-grey-1 text-xs text-[#F83636]">
-              신고
-            </button>
-            <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
-              수정
-            </button>
-          </div>
-        </div>
-      </section>
-      <footer />
+      <ReplyList />
+      <ReplyInput />
     </div>
   )
 }

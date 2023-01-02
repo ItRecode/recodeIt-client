@@ -57,6 +57,7 @@ export default function AddRecord() {
     enroll()
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const makeFormDatas = (e: any) => {
     const formData: WriteRecordRequestDto = {
       color_name: selectedColor,
