@@ -50,7 +50,6 @@ const router = createBrowserRouter([
     ),
   },
   { path: 'record/:recordId', element: <DetailRecord /> },
-
   { path: '*', element: <NotFound /> },
   {
     path: '/notservice',

@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom'
 export default function Setting() {
   const navigate = useNavigate()
   useEffect(() => {
-    navigate('/notservice')
+    navigate('/notservice', {
+      replace: true,
+    })
   }, [])
   return <div>Setting</div>
 }

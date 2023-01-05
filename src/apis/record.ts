@@ -1,4 +1,4 @@
-import { WriteRecordRequestDto } from '@pages/AddRecord/AddRecord'
+// import { WriteRecordRequestDto } from '@pages/AddRecord/AddRecord'
 import axios from 'axios'
 import { baseInstance } from './instance'
 
@@ -8,6 +8,7 @@ export const getCategory = () => {
 
 const { REACT_APP_DEV_API_END_POINT } = process.env
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const enrollRecord = async (data: any) => {
   try {
     const response = await axios({
@@ -17,6 +18,7 @@ export const enrollRecord = async (data: any) => {
       data,
     })
     return response
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error)
   }

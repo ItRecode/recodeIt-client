@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AddRecordFile({ setFiles }: any) {
   const [currentImg, setCurrentImg] = useState<null | string>(null)
 
@@ -32,7 +33,9 @@ function AddRecordFile({ setFiles }: any) {
         <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
           <img className=" mb-1" src={Camera} alt="camera" />
           <p className=" text-xs text-grey-4">
-            <span className={`text-${!currentImg ? 'grey-4' : 'primary-2'}`}>
+            <span
+              className={`${!currentImg ? 'text-grey-4' : 'text-primary-2'}`}
+            >
               {!currentImg ? '0' : '1'}
             </span>
             /1

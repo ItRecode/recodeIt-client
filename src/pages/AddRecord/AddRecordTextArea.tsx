@@ -8,11 +8,7 @@ type userProps = {
   checkAllFilled: CheckAllType
 }
 
-function AddRecordTextArea({
-  currentRecordType,
-  setCheckAllFilled,
-  checkAllFilled,
-}: userProps) {
+function AddRecordTextArea({ setCheckAllFilled, checkAllFilled }: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
 
   const handleChangeTextArea = (

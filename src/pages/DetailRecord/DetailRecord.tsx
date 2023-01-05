@@ -17,6 +17,7 @@ import ReplyInput from './ReplyInput'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [haveImage, setHaveImage] = useState(false)
   const [date, setDate] = useState('')
   const [recordData, setRecordData] =
@@ -100,7 +101,7 @@ export default function DetailRecord() {
             active={true}
             icon={getChipIconName()}
             message={`${category_name}`}
-          ></Chip>
+          />
         </div>
         <div className="mt-4 flex">
           <p className="text-[14px]">{writer}</p>
@@ -112,7 +113,7 @@ export default function DetailRecord() {
         className="flex w-full flex-col items-center"
       >
         <div
-          className={`my-4 h-[338px] w-[338px] rounded-2xl bg-${color_name} flex items-center justify-center`}
+          className={`my-4 h-[338px] w-[338px] rounded-2xl${color_name} flex items-center justify-center`}
         >
           {icon_name !== '' && <RecordIcon width={160} height={160} />}
         </div>
