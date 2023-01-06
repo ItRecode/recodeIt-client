@@ -16,7 +16,7 @@ export default function KakaoButton() {
   return (
     <button
       aria-label="kakao-login-button"
-      className="flex h-12 w-85 items-center rounded-xl border-none bg-kakao px-8 font-semibold hover:cursor-pointer"
+      className="flex h-12 w-full items-center rounded-xl border-none bg-kakao px-8 font-semibold hover:cursor-pointer"
       onClick={handleKakaoLogin}
     >
       <KakaoSymbol aria-label="kakao-symbol-icon" />
