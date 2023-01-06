@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Depress from '@assets/depress.svg'
 import Sympathy from '@assets/sympathy.svg'
 import MySide from '@assets/mySide.svg'
@@ -8,6 +8,7 @@ import Chip from '@components/Chip'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
+import { enrollRecord, getCategory } from '@apis/record'
 
 type CategorySource = {
   title: string
@@ -43,6 +44,13 @@ function AddRecordCategory({
 
   const [categoryState, setCategoryState] = useState<CategoryType>(categoryData)
   const [formData, setFormData] = useRecoilState(formDataAtom)
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getCategory()
+      console.log(data)
+    }
+    getData()
+  }, [])
 
   const handleChooseCurrentCategory = (index: number): void => {
     const currentState = {
