@@ -52,7 +52,9 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
-      navigate(`/record/${response.data.record_id}`)
+      navigate(`/record/${response.data.record_id}`, {
+        replace: true,
+      })
     }
     enroll()
   }
