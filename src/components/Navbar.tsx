@@ -7,7 +7,7 @@ export default function NavBar() {
   return (
     <>
       <Outlet />
-      <nav className="absolute bottom-0 flex h-[60px] w-[375px] justify-between rounded-t-xl border border-solid border-grey-3 px-3 pt-1.5">
+      <nav className="absolute bottom-0 flex h-[60px] w-full justify-between rounded-t-xl border border-solid border-grey-3 px-3 pt-1.5">
         <nav className="left-3 flex">
           <NavbarItem pageName="홈" linkSrc="/" className="mr-5" />
           <NavbarItem pageName="랭킹" linkSrc="/rank" />
