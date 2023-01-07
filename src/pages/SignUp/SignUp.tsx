@@ -6,7 +6,6 @@ import Input from '@components/Input'
 import { useAuth } from '@react-query/hooks/useAuth'
 import { getIsDuplicatedNickname } from '@apis/auth'
 import useDebounce from '@hooks/useDebounce'
-import { isClassDeclaration } from 'typescript'
 
 export default function SignUp() {
   const location = useLocation()
@@ -18,9 +17,9 @@ export default function SignUp() {
   const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
-    // if (!location.state?.tempSessionId) {
-    //   navigate('/login')
-    // }
+    if (!location.state?.tempSessionId) {
+      navigate('/login')
+    }
   }, [])
 
   useDebounce(
@@ -43,7 +42,8 @@ export default function SignUp() {
 
   const validateNickname = (nickname: string) => {
     const spacePattern = /\s/g
-    const nicknamePattern = /[가-힣|A-z|0-9]{2,8}/
+    const nicknamePattern = /[가-힣A-z0-9]{2,8}/
+    const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
     if (nickname.length < 2) {
       setErrorMessage('2글자 이상 입력해주세요')
@@ -55,8 +55,13 @@ export default function SignUp() {
       return false
     }
 
+    if (nickname.match(specialPattern)) {
+      setErrorMessage('특수문자를 제거해주세요')
+      return false
+    }
+
     if (!nickname.match(nicknamePattern)) {
-      setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다.')
+      setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다')
       return false
     }
     return true
