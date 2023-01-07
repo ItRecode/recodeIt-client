@@ -14,6 +14,7 @@ export default function SignUp() {
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
     if (!location.state?.tempSessionId) {
@@ -41,7 +42,8 @@ export default function SignUp() {
 
   const validateNickname = (nickname: string) => {
     const spacePattern = /\s/g
-    const nicknamePattern = /[가-힣aA-z0-9]/
+    const nicknamePattern = /[가-힣A-z0-9]{2,8}/
+    const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
     if (nickname.length < 2) {
       setErrorMessage('2글자 이상 입력해주세요')
@@ -53,8 +55,13 @@ export default function SignUp() {
       return false
     }
 
+    if (nickname.match(specialPattern)) {
+      setErrorMessage('특수문자를 제거해주세요')
+      return false
+    }
+
     if (!nickname.match(nicknamePattern)) {
-      setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다.')
+      setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다')
       return false
     }
     return true
@@ -62,15 +69,14 @@ export default function SignUp() {
 
   const setPropertyWithIsCheckedNickname = () => {
     if (isCheckedNickname) return 'success'
+    if (nickname.length < 1 && isInputClicked) return 'success'
     if (errorMessage.length > 0 && !isCheckedNickname) return 'error'
     return 'default'
   }
 
-  const handleRemoveNickname = (isRemove: boolean) => {
-    if (isRemove && !isCheckedNickname) {
-      setNickname('')
-      setIsCheckedNickname(false)
-    }
+  const handleRemoveNickname = () => {
+    setNickname('')
+    setIsCheckedNickname(false)
   }
 
   const handleSignUp = () => {
@@ -92,10 +98,13 @@ export default function SignUp() {
         label="닉네임"
         value={nickname}
         maxLength={8}
-        placeholder="국문, 영문, 숫자 포함 2~8자"
+        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
         message={isCheckedNickname ? '사용가능한 닉네임입니다.' : errorMessage}
         onChange={(e) => setNickname(e.target.value)}
         onRemove={handleRemoveNickname}
+        onFocus={() => setIsInputClicked(true)}
+        onBlur={() => setIsInputClicked(false)}
+        autoFocus={false}
       />
       <div className="mt-[104px]">
         <Button
