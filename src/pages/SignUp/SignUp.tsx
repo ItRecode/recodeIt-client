@@ -18,9 +18,9 @@ export default function SignUp() {
   const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
-    if (!location.state?.tempSessionId) {
-      navigate('/login')
-    }
+    // if (!location.state?.tempSessionId) {
+    //   navigate('/login')
+    // }
   }, [])
 
   useDebounce(
@@ -70,10 +70,8 @@ export default function SignUp() {
   }
 
   const handleRemoveNickname = (isRemove: boolean) => {
-    if (isRemove && !isCheckedNickname) {
-      setNickname('')
-      setIsCheckedNickname(false)
-    }
+    setNickname('')
+    setIsCheckedNickname(false)
   }
 
   const handleSignUp = () => {
