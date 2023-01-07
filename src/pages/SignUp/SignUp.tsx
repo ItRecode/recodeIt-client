@@ -7,6 +7,8 @@ import { useAuth } from '@react-query/hooks/useAuth'
 import { getIsDuplicatedNickname } from '@apis/auth'
 import useDebounce from '@hooks/useDebounce'
 
+const NICKNAME_MIN_LENGTH = 2
+
 export default function SignUp() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -45,8 +47,8 @@ export default function SignUp() {
     const nicknamePattern = /[가-힣A-z0-9]{2,8}/
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
-    if (nickname.length < 2) {
-      setErrorMessage('2글자 이상 입력해주세요')
+    if (nickname.length < NICKNAME_MIN_LENGTH) {
+      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요`)
       return false
     }
 
