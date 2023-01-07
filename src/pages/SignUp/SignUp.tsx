@@ -69,7 +69,7 @@ export default function SignUp() {
     return 'default'
   }
 
-  const handleRemoveNickname = (isRemove: boolean) => {
+  const handleRemoveNickname = () => {
     setNickname('')
     setIsCheckedNickname(false)
   }
