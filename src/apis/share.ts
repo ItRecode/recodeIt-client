@@ -13,18 +13,18 @@ export const ShareKakao = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { Kakao }: any = window
   if (!Kakao.isInitialized()) {
-    Kakao.init(process.env.REACT_APP_KAKAO_REST_API_KEY)
+    Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY)
   }
 
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: `${title}`,
-      description: `${description}`,
-      imageUrl: `${imageUrl}`,
+      title: title,
+      description: description,
+      imageUrl: imageUrl,
       link: {
-        webUrl: `${process.env.REACT_APP_WEB_URL}`,
-        mobileWebUrl: `${process.env.REACT_APP_WEB_URL}`,
+        webUrl: process.env.REACT_APP_WEB_URL,
+        mobileWebUrl: process.env.REACT_APP_WEB_URL,
       },
     },
 
