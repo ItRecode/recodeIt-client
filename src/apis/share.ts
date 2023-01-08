@@ -19,12 +19,12 @@ export const ShareKakao = ({
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: `${title}`,
-      description: `${description}`,
-      imageUrl: `${imageUrl}`,
+      title: title,
+      description: description,
+      imageUrl: imageUrl,
       link: {
-        webUrl: `${process.env.REACT_APP_WEB_URL}`,
-        mobileWebUrl: `${process.env.REACT_APP_WEB_URL}`,
+        webUrl: process.env.REACT_APP_WEB_URL,
+        mobileWebUrl: process.env.REACT_APP_WEB_URL,
       },
     },
 
