@@ -42,7 +42,7 @@ export default function ReplyInput() {
   }, [])
 
   return (
-    <div className="flex w-full items-end">
+    <div className="flex w-full items-end bg-grey-1">
       <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
         {image !== null && (
           <div className="mb-2.5 aspect-square w-[60px] rounded-2xl">

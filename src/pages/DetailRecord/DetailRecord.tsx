@@ -14,6 +14,7 @@ import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
 import ShareModal from './ShareModal'
+import EditModal from './EditModal'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -95,10 +96,16 @@ export default function DetailRecord() {
           icon_name={icon_name}
         />
       )}
+      {editModalState && <EditModal setEditModalState={setEditModalState} />}
       <header className="h-4" />
       <nav className="flex justify-between px-6">
         <BackButton />
-        <MoreButton />
+        <button
+          className="cursor-pointer bg-grey-1"
+          onClick={() => setEditModalState(true)}
+        >
+          <MoreButton />
+        </button>
       </nav>
       <section id="title" className="mt-7 flex flex-col px-6">
         <div className="flex justify-between">
