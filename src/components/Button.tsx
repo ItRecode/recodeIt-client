@@ -5,8 +5,10 @@ interface ButtonPropsType
   property?: 'solid' | 'primary' | 'default' | 'danger'
   small?: boolean
   active?: boolean
+  normal?: boolean
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
+
   children?: React.ReactElement | string
 }
 
@@ -14,6 +16,7 @@ export default function Button({
   property = 'default',
   small = false,
   active = true,
+  normal = false,
   disabled = false,
   type = 'button',
   children,
@@ -35,7 +38,9 @@ export default function Button({
           : 'border border-solid border-inactive text-inactive bg-grey-1'
       case 'danger':
         return active
-          ? 'border border-solid border-danger bg-grey-1 text-danger hover:border-danger hover:text-danger'
+          ? `border border-solid bg-grey-1 ${
+              normal ? 'border-grey-6 text-grey-6' : 'border-danger text-danger'
+            } hover:border-danger hover:text-danger`
           : 'border border-solid border-inactive text-inactive'
       default:
         return ''

@@ -97,53 +97,56 @@ export default function DetailRecord() {
         />
       )}
       {editModalState && <EditModal setEditModalState={setEditModalState} />}
-      <header className="h-4" />
-      <nav className="flex justify-between px-6">
-        <BackButton />
-        <button
-          className="cursor-pointer bg-grey-1"
-          onClick={() => setEditModalState(true)}
+      <header className="p-4">
+        <nav className="flex justify-between">
+          <BackButton />
+          <button
+            className="cursor-pointer bg-grey-1"
+            onClick={() => setEditModalState(true)}
+          >
+            <MoreButton />
+          </button>
+        </nav>
+      </header>
+      <div className={`mb-3 h-[calc(100vh_-_10rem)] overflow-auto`}>
+        <section id="title" className="flex flex-col px-6">
+          <div className="flex justify-between">
+            <p className="flex items-center text-2xl font-semibold">{title}</p>
+            <Chip
+              active={true}
+              icon={getChipIconName()}
+              message={`${category_name}`}
+              property="small"
+            />
+          </div>
+          <div className="mt-4 flex">
+            <p className="text-[14px]">{writer}</p>
+            <p className="px-4 text-xs text-grey-5">{date}</p>
+          </div>
+        </section>
+        <section
+          id="record_context"
+          className="flex w-full flex-col items-center px-[18px]"
         >
-          <MoreButton />
-        </button>
-      </nav>
-      <section id="title" className="mt-7 flex flex-col px-6">
-        <div className="flex justify-between">
-          <p className="flex items-center text-2xl font-semibold">{title}</p>
-          <Chip
-            active={true}
-            icon={getChipIconName()}
-            message={`${category_name}`}
-            property="small"
-          />
-        </div>
-        <div className="mt-4 flex">
-          <p className="text-[14px]">{writer}</p>
-          <p className="px-4 text-xs text-grey-5">{date}</p>
-        </div>
-      </section>
-      <section
-        id="record_context"
-        className="flex w-full flex-col items-center px-[18px]"
-      >
-        <div
-          className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
-        >
-          {icon_name !== '' && <RecordIcon width={160} height={160} />}
-        </div>
-        <Button onClick={() => setShareStatus(true)}>
-          <p className="text-base font-semibold">공유하기</p>
-        </Button>
-        <div className="my-6 w-[327px] text-[14px]">
-          <p>{content}</p>
-        </div>
-      </section>
-      <section id="record_reply_list">
-        <ReplyList />
-      </section>
+          <div
+            className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
+          >
+            {icon_name !== '' && <RecordIcon width={160} height={160} />}
+          </div>
+          <Button onClick={() => setShareStatus(true)}>
+            <p className="text-base font-semibold">공유하기</p>
+          </Button>
+          <div className="my-6 w-[327px] text-[14px]">
+            <p>{content}</p>
+          </div>
+        </section>
+        <section id="record_reply_list">
+          <ReplyList />
+        </section>
+      </div>
       <section
         id="record_reply_input"
-        className="absolute bottom-0 w-full py-4 px-6"
+        className="absolute bottom-0 w-full bg-grey-1 px-6 py-4"
       >
         <ReplyInput />
       </section>

@@ -9,16 +9,21 @@ export default function EditModal({
 }) {
   return (
     <>
-      <div className="absolute bottom-0 z-20 flex w-full flex-col items-center justify-center rounded-t-lg bg-grey-1">
+      <div className="absolute bottom-0 z-20 flex w-full animate-[popUp_150ms_linear] flex-col items-center justify-center rounded-t-lg bg-grey-1">
         <div className="pt-3.5">
           <Pin />
         </div>
         <div className="pt-10">
           <div>
-            <Button>수정</Button>
+            <Button property="danger" normal={true}>
+              수정
+            </Button>
           </div>
           <div className="pt-2.5">
-            <Button property="danger" active={true}>
+            <Button
+              property="danger"
+              onClick={() => alert('레코드를 삭제하시겠어요?')}
+            >
               삭제
             </Button>
           </div>

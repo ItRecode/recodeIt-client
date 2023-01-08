@@ -63,6 +63,12 @@ module.exports = {
         basic: { min: '375px', max: '450px' },
         small: { max: '375px' },
       },
+      keyframes: {
+        popUp: {
+          '0%': { transform: 'translateY(200px)' },
+          '100%': { transform: 'translateY(0px)' },
+        },
+      },
     },
   },
 }
