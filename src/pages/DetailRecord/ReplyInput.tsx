@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Camera } from '@assets/camera.svg'
 import { ReactComponent as Plus } from '@assets/plus.svg'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
@@ -6,17 +6,23 @@ import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 
-export default function ReplyInput() {
+export default function ReplyInput({
+  setInputSectionHeight,
+}: {
+  setInputSectionHeight: Dispatch<SetStateAction<number>>
+}) {
   const [image, setImage] = useState<string | null>(null)
   const textRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
     setImage(() => e.target.value)
+    setInputSectionHeight((prev) => prev + 74)
   }
 
   const handleDeleteImageFile = () => {
     setImage(() => null)
+    setInputSectionHeight((prev) => prev - 74)
   }
 
   const encodeFileToBase64 = (fileBlob: File) => {
@@ -38,6 +44,7 @@ export default function ReplyInput() {
     if (textRef.current !== null) {
       textRef.current.style.height = 'auto'
       textRef.current.style.height = textRef.current.scrollHeight + 'px'
+      setInputSectionHeight(64 + textRef.current!.scrollHeight)
     }
   }, [])
 

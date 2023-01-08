@@ -15,6 +15,7 @@ import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
 import ShareModal from './ShareModal'
 import EditModal from './EditModal'
+import { useRef } from 'react'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -84,6 +85,17 @@ export default function DetailRecord() {
   const RecordIcon = recordIcons[`${icon_name}`]
   const background_color = `bg-${color_name}`
 
+  const scrollSection = useRef<HTMLDivElement>(null)
+  const [inputSectionHeight, setInputSectionHeight] = useState(84)
+
+  useEffect(() => {
+    if (scrollSection.current !== null) {
+      scrollSection.current.style.height = 'auto'
+      scrollSection.current.style.height =
+        window.innerHeight - inputSectionHeight - 61 + 'px'
+    }
+  }, [inputSectionHeight])
+
   return (
     <div className="relative h-full w-full">
       {shareStatus && (
@@ -108,7 +120,7 @@ export default function DetailRecord() {
           </button>
         </nav>
       </header>
-      <div className={`mb-3 h-[calc(100vh_-_10rem)] overflow-auto`}>
+      <div className="mb-3 overflow-auto" ref={scrollSection}>
         <section id="title" className="flex flex-col px-6">
           <div className="flex justify-between">
             <p className="flex items-center text-2xl font-semibold">{title}</p>
@@ -148,7 +160,7 @@ export default function DetailRecord() {
         id="record_reply_input"
         className="absolute bottom-0 w-full bg-grey-1 px-6 py-4"
       >
-        <ReplyInput />
+        <ReplyInput setInputSectionHeight={setInputSectionHeight} />
       </section>
     </div>
   )
