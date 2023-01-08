@@ -44,6 +44,7 @@ export default function SignUp() {
 
   const validateNickname = (nickname: string) => {
     const spacePattern = /\s/g
+    const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
     const nicknamePattern = /[가-힣A-z0-9]{2,8}/
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
@@ -59,6 +60,11 @@ export default function SignUp() {
 
     if (nickname.match(specialPattern)) {
       setErrorMessage('특수문자를 제거해주세요')
+      return false
+    }
+
+    if (nickname.match(consonantAndVowelPattern)) {
+      setErrorMessage('자음이나 모음을 제거해주세요')
       return false
     }
 
