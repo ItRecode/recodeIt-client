@@ -19,12 +19,12 @@ export const ShareKakao = ({
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: title,
-      description: description,
-      imageUrl: imageUrl,
+      title: `${title}`,
+      description: `${description}`,
+      imageUrl: `${imageUrl}`,
       link: {
-        mobileWebUrl: 'https://developers.kakao.com',
-        androidExecutionParams: 'test',
+        webUrl: `${process.env.REACT_APP_WEB_URL}`,
+        mobileWebUrl: `${process.env.REACT_APP_WEB_URL}`,
       },
     },
 
@@ -32,8 +32,8 @@ export const ShareKakao = ({
       {
         title: '레코드 보러가기',
         link: {
-          mobileWebUrl: `https://recordit.vercel.app/record/${recordId}`,
-          webUrl: `https://recordit.vercel.app/record/${recordId}`,
+          mobileWebUrl: `${process.env.REACT_APP_WEB_URL}/record/${recordId}`,
+          webUrl: `${process.env.REACT_APP_WEB_URL}/record/${recordId}`,
         },
       },
     ],

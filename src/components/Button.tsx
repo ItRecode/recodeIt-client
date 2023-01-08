@@ -7,7 +7,7 @@ interface ButtonPropsType
   active?: boolean
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
-  children?: string
+  children?: React.ReactElement | string
 }
 
 export default function Button({

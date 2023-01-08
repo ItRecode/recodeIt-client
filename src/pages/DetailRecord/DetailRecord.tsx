@@ -3,7 +3,6 @@ import BackButton from '@components/BackButton'
 import Button from '@components/Button'
 import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
-import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -14,6 +13,7 @@ import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
+import ShareModal from './ShareModal'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -22,6 +22,7 @@ export default function DetailRecord() {
   const [date, setDate] = useState('')
   const [recordData, setRecordData] =
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
+
   const {
     record_id,
     category_name,
@@ -79,17 +80,21 @@ export default function DetailRecord() {
   }
 
   const RecordIcon = recordIcons[`${icon_name}`]
+  const background_color = `bg-${color_name}`
+
   return (
-    <div className="w-full">
+    <div className="relative h-full w-full">
       {shareStatus && (
         <ShareModal
           setShareStatus={setShareStatus}
           recordId={record_id}
           title={title}
           description={content}
+          background_color={background_color}
+          icon_name={icon_name}
         />
       )}
-      <header className="h-[60px]" />
+      <header className="h-4" />
       <nav className="flex justify-between px-6">
         <BackButton />
         <MoreButton />
@@ -101,6 +106,7 @@ export default function DetailRecord() {
             active={true}
             icon={getChipIconName()}
             message={`${category_name}`}
+            property="small"
           />
         </div>
         <div className="mt-4 flex">
@@ -110,20 +116,29 @@ export default function DetailRecord() {
       </section>
       <section
         id="record_context"
-        className="flex w-full flex-col items-center"
+        className="flex w-full flex-col items-center px-[18px]"
       >
         <div
-          className={`my-4 h-[338px] w-[338px] rounded-2xl${color_name} flex items-center justify-center`}
+          className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
         >
           {icon_name !== '' && <RecordIcon width={160} height={160} />}
         </div>
-        <Button onClick={() => setShareStatus(true)}>공유하기</Button>
+        <Button onClick={() => setShareStatus(true)}>
+          <p className="text-base font-semibold">공유하기</p>
+        </Button>
         <div className="my-6 w-[327px] text-[14px]">
           <p>{content}</p>
         </div>
       </section>
-      <ReplyList />
-      <ReplyInput />
+      <section id="record_reply_list">
+        <ReplyList />
+      </section>
+      <section
+        id="record_reply_input"
+        className="absolute bottom-0 w-full py-4 px-6"
+      >
+        <ReplyInput />
+      </section>
     </div>
   )
 }
