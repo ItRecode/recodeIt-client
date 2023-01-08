@@ -44,7 +44,7 @@ export default function ReplyInput({
     if (textRef.current !== null) {
       textRef.current.style.height = 'auto'
       textRef.current.style.height = textRef.current.scrollHeight + 'px'
-      setInputSectionHeight(64 + textRef.current!.scrollHeight)
+      setInputSectionHeight(64 + textRef.current.scrollHeight)
     }
   }, [])
 
