@@ -50,7 +50,6 @@ module.exports = {
         inactive: '#D0D0D0',
 
         kakao: '#FEE500',
-        'kakao-label': '#000000 85%',
       },
       fontFamily: {
         sans: ['San Francisco'],
