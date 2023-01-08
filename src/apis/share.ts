@@ -13,7 +13,7 @@ export const ShareKakao = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { Kakao }: any = window
   if (!Kakao.isInitialized()) {
-    Kakao.init(process.env.REACT_APP_KAKAO_REST_API_KEY)
+    Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY)
   }
 
   Kakao.Share.sendDefault({
