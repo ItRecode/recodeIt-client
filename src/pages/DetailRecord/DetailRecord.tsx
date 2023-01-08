@@ -20,7 +20,7 @@ export default function DetailRecord() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [haveImage, setHaveImage] = useState(false)
   const [date, setDate] = useState('')
-  const [editModalState, setEditModalState] = useState(false)
+  // const [editModalState, setEditModalState] = useState(false)
   const [recordData, setRecordData] =
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
 
