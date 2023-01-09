@@ -33,6 +33,7 @@ function AddRecordTextArea({ setCheckAllFilled, checkAllFilled }: userProps) {
         className=" min-h-[137px]  w-full resize-none bg-grey-2 focus:outline-none"
         onChange={handleChangeTextArea}
         placeholder="ex) 오늘은 나의 생일이에요!모두 축하해주세요!"
+        value={textAreaValue}
       />
       <div className="text-right text-xs">{`${textAreaValue.length}/${INPUT_DETAILS.MAX_TEXTAREA_TYPING}`}</div>
     </div>
