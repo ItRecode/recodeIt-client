@@ -69,7 +69,11 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-    data.append('file', files as Blob)
+    data.append(
+      'files',
+      new Blob([files as Blob], { type: 'multipart/form-data' })
+      //  files as Blob
+    )
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -79,10 +83,10 @@ export default function AddRecord() {
 
   return (
     <div className="relative mb-6">
-      <div className="sticky top-0 left-0 bg-grey-1 pt-4">
-        <div className="ml-[18px]">
-          <BackButton />
-        </div>
+      <div className="ml-[18px]">
+        <BackButton />
+      </div>
+      <div className="sticky top-0 left-0 bg-grey-1">
         <MainCategoryTap
           currentRecordType={recordType}
           onSetRecordType={setRecordType}
