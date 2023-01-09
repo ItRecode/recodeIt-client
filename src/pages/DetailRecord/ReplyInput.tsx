@@ -75,7 +75,7 @@ export default function ReplyInput({
           <textarea
             ref={textRef}
             rows={1}
-            maxLength={200}
+            maxLength={100}
             required={true}
             placeholder="따뜻한 마음을 남겨주세요"
             onInput={handleResizeHeight}
@@ -89,7 +89,7 @@ export default function ReplyInput({
       <label htmlFor="imageFile">
         <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
-          <Plus className="absolute right-0.5 top-[5px]" />
+          {image === null && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
         <input
           onChange={handleSelectImageFile}

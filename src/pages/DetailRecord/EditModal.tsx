@@ -7,6 +7,12 @@ export default function EditModal({
 }: {
   setEditModalState: Dispatch<SetStateAction<boolean>>
 }) {
+  const onClickDeleteBtn = () => {
+    if (confirm('삭제하시겠습니까?')) {
+      // delete record 로직 추가 예정
+    }
+  }
+
   return (
     <>
       <div className="absolute bottom-0 z-20 flex w-full animate-[popUp_150ms_linear] flex-col items-center justify-center rounded-t-lg bg-grey-1">
@@ -20,10 +26,7 @@ export default function EditModal({
             </Button>
           </div>
           <div className="pt-2.5">
-            <Button
-              property="danger"
-              onClick={() => alert('레코드를 삭제하시겠어요?')}
-            >
+            <Button property="danger" onClick={onClickDeleteBtn}>
               삭제
             </Button>
           </div>
