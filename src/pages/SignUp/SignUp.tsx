@@ -33,7 +33,7 @@ export default function SignUp() {
           await getIsDuplicatedNickname(nickname)
           setIsCheckedNickname(true)
         } catch (e) {
-          setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다.')
+          setErrorMessage('이미 사용중인 닉네임이에요')
           setIsCheckedNickname(false)
         }
       }
@@ -45,7 +45,6 @@ export default function SignUp() {
   const validateNickname = (nickname: string) => {
     const spacePattern = /\s/g
     const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
-    const nicknamePattern = /[가-힣A-z0-9]{2,8}/
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
     if (nickname.length < NICKNAME_MIN_LENGTH) {
@@ -68,10 +67,6 @@ export default function SignUp() {
       return false
     }
 
-    if (!nickname.match(nicknamePattern)) {
-      setErrorMessage('이미 사용중인 닉네임이에요')
-      return false
-    }
     return true
   }
 
