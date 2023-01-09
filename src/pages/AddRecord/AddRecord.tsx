@@ -125,7 +125,6 @@ export default function AddRecord() {
             property={'solid'}
             disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
             type="submit"
-            small={true}
             active={
               checkAllFilled.input && checkAllFilled.textArea ? true : false
             }
