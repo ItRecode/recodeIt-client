@@ -8,7 +8,16 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
-import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
+import {
+  Cake,
+  Celebrate,
+  Consolate,
+  Depress,
+  Happy,
+  Love,
+  MySide,
+  Sympathy,
+} from '@assets/chip_icon'
 import {
   INITIAL_RECORD_DATA,
   RECORD_DETAIL_HEADER_SECTION_HEIGHT,
@@ -81,6 +90,12 @@ export default function DetailRecord() {
         return Love
       case '위로해주세요':
         return Consolate
+      case '우울해요':
+        return Depress
+      case '공감이 필요해요':
+        return Sympathy
+      case '내 편이 되어주세요':
+        return MySide
       default:
         return ''
     }
@@ -163,8 +178,8 @@ export default function DetailRecord() {
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
           </Button>
-          <div className="my-6 w-full px-1 text-[14px]">
-            <p>{content}</p>
+          <div className="mt-6 mb-10 w-full px-1.5 text-[14px]">
+            <p className="w-full ">{content}</p>
           </div>
         </section>
         <section id="record_reply_list">
