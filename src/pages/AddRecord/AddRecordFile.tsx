@@ -57,8 +57,7 @@ function AddRecordFile({ currentRecordType, setFiles }: Props) {
         className="hidden"
         id="file"
         type={'file'}
-        accept=".jpg, .jpeg, .png, .svg"
-        capture
+        accept=".jpg, .jpeg, .png, .svg; capture=camera"
       />
       {currentImg && (
         <div className=" relative h-[66px] w-[66px]">
