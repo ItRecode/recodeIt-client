@@ -49,9 +49,10 @@ module.exports = {
         danger: '#DA2626',
         inactive: '#D0D0D0',
 
+        report: '#F83636',
+
         kakao: '#FEE500',
         'kakao-label': '#000000 85%',
-        'report-button': 'F83636',
       },
       fontFamily: {
         sans: ['San Francisco'],

@@ -15,7 +15,7 @@ export default function ReplyList() {
           </p>
         </div>
         <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report-button">
+          <button className="cursor-pointer bg-grey-1 text-xs text-report">
             신고
           </button>
           <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
@@ -34,7 +34,7 @@ export default function ReplyList() {
           </p>
         </div>
         <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report-button">
+          <button className="cursor-pointer bg-grey-1 text-xs text-report">
             신고
           </button>
           <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
@@ -53,7 +53,7 @@ export default function ReplyList() {
           </p>
         </div>
         <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report-button">
+          <button className="cursor-pointer bg-grey-1 text-xs text-report">
             신고
           </button>
           <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
