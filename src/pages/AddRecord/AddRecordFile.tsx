@@ -7,7 +7,7 @@ interface Props {
 }
 
 function AddRecordFile({ setFiles }: Props) {
-  const [currentImg, setCurrentImg] = useState<null | string>(null)
+  const [currentImg, setCurrentImg] = useState<string | null>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])

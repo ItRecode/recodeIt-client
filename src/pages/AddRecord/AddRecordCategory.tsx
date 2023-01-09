@@ -9,7 +9,6 @@ import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
 import { getCategory } from '@apis/record'
-import { AxiosPromise } from 'axios'
 
 type CategorySource = {
   title: string
@@ -56,7 +55,6 @@ function AddRecordCategory({
     const getData = async () => {
       const { data } = await getCategory()
       setCategoryState(makeCategoryData(data))
-      console.log(data)
     }
     getData()
   }, [])
