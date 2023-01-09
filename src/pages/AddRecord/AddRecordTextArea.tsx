@@ -16,7 +16,7 @@ function AddRecordTextArea({
   const [textAreaValue, setTextAreaValue] = useState('')
   const [focusState, setFocusState] = useState<boolean>(false)
   const PLACEHOLDER_MESSAGE = {
-    celebration: 'ex) 오늘은 나의 생일이에요!모두 축하해주세요!',
+    celebration: 'ex) 오늘은 나의 생일이에요! 모두 축하해주세요!',
     consolation: 'ex) 오늘은 기분이 우울하네요. 저를 위로해주세요',
   }
 
