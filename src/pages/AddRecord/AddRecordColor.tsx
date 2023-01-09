@@ -7,7 +7,7 @@ import {
   colorSourceType,
 } from '@assets/constant/RecordColors'
 
-interface props {
+interface Props {
   currentRecordType: string
 }
 
