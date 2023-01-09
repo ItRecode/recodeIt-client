@@ -5,6 +5,10 @@ import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
+import {
+  RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
+  RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
+} from '@assets/constant/constant'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -17,12 +21,12 @@ export default function ReplyInput({
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
     setImage(() => e.target.value)
-    setInputSectionHeight((prev) => prev + 74)
+    setInputSectionHeight((prev) => prev + RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
   }
 
   const handleDeleteImageFile = () => {
     setImage(() => null)
-    setInputSectionHeight((prev) => prev - 74)
+    setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
   }
 
   const encodeFileToBase64 = (fileBlob: File) => {
@@ -44,7 +48,10 @@ export default function ReplyInput({
     if (textRef.current !== null) {
       textRef.current.style.height = 'auto'
       textRef.current.style.height = textRef.current.scrollHeight + 'px'
-      setInputSectionHeight(64 + textRef.current.scrollHeight)
+      setInputSectionHeight(
+        RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA +
+          textRef.current.scrollHeight
+      )
     }
   }, [])
 

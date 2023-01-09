@@ -51,6 +51,7 @@ module.exports = {
 
         kakao: '#FEE500',
         'kakao-label': '#000000 85%',
+        'report-button': 'F83636',
       },
       fontFamily: {
         sans: ['San Francisco'],

@@ -9,7 +9,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
+import {
+  INITIAL_RECORD_DATA,
+  RECORD_DETAIL_HEADER_SECTION_HEIGHT,
+  RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
+} from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
@@ -86,13 +90,18 @@ export default function DetailRecord() {
   const background_color = `bg-${color_name}`
 
   const scrollSection = useRef<HTMLDivElement>(null)
-  const [inputSectionHeight, setInputSectionHeight] = useState(84)
+  const [inputSectionHeight, setInputSectionHeight] = useState(
+    RECORD_DETAIL_INITIAL_INPUT_HEIGHT
+  )
 
   useEffect(() => {
     if (scrollSection.current !== null) {
       scrollSection.current.style.height = 'auto'
       scrollSection.current.style.height =
-        window.innerHeight - inputSectionHeight - 61 + 'px'
+        window.innerHeight -
+        inputSectionHeight -
+        RECORD_DETAIL_HEADER_SECTION_HEIGHT +
+        'px'
     }
   }, [inputSectionHeight])
 
