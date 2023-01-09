@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BackButton from '@components/BackButton'
 import AddRecordCategory from './AddRecordCategory'
 import AddRecordInput from './AddRecordInput'
@@ -46,6 +46,10 @@ export default function AddRecord() {
     useRecoilValue(formDataAtom)
   const [files, setFiles] = useState<File>()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setCheckAllFilled({ input: false, textArea: false })
+  }, [recordType])
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
