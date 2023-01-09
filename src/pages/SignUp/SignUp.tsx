@@ -33,7 +33,7 @@ export default function SignUp() {
           await getIsDuplicatedNickname(nickname)
           setIsCheckedNickname(true)
         } catch (e) {
-          setErrorMessage('이미 사용중인 닉네임이에요')
+          setErrorMessage('이미 사용중인 닉네임이에요.')
           setIsCheckedNickname(false)
         }
       }
@@ -48,22 +48,22 @@ export default function SignUp() {
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
     if (nickname.length < NICKNAME_MIN_LENGTH) {
-      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요`)
+      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요.`)
       return false
     }
 
     if (nickname.match(spacePattern)) {
-      setErrorMessage('공백은 사용할 수 없어요')
+      setErrorMessage('공백은 사용할 수 없어요.')
       return false
     }
 
     if (nickname.match(specialPattern)) {
-      setErrorMessage('특수문자는 사용할 수 없어요')
+      setErrorMessage('특수문자는 사용할 수 없어요.')
       return false
     }
 
     if (nickname.match(consonantAndVowelPattern)) {
-      setErrorMessage('자음이나 모음만은 사용할 수 없어요')
+      setErrorMessage('자음이나 모음만은 사용할 수 없어요.')
       return false
     }
 
