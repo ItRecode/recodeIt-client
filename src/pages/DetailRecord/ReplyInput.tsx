@@ -89,11 +89,7 @@ export default function ReplyInput({
       <label htmlFor="imageFile">
         <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
-          {image === null ? (
-            <Plus className="absolute right-0.5 top-[5px]" />
-          ) : (
-            ''
-          )}
+          {image === null && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
         <input
           onChange={handleSelectImageFile}
