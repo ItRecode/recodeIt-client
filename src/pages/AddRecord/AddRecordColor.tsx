@@ -11,7 +11,7 @@ interface Props {
   currentRecordType: string
 }
 
-function AddRecordColor({ currentRecordType }: props) {
+function AddRecordColor({ currentRecordType }: Props) {
   const [colors, setColors] = useState<colorSourceType[]>(ADD_RECORD_COLORS)
   const [formData, setFormData] = useRecoilState(formDataAtom)
 
