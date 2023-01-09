@@ -8,7 +8,6 @@ import Chip from '@components/Chip'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-import { getCategory } from '@apis/record'
 
 type CategorySource = {
   title: string
@@ -27,14 +26,7 @@ function AddRecordCategory({
 }: {
   currentRecordType: keyof CategoryType
 }) {
-  type BigCategory = {
-    id: number
-    name: string
-    subcategories: []
-  }
-  type CategoryDatas = BigCategory[]
-
-  const categoryData: CategoryType = {
+  const CATEGORY_DATA: CategoryType = {
     [TEXT_DETAILS.CELEBRATION]: [
       { title: '축하해주세요', choosed: true, id: 3, iconSrc: Celebrate },
       { title: '행복해요', choosed: false, id: 4, iconSrc: Happy },
@@ -48,49 +40,21 @@ function AddRecordCategory({
       { title: '내편이 되어주세요', choosed: false, id: 10, iconSrc: MySide },
     ],
   }
-  const [categoryState, setCategoryState] = useState<CategoryType>(categoryData)
+
+  const [categoryState, setCategoryState] =
+    useState<CategoryType>(CATEGORY_DATA)
   const [formData, setFormData] = useRecoilState(formDataAtom)
 
   useEffect(() => {
-    const getData = async () => {
-      const { data } = await getCategory()
-      setCategoryState(makeCategoryData(data))
-    }
-    getData()
-  }, [])
-
-  const makeCategoryData = (data: CategoryDatas) => {
-    const categoryData: CategoryType = {
-      [TEXT_DETAILS.CELEBRATION]: data[1].subcategories.map(
-        (category: BigCategory, index: number) => {
-          return {
-            title: category.name,
-            choosed: index === 0,
-            id: category.id,
-            iconSrc: getIconSrc(category.id),
-          }
-        }
-      ),
-      [TEXT_DETAILS.CONSOLATION]: data[0].subcategories.map(
-        (category: BigCategory, index: number) => {
-          return {
-            title: category.name,
-            choosed: index === 0 && true,
-            id: category.id,
-            iconSrc: getIconSrc(category.id),
-          }
-        }
-      ),
-    }
-    return categoryData
-  }
+    setCategoryState(CATEGORY_DATA)
+  }, [currentRecordType])
 
   const handleChooseCurrentCategory = (index: number): void => {
     const CELEBRATES = 3
-    const CONSOLATIONS = 7
+    const CONSOLATES = 7
     const currentState = {
       ...categoryState,
-      [currentRecordType]: categoryData[currentRecordType].map(
+      [currentRecordType]: CATEGORY_DATA[currentRecordType].map(
         (category: CategorySource) => ({
           ...category,
           choosed: category.id === index,
@@ -104,33 +68,10 @@ function AddRecordCategory({
         categoryState[currentRecordType][
           currentRecordType === 'celebration'
             ? index - CELEBRATES
-            : index - CONSOLATIONS
+            : index - CONSOLATES
         ].id,
     })
     setCategoryState(currentState)
-  }
-
-  const getIconSrc = (id: number): string => {
-    switch (id) {
-      case 3:
-        return Celebrate
-      case 4:
-        return Happy
-      case 5:
-        return Cake
-      case 6:
-        return Love
-      case 7:
-        return Consolate
-      case 8:
-        return Depress
-      case 9:
-        return Sympathy
-      case 10:
-        return MySide
-      default:
-        return Celebrate
-    }
   }
 
   return (
@@ -145,7 +86,7 @@ function AddRecordCategory({
               type="button"
               active={category.choosed}
               message={category.title}
-              icon={getIconSrc(category.id)}
+              icon={category.iconSrc}
             />
           </div>
         )

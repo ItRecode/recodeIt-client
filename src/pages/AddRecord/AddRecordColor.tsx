@@ -1,17 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactComponent as Check } from '@assets/check.svg'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
+import {
+  ADD_RECORD_COLORS,
+  colorSourceType,
+} from '@assets/constant/RecordColors'
 
-function AddRecordColor() {
-  const [colors, setColors] = useState([
-    { src: 'bg-icon-purple', choosed: true, id: 0 },
-    { src: 'bg-icon-yellow', choosed: false, id: 1 },
-    { src: 'bg-icon-pink', choosed: false, id: 2 },
-    { src: 'bg-icon-blue', choosed: false, id: 3 },
-    { src: 'bg-icon-green', choosed: false, id: 4 },
-  ])
+interface Props {
+  currentRecordType: string
+}
+
+function AddRecordColor({ currentRecordType }: props) {
+  const [colors, setColors] = useState<colorSourceType[]>(ADD_RECORD_COLORS)
   const [formData, setFormData] = useRecoilState(formDataAtom)
+
+  useEffect(() => {
+    setColors(
+      colors.map((color: colorSourceType, index: number) => {
+        if (index === 0) {
+          return { ...color, choosed: true }
+        }
+        return { ...color, choosed: false }
+      })
+    )
+  }, [currentRecordType])
 
   const handleChooseCurrentColor = (index: number): void => {
     const changeCurrent = colors.map((color) => ({
