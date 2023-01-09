@@ -33,7 +33,7 @@ export default function SignUp() {
           await getIsDuplicatedNickname(nickname)
           setIsCheckedNickname(true)
         } catch (e) {
-          setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다.')
+          setErrorMessage('이미 사용중인 닉네임이에요.')
           setIsCheckedNickname(false)
         }
       }
@@ -45,41 +45,35 @@ export default function SignUp() {
   const validateNickname = (nickname: string) => {
     const spacePattern = /\s/g
     const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
-    const nicknamePattern = /[가-힣A-z0-9]{2,8}/
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
 
     if (nickname.length < NICKNAME_MIN_LENGTH) {
-      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요`)
+      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요.`)
       return false
     }
 
     if (nickname.match(spacePattern)) {
-      setErrorMessage('공백을 제거해주세요')
+      setErrorMessage('공백은 사용할 수 없어요.')
       return false
     }
 
     if (nickname.match(specialPattern)) {
-      setErrorMessage('특수문자를 제거해주세요')
+      setErrorMessage('특수문자는 사용할 수 없어요.')
       return false
     }
 
     if (nickname.match(consonantAndVowelPattern)) {
-      setErrorMessage('자음이나 모음을 제거해주세요')
+      setErrorMessage('자음이나 모음만은 사용할 수 없어요.')
       return false
     }
 
-    if (!nickname.match(nicknamePattern)) {
-      setErrorMessage('이미 사용중이거나 사용할 수 없는 닉네임입니다')
-      return false
-    }
     return true
   }
 
   const setPropertyWithIsCheckedNickname = () => {
-    if (isCheckedNickname) return 'success'
-    if (nickname.length < 1 && isInputClicked) return 'success'
+    if (nickname.length < 1 && !isInputClicked) return 'default'
     if (errorMessage.length > 0 && !isCheckedNickname) return 'error'
-    return 'default'
+    return 'success'
   }
 
   const handleRemoveNickname = () => {
@@ -106,12 +100,11 @@ export default function SignUp() {
         label="닉네임"
         value={nickname}
         maxLength={8}
-        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
-        message={isCheckedNickname ? '사용가능한 닉네임입니다.' : errorMessage}
+        placeholder="국문, 영문, 숫자 포함 2~8자"
+        message={isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage}
         onChange={(e) => setNickname(e.target.value)}
         onRemove={handleRemoveNickname}
         onFocus={() => setIsInputClicked(true)}
-        onBlur={() => setIsInputClicked(false)}
         autoFocus={false}
       />
       <div className="mt-[104px]">

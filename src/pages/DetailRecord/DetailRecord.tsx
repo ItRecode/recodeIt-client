@@ -9,18 +9,24 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
+import {
+  INITIAL_RECORD_DATA,
+  RECORD_DETAIL_HEADER_SECTION_HEIGHT,
+  RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
+} from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
 import ShareModal from './ShareModal'
+import EditModal from './EditModal'
+import { useRef } from 'react'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [haveImage, setHaveImage] = useState(false)
   const [date, setDate] = useState('')
-  // const [editModalState, setEditModalState] = useState(false)
+  const [editModalState, setEditModalState] = useState(false)
   const [recordData, setRecordData] =
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
 
@@ -83,6 +89,22 @@ export default function DetailRecord() {
   const RecordIcon = recordIcons[`${icon_name}`]
   const background_color = `bg-${color_name}`
 
+  const scrollSection = useRef<HTMLDivElement>(null)
+  const [inputSectionHeight, setInputSectionHeight] = useState(
+    RECORD_DETAIL_INITIAL_INPUT_HEIGHT
+  )
+
+  useEffect(() => {
+    if (scrollSection.current !== null) {
+      scrollSection.current.style.height = 'auto'
+      scrollSection.current.style.height =
+        window.innerHeight -
+        inputSectionHeight -
+        RECORD_DETAIL_HEADER_SECTION_HEIGHT +
+        'px'
+    }
+  }, [inputSectionHeight])
+
   return (
     <div className="relative h-full w-full">
       {shareStatus && (
@@ -95,50 +117,59 @@ export default function DetailRecord() {
           icon_name={icon_name}
         />
       )}
-      <header className="h-4" />
-      <nav className="flex justify-between px-6">
-        <BackButton />
-        <MoreButton />
-      </nav>
-      <section id="title" className="mt-7 flex flex-col px-6">
-        <div className="flex justify-between">
-          <p className="flex items-center text-2xl font-semibold">{title}</p>
-          <Chip
-            active={true}
-            icon={getChipIconName()}
-            message={`${category_name}`}
-            property="small"
-          />
-        </div>
-        <div className="mt-4 flex">
-          <p className="text-[14px]">{writer}</p>
-          <p className="px-4 text-xs text-grey-5">{date}</p>
-        </div>
-      </section>
-      <section
-        id="record_context"
-        className="flex w-full flex-col items-center px-[18px]"
-      >
-        <div
-          className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
+      {editModalState && <EditModal setEditModalState={setEditModalState} />}
+      <header className="p-4">
+        <nav className="flex justify-between">
+          <BackButton />
+          <button
+            className="cursor-pointer bg-grey-1"
+            onClick={() => setEditModalState(true)}
+          >
+            <MoreButton />
+          </button>
+        </nav>
+      </header>
+      <div className="mb-3 overflow-auto" ref={scrollSection}>
+        <section id="title" className="flex flex-col px-6">
+          <div className="flex justify-between">
+            <p className="flex items-center text-2xl font-semibold">{title}</p>
+            <Chip
+              active={true}
+              icon={getChipIconName()}
+              message={`${category_name}`}
+              property="small"
+            />
+          </div>
+          <div className="mt-4 flex">
+            <p className="text-[14px]">{writer}</p>
+            <p className="px-4 text-xs text-grey-5">{date}</p>
+          </div>
+        </section>
+        <section
+          id="record_context"
+          className="flex w-full flex-col items-center px-[18px]"
         >
-          {icon_name !== '' && <RecordIcon width={160} height={160} />}
-        </div>
-        <Button onClick={() => setShareStatus(true)}>
-          <p className="text-base font-semibold">공유하기</p>
-        </Button>
-        <div className="my-6 w-[327px] text-[14px]">
-          <p>{content}</p>
-        </div>
-      </section>
-      <section id="record_reply_list">
-        <ReplyList />
-      </section>
+          <div
+            className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
+          >
+            {icon_name !== '' && <RecordIcon width={160} height={160} />}
+          </div>
+          <Button onClick={() => setShareStatus(true)}>
+            <p className="text-base font-semibold">공유하기</p>
+          </Button>
+          <div className="my-6 w-[327px] text-[14px]">
+            <p>{content}</p>
+          </div>
+        </section>
+        <section id="record_reply_list">
+          <ReplyList />
+        </section>
+      </div>
       <section
         id="record_reply_input"
-        className="absolute bottom-0 w-full py-4 px-6"
+        className="absolute bottom-0 w-full bg-grey-1 px-6 py-4"
       >
-        <ReplyInput />
+        <ReplyInput setInputSectionHeight={setInputSectionHeight} />
       </section>
     </div>
   )

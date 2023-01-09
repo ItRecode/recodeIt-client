@@ -14,12 +14,9 @@ export default function Login() {
           모두의 추억을 레코드해요!
         </h1>
       </div>
-      <div className="flex w-full flex-col items-center gap-2">
+      <div className="mb-20 flex w-full flex-col items-center gap-2">
         <KakaoButton />
         <GoogleButton />
-        <p className="mt-5 mb-10 text-xs text-grey-1 underline hover:cursor-pointer">
-          이메일로 회원가입
-        </p>
       </div>
     </div>
   )
