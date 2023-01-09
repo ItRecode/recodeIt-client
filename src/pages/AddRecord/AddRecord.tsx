@@ -44,7 +44,7 @@ export default function AddRecord() {
   })
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     useRecoilValue(formDataAtom)
-  const [files, setFiles] = useState('')
+  const [files, setFiles] = useState<File | undefined>()
   const navigate = useNavigate()
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -69,7 +69,10 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-    data.append('file', files)
+    data.append(
+      'file',
+      new Blob([JSON.stringify(files)], { type: 'multipart/form-data' })
+    )
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -112,11 +115,9 @@ export default function AddRecord() {
         <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 pl-6">
           <Button
             property={'solid'}
-            disabled={false}
+            disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
             type="submit"
-            active={
-              checkAllFilled.input && checkAllFilled.textArea ? true : false
-            }
+            active={checkAllFilled.input && checkAllFilled.textArea}
           >
             레코드 추가하기
           </Button>
