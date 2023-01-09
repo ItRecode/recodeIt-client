@@ -44,7 +44,7 @@ export default function AddRecord() {
   })
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     useRecoilValue(formDataAtom)
-  const [files, setFiles] = useState<File | undefined>()
+  const [files, setFiles] = useState<File>()
   const navigate = useNavigate()
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -69,10 +69,7 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-    data.append(
-      'file',
-      new Blob([JSON.stringify(files)], { type: 'multipart/form-data' })
-    )
+    data.append('file', files as Blob)
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -81,14 +78,16 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="mb-6 pt-16">
-      <div className="ml-[18px]">
-        <BackButton />
+    <div className="relative mb-6">
+      <div className="sticky top-0 left-0 bg-grey-1 pt-4">
+        <div className="ml-[18px]">
+          <BackButton />
+        </div>
+        <MainCategoryTap
+          currentRecordType={recordType}
+          onSetRecordType={setRecordType}
+        />
       </div>
-      <MainCategoryTap
-        currentRecordType={recordType}
-        onSetRecordType={setRecordType}
-      />
       <form
         encType="multipart/form-data"
         className="px-6"
@@ -97,6 +96,7 @@ export default function AddRecord() {
         <AddRecordCategory currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
+          currentRecordType={recordType}
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
         />
@@ -107,17 +107,20 @@ export default function AddRecord() {
           currentRecordType={recordType}
         />
         <AddRecordTitle title={'레코드 컬러'} />
-        <AddRecordColor />
+        <AddRecordColor currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 아이콘'} />
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
-        <AddRecordFile setFiles={setFiles} />
-        <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 pl-6">
+        <AddRecordFile currentRecordType={recordType} setFiles={setFiles} />
+        <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 px-6">
           <Button
             property={'solid'}
             disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
             type="submit"
-            active={checkAllFilled.input && checkAllFilled.textArea}
+            small={true}
+            active={
+              checkAllFilled.input && checkAllFilled.textArea ? true : false
+            }
           >
             레코드 추가하기
           </Button>

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
 import { CheckAllType } from './AddRecord'
 
@@ -8,8 +8,20 @@ type userProps = {
   checkAllFilled: CheckAllType
 }
 
-function AddRecordTextArea({ setCheckAllFilled, checkAllFilled }: userProps) {
+function AddRecordTextArea({
+  setCheckAllFilled,
+  checkAllFilled,
+  currentRecordType,
+}: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
+  const PLACEHOLDER_MESSAGE = {
+    celebration: 'ex) 오늘은 나의 생일이에요!모두 축하해주세요!',
+    consolation: 'ex) 오늘은 기분이 우울하네요. 저를 위로해주세요',
+  }
+
+  useEffect(() => {
+    setTextAreaValue('')
+  }, [currentRecordType])
 
   const handleChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -30,9 +42,13 @@ function AddRecordTextArea({ setCheckAllFilled, checkAllFilled }: userProps) {
   return (
     <div className=" mb-10 rounded-lg bg-grey-2 px-4 pt-4 pb-2 text-sm font-medium text-grey-5">
       <textarea
-        className=" min-h-[137px]  w-full resize-none bg-grey-2 focus:outline-none"
+        className=" min-h-[137px]  w-full resize-none bg-grey-2 focus:outline-none focus:placeholder:text-transparent"
         onChange={handleChangeTextArea}
-        placeholder="ex) 오늘은 나의 생일이에요!모두 축하해주세요!"
+        placeholder={
+          currentRecordType === 'celebration'
+            ? PLACEHOLDER_MESSAGE.celebration
+            : PLACEHOLDER_MESSAGE.consolation
+        }
         value={textAreaValue}
       />
       <div className="text-right text-xs">{`${textAreaValue.length}/${INPUT_DETAILS.MAX_TEXTAREA_TYPING}`}</div>

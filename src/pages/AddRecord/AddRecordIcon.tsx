@@ -1,6 +1,6 @@
 import { ADD_RECORD_ICONS } from '@assets/constant/RecordIcons'
 import { formDataAtom } from '@store/atom'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
 type IconSource = {
@@ -23,6 +23,10 @@ function AddRecordIcon({
 
   const [iconState, setIconState] = useState<IconType>(icons)
   const [formData, setFormData] = useRecoilState(formDataAtom)
+
+  useEffect(() => {
+    setIconState(icons)
+  }, [currentRecordType])
 
   const handleChooseCurrentIcon = (index: number): void => {
     const currentState = {

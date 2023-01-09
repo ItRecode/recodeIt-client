@@ -1,19 +1,25 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface Props {
+  currentRecordType: string
   setFiles: Dispatch<SetStateAction<File | undefined>>
 }
 
-function AddRecordFile({ setFiles }: Props) {
-  const [currentImg, setCurrentImg] = useState<string | null>(null)
+function AddRecordFile({ currentRecordType, setFiles }: Props) {
+  const [currentImg, setCurrentImg] = useState<null | string>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
     setFiles((e.target.files as FileList)[0])
     setCurrentImg(e.target.value)
   }
+
+  useEffect(() => {
+    setCurrentImg(null)
+  }, [currentRecordType])
 
   const encodeFileToBase64 = (fileBlob: File) => {
     const reader = new FileReader()
