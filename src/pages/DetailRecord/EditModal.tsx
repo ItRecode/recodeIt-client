@@ -9,7 +9,7 @@ export default function EditModal({
 }) {
   const onClickDeleteBtn = () => {
     if (confirm('삭제하시겠습니까?')) {
-      // delete record
+      // delete record 로직 추가 예정
     }
   }
 

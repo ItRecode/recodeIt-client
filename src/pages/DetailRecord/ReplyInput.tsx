@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Camera } from '@assets/camera.svg'
 import { ReactComponent as Plus } from '@assets/plus.svg'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
