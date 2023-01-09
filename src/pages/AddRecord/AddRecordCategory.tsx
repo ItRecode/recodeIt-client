@@ -50,6 +50,8 @@ function AddRecordCategory({
   }, [currentRecordType])
 
   const handleChooseCurrentCategory = (index: number): void => {
+    const CELEBRATES = 3
+    const CONSOLATES = 7
     const currentState = {
       ...categoryState,
       [currentRecordType]: CATEGORY_DATA[currentRecordType].map(
@@ -64,7 +66,9 @@ function AddRecordCategory({
       ...formData,
       selectedCategory:
         categoryState[currentRecordType][
-          currentRecordType === 'celebration' ? index - 3 : index - 7
+          currentRecordType === 'celebration'
+            ? index - CELEBRATES
+            : index - CONSOLATES
         ].id,
     })
     setCategoryState(currentState)

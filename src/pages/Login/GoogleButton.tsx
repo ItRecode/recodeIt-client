@@ -16,11 +16,14 @@ export default function GoogleButton() {
   return (
     <button
       aria-label="google-login-button"
-      className="flex h-12 w-full items-center rounded-xl border-none bg-grey-1 px-8 font-semibold text-grey-10 hover:cursor-pointer"
+      className="flex h-12 w-full items-center rounded-md border-none bg-grey-1 px-5 text-sm font-semibold text-grey-10 hover:cursor-pointer"
       onClick={handleGoogleLogin}
     >
-      <GoogleSymbol aria-label="google-symbol-icon" />
-      <p className="w-full text-grey-10">Google로 계속하기</p>
+      <GoogleSymbol
+        aria-label="google-symbol-icon"
+        className="h-[18px] w-[18px]"
+      />
+      <p className="w-full text-gray-500 ">Google 로그인</p>
     </button>
   )
 }

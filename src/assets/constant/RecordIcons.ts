@@ -14,8 +14,8 @@ import Lock from '@assets/record_icons/lock.svg'
 
 export const ADD_RECORD_ICONS = Object.freeze({
   celebration: [
-    { src: Heart, choosed: true, id: 0 },
-    { src: Gift, choosed: false, id: 1 },
+    { src: Gift, choosed: true, id: 0 },
+    { src: Heart, choosed: false, id: 1 },
     { src: Music, choosed: false, id: 2 },
     { src: Rocket, choosed: false, id: 3 },
     { src: Like, choosed: false, id: 4 },
