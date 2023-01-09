@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function AddRecordFile({ setFiles }: any) {
-  const [currentImg, setCurrentImg] = useState<null | string>(null)
+interface Props {
+  setFiles: Dispatch<SetStateAction<File | undefined>>
+}
+
+function AddRecordFile({ setFiles }: Props) {
+  const [currentImg, setCurrentImg] = useState<string | null>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFileToBase64((e.target.files as FileList)[0])
