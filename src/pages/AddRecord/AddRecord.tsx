@@ -57,14 +57,15 @@ export default function AddRecord() {
     enroll()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const makeFormDatas = (e: any) => {
+  const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const target = e.target as any
     const formData: WriteRecordRequestDto = {
       color_name: selectedColor,
-      content: e.target[5].value,
+      content: target[5].value,
       icon_name: selectedIcon,
       record_category_id: selectedCategory,
-      title: e.target[4].value,
+      title: target[4].value,
     }
 
     const data = new FormData()
