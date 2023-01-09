@@ -47,7 +47,7 @@ function AddRecordInput({
       <input
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
-        className="border-none text-xs text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+        className="border-none text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
         placeholder={
           currentRecordType === 'celebration'
             ? PLACEHOLDER_MESSAGE.celebration
