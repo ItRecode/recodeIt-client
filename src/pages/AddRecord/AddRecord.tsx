@@ -86,7 +86,7 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="relative mb-6">
+    <div className="relative">
       <div className="ml-[18px]">
         <BackButton />
       </div>
@@ -120,7 +120,7 @@ export default function AddRecord() {
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
         <AddRecordFile currentRecordType={recordType} setFiles={setFiles} />
-        <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 px-6">
+        <div className="sticky bottom-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
           <Button
             property={'solid'}
             disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
