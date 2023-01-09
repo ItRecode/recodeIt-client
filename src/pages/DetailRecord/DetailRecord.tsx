@@ -164,11 +164,17 @@ export default function DetailRecord() {
           id="record_context"
           className="flex w-full flex-col items-center px-[18px]"
         >
-          <div
-            className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
-          >
-            {icon_name !== '' && <RecordIcon width={160} height={160} />}
-          </div>
+          {haveImage ? (
+            <div className="my-4 flex aspect-square w-full items-center justify-center rounded-2xl">
+              <img alt="record-image-file" src={image_urls[0]} />
+            </div>
+          ) : (
+            <div
+              className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
+            >
+              {icon_name !== '' && <RecordIcon width={160} height={160} />}
+            </div>
+          )}
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
           </Button>
