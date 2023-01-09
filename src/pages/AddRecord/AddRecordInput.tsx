@@ -1,25 +1,38 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
 import { CheckAllType } from './AddRecord'
 
-type userProps = {
+interface Props {
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
+  currentRecordType: string
 }
 
-function AddRecordInput({ setCheckAllFilled, checkAllFilled }: userProps) {
+function AddRecordInput({
+  setCheckAllFilled,
+  checkAllFilled,
+  currentRecordType,
+}: Props) {
   const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
+  const PLACEHOLDER_MESSAGE = {
+    celebration: 'ex) 5월 5일 내 생일',
+    consolation: 'ex) 오늘 우울해요',
+  }
+
+  useEffect(() => {
+    setInputValue('')
+  }, [currentRecordType])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValueLength = e.target.value.length
     if (inputValueLength > INPUT_DETAILS.MAX_INPUT_TYPING) {
       return
     }
-    if (inputValueLength > 0) {
+    if (inputValueLength > INPUT_DETAILS.MIN_TYPING) {
       setCheckAllFilled({ ...checkAllFilled, input: true })
     }
-    if (inputValueLength === 0) {
+    if (inputValueLength === INPUT_DETAILS.MIN_TYPING) {
       setCheckAllFilled({ ...checkAllFilled, input: false })
     }
     setInputValue(e.target.value)
@@ -34,8 +47,12 @@ function AddRecordInput({ setCheckAllFilled, checkAllFilled }: userProps) {
       <input
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
-        className="border-none text-xs text-grey-9 outline-none placeholder:text-grey-4"
-        placeholder="ex) 5월 5일 내생일"
+        className="border-none text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+        placeholder={
+          currentRecordType === 'celebration'
+            ? PLACEHOLDER_MESSAGE.celebration
+            : PLACEHOLDER_MESSAGE.consolation
+        }
         onChange={(e) => handleChange(e)}
         type="text"
         value={inputValue}

@@ -5,8 +5,7 @@ export const getCategory = () => {
 }
 
 export const enrollRecord = async (data: FormData) => {
-  return baseInstance.post('/record', {
-    data,
+  return baseInstance.post('/record', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }

@@ -30,7 +30,7 @@ export default function Button({
           : 'bg-inactive text-grey-1 '
       case 'primary':
         return active
-          ? 'bg-primary-10  text-primary-3 hover:bg-primary-8 hover:text-primary-1'
+          ? 'bg-primary-10  text-primary-2 hover:bg-primary-8 hover:text-primary-1'
           : 'bg-primary-10 text-primary-8'
       case 'default':
         return active
@@ -51,7 +51,7 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={`disabled: flex h-12  items-center justify-center rounded-2xl px-6 py-4 font-semibold
-      ${!small && ' w-85'} 
+      ${!small ? ' w-85' : 'w-full'} 
       ${active ? 'cursor-pointer' : 'cursor-not-allowed'} 
       ${setClassNameByProperty(property)}`}
       {...props}
