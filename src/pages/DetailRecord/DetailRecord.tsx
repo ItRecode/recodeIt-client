@@ -157,7 +157,7 @@ export default function DetailRecord() {
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
           </Button>
-          <div className="my-6 w-[327px] text-[14px]">
+          <div className="my-6 w-full px-1 text-[14px]">
             <p>{content}</p>
           </div>
         </section>
