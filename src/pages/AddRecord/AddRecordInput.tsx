@@ -16,10 +16,10 @@ function AddRecordInput({ setCheckAllFilled, checkAllFilled }: userProps) {
     if (inputValueLength > INPUT_DETAILS.MAX_INPUT_TYPING) {
       return
     }
-    if (inputValueLength > 0) {
+    if (inputValueLength > INPUT_DETAILS.MIN_TYPING) {
       setCheckAllFilled({ ...checkAllFilled, input: true })
     }
-    if (inputValueLength === 0) {
+    if (inputValueLength === INPUT_DETAILS.MIN_TYPING) {
       setCheckAllFilled({ ...checkAllFilled, input: false })
     }
     setInputValue(e.target.value)

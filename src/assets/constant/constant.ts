@@ -1,6 +1,7 @@
 export const INPUT_DETAILS = Object.freeze({
-  MAX_INPUT_TYPING: 10,
+  MAX_INPUT_TYPING: 12,
   MAX_TEXTAREA_TYPING: 200,
+  MIN_TYPING: 0,
 })
 
 export const TEXT_DETAILS = Object.freeze({
