@@ -47,7 +47,7 @@ function AddRecordTextArea({
       } px-4 pt-4 pb-2 text-sm font-medium text-grey-5`}
     >
       <textarea
-        className={` min-h-[137px] ${
+        className={` min-h-[130px] ${
           focusState ? 'bg-primary-10' : 'bg-grey-2'
         } w-full resize-none  focus:outline-none focus:placeholder:text-transparent`}
         onChange={handleChangeTextArea}

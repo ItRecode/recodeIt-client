@@ -27,7 +27,7 @@ export default function Button({
           : 'bg-inactive text-grey-1 '
       case 'primary':
         return active
-          ? 'bg-primary-10  text-primary-3 hover:bg-primary-8 hover:text-primary-1'
+          ? 'bg-primary-10  text-primary-2 hover:bg-primary-8 hover:text-primary-1'
           : 'bg-primary-10 text-primary-8'
       case 'default':
         return active
