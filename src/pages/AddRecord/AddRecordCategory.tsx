@@ -67,7 +67,7 @@ function AddRecordCategory({
         (category: BigCategory, index: number) => {
           return {
             title: category.name,
-            choosed: index === 0 && true,
+            choosed: index === 0,
             id: category.id,
             iconSrc: getIconSrc(category.id),
           }
