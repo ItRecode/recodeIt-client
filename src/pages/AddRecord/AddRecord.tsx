@@ -75,7 +75,7 @@ export default function AddRecord() {
     const data = new FormData()
     data.append(
       'files',
-      new Blob([files as Blob], { type: 'multipart/form-data' })
+      new Blob([files as Blob], { type: `image/${files?.type.split('/')[1]}` })
       //  files as Blob
     )
     data.append(
