@@ -100,11 +100,12 @@ export default function SignUp() {
         label="닉네임"
         value={nickname}
         maxLength={8}
-        placeholder="국문, 영문, 숫자 포함 2~8자"
+        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
         message={isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage}
         onChange={(e) => setNickname(e.target.value)}
         onRemove={handleRemoveNickname}
         onFocus={() => setIsInputClicked(true)}
+        onBlur={() => setIsInputClicked(false)}
         autoFocus={false}
       />
       <div className="mt-[104px]">

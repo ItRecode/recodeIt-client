@@ -49,7 +49,7 @@ function AddRecordTextArea({
       <textarea
         className={` min-h-[130px] ${
           focusState ? 'bg-primary-10' : 'bg-grey-2'
-        } w-full resize-none  focus:outline-none focus:placeholder:text-transparent`}
+        } w-full resize-none  placeholder:text-grey-5 focus:outline-none focus:placeholder:text-transparent`}
         onChange={handleChangeTextArea}
         placeholder={
           currentRecordType === 'celebration'
