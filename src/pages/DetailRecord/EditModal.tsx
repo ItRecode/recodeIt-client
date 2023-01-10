@@ -19,19 +19,19 @@ export default function EditModal({
         <div className="pt-3.5">
           <Pin />
         </div>
-        <div className="pt-10">
-          <div>
+        <div className="w-full px-2.5 pt-10">
+          <div className="w-full">
             <Button property="danger" normal={true}>
               수정
             </Button>
           </div>
-          <div className="pt-2.5">
+          <div className="w-full pt-2.5">
             <Button property="danger" onClick={onClickDeleteBtn}>
               삭제
             </Button>
           </div>
         </div>
-        <div className="pb-10 pt-5">
+        <div className="w-full px-2.5 pb-10 pt-5">
           <Button onClick={() => setEditModalState(false)} property="solid">
             취소
           </Button>
