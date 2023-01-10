@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
-import recordIcons from '@assets/record_icons'
 import {
   Cake,
   Celebrate,
@@ -29,11 +28,11 @@ import ReplyInput from './ReplyInput'
 import ShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
+import ImageContainer from '@components/ImageContainer'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [haveImage, setHaveImage] = useState(false)
+
   const [date, setDate] = useState('')
   const [editModalState, setEditModalState] = useState(false)
   const [recordData, setRecordData] =
@@ -70,9 +69,6 @@ export default function DetailRecord() {
   }, [])
 
   useEffect(() => {
-    if (image_urls[0]) {
-      setHaveImage(true)
-    }
     if (created_at) {
       setDate(getCreatedDate(created_at))
     }
@@ -101,7 +97,6 @@ export default function DetailRecord() {
     }
   }
 
-  const RecordIcon = recordIcons[`${icon_name}`]
   const background_color = `bg-${color_name}`
 
   const scrollSection = useRef<HTMLDivElement>(null)
@@ -164,11 +159,12 @@ export default function DetailRecord() {
           id="record_context"
           className="flex w-full flex-col items-center px-[18px]"
         >
-          <div
-            className={`${background_color} my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
-          >
-            {icon_name !== '' && <RecordIcon width={160} height={160} />}
-          </div>
+          <ImageContainer
+            background_color={background_color}
+            icon_name={icon_name}
+            image_urls={image_urls}
+          />
+
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
           </Button>

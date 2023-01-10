@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Closed_icon } from '@assets/icon_closed.svg'
 import { ReactComponent as Kakao_icon } from '@assets/kakao.svg'
-import { ReactComponent as Arrow_icon } from '@assets/right_arrow.svg'
+import { ReactComponent as Arrow_icon } from '@assets/right_purple_arrow.svg'
 import { copyLink, ShareKakao } from '@apis/share'
 import recordIcons from '@assets/record_icons'
 
