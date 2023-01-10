@@ -164,7 +164,6 @@ export default function DetailRecord() {
             icon_name={icon_name}
             image_urls={image_urls}
           />
-
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
           </Button>
