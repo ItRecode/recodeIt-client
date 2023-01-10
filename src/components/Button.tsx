@@ -50,7 +50,7 @@ export default function Button({
     <button
       type={type}
       disabled={disabled}
-      className={`disabled: flex h-12 w-full items-center justify-center rounded-2xl px-6 py-4 font-semibold
+      className={`disabled: flex h-12 items-center justify-center rounded-2xl px-6 py-4 font-semibold
       ${!small && ' w-full'} 
       ${active ? 'cursor-pointer' : 'cursor-not-allowed'} 
       ${setClassNameByProperty(property)}`}
