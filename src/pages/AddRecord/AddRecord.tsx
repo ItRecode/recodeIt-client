@@ -27,10 +27,10 @@ export type FormDataType = {
 }
 
 export interface WriteRecordRequestDto {
-  color_name: string
+  colorName: string
   content: string
-  icon_name: string
-  record_category_id: number
+  iconName: string
+  recordCategoryId: number
   title: string
 }
 
@@ -65,10 +65,10 @@ export default function AddRecord() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
     const formData: WriteRecordRequestDto = {
-      color_name: selectedColor,
+      colorName: selectedColor,
       content: target[5].value,
-      icon_name: selectedIcon,
-      record_category_id: selectedCategory,
+      iconName: selectedIcon,
+      recordCategoryId: selectedCategory,
       title: target[4].value,
     }
 
@@ -78,6 +78,8 @@ export default function AddRecord() {
       new Blob([files as Blob], { type: `image/${files?.type.split('/')[1]}` })
       //  files as Blob
     )
+    console.log(`image/${files?.type.split('/')[1]}`)
+    console.log(files)
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
