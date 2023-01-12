@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function ReplyList() {
   return (
-    <section id="reply" className="px-6 pt-10">
+    <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
       <div className="mt-3">
         <div className="rounded-lg bg-grey-2 p-3">
