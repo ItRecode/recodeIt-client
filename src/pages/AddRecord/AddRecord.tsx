@@ -78,8 +78,6 @@ export default function AddRecord() {
       new Blob([files as Blob], { type: `image/${files?.type.split('/')[1]}` })
       //  files as Blob
     )
-    console.log(`image/${files?.type.split('/')[1]}`)
-    console.log(files)
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
