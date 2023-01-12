@@ -7,23 +7,23 @@ import { useImageSwipe } from '@hooks/useImageSwipe'
 
 interface Iprops {
   background_color: string
-  icon_name: string
-  image_urls: string[]
+  iconName: string
+  imageUrls: string[]
 }
 export default function ImageContainer({
   background_color,
-  icon_name,
-  image_urls,
+  iconName,
+  imageUrls,
 }: Iprops) {
   const { haveNext, havePrev, next, prev, imageState } =
-    useImageSwipe(image_urls)
-  const RecordIcon = recordIcons[`${icon_name}`]
+    useImageSwipe(imageUrls)
+  const RecordIcon = recordIcons[`${iconName}`]
 
   return (
     <div
       className={`${background_color} relative my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
     >
-      {imageState === 0 && icon_name !== '' && (
+      {imageState === 0 && iconName !== '' && (
         <RecordIcon width={160} height={160} />
       )}
       {haveNext && (
@@ -44,7 +44,7 @@ export default function ImageContainer({
       )}
       {imageState !== 0 && (
         <img
-          src={image_urls[imageState - 1]}
+          src={imageUrls[imageState - 1]}
           className="h-full w-full rounded-2xl"
         />
       )}

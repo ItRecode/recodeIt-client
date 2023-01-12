@@ -39,24 +39,24 @@ export default function DetailRecord() {
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
 
   const {
-    record_id,
-    category_name,
+    recordId,
+    categoryName,
     title,
     content,
     writer,
-    color_name,
-    icon_name,
-    created_at,
-    image_urls,
+    colorName,
+    iconName,
+    createdAt,
+    imageUrls,
   } = recordData
 
-  const { recordId } = useParams()
+  const { recordIdParams } = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {
     const getRecordData = async () => {
       try {
-        const response = await getRecord(recordId)
+        const response = await getRecord(recordIdParams)
         if (response) {
           setRecordData(response.data)
         }
@@ -69,13 +69,13 @@ export default function DetailRecord() {
   }, [])
 
   useEffect(() => {
-    if (created_at) {
-      setDate(getCreatedDate(created_at))
+    if (createdAt) {
+      setDate(getCreatedDate(createdAt))
     }
   }, [recordData])
 
   const getChipIconName = () => {
-    switch (category_name) {
+    switch (categoryName) {
       case '축하해주세요':
         return Celebrate
       case '행복해요':
@@ -97,7 +97,7 @@ export default function DetailRecord() {
     }
   }
 
-  const background_color = `bg-${color_name}`
+  const background_color = `bg-${colorName}`
 
   const scrollSection = useRef<HTMLDivElement>(null)
   const [inputSectionHeight, setInputSectionHeight] = useState(
@@ -120,11 +120,11 @@ export default function DetailRecord() {
       {shareStatus && (
         <ShareModal
           setShareStatus={setShareStatus}
-          recordId={record_id}
+          recordId={recordId}
           title={title}
           description={content}
-          background_color={background_color}
-          icon_name={icon_name}
+          backgroundColor={background_color}
+          iconName={iconName}
         />
       )}
       {editModalState && <EditModal setEditModalState={setEditModalState} />}
@@ -146,7 +146,7 @@ export default function DetailRecord() {
             <Chip
               active={true}
               icon={getChipIconName()}
-              message={`${category_name}`}
+              message={`${categoryName}`}
               property="small"
             />
           </div>
@@ -161,8 +161,8 @@ export default function DetailRecord() {
         >
           <ImageContainer
             background_color={background_color}
-            icon_name={icon_name}
-            image_urls={image_urls}
+            iconName={iconName}
+            imageUrls={imageUrls}
           />
           <Button onClick={() => setShareStatus(true)}>
             <p className="text-base font-semibold">공유하기</p>
