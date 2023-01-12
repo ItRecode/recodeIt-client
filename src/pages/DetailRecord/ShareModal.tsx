@@ -11,8 +11,8 @@ interface IModalProps {
   title: string
   description: string
   imageUrl?: string
-  background_color: string
-  icon_name: string
+  backgroundColor: string
+  iconName: string
 }
 
 export default function ShareModal({
@@ -21,10 +21,10 @@ export default function ShareModal({
   title,
   description,
   imageUrl,
-  background_color,
-  icon_name,
+  backgroundColor,
+  iconName,
 }: IModalProps) {
-  const RecordIcon = recordIcons[`${icon_name}`]
+  const RecordIcon = recordIcons[`${iconName}`]
   return (
     <div className="fixed left-0 z-10 flex h-full w-screen items-center justify-center">
       <div className="absolute h-full w-screen bg-grey-10  opacity-50" />
@@ -44,7 +44,7 @@ export default function ShareModal({
             onClick={() => copyLink(recordId)}
           >
             <div
-              className={`${background_color} flex h-12 w-12 items-center justify-center rounded-full`}
+              className={`${backgroundColor} flex h-12 w-12 items-center justify-center rounded-full`}
             >
               <RecordIcon width={36} height={36} />
             </div>

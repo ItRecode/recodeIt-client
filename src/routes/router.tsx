@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  { path: 'record/:recordId', element: <DetailRecord /> },
+  { path: 'record/:recordIdParams', element: <DetailRecord /> },
   { path: '*', element: <NotFound /> },
   {
     path: '/notservice',
