@@ -11,7 +11,7 @@ export const useImageSwipe = (imageUrl: string[]) => {
   const prev = () => {
     setImageState((prev) => prev - 1)
   }
-  console.log(imageState)
+
   useEffect(() => {
     if (imageUrl[0] !== '') {
       if (imageState === 0) {
