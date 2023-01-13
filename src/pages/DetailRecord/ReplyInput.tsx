@@ -84,7 +84,7 @@ export default function ReplyInput({
       })
     )
     const submit = async () => {
-      const res = await createReply(data)
+      await createReply(data)
     }
     submit()
   }
