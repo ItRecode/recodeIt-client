@@ -2,7 +2,9 @@ import { useEffect, useRef } from 'react'
 
 const events = ['mousedown', 'touchstart']
 
-const useClickAway = <T extends HTMLElement>(handler: (e: Event) => void) => {
+const useClickOutside = <T extends HTMLElement>(
+  handler: (e: Event) => void
+) => {
   // 파라미터로 받는 것 : 바깥 부분을 클릭했을 때 실행 되는 이벤트
   const ref = useRef<T>(null)
 
@@ -30,4 +32,4 @@ const useClickAway = <T extends HTMLElement>(handler: (e: Event) => void) => {
   return ref
 }
 
-export default useClickAway
+export default useClickOutside
