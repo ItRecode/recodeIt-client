@@ -3,7 +3,7 @@ import { baseInstance } from './instance'
 
 export const login = ({ type, token }: IAuth) => {
   return baseInstance.post(`/member/oauth/login/${type}`, {
-    oauth_token: token,
+    oauthToken: token,
   })
 }
 
