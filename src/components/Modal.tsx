@@ -1,4 +1,4 @@
-import useClickAway from '@hooks/useClickOutside'
+import useClickOutside from '@hooks/useClickOutside'
 import React, { ReactNode, useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -14,7 +14,7 @@ export default function Modal({
   onClose,
   ...props
 }: IModalProps) {
-  const modalRef = useClickAway<HTMLDivElement>(() => {
+  const modalRef = useClickOutside<HTMLDivElement>(() => {
     onClose && onClose()
   })
 
