@@ -26,59 +26,54 @@ export default function ShareModal({
 }: IModalProps) {
   const RecordIcon = recordIcons[`${iconName}`]
   return (
-    <div className="fixed left-0 z-10 flex h-full w-screen items-center justify-center">
-      <div className="absolute h-full w-screen bg-grey-10  opacity-50" />
-      <section className="absolute z-20 h-[187px] w-[270px] rounded-2xl bg-grey-1 py-4 px-3">
-        <div className="flex justify-between">
-          <p className="text-lg font-semibold">공유하기</p>
-          <button
-            className="cursor-pointer bg-grey-1"
-            onClick={() => setShareStatus(false)}
+    <section className="z-20 h-[187px] w-[270px] rounded-2xl bg-grey-1 py-4 px-3">
+      <div className="flex justify-between">
+        <p className="text-lg font-semibold">공유하기</p>
+        <button
+          className="cursor-pointer bg-grey-1"
+          onClick={() => setShareStatus(false)}
+        >
+          <Closed_icon />
+        </button>
+      </div>
+      <div className="mt-4">
+        <button
+          className="flex w-full cursor-pointer items-center bg-grey-1"
+          onClick={() => copyLink(recordId)}
+        >
+          <div
+            className={`${backgroundColor} flex h-12 w-12 items-center justify-center rounded-full`}
           >
-            <Closed_icon />
-          </button>
-        </div>
-        <div className="mt-4">
-          <button
-            className="flex w-full cursor-pointer items-center bg-grey-1"
-            onClick={() => copyLink(recordId)}
-          >
-            <div
-              className={`${backgroundColor} flex h-12 w-12 items-center justify-center rounded-full`}
-            >
-              <RecordIcon width={36} height={36} />
-            </div>
-            <div className="ml-3 w-[68%]">
-              <div className="flex justify-between text-left text-[18px] font-semibold">
-                URL 공유하기
-                <div>
-                  <Arrow_icon />
-                </div>
+            <RecordIcon width={36} height={36} />
+          </div>
+          <div className="ml-3 w-[68%]">
+            <div className="flex justify-between text-left text-[18px] font-semibold">
+              URL 공유하기
+              <div>
+                <Arrow_icon />
               </div>
-              <p className="text-left text-[12px] text-grey-8">https://...</p>
             </div>
-          </button>
-          <button
-            className="mt-[7px] flex w-full cursor-pointer items-center bg-grey-1"
-            onClick={() =>
-              ShareKakao({ recordId, title, description, imageUrl })
-            }
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-kakao">
-              <Kakao_icon />
-            </div>
-            <div className="ml-3 w-[68%]">
-              <div className="flex justify-between text-left text-[18px] font-semibold">
-                카카오톡 공유하기
-                <div>
-                  <Arrow_icon />
-                </div>
+            <p className="text-left text-[12px] text-grey-8">https://...</p>
+          </div>
+        </button>
+        <button
+          className="mt-[7px] flex w-full cursor-pointer items-center bg-grey-1"
+          onClick={() => ShareKakao({ recordId, title, description, imageUrl })}
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-kakao">
+            <Kakao_icon />
+          </div>
+          <div className="ml-3 w-[68%]">
+            <div className="flex justify-between text-left text-[18px] font-semibold">
+              카카오톡 공유하기
+              <div>
+                <Arrow_icon />
               </div>
-              <p className="text-left text-[12px] text-grey-8">https://...</p>
             </div>
-          </button>
-        </div>
-      </section>
-    </div>
+            <p className="text-left text-[12px] text-grey-8">https://...</p>
+          </div>
+        </button>
+      </div>
+    </section>
   )
 }
