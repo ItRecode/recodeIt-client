@@ -86,7 +86,7 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative pt-4">
       <div className="ml-[18px]">
         <BackButton />
       </div>
