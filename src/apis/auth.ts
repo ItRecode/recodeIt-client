@@ -3,14 +3,14 @@ import { baseInstance } from './instance'
 
 export const login = ({ type, token }: IAuth) => {
   return baseInstance.post(`/member/oauth/login/${type}`, {
-    oauth_token: token,
+    oauthToken: token,
   })
 }
 
 export const signUp = ({ type, tempId, nickname }: ISignUp) => {
   return baseInstance.post(`/member/oauth/register/${type}`, {
     nickname: nickname,
-    register_session: tempId,
+    registerSession: tempId,
   })
 }
 
