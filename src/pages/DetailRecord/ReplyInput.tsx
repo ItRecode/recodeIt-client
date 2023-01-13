@@ -9,7 +9,6 @@ import {
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
-import Modal from '@components/Modal'
 import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 
