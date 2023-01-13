@@ -35,12 +35,14 @@ export default function Alert({
         </div>
         <div className="flex justify-center align-middle">
           <button
+            aria-label="alert-cancel-message"
             className={`${buttonClassName} text-grey-8`}
             onClick={onCancel}
           >
             {cancelMessage}
           </button>
           <button
+            aria-label="alert-confirm-message"
             className={`${buttonClassName} text-primary-2`}
             onClick={onConfirm}
           >
