@@ -90,7 +90,7 @@ export default function AddRecord() {
       <div className="ml-[18px]">
         <BackButton />
       </div>
-      <div className="sticky top-0 left-0 bg-grey-1">
+      <div className="sticky top-0 left-0 z-[5] bg-grey-1">
         <MainCategoryTap
           currentRecordType={recordType}
           onSetRecordType={setRecordType}
