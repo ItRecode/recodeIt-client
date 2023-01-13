@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BackButton from '@components/BackButton'
 import AddRecordCategory from './AddRecordCategory'
 import AddRecordInput from './AddRecordInput'
@@ -27,10 +27,10 @@ export type FormDataType = {
 }
 
 export interface WriteRecordRequestDto {
-  color_name: string
+  colorName: string
   content: string
-  icon_name: string
-  record_category_id: number
+  iconName: string
+  recordCategoryId: number
   title: string
 }
 
@@ -44,8 +44,12 @@ export default function AddRecord() {
   })
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     useRecoilValue(formDataAtom)
-  const [files, setFiles] = useState('')
+  const [files, setFiles] = useState<File>()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setCheckAllFilled({ input: false, textArea: false })
+  }, [recordType])
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -57,17 +61,23 @@ export default function AddRecord() {
     enroll()
   }
 
-  const makeFormDatas = (e: any) => {
+  const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const target = e.target as any
     const formData: WriteRecordRequestDto = {
-      color_name: selectedColor,
-      content: e.target[5].value,
-      icon_name: selectedIcon,
-      record_category_id: selectedCategory,
-      title: e.target[4].value,
+      colorName: selectedColor,
+      content: target[5].value,
+      iconName: selectedIcon,
+      recordCategoryId: selectedCategory,
+      title: target[4].value,
     }
 
     const data = new FormData()
-    data.append('file', files)
+    data.append(
+      'files',
+      new Blob([files as Blob], { type: `image/${files?.type.split('/')[1]}` })
+      //  files as Blob
+    )
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -76,14 +86,16 @@ export default function AddRecord() {
   }
 
   return (
-    <div className="mb-6 pt-16">
+    <div className="relative pt-4">
       <div className="ml-[18px]">
         <BackButton />
       </div>
-      <MainCategoryTap
-        currentRecordType={recordType}
-        onSetRecordType={setRecordType}
-      />
+      <div className="sticky top-0 left-0 bg-grey-1">
+        <MainCategoryTap
+          currentRecordType={recordType}
+          onSetRecordType={setRecordType}
+        />
+      </div>
       <form
         encType="multipart/form-data"
         className="px-6"
@@ -92,6 +104,7 @@ export default function AddRecord() {
         <AddRecordCategory currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 제목'} />
         <AddRecordInput
+          currentRecordType={recordType}
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
         />
@@ -102,15 +115,15 @@ export default function AddRecord() {
           currentRecordType={recordType}
         />
         <AddRecordTitle title={'레코드 컬러'} />
-        <AddRecordColor />
+        <AddRecordColor currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 아이콘'} />
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
-        <AddRecordFile setFiles={setFiles} />
-        <div className="ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 py-4 pl-6">
+        <AddRecordFile currentRecordType={recordType} setFiles={setFiles} />
+        <div className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
           <Button
             property={'solid'}
-            disabled={false}
+            disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
             type="submit"
             active={
               checkAllFilled.input && checkAllFilled.textArea ? true : false

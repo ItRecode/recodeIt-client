@@ -3,43 +3,60 @@ import BackButton from '@components/BackButton'
 import Button from '@components/Button'
 import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
-import ShareModal from '@components/ShareModal'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
-import recordIcons from '@assets/record_icons'
-import { Cake, Celebrate, Consolate, Happy, Love } from '@assets/chip_icon'
-import { INITIAL_RECORD_DATA } from '@assets/constant/constant'
+import {
+  Cake,
+  Celebrate,
+  Consolate,
+  Depress,
+  Happy,
+  Love,
+  MySide,
+  Sympathy,
+} from '@assets/chip_icon'
+import {
+  INITIAL_RECORD_DATA,
+  RECORD_DETAIL_HEADER_SECTION_HEIGHT,
+  RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
+} from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
+import ShareModal from './ShareModal'
+import EditModal from './EditModal'
+import { useRef } from 'react'
+import ImageContainer from '@components/ImageContainer'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
-  const [haveImage, setHaveImage] = useState(false)
+
   const [date, setDate] = useState('')
+  const [editModalState, setEditModalState] = useState(false)
   const [recordData, setRecordData] =
     useState<IRecordDataType>(INITIAL_RECORD_DATA)
+
   const {
-    record_id,
-    category_name,
+    recordId,
+    categoryName,
     title,
     content,
     writer,
-    color_name,
-    icon_name,
-    created_at,
-    image_urls,
+    colorName,
+    iconName,
+    createdAt,
+    imageUrls,
   } = recordData
 
-  const { recordId } = useParams()
+  const { recordIdParams } = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {
     const getRecordData = async () => {
       try {
-        const response = await getRecord(recordId)
+        const response = await getRecord(recordIdParams)
         if (response) {
           setRecordData(response.data)
         }
@@ -52,16 +69,13 @@ export default function DetailRecord() {
   }, [])
 
   useEffect(() => {
-    if (image_urls[0]) {
-      setHaveImage(true)
-    }
-    if (created_at) {
-      setDate(getCreatedDate(created_at))
+    if (createdAt) {
+      setDate(getCreatedDate(createdAt))
     }
   }, [recordData])
 
   const getChipIconName = () => {
-    switch (category_name) {
+    switch (categoryName) {
       case '축하해주세요':
         return Celebrate
       case '행복해요':
@@ -72,57 +86,101 @@ export default function DetailRecord() {
         return Love
       case '위로해주세요':
         return Consolate
+      case '우울해요':
+        return Depress
+      case '공감이 필요해요':
+        return Sympathy
+      case '내 편이 되어주세요':
+        return MySide
       default:
         return ''
     }
   }
 
-  const RecordIcon = recordIcons[`${icon_name}`]
+  const background_color = `bg-${colorName}`
+
+  const scrollSection = useRef<HTMLDivElement>(null)
+  const [inputSectionHeight, setInputSectionHeight] = useState(
+    RECORD_DETAIL_INITIAL_INPUT_HEIGHT
+  )
+
+  useEffect(() => {
+    if (scrollSection.current !== null) {
+      scrollSection.current.style.height = 'auto'
+      scrollSection.current.style.height =
+        window.innerHeight -
+        inputSectionHeight -
+        RECORD_DETAIL_HEADER_SECTION_HEIGHT +
+        'px'
+    }
+  }, [inputSectionHeight])
+
   return (
-    <div className="w-full">
+    <div className="relative h-full w-full">
       {shareStatus && (
         <ShareModal
           setShareStatus={setShareStatus}
-          recordId={record_id}
+          recordId={recordId}
           title={title}
           description={content}
+          backgroundColor={background_color}
+          iconName={iconName}
         />
       )}
-      <header className="h-[60px]" />
-      <nav className="flex justify-between px-6">
-        <BackButton />
-        <MoreButton />
-      </nav>
-      <section id="title" className="mt-7 flex flex-col px-6">
-        <div className="flex justify-between">
-          <p className="flex items-center text-2xl font-semibold">{title}</p>
-          <Chip
-            active={true}
-            icon={getChipIconName()}
-            message={`${category_name}`}
-          ></Chip>
-        </div>
-        <div className="mt-4 flex">
-          <p className="text-[14px]">{writer}</p>
-          <p className="px-4 text-xs text-grey-5">{date}</p>
-        </div>
-      </section>
-      <section
-        id="record_context"
-        className="flex w-full flex-col items-center"
-      >
-        <div
-          className={`my-4 h-[338px] w-[338px] rounded-2xl bg-${color_name} flex items-center justify-center`}
+      {editModalState && <EditModal setEditModalState={setEditModalState} />}
+      <header className="p-4">
+        <nav className="flex justify-between">
+          <BackButton />
+          <button
+            className="cursor-pointer bg-grey-1"
+            onClick={() => setEditModalState(true)}
+          >
+            <MoreButton />
+          </button>
+        </nav>
+      </header>
+      <div className="mb-3 overflow-auto" ref={scrollSection}>
+        <section id="title" className="flex flex-col px-6">
+          <div className="flex justify-between">
+            <p className="flex items-center text-2xl font-semibold">{title}</p>
+            <Chip
+              active={true}
+              icon={getChipIconName()}
+              message={`${categoryName}`}
+              property="small"
+            />
+          </div>
+          <div className="mt-4 flex">
+            <p className="text-[14px]">{writer}</p>
+            <p className="px-4 text-xs text-grey-5">{date}</p>
+          </div>
+        </section>
+        <section
+          id="record_context"
+          className="flex w-full flex-col items-center px-[18px]"
         >
-          {icon_name !== '' && <RecordIcon width={160} height={160} />}
-        </div>
-        <Button onClick={() => setShareStatus(true)}>공유하기</Button>
-        <div className="my-6 w-[327px] text-[14px]">
-          <p>{content}</p>
-        </div>
+          <ImageContainer
+            background_color={background_color}
+            iconName={iconName}
+            imageUrls={imageUrls}
+          />
+          <Button onClick={() => setShareStatus(true)}>
+            <p className="text-base font-semibold">공유하기</p>
+          </Button>
+          <div className="mt-6 mb-10 w-full px-1.5 text-[14px]">
+            <p className="w-full ">{content}</p>
+          </div>
+        </section>
+        <section id="record_reply_list">
+          <ReplyList />
+        </section>
+      </div>
+      <section
+        id="record_reply_input"
+        className="absolute bottom-0 w-full bg-grey-1 px-6 py-4"
+      >
+        <ReplyInput setInputSectionHeight={setInputSectionHeight} />
       </section>
-      <ReplyList />
-      <ReplyInput />
     </div>
   )
 }

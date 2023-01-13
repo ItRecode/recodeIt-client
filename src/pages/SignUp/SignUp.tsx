@@ -1,46 +1,22 @@
-import React, { ChangeEvent } from 'react'
+import React from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
 import Input from '@components/Input'
-import useForm from '@hooks/useForm'
 import { useAuth } from '@react-query/hooks/useAuth'
-import { useGetDuplicateNickname } from '@react-query/hooks/useNickname'
+import { getIsDuplicatedNickname } from '@apis/auth'
+import useDebounce from '@hooks/useDebounce'
+
+const NICKNAME_MIN_LENGTH = 2
 
 export default function SignUp() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { oauthSignUp } = useAuth()
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
-  const { oauthSignUp } = useAuth()
-  const navigate = useNavigate()
-
-  const { values, errors, handleRemove, handleChange, handleSubmit } = useForm({
-    initialValues: { nickname: '' },
-    onSubmit: ({ nickname }) => {
-      setIsCheckedNickname(true)
-      setNickname(nickname)
-    },
-    validate: ({ nickname }) => {
-      const error: { nickname?: string } = {}
-      const spacePattern = /\s/g
-      const nicknamePattern = /[가-힣aA-z0-9]{2,8}/
-
-      if (!nickname.match(nicknamePattern)) {
-        error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
-      }
-
-      if (nickname.match(spacePattern)) {
-        error.nickname = '공백을 제거해주세요'
-      }
-
-      if (!isDuplicate) {
-        error.nickname = '이미 사용중이거나 사용할 수 없는 닉네임입니다.'
-      }
-
-      return error
-    },
-  })
-  const { isDuplicate } = useGetDuplicateNickname(values.nickname)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
     if (!location.state?.tempSessionId) {
@@ -48,20 +24,60 @@ export default function SignUp() {
     }
   }, [])
 
-  const setPropertyWithIsCheckedNickname = () => {
-    if (isCheckedNickname) return 'success'
-    if (errors.nickname as string) return 'error'
-    return 'default'
-  }
+  useDebounce(
+    async () => {
+      setErrorMessage('')
+      setIsCheckedNickname(false)
+      if (nickname.length > 0 && validateNickname(nickname)) {
+        try {
+          await getIsDuplicatedNickname(nickname)
+          setIsCheckedNickname(true)
+        } catch (e) {
+          setErrorMessage('이미 사용중인 닉네임이에요.')
+          setIsCheckedNickname(false)
+        }
+      }
+    },
+    300,
+    [nickname]
+  )
 
-  const handleRemoveNickname = (isRemove: boolean) => {
-    if (isRemove && !isCheckedNickname) {
-      handleRemove('nickname')
+  const validateNickname = (nickname: string) => {
+    const spacePattern = /\s/g
+    const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
+    const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
+
+    if (nickname.length < NICKNAME_MIN_LENGTH) {
+      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요.`)
+      return false
     }
+
+    if (nickname.match(spacePattern)) {
+      setErrorMessage('공백은 사용할 수 없어요.')
+      return false
+    }
+
+    if (nickname.match(specialPattern)) {
+      setErrorMessage('특수문자는 사용할 수 없어요.')
+      return false
+    }
+
+    if (nickname.match(consonantAndVowelPattern)) {
+      setErrorMessage('자음이나 모음만은 사용할 수 없어요.')
+      return false
+    }
+
+    return true
   }
 
-  const handleChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e)
+  const setPropertyWithIsCheckedNickname = () => {
+    if (nickname.length < 1 && !isInputClicked) return 'default'
+    if (errorMessage.length > 0 && !isCheckedNickname) return 'error'
+    return 'success'
+  }
+
+  const handleRemoveNickname = () => {
+    setNickname('')
     setIsCheckedNickname(false)
   }
 
@@ -78,29 +94,21 @@ export default function SignUp() {
         <br />
         사용하시겠어요?
       </h1>
-      <form onSubmit={handleSubmit}>
-        <Input
-          property={setPropertyWithIsCheckedNickname()}
-          name="nickname"
-          label="닉네임"
-          value={values.nickname}
-          maxLength={8}
-          placeholder="국문, 영문, 숫자 포함 2~8자"
-          message={
-            isCheckedNickname
-              ? '사용가능한 닉네임입니다.'
-              : (errors.nickname as string)
-          }
-          onChange={handleChangeNickname}
-          onRemove={handleRemoveNickname}
-        />
-        <div className="mt-[72px]">
-          <Button type="submit" active={values.nickname.length > 0}>
-            중복 확인
-          </Button>
-        </div>
-      </form>
-      <div className="mt-2">
+      <Input
+        property={setPropertyWithIsCheckedNickname()}
+        name="nickname"
+        label="닉네임"
+        value={nickname}
+        maxLength={8}
+        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
+        message={isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage}
+        onChange={(e) => setNickname(e.target.value)}
+        onRemove={handleRemoveNickname}
+        onFocus={() => setIsInputClicked(true)}
+        onBlur={() => setIsInputClicked(false)}
+        autoFocus={false}
+      />
+      <div className="mt-[104px]">
         <Button
           type="submit"
           property="solid"

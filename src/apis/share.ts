@@ -10,9 +10,10 @@ export const ShareKakao = ({
   description,
   imageUrl = '',
 }: IShareDataType) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { Kakao }: any = window
   if (!Kakao.isInitialized()) {
-    Kakao.init(process.env.REACT_APP_KAKAO_REST_API_KEY)
+    Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY)
   }
 
   Kakao.Share.sendDefault({
@@ -22,8 +23,8 @@ export const ShareKakao = ({
       description: description,
       imageUrl: imageUrl,
       link: {
-        mobileWebUrl: 'https://developers.kakao.com',
-        androidExecutionParams: 'test',
+        webUrl: process.env.REACT_APP_WEB_URL,
+        mobileWebUrl: process.env.REACT_APP_WEB_URL,
       },
     },
 
@@ -31,8 +32,8 @@ export const ShareKakao = ({
       {
         title: '레코드 보러가기',
         link: {
-          mobileWebUrl: `https://recordit.vercel.app/record/${recordId}`,
-          webUrl: `https://recordit.vercel.app/record/${recordId}`,
+          mobileWebUrl: `${process.env.REACT_APP_WEB_URL}/record/${recordId}`,
+          webUrl: `${process.env.REACT_APP_WEB_URL}/record/${recordId}`,
         },
       },
     ],

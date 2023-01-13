@@ -49,8 +49,9 @@ module.exports = {
         danger: '#DA2626',
         inactive: '#D0D0D0',
 
+        report: '#F83636',
+
         kakao: '#FEE500',
-        'kakao-label': '#000000 85%',
       },
       fontFamily: {
         sans: ['San Francisco'],
@@ -62,6 +63,12 @@ module.exports = {
         web: { min: '450px' },
         basic: { min: '375px', max: '450px' },
         small: { max: '375px' },
+      },
+      keyframes: {
+        popUp: {
+          '0%': { transform: 'translateY(200px)' },
+          '100%': { transform: 'translateY(0px)' },
+        },
       },
     },
   },

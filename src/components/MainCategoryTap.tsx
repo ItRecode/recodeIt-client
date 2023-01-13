@@ -10,31 +10,35 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
   const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
 
   const typeConfig = {
-    active: 'text-primary-2 border-b-2 border-current pb-4',
+    active: 'text-primary-2 border-b-2 border-current',
     inactive: 'text-gray-600',
   }
 
   return (
-    <div className="mt-6 flex justify-between border-b border-grey-3 px-16 text-lg font-semibold">
-      <div
-        className={`${
-          currentRecordType === CELEBRATION
-            ? typeConfig.active
-            : typeConfig.inactive
-        }`}
-        onClick={() => onSetRecordType(CELEBRATION)}
-      >
-        축하 레코드
+    <div className="flex justify-between border-b border-grey-3 bg-grey-1 text-lg font-semibold">
+      <div className="flex w-1/2 justify-center align-middle">
+        <div
+          className={`py-4 ${
+            currentRecordType === CELEBRATION
+              ? typeConfig.active
+              : typeConfig.inactive
+          }`}
+          onClick={() => onSetRecordType(CELEBRATION)}
+        >
+          축하 레코드
+        </div>
       </div>
-      <div
-        className={`${
-          currentRecordType === CONSOLATION
-            ? typeConfig.active
-            : typeConfig.inactive
-        }`}
-        onClick={() => onSetRecordType(CONSOLATION)}
-      >
-        위로 레코드
+      <div className="flex w-1/2 justify-center align-middle">
+        <div
+          className={` py-4 ${
+            currentRecordType === CONSOLATION
+              ? typeConfig.active
+              : typeConfig.inactive
+          }`}
+          onClick={() => onSetRecordType(CONSOLATION)}
+        >
+          위로 레코드
+        </div>
       </div>
     </div>
   )

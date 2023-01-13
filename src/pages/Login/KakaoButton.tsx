@@ -16,11 +16,14 @@ export default function KakaoButton() {
   return (
     <button
       aria-label="kakao-login-button"
-      className="flex h-12 w-85 items-center rounded-xl border-none bg-kakao px-8 font-semibold hover:cursor-pointer"
+      className="flex h-12 w-full items-center rounded-md border-none bg-kakao px-5 text-sm font-semibold text-grey-10 hover:cursor-pointer"
       onClick={handleKakaoLogin}
     >
-      <KakaoSymbol aria-label="kakao-symbol-icon" />
-      <p className="w-full text-kakao-label">카카오로 계속하기</p>
+      <KakaoSymbol
+        aria-label="kakao-symbol-icon"
+        className="h-[18px] w-[18px]"
+      />
+      <p className="w-full text-grey-10">카카오 로그인</p>
     </button>
   )
 }

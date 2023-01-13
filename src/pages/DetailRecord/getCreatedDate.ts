@@ -1,35 +1,52 @@
-export const getCreatedDate = (created_at: string) => {
-  const current_time = new Date().getTime()
-  const created_time = new Date(new Date(created_at)).getTime()
-  const difference_time = current_time - created_time / 1000
+export const getCreatedDate = (createdAt: string) => {
+  const currentTime = new Date().getTime()
+  const createdTime = new Date(new Date(createdAt)).getTime()
+  // diffenceTime = 초 (s)
+  const differenceTime = (currentTime - createdTime) / 1000
 
-  if (difference_time < 60) {
+  // 게시물 작성 1분 미만 (60s)
+  if (differenceTime < 60) {
     const second = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.floor(-difference_time),
+      Math.round(-differenceTime),
       'second'
     )
     return second
   }
-  if (difference_time / 60 < 60) {
+
+  // 게시물 작성 1시간 미만 (60 * 60s)
+  if (differenceTime < 60 * 60) {
     const minute = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.floor(-difference_time / 60),
+      Math.round(-differenceTime / 60),
       'minute'
     )
     return minute
   }
-  if (difference_time < 24) {
+
+  // 게시물 작성 하루 미만 (60 * 60 * 24s)
+  if (differenceTime < 60 * 60 * 24) {
     const hour = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.floor(-difference_time / 3600),
+      Math.round(-differenceTime / (60 * 60)),
       'hour'
     )
     return hour
   }
-  if (difference_time > 24) {
+
+  // 게시물 작성 일주일 미만 (60 * 60 * 24 * 7s)
+  if (differenceTime < 60 * 60 * 24 * 7) {
+    const day = new Intl.RelativeTimeFormat('ko-KR').format(
+      Math.round(-differenceTime / (60 * 60 * 24)),
+      'day'
+    )
+    return day
+  }
+
+  // 게시물 작성 일주일 이상 작성 날짜,시간 반환
+  if (differenceTime > 24) {
     const date = new Intl.DateTimeFormat('ko-KR', {
       dateStyle: 'medium',
       timeStyle: 'short',
       hour12: false,
-    }).format(created_time)
+    }).format(createdTime)
     return date
   }
   return ''

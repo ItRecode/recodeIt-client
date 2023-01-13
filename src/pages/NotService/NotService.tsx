@@ -13,8 +13,8 @@ export default function NotService() {
         아직 준비 중인 서비스예요
       </p>
       <p className="mb-10 text-xs font-medium">서비스가 완성되면 만나요.</p>
-      <Button disabled={false} onClick={() => navigate(-3)} property="solid">
-        레코딧으로 이동
+      <Button disabled={false} onClick={() => navigate(-1)} property="primary">
+        이전 페이지로
       </Button>
     </div>
   )
