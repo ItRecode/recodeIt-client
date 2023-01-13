@@ -56,7 +56,7 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
-      navigate(`/record/${response.data.record_id}`)
+      navigate(`/record/${response.data.recordId}`)
     }
     enroll()
   }
@@ -73,11 +73,8 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-    data.append(
-      'files',
-      new Blob([files as Blob], { type: `image/${files?.type.split('/')[1]}` })
-      //  files as Blob
-    )
+
+    data.append('files', files as Blob, files?.name)
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
