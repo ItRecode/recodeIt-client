@@ -10,7 +10,7 @@ export const login = ({ type, token }: IAuth) => {
 export const signUp = ({ type, tempId, nickname }: ISignUp) => {
   return baseInstance.post(`/member/oauth/register/${type}`, {
     nickname: nickname,
-    register_session: tempId,
+    registerSession: tempId,
   })
 }
 
