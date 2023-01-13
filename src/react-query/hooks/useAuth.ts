@@ -23,7 +23,7 @@ export const useAuth = () => {
 
           navigate('/sign-up', {
             state: {
-              tempSessionId: data.register_session,
+              tempSessionId: data.registerSession,
               loginType,
             },
           })
