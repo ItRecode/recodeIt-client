@@ -15,26 +15,30 @@ function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
   }
 
   return (
-    <div className="flex justify-between border-b border-grey-3 bg-grey-1 px-16 text-lg font-semibold">
-      <div
-        className={`py-4 ${
-          currentRecordType === CELEBRATION
-            ? typeConfig.active
-            : typeConfig.inactive
-        }`}
-        onClick={() => onSetRecordType(CELEBRATION)}
-      >
-        축하 레코드
+    <div className="flex justify-between border-b border-grey-3 bg-grey-1 text-lg font-semibold">
+      <div className="flex w-1/2 justify-center align-middle">
+        <div
+          className={`py-4 ${
+            currentRecordType === CELEBRATION
+              ? typeConfig.active
+              : typeConfig.inactive
+          }`}
+          onClick={() => onSetRecordType(CELEBRATION)}
+        >
+          축하 레코드
+        </div>
       </div>
-      <div
-        className={`py-4 ${
-          currentRecordType === CONSOLATION
-            ? typeConfig.active
-            : typeConfig.inactive
-        }`}
-        onClick={() => onSetRecordType(CONSOLATION)}
-      >
-        위로 레코드
+      <div className="flex w-1/2 justify-center align-middle">
+        <div
+          className={` py-4 ${
+            currentRecordType === CONSOLATION
+              ? typeConfig.active
+              : typeConfig.inactive
+          }`}
+          onClick={() => onSetRecordType(CONSOLATION)}
+        >
+          위로 레코드
+        </div>
       </div>
     </div>
   )
