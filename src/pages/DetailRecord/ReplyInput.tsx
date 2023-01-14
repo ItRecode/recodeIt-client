@@ -10,6 +10,8 @@ import {
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
 import { createReply } from '@apis/reply'
+import Alert from '@components/Alert'
+import { useNavigate } from 'react-router-dom'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -18,10 +20,12 @@ export default function ReplyInput({
   setInputSectionHeight: Dispatch<SetStateAction<number>>
   recordId: number
 }) {
-  const [image, setImage] = useState<string | undefined>()
+  const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
   const textRef = useRef<HTMLTextAreaElement>(null)
+  const [isCheckedLogin, setIsCheckedLogin] = useState(false)
+  const navigate = useNavigate()
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -105,7 +109,7 @@ export default function ReplyInput({
       onSubmit={handleSubmitReplyData}
     >
       <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
-        {image && (
+        {image !== '' && (
           <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
             <img
               className=" h-full w-full rounded-2xl"
@@ -129,6 +133,7 @@ export default function ReplyInput({
             onChange={(e) => setText(e.target.value)}
             value={text}
             className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
+            onFocus={() => setIsCheckedLogin(true)}
           />
           <button className="cursor-pointer text-[12px] text-primary-2">
             확인
@@ -138,7 +143,7 @@ export default function ReplyInput({
       <label htmlFor="imageFile">
         <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
-          {!image && <Plus className="absolute right-0.5 top-[5px]" />}
+          {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
         <input
           onChange={handleSelectImageFile}
@@ -148,6 +153,25 @@ export default function ReplyInput({
           className="hidden"
         />
       </label>
+      {/* TODO: ProtectedRoute 구현 후 로그인 유무에 따라 다시 로직 구현 */}
+      {isCheckedLogin && (
+        <Alert
+          visible={isCheckedLogin}
+          mainMessage={
+            <div className="text-base font-semibold leading-6">
+              비회원은 댓글을
+              <br />
+              <span className="text-sub-1">수정, 삭제</span> 할 수 없어요
+            </div>
+          }
+          subMessage="회원가입하고 추억을 공유해보세요."
+          cancelMessage="괜찮아요"
+          confirmMessage="회원가입"
+          onClose={() => setIsCheckedLogin(false)}
+          onCancel={() => setIsCheckedLogin(false)}
+          onConfirm={() => navigate('/login')}
+        />
+      )}
     </form>
   )
 }

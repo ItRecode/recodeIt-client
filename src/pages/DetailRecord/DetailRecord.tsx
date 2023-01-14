@@ -29,10 +29,10 @@ import ShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
 import ImageContainer from '@components/ImageContainer'
+import Modal from '@components/Modal'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
-
   const [date, setDate] = useState('')
   const [editModalState, setEditModalState] = useState(false)
   const [recordData, setRecordData] =
@@ -118,14 +118,16 @@ export default function DetailRecord() {
   return (
     <div className="relative h-full w-full">
       {shareStatus && (
-        <ShareModal
-          setShareStatus={setShareStatus}
-          recordId={recordId}
-          title={title}
-          description={content}
-          backgroundColor={background_color}
-          iconName={iconName}
-        />
+        <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
+          <ShareModal
+            setShareStatus={setShareStatus}
+            recordId={recordId}
+            title={title}
+            description={content}
+            backgroundColor={background_color}
+            iconName={iconName}
+          />
+        </Modal>
       )}
       {editModalState && <EditModal setEditModalState={setEditModalState} />}
       <header className="p-4">
