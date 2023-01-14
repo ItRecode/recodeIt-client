@@ -42,14 +42,10 @@ function AddRecordTextArea({
 
   return (
     <div
-      className={`mb-10 rounded-lg ${
-        focusState ? 'bg-primary-10' : 'bg-grey-2'
-      } px-4 pt-4 pb-2 text-sm font-medium text-grey-5`}
+      className={`mb-10 rounded-lg bg-grey-2 px-4 pt-4 pb-2 text-sm font-medium text-grey-5`}
     >
       <textarea
-        className={` min-h-[130px] ${
-          focusState ? 'bg-primary-10' : 'bg-grey-2'
-        } w-full resize-none  placeholder:text-grey-5 focus:outline-none focus:placeholder:text-transparent`}
+        className={`min-h-[130px] w-full resize-none bg-grey-2  placeholder:text-grey-5 focus:outline-none focus:placeholder:text-transparent`}
         onChange={handleChangeTextArea}
         placeholder={
           currentRecordType === 'celebration'
