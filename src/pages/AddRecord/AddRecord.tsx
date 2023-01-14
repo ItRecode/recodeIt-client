@@ -74,8 +74,9 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-
-    data.append('files', files as Blob, files?.name)
+    if (files !== undefined) {
+      data.append('files', files as File, files?.name)
+    }
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
