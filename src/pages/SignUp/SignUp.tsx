@@ -6,13 +6,14 @@ import Input from '@components/Input'
 import { useAuth } from '@react-query/hooks/useAuth'
 import { getIsDuplicatedNickname } from '@apis/auth'
 import useDebounce from '@hooks/useDebounce'
+import Spinner from '@components/Spinner'
 
 const NICKNAME_MIN_LENGTH = 2
 
 export default function SignUp() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { oauthSignUp } = useAuth()
+  const { oauthSignUp, isLoading } = useAuth()
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -115,7 +116,7 @@ export default function SignUp() {
           active={isCheckedNickname}
           onClick={handleSignUp}
         >
-          레코딧 입장
+          {isLoading ? <Spinner /> : '레코딧 입장'}
         </Button>
       </div>
     </div>
