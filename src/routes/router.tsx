@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <ProtectedRoute isPublic={true}>
+      <ProtectedRoute isPublic={false}>
         <NavBar />
       </ProtectedRoute>
     ),
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
   {
     path: '/record/add',
     element: (
-      <ProtectedRoute isPublic={true}>
+      <ProtectedRoute isPublic={false}>
         <AddRecord />
       </ProtectedRoute>
     ),
