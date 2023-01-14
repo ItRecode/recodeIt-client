@@ -9,43 +9,53 @@ import {
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
+import { createReply } from '@apis/reply'
 import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 
 export default function ReplyInput({
   setInputSectionHeight,
+  recordId,
 }: {
   setInputSectionHeight: Dispatch<SetStateAction<number>>
+  recordId: number
 }) {
-  const [image, setImage] = useState<string | null>(null)
+  const [image, setImage] = useState<string>('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [text, setText] = useState('')
   const textRef = useRef<HTMLTextAreaElement>(null)
   const [isCheckedLogin, setIsCheckedLogin] = useState(false)
   const navigate = useNavigate()
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    encodeFileToBase64((e.target.files as FileList)[0])
-    setImage(() => e.target.value)
+    encodeFile((e.target.files as FileList)[0])
+
+    setImage(e.target.value)
+    setImageFile((e.target.files as FileList)[0])
+
     setInputSectionHeight((prev) => prev + RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
+    e.target.value = ''
   }
 
-  const handleDeleteImageFile = () => {
-    setImage(() => null)
-    setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
-  }
-
-  const encodeFileToBase64 = (fileBlob: File) => {
+  const encodeFile = (fileBlob: File) => {
     const reader = new FileReader()
     reader.readAsDataURL(fileBlob)
     return new Promise<void>((resolve, reject) => {
       reader.onload = () => {
         try {
-          setImage(reader.result as string | null)
+          setImage(reader.result as string)
           resolve()
         } catch (error) {
           reject(error)
         }
       }
     })
+  }
+
+  const handleDeleteImageFile = () => {
+    setImage('')
+    setImageFile(null)
+    setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
   }
 
   const handleResizeHeight = useCallback(() => {
@@ -59,10 +69,47 @@ export default function ReplyInput({
     }
   }, [])
 
+  const handleSubmitReplyData = (
+    e: React.FormEvent<HTMLFormElement>,
+    parentId?: number
+  ) => {
+    e.preventDefault()
+
+    const writeCommentRequestDto = {
+      recordId: recordId,
+      comment: (e.target as HTMLInputElement).value,
+      parentId: parentId || '',
+    }
+    const data = new FormData()
+
+    if (imageFile !== null) {
+      data.set('attachment', imageFile as Blob, (imageFile as File).name)
+    }
+
+    data.set(
+      'writeCommentRequestDto',
+      new Blob([JSON.stringify(writeCommentRequestDto)], {
+        type: 'application/json',
+      })
+    )
+    // for (const key of Array.from(data.keys())) {
+    //   console.log(key + ' : ' + data.get(key) + ':' + typeof data.get(key))
+    // }
+
+    const submit = async () => {
+      await createReply(data)
+    }
+    submit()
+  }
+
   return (
-    <div className="flex w-full items-end bg-grey-1">
+    <form
+      className="flex w-full items-end bg-grey-1"
+      encType="multipart/form-data"
+      onSubmit={handleSubmitReplyData}
+    >
       <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
-        {image !== null && (
+        {image !== '' && (
           <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
             <img
               className=" h-full w-full rounded-2xl"
@@ -83,6 +130,8 @@ export default function ReplyInput({
             required={true}
             placeholder="따뜻한 마음을 남겨주세요"
             onInput={handleResizeHeight}
+            onChange={(e) => setText(e.target.value)}
+            value={text}
             className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
             onFocus={() => setIsCheckedLogin(true)}
           />
@@ -94,7 +143,7 @@ export default function ReplyInput({
       <label htmlFor="imageFile">
         <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
-          {image === null && <Plus className="absolute right-0.5 top-[5px]" />}
+          {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
         <input
           onChange={handleSelectImageFile}
@@ -123,6 +172,6 @@ export default function ReplyInput({
           onConfirm={() => navigate('/login')}
         />
       )}
-    </div>
+    </form>
   )
 }

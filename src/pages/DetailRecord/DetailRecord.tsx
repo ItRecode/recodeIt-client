@@ -181,7 +181,10 @@ export default function DetailRecord() {
         id="record_reply_input"
         className="absolute bottom-0 w-full bg-grey-1 px-6 py-4"
       >
-        <ReplyInput setInputSectionHeight={setInputSectionHeight} />
+        <ReplyInput
+          setInputSectionHeight={setInputSectionHeight}
+          recordId={recordId}
+        />
       </section>
     </div>
   )
