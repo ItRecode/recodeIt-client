@@ -1,7 +1,5 @@
 import { ADD_RECORD_ICONS } from '@assets/constant/RecordIcons'
-import { formDataAtom } from '@store/atom'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Back } from '@assets/back.svg'
 import { ReactComponent as Front } from '@assets/front.svg'
 import Slider from 'react-slick'
