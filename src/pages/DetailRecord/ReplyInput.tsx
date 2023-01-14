@@ -19,15 +19,18 @@ export default function ReplyInput({
   recordId: number
 }) {
   const [image, setImage] = useState<string | undefined>()
-  const [imageFile, setImageFile] = useState<File | undefined>()
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
   const textRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
-    setImage(() => e.target.value)
+
+    setImage(e.target.value)
     setImageFile((e.target.files as FileList)[0])
+
     setInputSectionHeight((prev) => prev + RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
+    e.target.value = ''
   }
 
   const encodeFile = (fileBlob: File) => {
@@ -36,7 +39,7 @@ export default function ReplyInput({
     return new Promise<void>((resolve, reject) => {
       reader.onload = () => {
         try {
-          setImage(reader.result as string | undefined)
+          setImage(reader.result as string)
           resolve()
         } catch (error) {
           reject(error)
@@ -46,8 +49,8 @@ export default function ReplyInput({
   }
 
   const handleDeleteImageFile = () => {
-    setImage(() => undefined)
-    setImageFile(() => undefined)
+    setImage('')
+    setImageFile(null)
     setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
   }
 
@@ -74,15 +77,21 @@ export default function ReplyInput({
       parentId: parentId || '',
     }
     const data = new FormData()
-    if (imageFile !== undefined) {
-      data.set('attachment', imageFile as Blob, imageFile?.name)
+
+    if (imageFile !== null) {
+      data.set('attachment', imageFile as Blob, (imageFile as File).name)
     }
+
     data.set(
       'writeCommentRequestDto',
       new Blob([JSON.stringify(writeCommentRequestDto)], {
         type: 'application/json',
       })
     )
+    // for (const key of Array.from(data.keys())) {
+    //   console.log(key + ' : ' + data.get(key) + ':' + typeof data.get(key))
+    // }
+
     const submit = async () => {
       await createReply(data)
     }
@@ -96,7 +105,7 @@ export default function ReplyInput({
       onSubmit={handleSubmitReplyData}
     >
       <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
-        {image !== undefined && (
+        {image && (
           <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
             <img
               className=" h-full w-full rounded-2xl"
@@ -129,9 +138,7 @@ export default function ReplyInput({
       <label htmlFor="imageFile">
         <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
-          {image === undefined && (
-            <Plus className="absolute right-0.5 top-[5px]" />
-          )}
+          {!image && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
         <input
           onChange={handleSelectImageFile}
