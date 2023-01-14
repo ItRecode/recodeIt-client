@@ -40,7 +40,7 @@ function AddRecordColor({ currentRecordType }: Props) {
   }
 
   return (
-    <div className="mb-10 flex justify-between">
+    <div className="relative z-0 mb-10 flex justify-between">
       {colors.map((color, index) => {
         return (
           <div className="relative" key={color.id}>
