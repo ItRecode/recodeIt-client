@@ -115,8 +115,10 @@ export default function SignUp() {
           property="solid"
           active={isCheckedNickname}
           onClick={handleSignUp}
+          loading={isLoading}
+          disabled={isLoading}
         >
-          {isLoading ? <Spinner /> : '레코딧 입장'}
+          레코딧 입장
         </Button>
       </div>
     </div>
