@@ -6,7 +6,6 @@ import Input from '@components/Input'
 import { useAuth } from '@react-query/hooks/useAuth'
 import { getIsDuplicatedNickname } from '@apis/auth'
 import useDebounce from '@hooks/useDebounce'
-import Spinner from '@components/Spinner'
 
 const NICKNAME_MIN_LENGTH = 2
 
