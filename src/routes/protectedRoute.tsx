@@ -8,8 +8,12 @@ interface RouteProps {
 
 const ProtectedRoute = ({ children, isPublic }: RouteProps) => {
   const getCookie = (name: string): string | null => {
-    const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
-    return value ? value[2] : null
+    const cookieData = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
+    let cookieValue = null
+    if (cookieData !== null) {
+      cookieValue = cookieData[2]
+    }
+    return cookieData ? cookieValue : null
   }
 
   const SESSION = 'SESSION'
