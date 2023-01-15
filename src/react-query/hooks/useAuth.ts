@@ -35,7 +35,7 @@ export const useAuth = () => {
     }
   )
 
-  const { mutate: oauthSignUp } = useMutation(
+  const { mutate: oauthSignUp, isLoading } = useMutation(
     async ({ type, tempId, nickname }: ISignUp) =>
       await signUp({ type, tempId, nickname }),
     {
@@ -50,5 +50,5 @@ export const useAuth = () => {
     }
   )
 
-  return { oauthLogin, oauthSignUp }
+  return { oauthLogin, oauthSignUp, isLoading }
 }

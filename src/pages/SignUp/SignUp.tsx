@@ -12,7 +12,7 @@ const NICKNAME_MIN_LENGTH = 2
 export default function SignUp() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { oauthSignUp } = useAuth()
+  const { oauthSignUp, isLoading } = useAuth()
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -114,6 +114,8 @@ export default function SignUp() {
           property="solid"
           active={isCheckedNickname}
           onClick={handleSignUp}
+          loading={isLoading}
+          disabled={isLoading}
         >
           레코딧 입장
         </Button>
