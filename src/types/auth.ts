@@ -8,3 +8,7 @@ export interface ISignUp {
   tempId: string
   nickname: string
 }
+
+export interface User {
+  nickname: string
+}
