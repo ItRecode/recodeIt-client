@@ -36,7 +36,6 @@ export default function ReplyList({
 
   return (
     <section id="reply" className="px-6">
-      <button onClick={() => loadMore()}>asdasdasd</button>
       <h2 className="text-lg font-semibold">댓글</h2>
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
