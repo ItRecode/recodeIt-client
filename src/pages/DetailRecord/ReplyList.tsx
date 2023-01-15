@@ -14,7 +14,10 @@ export default function ReplyList({
     queryKey: ['getReplyData', recordId],
     queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
     getNextPageParam: (lastPage): number | null => {
-      return lastPage.config.params.page + 1
+      if (lastPage.data.totalPage > lastPage.config.params.page) {
+        return lastPage.config.params.page + 1
+      }
+      return null
     },
   })
 
