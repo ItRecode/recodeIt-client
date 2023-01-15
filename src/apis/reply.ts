@@ -6,8 +6,17 @@ export const createReply = async (data: FormData) => {
   })
 }
 
-export const getReply = async (recordId: number) => {
-  if (recordId) {
-    return await baseInstance.get(`/comment`)
-  }
+export const getReply = async (
+  pageParam: number,
+  recordId?: number,
+  parentId?: number
+) => {
+  return await baseInstance.get('/comment', {
+    params: {
+      page: pageParam,
+      parentId: parentId ? parentId : '',
+      recordId: recordId,
+      size: 10,
+    },
+  })
 }

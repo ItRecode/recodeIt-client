@@ -9,3 +9,10 @@ export const enrollRecord = async (data: FormData) => {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
+
+export const getRecord = async (recordId: string | undefined) => {
+  if (recordId) {
+    const res = await baseInstance.get(`/record/${recordId}`)
+    return res.data
+  }
+}

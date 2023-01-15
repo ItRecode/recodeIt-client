@@ -10,7 +10,7 @@ import {
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
 import { createReply } from '@apis/reply'
-import Alert from '@components/Alert'
+// import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 
 export default function ReplyInput({
@@ -77,9 +77,10 @@ export default function ReplyInput({
 
     const writeCommentRequestDto = {
       recordId: recordId,
-      comment: (e.target as HTMLInputElement).value,
+      comment: text,
       parentId: parentId || '',
     }
+
     const data = new FormData()
 
     if (imageFile !== null) {
@@ -92,9 +93,6 @@ export default function ReplyInput({
         type: 'application/json',
       })
     )
-    // for (const key of Array.from(data.keys())) {
-    //   console.log(key + ' : ' + data.get(key) + ':' + typeof data.get(key))
-    // }
 
     const submit = async () => {
       await createReply(data)
@@ -154,7 +152,7 @@ export default function ReplyInput({
         />
       </label>
       {/* TODO: ProtectedRoute 구현 후 로그인 유무에 따라 다시 로직 구현 */}
-      {isCheckedLogin && (
+      {/* {isCheckedLogin && (
         <Alert
           visible={isCheckedLogin}
           mainMessage={
@@ -171,7 +169,7 @@ export default function ReplyInput({
           onCancel={() => setIsCheckedLogin(false)}
           onConfirm={() => navigate('/login')}
         />
-      )}
+      )} */}
     </form>
   )
 }
