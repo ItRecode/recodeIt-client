@@ -14,15 +14,12 @@ export default function ReplyList({
     queryKey: ['getReplyData', recordId],
     queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
     getNextPageParam: (lastPage): number | null => {
-      return lastPage.config.params.page + 1
+      if (lastPage.data.totalPage > lastPage.config.params.page) {
+        return lastPage.config.params.page + 1
+      }
+      return null
     },
   })
-
-  const loadMore = () => {
-    if (hasNextPage) {
-      fetchNextPage()
-    }
-  }
 
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target)
@@ -33,7 +30,6 @@ export default function ReplyList({
 
   return (
     <section id="reply" className="px-6">
-      <button onClick={() => loadMore()}>asdasdasd</button>
       <h2 className="text-lg font-semibold">댓글</h2>
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
