@@ -13,19 +13,19 @@ export const useUser = () => {
     return await getUserInfo()
   }
 
-  const { data: user = null } = useQuery(
-    [QUERY_KEYS.user],
-    getUserInfoQueryFn,
-    {
-      onError: () => {
-        deleteCookie(SESSION)
-      },
-      retry: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  )
+  const {
+    data: user = null,
+    refetch,
+    isLoading,
+  } = useQuery([QUERY_KEYS.user], getUserInfoQueryFn, {
+    onError: () => {
+      deleteCookie(SESSION)
+    },
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  })
 
-  return { user }
+  return { user, refetch, isLoading }
 }

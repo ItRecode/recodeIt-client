@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       {
         path: 'myrecord',
         element: (
-          <ProtectedRoute isPublic={false}>
+          <ProtectedRoute route={'/myrecord'}>
             <MyRecord />
           </ProtectedRoute>
         ),
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       {
         path: 'setting',
         element: (
-          <ProtectedRoute isPublic={false}>
+          <ProtectedRoute route={'/setting'}>
             <Setting />
           </ProtectedRoute>
         ),
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
   {
     path: '/record/add',
     element: (
-      <ProtectedRoute isPublic={false}>
+      <ProtectedRoute route={'/record/add'}>
         <AddRecord />
       </ProtectedRoute>
     ),
