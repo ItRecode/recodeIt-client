@@ -18,8 +18,7 @@ export const useUser = () => {
     getUserInfoQueryFn,
     {
       onError: () => {
-        // 쿠키에서 세션 삭제
-        // deleteCookie(SESSION)
+        deleteCookie(SESSION)
       },
       retry: false,
       refetchOnMount: false,
