@@ -7,7 +7,18 @@ interface RouteProps {
 }
 
 const ProtectedRoute = ({ children, isPublic }: RouteProps) => {
-  const validation = isPublic
+  const getCookie = (name: string): string | null => {
+    const cookieData = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
+    let cookieValue = null
+    if (cookieData !== null) {
+      cookieValue = cookieData[2]
+    }
+    return cookieData ? cookieValue : null
+  }
+
+  const SESSION = 'SESSION'
+  const validation = isPublic || getCookie(SESSION)
+
   if (!validation) {
     return <Navigate to="/login" />
   }

@@ -56,6 +56,7 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
+      setFiles(undefined)
       navigate(`/record/${response.data.recordId}`)
     }
     enroll()
@@ -73,8 +74,9 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-
-    data.append('files', files as Blob, files?.name)
+    if (files !== undefined) {
+      data.append('files', files as File, files?.name)
+    }
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -87,7 +89,7 @@ export default function AddRecord() {
       <div className="ml-[18px]">
         <BackButton />
       </div>
-      <div className="sticky top-0 left-0 bg-grey-1">
+      <div className="sticky top-0 left-0 z-[5] bg-grey-1">
         <MainCategoryTap
           currentRecordType={recordType}
           onSetRecordType={setRecordType}
