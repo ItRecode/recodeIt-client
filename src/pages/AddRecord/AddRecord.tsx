@@ -59,10 +59,12 @@ export default function AddRecord() {
     const enroll = async () => {
       const response = await enrollRecord(formData)
       setFiles(undefined)
-      setIsLoadingWhileSubmit(true)
-      navigate(`/record/${response.data.recordId}`)
+      navigate(`/record/${response.data.recordId}`, {
+        replace: true,
+      })
     }
     enroll()
+    setIsLoadingWhileSubmit(true)
   }
 
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
