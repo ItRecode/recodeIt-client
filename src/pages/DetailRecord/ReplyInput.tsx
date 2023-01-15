@@ -11,7 +11,7 @@ import {
 } from '@assets/constant/constant'
 import { createReply } from '@apis/reply'
 // import Alert from '@components/Alert'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -24,8 +24,8 @@ export default function ReplyInput({
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
   const textRef = useRef<HTMLTextAreaElement>(null)
-  const [isCheckedLogin, setIsCheckedLogin] = useState(false)
-  const navigate = useNavigate()
+  // const [isCheckedLogin, setIsCheckedLogin] = useState(false)
+  // const navigate = useNavigate()
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -131,7 +131,7 @@ export default function ReplyInput({
             onChange={(e) => setText(e.target.value)}
             value={text}
             className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
-            onFocus={() => setIsCheckedLogin(true)}
+            // onFocus={() => setIsCheckedLogin(true)}
           />
           <button className="cursor-pointer text-[12px] text-primary-2">
             확인

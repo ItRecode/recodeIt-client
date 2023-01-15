@@ -6,8 +6,8 @@ export default function ReplyItem({
   content,
   createdAt,
   imageUrl,
-  modifiedAt,
-  numOfSubComment,
+  // modifiedAt,
+  // numOfSubComment,
   writer,
 }: CommentData) {
   return (

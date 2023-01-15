@@ -8,7 +8,7 @@ export const createReply = async (data: FormData) => {
 
 export const getReply = async (
   pageParam: number,
-  recordId?: number,
+  recordId?: string | undefined,
   parentId?: number
 ) => {
   return await baseInstance.get('/comment', {

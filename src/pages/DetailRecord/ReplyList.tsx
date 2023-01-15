@@ -12,7 +12,7 @@ export default function ReplyList({
 }) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['getReplyData', recordId],
-    queryFn: ({ pageParam = 0 }) => getReply(pageParam, +recordId!),
+    queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
     getNextPageParam: (lastPage): number | null => {
       return lastPage.config.params.page + 1
     },
