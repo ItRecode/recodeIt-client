@@ -59,7 +59,7 @@ export default function Button({
       ${setClassNameByProperty(property)}`}
       {...props}
     >
-      {loading ? <Spinner /> : children}
+      {loading ? <Spinner size="button" /> : children}
     </button>
   )
 }
