@@ -1,9 +1,11 @@
 import React from 'react'
 import { ReactComponent as Record_icon } from '@assets/nav_icons/record_icon.svg'
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
 
 export default function NavBar() {
+  const navigate = useNavigate()
+
   return (
     <>
       <Outlet />
@@ -12,12 +14,10 @@ export default function NavBar() {
           <NavbarItem pageName="홈" linkSrc="/" className="mr-5" />
           <NavbarItem pageName="랭킹" linkSrc="/rank" />
         </nav>
-        <Link
-          to="/record/add"
+        <Record_icon
           className="relative bottom-[50px] cursor-pointer"
-        >
-          <Record_icon />
-        </Link>
+          onClick={() => navigate('/record/add')}
+        />
         <nav className="right-3 flex">
           <NavbarItem
             pageName="마이레코드"

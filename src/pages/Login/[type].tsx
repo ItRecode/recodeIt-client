@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useAuth } from '@react-query/hooks/useAuth'
+import Loading from '@components/Loading'
 
 const useQuery = () => {
   const { search } = useLocation()
@@ -22,5 +23,5 @@ export default function OauthLogin() {
     }
   }, [authorizationCode])
 
-  return <div>Loading..</div>
+  return <Loading />
 }

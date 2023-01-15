@@ -154,3 +154,8 @@ input,
 textarea {
   border: inherit;
 }
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center !important;
+}

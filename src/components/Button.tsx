@@ -1,4 +1,5 @@
 import React from 'react'
+import Spinner from './Spinner'
 
 interface ButtonPropsType
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,8 +8,8 @@ interface ButtonPropsType
   active?: boolean
   normal?: boolean
   disabled?: boolean
+  loading?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
-
   children?: React.ReactElement | string
 }
 
@@ -18,6 +19,7 @@ export default function Button({
   active = true,
   normal = false,
   disabled = false,
+  loading = false,
   type = 'button',
   children,
   ...props
@@ -46,17 +48,18 @@ export default function Button({
         return ''
     }
   }
+
   return (
     <button
       type={type}
       disabled={disabled}
-      className={`disabled: flex h-12 items-center justify-center rounded-2xl px-6 py-4 text-base font-semibold
+      className={`flex h-12 items-center justify-center rounded-2xl px-6 py-4 text-base font-semibold disabled:cursor-not-allowed
       ${!small && ' w-full'} 
       ${active ? 'cursor-pointer' : 'cursor-not-allowed'} 
       ${setClassNameByProperty(property)}`}
       {...props}
     >
-      {children}
+      {loading ? <Spinner size="button" /> : children}
     </button>
   )
 }

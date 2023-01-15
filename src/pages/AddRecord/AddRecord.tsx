@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { formDataAtom } from '@store/atom'
 import { useRecoilValue } from 'recoil'
 import { enrollRecord } from '@apis/record'
+import Alert from '@components/Alert'
 
 export type CheckAllType = {
   input: boolean
@@ -36,7 +37,6 @@ export interface WriteRecordRequestDto {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
-
   const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: false,
@@ -46,6 +46,7 @@ export default function AddRecord() {
     useRecoilValue(formDataAtom)
   const [files, setFiles] = useState<File>()
   const navigate = useNavigate()
+  const [isClickBackButton, setIsBackButton] = useState(false)
 
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
@@ -56,6 +57,7 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
+      setFiles(undefined)
       navigate(`/record/${response.data.recordId}`)
     }
     enroll()
@@ -73,8 +75,9 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-
-    data.append('files', files as Blob, files?.name)
+    if (files !== undefined) {
+      data.append('files', files as File, files?.name)
+    }
     data.append(
       'writeRecordRequestDto',
       new Blob([JSON.stringify(formData)], { type: 'application/json' })
@@ -85,9 +88,9 @@ export default function AddRecord() {
   return (
     <div className="relative pt-4">
       <div className="ml-[18px]">
-        <BackButton />
+        <BackButton onClick={() => setIsBackButton(true)} />
       </div>
-      <div className="sticky top-0 left-0 bg-grey-1">
+      <div className="sticky top-0 left-0 z-[5] bg-grey-1">
         <MainCategoryTap
           currentRecordType={recordType}
           onSetRecordType={setRecordType}
@@ -129,6 +132,24 @@ export default function AddRecord() {
             레코드 추가하기
           </Button>
         </div>
+        {isClickBackButton && (
+          <Alert
+            visible={isClickBackButton}
+            mainMessage={
+              <div className="text-base font-semibold leading-6">
+                작성중인
+                <br />
+                레코드가 있어요
+              </div>
+            }
+            subMessage="작성하신 내용이 모두 삭제됩니다"
+            cancelMessage="나가기"
+            confirmMessage="계속하기"
+            onClose={() => setIsBackButton(false)}
+            onCancel={() => navigate('/')}
+            onConfirm={() => setIsBackButton(false)}
+          />
+        )}
       </form>
     </div>
   )

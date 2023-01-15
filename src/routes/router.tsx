@@ -17,16 +17,26 @@ import SignUp from '@pages/SignUp/SignUp'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <ProtectedRoute isPublic={true}>
-        <NavBar />
-      </ProtectedRoute>
-    ),
+    element: <NavBar />,
     children: [
       { index: true, element: <Main /> },
       { path: 'rank', element: <Rank /> },
-      { path: 'myrecord', element: <MyRecord /> },
-      { path: 'setting', element: <Setting /> },
+      {
+        path: 'myrecord',
+        element: (
+          <ProtectedRoute route={'/myrecord'}>
+            <MyRecord />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'setting',
+        element: (
+          <ProtectedRoute route={'/setting'}>
+            <Setting />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
@@ -44,7 +54,7 @@ const router = createBrowserRouter([
   {
     path: '/record/add',
     element: (
-      <ProtectedRoute isPublic={true}>
+      <ProtectedRoute route={'/record/add'}>
         <AddRecord />
       </ProtectedRoute>
     ),

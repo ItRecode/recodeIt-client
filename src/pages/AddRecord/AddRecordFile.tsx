@@ -15,6 +15,7 @@ function AddRecordFile({ currentRecordType, setFiles }: Props) {
     encodeFileToBase64((e.target.files as FileList)[0])
     setFiles((e.target.files as FileList)[0])
     setCurrentImg(e.target.value)
+    e.target.value = ''
   }
 
   useEffect(() => {
@@ -34,6 +35,11 @@ function AddRecordFile({ currentRecordType, setFiles }: Props) {
         }
       }
     })
+  }
+
+  const handleDelete = (): void => {
+    setCurrentImg(null)
+    setFiles(undefined)
   }
 
   return (
@@ -60,14 +66,14 @@ function AddRecordFile({ currentRecordType, setFiles }: Props) {
         accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
       />
       {currentImg && (
-        <div className=" relative h-[66px] w-[66px]">
+        <div className="relative h-[66px] w-[66px]">
           <img
-            className=" h-full w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
             src={currentImg}
             alt="user-selected-record-image"
           />
           <DeleteIcon
-            onClick={() => setCurrentImg(null)}
+            onClick={handleDelete}
             className=" absolute top-[6px] right-[6px] cursor-pointer"
           />
         </div>
