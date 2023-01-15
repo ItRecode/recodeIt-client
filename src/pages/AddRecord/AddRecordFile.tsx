@@ -66,9 +66,9 @@ function AddRecordFile({ currentRecordType, setFiles }: Props) {
         accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
       />
       {currentImg && (
-        <div className=" relative h-[66px] w-[66px]">
+        <div className="relative h-[66px] w-[66px]">
           <img
-            className=" h-full w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
             src={currentImg}
             alt="user-selected-record-image"
           />
