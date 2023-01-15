@@ -5,6 +5,8 @@ import { ReactComponent as Front } from '@assets/front.svg'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import { useRecoilState } from 'recoil'
+import { formDataAtom } from '@store/atom'
 
 type IconSource = {
   src: string
@@ -25,6 +27,7 @@ function AddRecordIcon({
 
   const [iconState, setIconState] = useState<IconType>(icons)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
+  const [formData, setFormData] = useRecoilState(formDataAtom)
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
@@ -56,13 +59,19 @@ function AddRecordIcon({
     slidesToShow: 3,
     slidesToScroll: 1,
   }
+
+  const handleClick = (id: number, iconSrc: string) => {
+    setCurrentFocus(id)
+    setFormData({ ...formData, selectedIcon: iconSrc })
+  }
+
   return (
     <div className="relative mb-10 flex items-center justify-between gap-x-[16px] px-3">
       <Slider ref={slickRef} className="w-full" {...settings}>
         {iconState[currentRecordType].map((icon) => {
           return (
             <div
-              onClick={() => setCurrentFocus(icon.id)}
+              onClick={() => handleClick(icon.id, icon.src)}
               className={`relative h-[70px] !w-[70px] rounded-2xl ${
                 currentFocus === icon.id && 'border-2 !border-primary-3'
               }`}

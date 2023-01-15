@@ -63,6 +63,8 @@ export default function AddRecord() {
     enroll()
   }
 
+  console.log(selectedIcon)
+
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
