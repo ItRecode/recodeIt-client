@@ -1,9 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ReactComponent as Record_icon } from '@assets/nav_icons/record_icon.svg'
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
+import { useUser } from '@react-query/hooks/useUser'
+import Alert from './Alert'
 
 export default function NavBar() {
+  const navigate = useNavigate()
+  const { user } = useUser()
+  const [isCheckedLogin, setIsCheckedLogin] = useState(false)
+
+  const handleClickRecordAddButton = () => {
+    if (!user) {
+      setIsCheckedLogin(true)
+      return
+    }
+
+    setIsCheckedLogin(false)
+    navigate('/record/add')
+  }
+
   return (
     <>
       <Outlet />
@@ -12,12 +28,10 @@ export default function NavBar() {
           <NavbarItem pageName="홈" linkSrc="/" className="mr-5" />
           <NavbarItem pageName="랭킹" linkSrc="/rank" />
         </nav>
-        <Link
-          to="/record/add"
+        <Record_icon
           className="relative bottom-[50px] cursor-pointer"
-        >
-          <Record_icon />
-        </Link>
+          onClick={handleClickRecordAddButton}
+        />
         <nav className="right-3 flex">
           <NavbarItem
             pageName="마이레코드"
@@ -27,6 +41,24 @@ export default function NavBar() {
           <NavbarItem pageName="설정" linkSrc="/setting" />
         </nav>
       </nav>
+      {isCheckedLogin && (
+        <Alert
+          visible={isCheckedLogin}
+          mainMessage={
+            <div className="text-base font-semibold leading-6">
+              비회원은 레코드를
+              <br />
+              <span className="text-sub-1">추가</span> 할 수 없어요
+            </div>
+          }
+          subMessage="회원가입하고 추억을 공유해보세요."
+          cancelMessage="닫기"
+          confirmMessage="회원가입"
+          onClose={() => setIsCheckedLogin(false)}
+          onCancel={() => setIsCheckedLogin(false)}
+          onConfirm={() => navigate('/login')}
+        />
+      )}
     </>
   )
 }
