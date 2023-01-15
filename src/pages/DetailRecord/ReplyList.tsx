@@ -21,12 +21,6 @@ export default function ReplyList({
     },
   })
 
-  const loadMore = () => {
-    if (hasNextPage) {
-      fetchNextPage()
-    }
-  }
-
   const ref = useIntersect(async (entry, observer) => {
     observer.unobserve(entry.target)
     if (hasNextPage && !isLoading) {
