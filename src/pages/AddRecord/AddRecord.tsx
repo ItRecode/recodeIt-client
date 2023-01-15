@@ -47,6 +47,7 @@ export default function AddRecord() {
   const [files, setFiles] = useState<File>()
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
+  const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
 
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
@@ -58,6 +59,7 @@ export default function AddRecord() {
     const enroll = async () => {
       const response = await enrollRecord(formData)
       setFiles(undefined)
+      setIsLoadingWhileSubmit(true)
       navigate(`/record/${response.data.recordId}`)
     }
     enroll()
@@ -128,6 +130,7 @@ export default function AddRecord() {
             active={
               checkAllFilled.input && checkAllFilled.textArea ? true : false
             }
+            loading={isLoadingWhileSubmit}
           >
             레코드 추가하기
           </Button>
