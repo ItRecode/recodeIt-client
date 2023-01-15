@@ -1,66 +1,55 @@
+import { getReply } from '@apis/reply'
+import { useIntersect } from '@hooks/useIntersectionObserver'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import React from 'react'
+import { CommentData } from 'types/replyData'
+import ReplyItem from './ReplyItem'
 
-export default function ReplyList() {
+export default function ReplyList({
+  recordId,
+}: {
+  recordId: string | undefined
+}) {
+  const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    queryKey: ['getReplyData', recordId],
+    queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
+    getNextPageParam: (lastPage): number | null => {
+      return lastPage.config.params.page + 1
+    },
+  })
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage()
+    }
+  }
+
+  const ref = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target)
+    if (hasNextPage && !isLoading) {
+      fetchNextPage()
+    }
+  })
+
   return (
     <section id="reply" className="px-6">
+      <button onClick={() => loadMore()}>asdasdasd</button>
       <h2 className="text-lg font-semibold">댓글</h2>
-      <div className="mt-3">
-        <div className="rounded-lg bg-grey-2 p-3">
-          <div className="flex">
-            <p className="text-xs font-medium">익명</p>
-            <p className="mx-1.5 text-xs font-normal text-grey-5">0시간 전</p>
-          </div>
-          <p className="mt-1.5 text-xs font-normal text-grey-8">
-            댓글이 노출됩니다.
-          </p>
-        </div>
-        <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report">
-            신고
-          </button>
-          <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
-            수정
-          </button>
-        </div>
-      </div>
-      <div className="mt-1.5">
-        <div className="rounded-lg bg-grey-2 p-3">
-          <div className="flex">
-            <p className="text-xs font-medium">익명</p>
-            <p className="mx-1.5 text-xs font-normal text-grey-5">0시간 전</p>
-          </div>
-          <p className="mt-1.5 text-xs font-normal text-grey-8">
-            댓글이 노출됩니다.
-          </p>
-        </div>
-        <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report">
-            신고
-          </button>
-          <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
-            수정
-          </button>
-        </div>
-      </div>
-      <div className="mt-1.5">
-        <div className="rounded-lg bg-grey-2 p-3">
-          <div className="flex">
-            <p className="text-xs font-medium">익명</p>
-            <p className="mx-1.5 text-xs font-normal text-grey-5">0시간 전</p>
-          </div>
-          <p className="mt-1.5 text-xs font-normal text-grey-8">
-            댓글이 노출됩니다.
-          </p>
-        </div>
-        <div className="flex justify-end">
-          <button className="cursor-pointer bg-grey-1 text-xs text-report">
-            신고
-          </button>
-          <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
-            수정
-          </button>
-        </div>
-      </div>
+      {data?.pages.map((page) =>
+        page.data.commentList.map((item: CommentData) => (
+          <ReplyItem
+            key={item.commentId}
+            commentId={item.commentId}
+            content={item.content}
+            createdAt={item.createdAt}
+            imageUrl={item.imageUrl}
+            modifiedAt={item.modifiedAt}
+            numOfSubComment={item.numOfSubComment}
+            writer={item.writer}
+          />
+        ))
+      )}
+      <div ref={ref} className="h-10 w-full " />
     </section>
   )
 }
