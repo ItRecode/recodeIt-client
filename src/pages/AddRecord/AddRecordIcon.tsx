@@ -28,9 +28,11 @@ function AddRecordIcon({
   const [iconState, setIconState] = useState<IconType>(icons)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
   const [formData, setFormData] = useRecoilState(formDataAtom)
+  const SLIDE_SPEED = 500
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
+  const [throttle, setThrottle] = useState<boolean>(false)
 
   useEffect(() => {
     setIconState(icons)
@@ -38,24 +40,40 @@ function AddRecordIcon({
 
   const handleFront = () => {
     slickRef.current?.slickNext()
-    if (currentFocus === MAX_FOCUS) {
-      return setCurrentFocus(0)
+    if (throttle) return
+    if (!throttle) {
+      setThrottle(true)
+      if (currentFocus === MAX_FOCUS) {
+        setCurrentFocus(0)
+      } else {
+        setCurrentFocus(currentFocus + 1)
+      }
+      setTimeout(async () => {
+        setThrottle(false)
+      }, 500)
     }
-    return setCurrentFocus(currentFocus + 1)
   }
 
   const handleBack = () => {
     slickRef.current?.slickPrev()
-    if (currentFocus === MIN_FOCUS) {
-      return setCurrentFocus(MAX_FOCUS)
+    if (throttle) return
+    if (!throttle) {
+      setThrottle(true)
+      if (currentFocus === MIN_FOCUS) {
+        setCurrentFocus(MAX_FOCUS)
+      } else {
+        setCurrentFocus(currentFocus - 1)
+      }
+      setTimeout(async () => {
+        setThrottle(false)
+      }, 500)
     }
-    return setCurrentFocus(currentFocus - 1)
   }
 
   const settings = {
     arrows: false,
     infinite: true,
-    speed: 500,
+    speed: SLIDE_SPEED,
     slidesToShow: 3,
     slidesToScroll: 1,
   }
