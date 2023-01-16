@@ -147,7 +147,12 @@ export default function AddRecord() {
                 레코드가 있어요
               </div>
             }
-            subMessage="작성하신 내용이 모두 삭제됩니다"
+            subMessage={
+              <>
+                작성하신 내용이 모두 <span className="text-sub-1">삭제</span>
+                됩니다
+              </>
+            }
             cancelMessage="나가기"
             confirmMessage="계속하기"
             onClose={() => setIsBackButton(false)}
