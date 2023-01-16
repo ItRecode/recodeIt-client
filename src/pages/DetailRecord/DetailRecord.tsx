@@ -52,7 +52,13 @@ export default function DetailRecord() {
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
-    () => getRecord(recordIdParams)
+    () => getRecord(recordIdParams),
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
   )
   useEffect(() => {
     if (isError) {

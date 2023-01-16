@@ -21,6 +21,8 @@ export default function ReplyList({
       }
       return null
     },
+    retry: false,
+    refetchOnWindowFocus: false,
   })
 
   const ref = useIntersect(async (entry, observer) => {
