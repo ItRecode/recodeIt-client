@@ -47,6 +47,7 @@ export default function AddRecord() {
   const [files, setFiles] = useState<File[]>([])
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
+  const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
 
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
@@ -57,10 +58,13 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
-      setFiles([])
-      navigate(`/record/${response.data.recordId}`)
+      setFiles(undefined)
+      navigate(`/record/${response.data.recordId}`, {
+        replace: true,
+      })
     }
     enroll()
+    setIsLoadingWhileSubmit(true)
   }
 
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
@@ -134,6 +138,7 @@ export default function AddRecord() {
             active={
               checkAllFilled.input && checkAllFilled.textArea ? true : false
             }
+            loading={isLoadingWhileSubmit}
           >
             레코드 추가하기
           </Button>
@@ -148,7 +153,12 @@ export default function AddRecord() {
                 레코드가 있어요
               </div>
             }
-            subMessage="작성하신 내용이 모두 삭제됩니다"
+            subMessage={
+              <>
+                작성하신 내용이 모두 <span className="text-sub-1">삭제</span>
+                됩니다
+              </>
+            }
             cancelMessage="나가기"
             confirmMessage="계속하기"
             onClose={() => setIsBackButton(false)}
