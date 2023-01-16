@@ -62,7 +62,11 @@ function AddRecordIcon({
 
   const handleClick = (id: number, iconSrc: string) => {
     setCurrentFocus(id)
-    setFormData({ ...formData, selectedIcon: iconSrc })
+    setFormData({ ...formData, selectedIcon: getIconSrc(iconSrc) })
+  }
+
+  const getIconSrc = (iconSrc: string): string => {
+    return iconSrc.split('/')[3].split('.')[0]
   }
 
   return (
