@@ -13,7 +13,7 @@ export const useImageSwipe = (imageUrl: string[]) => {
   }
 
   useEffect(() => {
-    if (imageUrl[0] !== '') {
+    if (imageUrl[0]) {
       if (imageState === 0) {
         setHaveNext(true)
         setHavePrev(false)
