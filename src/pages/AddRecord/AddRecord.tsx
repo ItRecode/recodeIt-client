@@ -57,14 +57,20 @@ export default function AddRecord() {
     e.preventDefault()
     const formData = makeFormDatas(e)
     const enroll = async () => {
-      const response = await enrollRecord(formData)
-      setFiles([])
-      navigate(`/record/${response.data.recordId}`, {
-        replace: true,
-      })
+      try {
+        const response = await enrollRecord(formData)
+        setFiles([])
+        setIsLoadingWhileSubmit(true)
+        navigate(`/record/${response.data.recordId}`, {
+          replace: true,
+        })
+      } catch {
+        setIsLoadingWhileSubmit(false)
+        alert('레코드 추가 실패 - TODO: toast로 변경')
+      }
     }
+
     enroll()
-    setIsLoadingWhileSubmit(true)
   }
 
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
@@ -133,7 +139,10 @@ export default function AddRecord() {
         <div className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
           <Button
             property={'solid'}
-            disabled={!(checkAllFilled.input && checkAllFilled.textArea)}
+            disabled={
+              !(checkAllFilled.input && checkAllFilled.textArea) ||
+              isLoadingWhileSubmit
+            }
             type="submit"
             active={
               checkAllFilled.input && checkAllFilled.textArea ? true : false

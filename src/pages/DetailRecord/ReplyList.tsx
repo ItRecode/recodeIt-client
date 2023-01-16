@@ -1,4 +1,5 @@
 import { getReply } from '@apis/reply'
+import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import React from 'react'
@@ -7,8 +8,10 @@ import ReplyItem from './ReplyItem'
 
 export default function ReplyList({
   recordId,
+  Recordwriter,
 }: {
   recordId: string | undefined
+  Recordwriter: string
 }) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['getReplyData', recordId],
@@ -19,6 +22,8 @@ export default function ReplyList({
       }
       return null
     },
+    retry: false,
+    refetchOnWindowFocus: false,
   })
 
   const ref = useIntersect(async (entry, observer) => {
@@ -31,6 +36,11 @@ export default function ReplyList({
   return (
     <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
+      {isLoading && (
+        <div className="flex w-full justify-center">
+          <Spinner size="small" />
+        </div>
+      )}
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
           <ReplyItem
@@ -41,6 +51,7 @@ export default function ReplyList({
             imageUrl={item.imageUrl}
             modifiedAt={item.modifiedAt}
             numOfSubComment={item.numOfSubComment}
+            Recordwriter={Recordwriter}
             writer={item.writer}
           />
         ))

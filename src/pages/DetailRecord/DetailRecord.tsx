@@ -17,12 +17,12 @@ import ReplyInput from './ReplyInput'
 import ShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
-import ImageContainer from '@components/ImageContainer'
 import Modal from '@components/Modal'
 import { getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
+import ImageContainer from './ImageContainer'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -52,7 +52,13 @@ export default function DetailRecord() {
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
-    () => getRecord(recordIdParams)
+    () => getRecord(recordIdParams),
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
   )
   useEffect(() => {
     if (isError) {
@@ -149,7 +155,7 @@ export default function DetailRecord() {
             </div>
           </section>
           <section id="record_reply_list">
-            <ReplyList recordId={recordIdParams} />
+            <ReplyList recordId={recordIdParams} Recordwriter={writer} />
           </section>
         </div>
         <section

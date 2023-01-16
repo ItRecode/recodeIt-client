@@ -10,8 +10,9 @@ import {
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
 import { createReply } from '@apis/reply'
-// import Alert from '@components/Alert'
-// import { useNavigate } from 'react-router-dom'
+import Alert from '@components/Alert'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '@react-query/hooks/useUser'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -24,8 +25,10 @@ export default function ReplyInput({
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
   const textRef = useRef<HTMLTextAreaElement>(null)
-  // const [isCheckedLogin, setIsCheckedLogin] = useState(false)
-  // const navigate = useNavigate()
+  const [isCheckedUser, setIsCheckedUser] = useState(false)
+  const [isAnonymousUser, setIsAnonymousUser] = useState(false)
+  const navigate = useNavigate()
+  const { user, isLoading } = useUser()
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -75,6 +78,7 @@ export default function ReplyInput({
   ) => {
     e.preventDefault()
 
+    setText('')
     const writeCommentRequestDto = {
       recordId: recordId,
       comment: text,
@@ -98,6 +102,17 @@ export default function ReplyInput({
       await createReply(data)
     }
     submit()
+  }
+
+  const handleInputFocus = () => {
+    if (!user) {
+      setIsCheckedUser(true)
+    }
+  }
+
+  const handleCancelSingUp = () => {
+    setIsCheckedUser(false)
+    setIsAnonymousUser(true)
   }
 
   return (
@@ -131,7 +146,8 @@ export default function ReplyInput({
             onChange={(e) => setText(e.target.value)}
             value={text}
             className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
-            // onFocus={() => setIsCheckedLogin(true)}
+            onFocus={handleInputFocus}
+            disabled={isLoading}
           />
           <button className="cursor-pointer text-[12px] text-primary-2">
             확인
@@ -147,14 +163,13 @@ export default function ReplyInput({
           onChange={handleSelectImageFile}
           id="imageFile"
           type="file"
-          accept="image/gif;capture=camera"
+          accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
           className="hidden"
         />
       </label>
-      {/* TODO: ProtectedRoute 구현 후 로그인 유무에 따라 다시 로직 구현 */}
-      {/* {isCheckedLogin && (
+      {isCheckedUser && (
         <Alert
-          visible={isCheckedLogin}
+          visible={isCheckedUser && !isAnonymousUser}
           mainMessage={
             <>
               비회원은 댓글을
@@ -165,11 +180,11 @@ export default function ReplyInput({
           subMessage={<>회원가입하고 추억을 공유해보세요.</>}
           cancelMessage="괜찮아요"
           confirmMessage="회원가입"
-          onClose={() => setIsCheckedLogin(false)}
-          onCancel={() => setIsCheckedLogin(false)}
+          onClose={() => setIsCheckedUser(false)}
+          onCancel={handleCancelSingUp}
           onConfirm={() => navigate('/login')}
         />
-      )} */}
+      )}
     </form>
   )
 }
