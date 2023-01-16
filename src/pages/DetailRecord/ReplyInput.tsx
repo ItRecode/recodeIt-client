@@ -156,13 +156,13 @@ export default function ReplyInput({
         <Alert
           visible={isCheckedLogin}
           mainMessage={
-            <div className="text-base font-semibold leading-6">
+            <>
               비회원은 댓글을
               <br />
               <span className="text-sub-1">수정, 삭제</span> 할 수 없어요
-            </div>
+            </>
           }
-          subMessage="회원가입하고 추억을 공유해보세요."
+          subMessage={<>회원가입하고 추억을 공유해보세요.</>}
           cancelMessage="괜찮아요"
           confirmMessage="회원가입"
           onClose={() => setIsCheckedLogin(false)}
