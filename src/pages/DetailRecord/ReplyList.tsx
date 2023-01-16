@@ -1,4 +1,5 @@
 import { getReply } from '@apis/reply'
+import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import React from 'react'
@@ -35,6 +36,11 @@ export default function ReplyList({
   return (
     <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
+      {isLoading && (
+        <div className="flex w-full justify-center">
+          <Spinner size="small" />
+        </div>
+      )}
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
           <ReplyItem

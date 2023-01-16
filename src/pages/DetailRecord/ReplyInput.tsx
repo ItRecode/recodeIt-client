@@ -16,9 +16,11 @@ import { createReply } from '@apis/reply'
 export default function ReplyInput({
   setInputSectionHeight,
   recordId,
+  status,
 }: {
   setInputSectionHeight: Dispatch<SetStateAction<number>>
   recordId: number
+  status?: string
 }) {
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
