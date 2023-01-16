@@ -43,7 +43,7 @@ export const ShareKakao = ({
 export const copyLink = async (recordId: number) => {
   try {
     await navigator.clipboard.writeText(
-      `https://recordit.vercel.app/record/${recordId}`
+      `${window.location.origin}/record/${recordId}`
     )
     alert('링크를 복사했습니다.')
   } catch (error) {
