@@ -7,7 +7,6 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
-import { useThrottle } from '@hooks/useThrottle'
 
 type IconSource = {
   src: string
