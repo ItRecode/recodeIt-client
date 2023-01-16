@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface Props {
   currentRecordType: string
   setFiles: Dispatch<SetStateAction<File[]>>
