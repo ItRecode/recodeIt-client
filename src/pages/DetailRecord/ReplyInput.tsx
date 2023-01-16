@@ -16,7 +16,6 @@ import { createReply } from '@apis/reply'
 export default function ReplyInput({
   setInputSectionHeight,
   recordId,
-  status,
 }: {
   setInputSectionHeight: Dispatch<SetStateAction<number>>
   recordId: number
