@@ -6,11 +6,11 @@ export const getCreatedDate = (createdAt: string) => {
 
   // 게시물 작성 1분 미만 (60s)
   if (differenceTime < 60) {
-    const second = new Intl.RelativeTimeFormat('ko-KR').format(
-      Math.round(-differenceTime),
-      'second'
-    )
-    return second
+    // const second = new Intl.RelativeTimeFormat('ko-KR').format(
+    //   Math.round(-differenceTime),
+    //   'second'
+    // )
+    return '방금'
   }
 
   // 게시물 작성 1시간 미만 (60 * 60s)

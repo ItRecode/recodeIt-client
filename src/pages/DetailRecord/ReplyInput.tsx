@@ -74,7 +74,7 @@ export default function ReplyInput({
     parentId?: number
   ) => {
     e.preventDefault()
-
+    setText('')
     const writeCommentRequestDto = {
       recordId: recordId,
       comment: text,
@@ -147,7 +147,7 @@ export default function ReplyInput({
           onChange={handleSelectImageFile}
           id="imageFile"
           type="file"
-          accept="image/gif;capture=camera"
+          accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
           className="hidden"
         />
       </label>

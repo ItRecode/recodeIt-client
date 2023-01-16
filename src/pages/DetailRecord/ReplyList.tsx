@@ -7,8 +7,10 @@ import ReplyItem from './ReplyItem'
 
 export default function ReplyList({
   recordId,
+  Recordwriter,
 }: {
   recordId: string | undefined
+  Recordwriter: string
 }) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['getReplyData', recordId],
@@ -41,6 +43,7 @@ export default function ReplyList({
             imageUrl={item.imageUrl}
             modifiedAt={item.modifiedAt}
             numOfSubComment={item.numOfSubComment}
+            Recordwriter={Recordwriter}
             writer={item.writer}
           />
         ))
