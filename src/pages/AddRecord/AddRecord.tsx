@@ -44,7 +44,7 @@ export default function AddRecord() {
   })
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     useRecoilValue(formDataAtom)
-  const [files, setFiles] = useState<File>()
+  const [files, setFiles] = useState<File[]>([])
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
@@ -58,7 +58,7 @@ export default function AddRecord() {
     const formData = makeFormDatas(e)
     const enroll = async () => {
       const response = await enrollRecord(formData)
-      setFiles(undefined)
+      setFiles([])
       navigate(`/record/${response.data.recordId}`, {
         replace: true,
       })
@@ -79,8 +79,10 @@ export default function AddRecord() {
     }
 
     const data = new FormData()
-    if (files !== undefined) {
-      data.append('files', files as File, files?.name)
+    if (files !== undefined && files.length > 0) {
+      files?.forEach((file) => {
+        data.append('files', file as File, file?.name)
+      })
     }
     data.append(
       'writeRecordRequestDto',
@@ -123,7 +125,11 @@ export default function AddRecord() {
         <AddRecordTitle title={'레코드 아이콘'} />
         <AddRecordIcon currentRecordType={recordType} />
         <AddRecordTitle title={'레코드 이미지'} />
-        <AddRecordFile currentRecordType={recordType} setFiles={setFiles} />
+        <AddRecordFile
+          currentRecordType={recordType}
+          files={files}
+          setFiles={setFiles}
+        />
         <div className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
           <Button
             property={'solid'}
