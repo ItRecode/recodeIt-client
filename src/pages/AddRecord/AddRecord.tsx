@@ -15,6 +15,7 @@ import { formDataAtom } from '@store/atom'
 import { useRecoilValue } from 'recoil'
 import { enrollRecord } from '@apis/record'
 import Alert from '@components/Alert'
+import { INPUT_FOCUS } from '@assets/constant/RecordInputs'
 
 export type CheckAllType = {
   input: boolean
@@ -35,6 +36,11 @@ export interface WriteRecordRequestDto {
   title: string
 }
 
+export type IsInputFocusType = {
+  isTextArea: boolean
+  isInput: boolean
+}
+
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
   const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
@@ -48,10 +54,29 @@ export default function AddRecord() {
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
-
+  const [isInputFocus, setIsInputFocus] =
+    useState<IsInputFocusType>(INPUT_FOCUS)
+  const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
   }, [recordType])
+
+  useEffect(() => {
+    function detectMobileDevice(agent: string): boolean {
+      const mobileRegex = [
+        /Android/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i,
+      ]
+
+      return mobileRegex.some((mobile) => agent.match(mobile))
+    }
+
+    setIsMobile(detectMobileDevice(window.navigator.userAgent))
+  }, [isInputFocus])
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -119,12 +144,16 @@ export default function AddRecord() {
           currentRecordType={recordType}
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
+          isInputFocus={isInputFocus}
+          setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 설명'} />
         <AddRecordTextArea
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
           currentRecordType={recordType}
+          isInputFocus={isInputFocus}
+          setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 컬러'} />
         <AddRecordColor currentRecordType={recordType} />
@@ -136,7 +165,13 @@ export default function AddRecord() {
           files={files}
           setFiles={setFiles}
         />
-        <div className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
+        <div
+          className={`${
+            (isInputFocus.isInput || isInputFocus.isTextArea) && isMobile
+              ? 'hidden'
+              : 'sticky'
+          } bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6`}
+        >
           <Button
             property={'solid'}
             disabled={
