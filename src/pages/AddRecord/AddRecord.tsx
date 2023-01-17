@@ -87,7 +87,7 @@ export default function AddRecord() {
     const data = new FormData()
     if (files !== undefined && files.length > 0) {
       files?.forEach((file) => {
-        data.append('files', file as File, file?.name)
+        data.append('attachments', file as File, file?.name)
       })
     }
     data.append(
