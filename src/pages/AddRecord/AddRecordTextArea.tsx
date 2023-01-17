@@ -27,6 +27,9 @@ function AddRecordTextArea({
     e: React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
     const inputValueLength = e.target.value.length
+    if (inputValueLength > INPUT_DETAILS.MAX_TEXTAREA_TYPING) {
+      return
+    }
     if (inputValueLength > 0) {
       setCheckAllFilled({ ...checkAllFilled, textArea: true })
     }
