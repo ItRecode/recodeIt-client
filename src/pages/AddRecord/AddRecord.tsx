@@ -210,13 +210,12 @@ export default function AddRecord() {
       </form>
       <Toast
         visible={isToast}
-        mainMessage={
+        message={
           <>
             5MB 이상은 <br />
             첨부할 수 없습니다.
           </>
         }
-        timeLimit={2}
         onClose={() => setIsToast(false)}
       />
     </div>
