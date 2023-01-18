@@ -9,8 +9,8 @@ export default function MyRecord() {
   const navigate = useNavigate()
 
   return (
-    <div className="h-full w-full px-6 pt-4">
-      <section className="sticky top-0 left-0" id="search-bar">
+    <div className="h-full w-full px-6 ">
+      <section id="search-bar" className="sticky top-0 left-0 bg-grey-1 py-4">
         <div className="relative flex items-center">
           <SearchIcon className="absolute left-[12px] h-[14px] w-[14px]" />
           <input
