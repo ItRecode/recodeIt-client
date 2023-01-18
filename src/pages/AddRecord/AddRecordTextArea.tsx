@@ -6,12 +6,14 @@ type userProps = {
   currentRecordType: string
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
+  setIsInputFocus: Dispatch<SetStateAction<boolean>>
 }
 
 function AddRecordTextArea({
   setCheckAllFilled,
   checkAllFilled,
   currentRecordType,
+  setIsInputFocus,
 }: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
   const PLACEHOLDER_MESSAGE = {
@@ -44,6 +46,8 @@ function AddRecordTextArea({
       className={`mb-10 rounded-lg bg-grey-2 px-4 pt-4 pb-2 text-sm font-medium text-grey-5`}
     >
       <textarea
+        onFocus={() => setIsInputFocus(true)}
+        onBlur={() => setIsInputFocus(false)}
         className={`min-h-[130px] w-full resize-none bg-grey-2  placeholder:text-grey-5 focus:outline-none focus:placeholder:text-transparent`}
         onChange={handleChangeTextArea}
         placeholder={

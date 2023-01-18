@@ -6,12 +6,14 @@ interface Props {
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
   currentRecordType: string
+  setIsInputFocus: Dispatch<SetStateAction<boolean>>
 }
 
 function AddRecordInput({
   setCheckAllFilled,
   checkAllFilled,
   currentRecordType,
+  setIsInputFocus,
 }: Props) {
   const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
@@ -38,6 +40,16 @@ function AddRecordInput({
     setInputValue(e.target.value)
   }
 
+  const handleFocus = () => {
+    setInputFocus(true)
+    setIsInputFocus(true)
+  }
+
+  const handleBlur = () => {
+    setInputFocus(false)
+    setIsInputFocus(false)
+  }
+
   return (
     <div
       className={` mb-10 flex justify-between border-b transition-all duration-300 ${
@@ -45,8 +57,8 @@ function AddRecordInput({
       }`}
     >
       <input
-        onFocus={() => setInputFocus(true)}
-        onBlur={() => setInputFocus(false)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         className="border-none text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
         placeholder={
           currentRecordType === 'celebration'

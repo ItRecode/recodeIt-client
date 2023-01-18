@@ -38,6 +38,13 @@ function AddRecordIcon({
     setIconState(icons)
   }, [currentRecordType])
 
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      selectedIcon: getIconSrc(icons[currentRecordType][currentFocus].src),
+    })
+  }, [currentFocus])
+
   const handleFront = () => {
     slickRef.current?.slickNext()
     if (throttle) return
@@ -74,13 +81,13 @@ function AddRecordIcon({
     arrows: false,
     infinite: true,
     speed: SLIDE_SPEED,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
+    swipeToSlide: true,
   }
 
-  const handleClick = (id: number, iconSrc: string) => {
+  const handleClick = (id: number) => {
     setCurrentFocus(id)
-    setFormData({ ...formData, selectedIcon: getIconSrc(iconSrc) })
   }
 
   const getIconSrc = (iconSrc: string): string => {
@@ -93,14 +100,14 @@ function AddRecordIcon({
         {iconState[currentRecordType].map((icon) => {
           return (
             <div
-              onClick={() => handleClick(icon.id, icon.src)}
-              className={`relative h-[70px] !w-[70px] rounded-2xl ${
-                currentFocus === icon.id && 'border-2 !border-primary-3'
+              onClick={() => handleClick(icon.id)}
+              className={`relative h-[54px] !w-[54px] rounded-2xl ${
+                currentFocus === icon.id && ' border-2  !border-primary-3'
               }`}
               key={icon.id}
             >
               <img
-                className="block translate-x-[-2px] translate-y-[-2px]"
+                className="h-[52px] !w-[52px] translate-x-[-2px] translate-y-[-2px]"
                 src={icon.src}
                 alt={`icon-${icon.id}-type`}
               />

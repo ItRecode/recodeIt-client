@@ -35,6 +35,11 @@ export interface WriteRecordRequestDto {
   title: string
 }
 
+export type IsInputFocusType = {
+  isTextAreaFocused: boolean
+  isInputFocused: boolean
+}
+
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
   const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
@@ -48,10 +53,28 @@ export default function AddRecord() {
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
-
+  const [isInputFocus, setIsInputFocus] = useState(false)
+  const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
   }, [recordType])
+
+  useEffect(() => {
+    function detectMobileDevice(agent: string): boolean {
+      const mobileRegex = [
+        /Android/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i,
+      ]
+
+      return mobileRegex.some((mobile) => agent.match(mobile))
+    }
+
+    setIsMobile(detectMobileDevice(window.navigator.userAgent))
+  }, [isInputFocus])
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -87,7 +110,7 @@ export default function AddRecord() {
     const data = new FormData()
     if (files !== undefined && files.length > 0) {
       files?.forEach((file) => {
-        data.append('files', file as File, file?.name)
+        data.append('attachments', file as File, file?.name)
       })
     }
     data.append(
@@ -119,12 +142,14 @@ export default function AddRecord() {
           currentRecordType={recordType}
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
+          setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 설명'} />
         <AddRecordTextArea
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
           currentRecordType={recordType}
+          setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 컬러'} />
         <AddRecordColor currentRecordType={recordType} />
@@ -136,7 +161,11 @@ export default function AddRecord() {
           files={files}
           setFiles={setFiles}
         />
-        <div className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6">
+        <div
+          className={`${
+            isInputFocus && isMobile ? 'hidden' : 'sticky'
+          } bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6`}
+        >
           <Button
             property={'solid'}
             disabled={
