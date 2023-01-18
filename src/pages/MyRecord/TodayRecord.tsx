@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { IRecordTodayData } from 'types/recordData'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from '@components/Chip'
 import recordIcons from '@assets/record_icons'
-import { useNavigate } from 'react-router-dom'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
@@ -48,7 +47,7 @@ export default function TodayRecord() {
       <div className="text-xs">{todayWriteRecord.createdAt}</div>
       <div className="mt-4 flex">
         <div
-          className={`${background_color} flex h-[86px] w-[86px]  items-center rounded-2xl`}
+          className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
         >
           <RecordIcon className="flex aspect-square w-full" />
         </div>
