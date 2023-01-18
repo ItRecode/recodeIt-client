@@ -1,21 +1,18 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
-import { CheckAllType, IsInputFocusType } from './AddRecord'
+import { CheckAllType } from './AddRecord'
 
 type userProps = {
   currentRecordType: string
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
-  isInputFocus: IsInputFocusType
-  setIsInputFocus: Dispatch<SetStateAction<IsInputFocusType>>
+  setIsInputFocus: Dispatch<SetStateAction<boolean>>
 }
 
 function AddRecordTextArea({
   setCheckAllFilled,
   checkAllFilled,
   currentRecordType,
-
-  isInputFocus,
   setIsInputFocus,
 }: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
@@ -46,8 +43,8 @@ function AddRecordTextArea({
       className={`mb-10 rounded-lg bg-grey-2 px-4 pt-4 pb-2 text-sm font-medium text-grey-5`}
     >
       <textarea
-        onFocus={() => setIsInputFocus({ ...isInputFocus, isInput: true })}
-        onBlur={() => setIsInputFocus({ ...isInputFocus, isInput: false })}
+        onFocus={() => setIsInputFocus(true)}
+        onBlur={() => setIsInputFocus(false)}
         className={`min-h-[130px] w-full resize-none bg-grey-2  placeholder:text-grey-5 focus:outline-none focus:placeholder:text-transparent`}
         onChange={handleChangeTextArea}
         placeholder={

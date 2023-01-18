@@ -1,20 +1,18 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
-import { CheckAllType, IsInputFocusType } from './AddRecord'
+import { CheckAllType } from './AddRecord'
 
 interface Props {
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
   currentRecordType: string
-  isInputFocus: IsInputFocusType
-  setIsInputFocus: Dispatch<SetStateAction<IsInputFocusType>>
+  setIsInputFocus: Dispatch<SetStateAction<boolean>>
 }
 
 function AddRecordInput({
   setCheckAllFilled,
   checkAllFilled,
   currentRecordType,
-  isInputFocus,
   setIsInputFocus,
 }: Props) {
   const [inputValue, setInputValue] = useState('')
@@ -44,12 +42,12 @@ function AddRecordInput({
 
   const handleFocus = () => {
     setInputFocus(true)
-    setIsInputFocus({ ...isInputFocus, isInput: true })
+    setIsInputFocus(true)
   }
 
   const handleBlur = () => {
     setInputFocus(false)
-    setIsInputFocus({ ...isInputFocus, isInput: false })
+    setIsInputFocus(false)
   }
 
   return (

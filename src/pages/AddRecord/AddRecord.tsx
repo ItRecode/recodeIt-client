@@ -15,7 +15,6 @@ import { formDataAtom } from '@store/atom'
 import { useRecoilValue } from 'recoil'
 import { enrollRecord } from '@apis/record'
 import Alert from '@components/Alert'
-import { INPUT_FOCUS } from '@assets/constant/RecordInputs'
 
 export type CheckAllType = {
   input: boolean
@@ -37,8 +36,8 @@ export interface WriteRecordRequestDto {
 }
 
 export type IsInputFocusType = {
-  isTextArea: boolean
-  isInput: boolean
+  isTextAreaFocused: boolean
+  isInputFocused: boolean
 }
 
 export default function AddRecord() {
@@ -54,8 +53,7 @@ export default function AddRecord() {
   const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
-  const [isInputFocus, setIsInputFocus] =
-    useState<IsInputFocusType>(INPUT_FOCUS)
+  const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
@@ -144,7 +142,6 @@ export default function AddRecord() {
           currentRecordType={recordType}
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
-          isInputFocus={isInputFocus}
           setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 설명'} />
@@ -152,7 +149,6 @@ export default function AddRecord() {
           checkAllFilled={checkAllFilled}
           setCheckAllFilled={setCheckAllFilled}
           currentRecordType={recordType}
-          isInputFocus={isInputFocus}
           setIsInputFocus={setIsInputFocus}
         />
         <AddRecordTitle title={'레코드 컬러'} />
@@ -167,9 +163,7 @@ export default function AddRecord() {
         />
         <div
           className={`${
-            (isInputFocus.isInput || isInputFocus.isTextArea) && isMobile
-              ? 'hidden'
-              : 'sticky'
+            isInputFocus && isMobile ? 'hidden' : 'sticky'
           } bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6`}
         >
           <Button
