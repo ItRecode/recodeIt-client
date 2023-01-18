@@ -1,4 +1,4 @@
-import { getNickname } from '@apis/auth'
+import { useUser } from '@react-query/hooks/useUser'
 import React, { useEffect, useState } from 'react'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
@@ -12,29 +12,22 @@ export default function ReplyItem({
   // numOfSubComment,
   writer,
 }: CommentData) {
-  const [nickName, setNickName] = useState<string | null>(null)
   const [nickNameResult, setNickNameResult] = useState<string | null>(null)
-  useEffect(() => {
-    const getUserNickName = async () => {
-      const nickName = await getNickname()
-      setNickName(nickName.data)
-    }
-    getUserNickName()
-  }, [])
+  const { user } = useUser()
 
   useEffect(() => {
-    if (nickName !== null) {
-      if (nickName === writer) {
+    if (user?.data !== null) {
+      if (user?.data === writer) {
         setNickNameResult('myComment')
       } else {
-        if (Recordwriter === nickName) {
+        if (Recordwriter === user?.data) {
           setNickNameResult('myRecordOtherReply')
         } else {
           setNickNameResult('otherRecordOtherReply')
         }
       }
     }
-  }, [Recordwriter, writer, nickName])
+  }, [Recordwriter, writer, user])
 
   return (
     <div className="mt-3">
@@ -48,13 +41,15 @@ export default function ReplyItem({
         {imageUrl !== null && (
           <div className="relative my-2.5 aspect-square w-[130px] rounded-2xl">
             <img
-              className=" h-full w-full rounded-2xl"
+              className="aspect-square w-full rounded-2xl object-cover"
               src={imageUrl}
               alt="user-selected-record-image"
             />
           </div>
         )}
-        <p className="mt-1.5 text-xs font-normal text-grey-8">{content}</p>
+        <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
+          {content}
+        </p>
       </div>
       <div>
         <div className="mt-2 flex w-full justify-between">

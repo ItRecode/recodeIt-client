@@ -23,6 +23,7 @@ import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
+import { useUser } from '@react-query/hooks/useUser'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -43,6 +44,8 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
+
+  const { user } = useUser()
 
   const background_color = `bg-${colorName}`
 
@@ -112,12 +115,14 @@ export default function DetailRecord() {
         <header className="p-4">
           <nav className="flex justify-between">
             <BackButton />
-            <button
-              className="cursor-pointer bg-grey-1"
-              onClick={() => setEditModalState(true)}
-            >
-              <MoreButton />
-            </button>
+            {user?.data === writer && (
+              <button
+                className="cursor-pointer bg-grey-1"
+                onClick={() => setEditModalState(true)}
+              >
+                <MoreButton />
+              </button>
+            )}
           </nav>
         </header>
         <div className="mb-3 overflow-auto" ref={scrollSection}>
@@ -150,8 +155,8 @@ export default function DetailRecord() {
             <Button onClick={() => setShareStatus(true)}>
               <p className="text-base font-semibold">공유하기</p>
             </Button>
-            <div className="mt-6 mb-10 w-full px-1.5 text-[14px]">
-              <p className="w-full ">{content}</p>
+            <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
+              <p className="w-full">{content}</p>
             </div>
           </section>
           <section id="record_reply_list">
@@ -160,7 +165,7 @@ export default function DetailRecord() {
         </div>
         <section
           id="record_reply_input"
-          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1 px-6 py-4 "
+          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1 py-4 pl-4 pr-6 "
         >
           <ReplyInput
             setInputSectionHeight={setInputSectionHeight}

@@ -36,11 +36,7 @@ export default function ReplyList({
   return (
     <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
-      {isLoading && (
-        <div className="flex w-full justify-center">
-          <Spinner size="small" />
-        </div>
-      )}
+
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
           <ReplyItem
@@ -55,6 +51,12 @@ export default function ReplyList({
             writer={item.writer}
           />
         ))
+      )}
+
+      {hasNextPage && (
+        <div className="flex w-full justify-center">
+          <Spinner size="small" />
+        </div>
       )}
       <div ref={ref} className="h-10 w-full " />
     </section>

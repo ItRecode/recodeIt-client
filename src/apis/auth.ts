@@ -19,7 +19,3 @@ export const getIsDuplicatedNickname = (nickname: string) => {
     params: { nickname },
   })
 }
-
-export const getNickname = () => {
-  return baseInstance.get('/member/auth')
-}
