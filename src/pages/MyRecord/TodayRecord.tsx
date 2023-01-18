@@ -4,8 +4,10 @@ import { IRecordTodayData } from 'types/recordData'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from '@components/Chip'
 import recordIcons from '@assets/record_icons'
+import { useNavigate } from 'react-router-dom'
 
 export default function TodayRecord() {
+  const navigate = useNavigate()
   const [todayWriteRecord, setTodayWriteRecord] =
     useState<IRecordTodayData | null>(null)
   const background_color = `bg-${todayWriteRecord?.colorName}`
@@ -30,7 +32,10 @@ export default function TodayRecord() {
           <br />
           레코드를 쓰고 추억을 공유해보세요.
         </span>
-        <div className="mt-4 cursor-pointer text-sm font-semibold leading-5 text-primary-2 underline underline-offset-4">
+        <div
+          className="mt-4 cursor-pointer text-sm font-semibold leading-5 text-primary-2 underline underline-offset-4"
+          onClick={() => navigate('/record/add')}
+        >
           레코드 추가하러 가기
         </div>
       </div>
