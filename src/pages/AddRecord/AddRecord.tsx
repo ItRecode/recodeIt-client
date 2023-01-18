@@ -15,6 +15,7 @@ import { formDataAtom } from '@store/atom'
 import { useRecoilValue } from 'recoil'
 import { enrollRecord } from '@apis/record'
 import Alert from '@components/Alert'
+import Toast from '@components/Toast'
 
 export type CheckAllType = {
   input: boolean
@@ -55,6 +56,8 @@ export default function AddRecord() {
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [isToast, setIsToast] = useState<boolean>(true)
+
   useEffect(() => {
     setCheckAllFilled({ input: false, textArea: false })
   }, [recordType])
@@ -206,6 +209,16 @@ export default function AddRecord() {
           />
         )}
       </form>
+      <Toast
+        visible={isToast}
+        message={
+          <>
+            5MB 이상은 <br />
+            첨부할 수 없습니다.
+          </>
+        }
+        onClose={() => setIsToast(false)}
+      />
     </div>
   )
 }
