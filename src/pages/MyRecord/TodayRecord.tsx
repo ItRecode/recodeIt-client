@@ -23,12 +23,23 @@ export default function TodayRecord() {
   })
 
   if (!todayWriteRecord) {
-    return <div />
+    return (
+      <div className="mt-10 mb-[49px] w-full text-center">
+        <span className="text-xs leading-5">
+          오늘 쓴 레코드가 없어요!
+          <br />
+          레코드를 쓰고 추억을 공유해보세요.
+        </span>
+        <div className="mt-4 cursor-pointer text-sm font-semibold leading-5 text-primary-2 underline underline-offset-4">
+          레코드 추가하러 가기
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="mt-4">
-      {/* TODO: 레코드 만든 날짜 === 오늘 날짜*/}
+    <div className="mt-4 mb-10 w-full">
+      {/* TODO: 레코드 만든 날짜 === 오늘 날짜 포맷팅하기*/}
       <div className="text-xs">{todayWriteRecord.createdAt}</div>
       <div className="mt-4 flex">
         <div
