@@ -13,8 +13,9 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
   const MAX_FILE = 3
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    encodeFileToBase64((e.target.files as FileList)[0])
-    setFiles([...files, (e.target.files as FileList)[0]])
+    encodeFileToBase64(e.target.files as FileList)
+    // FileList가 이터러블하지 않으나 유사배열이라서 Array를 빌려서 ...메소드를 사용함
+    setFiles([...files, ...Array.from(e.target.files as FileList)])
     e.target.value = ''
   }
 
@@ -22,19 +23,18 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
     setCurrentImg([])
   }, [currentRecordType])
 
-  const encodeFileToBase64 = (fileBlob: File) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(fileBlob)
-    return new Promise<void>((resolve, reject) => {
-      reader.onload = () => {
-        try {
-          setCurrentImg([...currentImg, reader.result as string])
-          resolve()
-        } catch (error) {
-          reject(error)
-        }
-      }
-    })
+  const encodeFileToBase64 = (fileBlob: FileList) => {
+    const readAndPreview = (file: File) => {
+      const reader = new FileReader()
+      reader.onload = () =>
+        setCurrentImg((prev) => [...prev, reader.result as string])
+      reader.readAsDataURL(file)
+    }
+    if (fileBlob) {
+      // 빈배열로 forEach 돌리니까 eslint때문에 세미콜론이 계속 생성되서 설정했습니다.
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;[].forEach.call(fileBlob, readAndPreview)
+    }
   }
 
   const handleDelete = (toDeleteIndex: number): void => {
@@ -66,6 +66,7 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
         </div>
       </label>
       <input
+        multiple
         disabled={currentImg.length === 3}
         onChange={handleSelectImageFile}
         className="hidden"
