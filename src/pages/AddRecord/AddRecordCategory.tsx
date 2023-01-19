@@ -40,28 +40,8 @@ function AddRecordCategory({
 }: {
   currentRecordType: keyof CategoryType
 }) {
-  const CATEGORY_DATA: CategoryType = {
-    [TEXT_DETAILS.CELEBRATION]: [
-      { title: '축하해주세요', choosed: true, id: 3, iconSrc: Celebrate },
-      { title: '행복해요', choosed: false, id: 4, iconSrc: Happy },
-      { title: '기념일이에요', choosed: false, id: 5, iconSrc: Cake },
-      { title: '연애중이에요', choosed: false, id: 6, iconSrc: Love },
-    ],
-    [TEXT_DETAILS.CONSOLATION]: [
-      { title: '위로해주세요', choosed: true, id: 7, iconSrc: Consolate },
-      { title: '우울해요', choosed: false, id: 8, iconSrc: Depress },
-      { title: '공감이 필요해요', choosed: false, id: 9, iconSrc: Sympathy },
-      { title: '내편이 되어주세요', choosed: false, id: 10, iconSrc: MySide },
-    ],
-  }
-
-  const [categoryState, setCategoryState] =
-    useState<CategoryType>(CATEGORY_DATA)
+  const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-
-  useEffect(() => {
-    setCategoryState(CATEGORY_DATA)
-  }, [currentRecordType])
 
   useEffect(() => {
     const getData = async () => {
@@ -69,11 +49,13 @@ function AddRecordCategory({
       setCategoryState(makeCategoryData(data))
     }
     getData()
-  }, [])
+  }, [currentRecordType])
 
   const makeCategoryData = (data: CategoryDatas) => {
+    const CELEBRATION = 1
+    const CONSOLATION = 0
     const categoryData: CategoryType = {
-      [TEXT_DETAILS.CELEBRATION]: data[1].subcategories.map(
+      [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
         (category: BigCategory, index: number) => {
           return {
             title: category.name,
@@ -83,7 +65,7 @@ function AddRecordCategory({
           }
         }
       ),
-      [TEXT_DETAILS.CONSOLATION]: data[0].subcategories.map(
+      [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
         (category: BigCategory, index: number) => {
           return {
             title: category.name,
@@ -123,45 +105,51 @@ function AddRecordCategory({
   const handleChooseCurrentCategory = (index: number): void => {
     const CELEBRATES = 3
     const CONSOLATES = 7
-    const currentState = {
+    const currentState: CategoryType | null = categoryState && {
       ...categoryState,
-      [currentRecordType]: CATEGORY_DATA[currentRecordType].map(
-        (category: CategorySource) => ({
+      [currentRecordType]:
+        categoryState !== null &&
+        categoryState[currentRecordType].map((category: CategorySource) => ({
           ...category,
           choosed: category.id === index,
-        })
-      ),
+        })),
     }
 
-    setFormData({
-      ...formData,
-      selectedCategory:
-        categoryState[currentRecordType][
-          currentRecordType === 'celebration'
-            ? index - CELEBRATES
-            : index - CONSOLATES
-        ].id,
-    })
-    setCategoryState(currentState)
+    if (categoryState !== null) {
+      setFormData({
+        ...formData,
+        selectedCategory:
+          categoryState[currentRecordType][
+            currentRecordType === 'celebration'
+              ? index - CELEBRATES
+              : index - CONSOLATES
+          ].id,
+      })
+    }
+
+    if (currentState !== null && categoryState !== null) {
+      setCategoryState(currentState)
+    }
   }
 
   return (
     <div className="mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4">
-      {categoryState[currentRecordType].map((category: CategorySource) => {
-        return (
-          <div
-            key={category.id}
-            onClick={() => handleChooseCurrentCategory(category.id)}
-          >
-            <Chip
-              type="button"
-              active={category.choosed}
-              message={category.title}
-              icon={category.iconSrc}
-            />
-          </div>
-        )
-      })}
+      {categoryState !== null &&
+        categoryState[currentRecordType].map((category: CategorySource) => {
+          return (
+            <div
+              key={category.id}
+              onClick={() => handleChooseCurrentCategory(category.id)}
+            >
+              <Chip
+                type="button"
+                active={category.choosed}
+                message={category.title}
+                icon={category.iconSrc}
+              />
+            </div>
+          )
+        })}
     </div>
   )
 }
