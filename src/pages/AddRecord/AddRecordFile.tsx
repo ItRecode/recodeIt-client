@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
+import Toast from '@components/Toast'
 
 interface Props {
   currentRecordType: string
@@ -10,11 +11,19 @@ interface Props {
 
 function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
   const [currentImg, setCurrentImg] = useState<string[]>([])
+  const [isToast, setIsToast] = useState(false)
   const MAX_FILE = 3
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    encodeFileToBase64((e.target.files as FileList)[0])
-    setFiles([...files, (e.target.files as FileList)[0]])
+    if (
+      e.target.files !== null &&
+      currentImg.length + e.target.files?.length > MAX_FILE
+    ) {
+      return setIsToast(true)
+    }
+    encodeFileToBase64(e.target.files as FileList)
+    // FileList가 이터러블하지 않으나 유사배열이라서 Array를 빌려서 ...메소드를 사용함
+    setFiles([...files, ...Array.from(e.target.files as FileList)])
     e.target.value = ''
   }
 
@@ -22,19 +31,18 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
     setCurrentImg([])
   }, [currentRecordType])
 
-  const encodeFileToBase64 = (fileBlob: File) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(fileBlob)
-    return new Promise<void>((resolve, reject) => {
-      reader.onload = () => {
-        try {
-          setCurrentImg([...currentImg, reader.result as string])
-          resolve()
-        } catch (error) {
-          reject(error)
-        }
-      }
-    })
+  const encodeFileToBase64 = (fileBlob: FileList) => {
+    const readAndPreview = (file: File) => {
+      const reader = new FileReader()
+      reader.onload = () =>
+        setCurrentImg((prev) => [...prev, reader.result as string])
+      reader.readAsDataURL(file)
+    }
+    if (fileBlob) {
+      // 빈배열로 forEach 돌리니까 eslint때문에 세미콜론이 계속 생성되서 설정했습니다.
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;[].forEach.call(fileBlob, readAndPreview)
+    }
   }
 
   const handleDelete = (toDeleteIndex: number): void => {
@@ -52,6 +60,19 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
 
   return (
     <div className="mb-8 flex items-center gap-2">
+      {isToast && (
+        <Toast
+          visible={true}
+          message={
+            <>
+              사진은 최대 3장까지
+              <br />
+              선택 가능합니다
+            </>
+          }
+          onClose={() => setIsToast(false)}
+        />
+      )}
       <label className="h-[66px] w-[66px]" htmlFor="file">
         <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
           <img className=" mb-1" src={Camera} alt="camera" />
@@ -66,6 +87,7 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
         </div>
       </label>
       <input
+        multiple
         disabled={currentImg.length === 3}
         onChange={handleSelectImageFile}
         className="hidden"
