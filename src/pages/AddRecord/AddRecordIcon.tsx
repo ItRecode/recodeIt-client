@@ -34,7 +34,6 @@ function AddRecordIcon({
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
   const TIME_DELAY_MS = 500
-  console.log(formData, currentFocus)
 
   useEffect(() => {
     setIconState(icons)
