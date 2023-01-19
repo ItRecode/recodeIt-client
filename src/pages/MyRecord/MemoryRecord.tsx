@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { IRecordMemoryDataItem } from 'types/recordData'
 import MemoryRecordItem from './MemoryRecordItem'
-import dummyData from './dummy.json'
-
-type IMemoryRecordList = IRecordMemoryDataItem[]
 
 export default function MemoryRecord() {
-  const [memoryRecordList, setMemoryRecordList] =
-    useState<IMemoryRecordList | null>(null)
-
-  useEffect(() => {
-    setMemoryRecordList(dummyData)
-  })
+  const memoryRecordList: IRecordMemoryDataItem[] = []
 
   return (
     <>
