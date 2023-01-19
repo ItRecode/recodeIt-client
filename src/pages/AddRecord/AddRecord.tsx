@@ -204,7 +204,7 @@ export default function AddRecord() {
             cancelMessage="나가기"
             confirmMessage="계속하기"
             onClose={() => setIsBackButton(false)}
-            onCancel={() => navigate('/')}
+            onCancel={() => navigate(-1)}
             onConfirm={() => setIsBackButton(false)}
           />
         )}
