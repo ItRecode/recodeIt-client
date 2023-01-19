@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
+import { useThrottle } from '@hooks/useThrottle'
 
 type IconSource = {
   src: string
@@ -32,7 +33,8 @@ function AddRecordIcon({
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
-  const [throttle, setThrottle] = useState<boolean>(false)
+  const TIME_DELAY_MS = 500
+  console.log(formData, currentFocus)
 
   useEffect(() => {
     setIconState(icons)
@@ -47,33 +49,19 @@ function AddRecordIcon({
 
   const handleFront = () => {
     slickRef.current?.slickNext()
-    if (throttle) return
-    if (!throttle) {
-      setThrottle(true)
-      if (currentFocus === MAX_FOCUS) {
-        setCurrentFocus(0)
-      } else {
-        setCurrentFocus(currentFocus + 1)
-      }
-      setTimeout(async () => {
-        setThrottle(false)
-      }, 500)
+    if (currentFocus === MAX_FOCUS) {
+      setCurrentFocus(0)
+    } else {
+      setCurrentFocus(currentFocus + 1)
     }
   }
 
   const handleBack = () => {
     slickRef.current?.slickPrev()
-    if (throttle) return
-    if (!throttle) {
-      setThrottle(true)
-      if (currentFocus === MIN_FOCUS) {
-        setCurrentFocus(MAX_FOCUS)
-      } else {
-        setCurrentFocus(currentFocus - 1)
-      }
-      setTimeout(async () => {
-        setThrottle(false)
-      }, 500)
+    if (currentFocus === MIN_FOCUS) {
+      setCurrentFocus(MAX_FOCUS)
+    } else {
+      setCurrentFocus(currentFocus - 1)
     }
   }
 
@@ -117,13 +105,13 @@ function AddRecordIcon({
       </Slider>
       <div
         className="absolute top-[1/2] left-0 cursor-pointer"
-        onClick={handleBack}
+        onClick={useThrottle(handleBack, TIME_DELAY_MS)}
       >
         <Back />
       </div>
       <div
         className="absolute top-[1/2] right-0 cursor-pointer"
-        onClick={handleFront}
+        onClick={useThrottle(handleFront, TIME_DELAY_MS)}
       >
         <Front />
       </div>
