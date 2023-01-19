@@ -79,6 +79,7 @@ export default function ReplyInput({
     e.preventDefault()
 
     setText('')
+    setImage('')
     const writeCommentRequestDto = {
       recordId: recordId,
       comment: text,
@@ -121,41 +122,8 @@ export default function ReplyInput({
       encType="multipart/form-data"
       onSubmit={handleSubmitReplyData}
     >
-      <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
-        {image !== '' && (
-          <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
-            <img
-              className=" h-full w-full rounded-2xl"
-              src={image}
-              alt="user-selected-record-image"
-            />
-            <Close
-              className="absolute top-1.5 right-1.5 cursor-pointer"
-              onClick={handleDeleteImageFile}
-            />
-          </div>
-        )}
-        <div className="flex items-end">
-          <textarea
-            ref={textRef}
-            rows={1}
-            maxLength={100}
-            required={true}
-            placeholder="따뜻한 마음을 남겨주세요"
-            onInput={handleResizeHeight}
-            onChange={(e) => setText(e.target.value)}
-            value={text}
-            className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
-            onFocus={handleInputFocus}
-            disabled={isLoading}
-          />
-          <button className="cursor-pointer text-[12px] text-primary-2">
-            확인
-          </button>
-        </div>
-      </div>
       <label htmlFor="imageFile">
-        <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
+        <div className="relative mr-2.5 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
           {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
@@ -167,6 +135,46 @@ export default function ReplyInput({
           className="hidden"
         />
       </label>
+      <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
+        {image !== '' && (
+          <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
+            <img
+              className="aspect-square w-full rounded-2xl object-cover"
+              src={image}
+              alt="user-selected-record-image"
+            />
+            <Close
+              className="absolute top-1.5 right-1.5 cursor-pointer"
+              onClick={handleDeleteImageFile}
+            />
+          </div>
+        )}
+
+        <div className="flex items-end">
+          <textarea
+            ref={textRef}
+            rows={1}
+            maxLength={100}
+            required={true}
+            placeholder="따뜻한 마음을 남겨주세요. (100자 이내)"
+            onInput={handleResizeHeight}
+            onChange={(e) => setText(e.target.value)}
+            value={text}
+            className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
+            onFocus={handleInputFocus}
+            disabled={isLoading}
+          />
+          <button
+            disabled={text === ''}
+            className={`cursor-pointer text-[12px] ${
+              text !== '' ? 'text-primary-2' : 'text-grey-6'
+            }`}
+          >
+            완료
+          </button>
+        </div>
+      </div>
+
       {isCheckedUser && (
         <Alert
           visible={isCheckedUser && !isAnonymousUser}

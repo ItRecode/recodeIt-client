@@ -45,7 +45,7 @@ export default function ImageContainer({
       {imageState !== 0 && (
         <img
           src={imageUrls[imageState - 1]}
-          className="h-full w-full rounded-2xl object-cover"
+          className="aspect-square h-full w-full rounded-2xl object-cover"
         />
       )}
     </div>
