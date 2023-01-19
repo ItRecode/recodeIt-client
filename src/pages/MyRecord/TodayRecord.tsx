@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const todayWriteRecord = null
+  // const todayWriteRecord = null
   // const background_color = `bg-${todayWriteRecord?.colorName}`
   // const RecordIcon = recordIcons[`${todayWriteRecord?.iconName}`]
 
