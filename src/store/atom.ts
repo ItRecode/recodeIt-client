@@ -8,3 +8,16 @@ export const formDataAtom = atom({
     selectedIcon: 'heart',
   },
 })
+
+export const DetailPageInputMode = atom<{
+  mode: 'reply' | 'nestedReply'
+  recordId: string | undefined
+  parentId: number | string
+}>({
+  key: 'DetailPageInputMode',
+  default: {
+    mode: 'reply',
+    recordId: '',
+    parentId: '',
+  },
+})

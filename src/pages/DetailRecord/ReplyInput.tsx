@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { ReactComponent as Camera } from '@assets/camera.svg'
 import { ReactComponent as Plus } from '@assets/plus.svg'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import {
+  INPUT_MODE,
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
@@ -13,6 +14,8 @@ import { createReply } from '@apis/reply'
 import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@react-query/hooks/useUser'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
+import { DetailPageInputMode } from '@store/atom'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -24,11 +27,18 @@ export default function ReplyInput({
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
+
   const textRef = useRef<HTMLTextAreaElement>(null)
+  const submitButtonRef = useRef<HTMLButtonElement>(null)
+
   const [isCheckedUser, setIsCheckedUser] = useState(false)
   const [isAnonymousUser, setIsAnonymousUser] = useState(false)
   const navigate = useNavigate()
+
   const { user, isLoading } = useUser()
+
+  const inputMode = useRecoilValue(DetailPageInputMode)
+  const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -72,18 +82,15 @@ export default function ReplyInput({
     }
   }, [])
 
-  const handleSubmitReplyData = (
-    e: React.FormEvent<HTMLFormElement>,
-    parentId?: number
-  ) => {
+  const handleSubmitReplyData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     setText('')
     setImage('')
+
     const writeCommentRequestDto = {
       recordId: recordId,
       comment: text,
-      parentId: parentId || '',
+      parentId: inputMode.parentId,
     }
 
     const data = new FormData()
@@ -116,14 +123,25 @@ export default function ReplyInput({
     setIsAnonymousUser(true)
   }
 
+  useEffect(() => {
+    if (inputMode.mode === 'nestedReply') {
+      textRef.current?.focus()
+    }
+  }, [inputMode.mode])
+
+  useEffect(() => {
+    if (isAnonymousUser) {
+      textRef.current?.focus()
+    }
+  }, [isAnonymousUser])
   return (
     <form
-      className="flex w-full items-end bg-grey-1"
+      className="flex w-full items-end bg-transparent"
       encType="multipart/form-data"
       onSubmit={handleSubmitReplyData}
     >
       <label htmlFor="imageFile">
-        <div className="relative mr-2.5 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
+        <div className="relative mr-2.5 mb-3 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
           {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
@@ -150,23 +168,38 @@ export default function ReplyInput({
           </div>
         )}
 
-        <div className="flex items-end">
+        <div className="flex w-full items-end justify-center">
           <textarea
             ref={textRef}
             rows={1}
             maxLength={100}
             required={true}
-            placeholder="따뜻한 마음을 남겨주세요. (100자 이내)"
+            placeholder={
+              inputMode.mode === 'reply'
+                ? '따뜻한 마음을 남겨주세요. (100자 이내)'
+                : '답글 추가... (100자 이내)'
+            }
             onInput={handleResizeHeight}
             onChange={(e) => setText(e.target.value)}
             value={text}
-            className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
+            className={`h-auto ${
+              inputMode.mode !== INPUT_MODE.NESTEDREPLY ? 'w-[85%]' : 'w-[70%]'
+            } resize-none bg-inherit text-[14px] leading-normal placeholder:text-grey-5 focus:outline-0`}
             onFocus={handleInputFocus}
             disabled={isLoading}
           />
+          {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
+            <button
+              onClick={resetInputMode}
+              className="mb-1 cursor-pointer text-xs text-primary-2"
+            >
+              답글취소
+            </button>
+          )}
           <button
+            ref={submitButtonRef}
             disabled={text === ''}
-            className={`cursor-pointer text-[12px] ${
+            className={`mb-1 cursor-pointer text-xs ${
               text !== '' ? 'text-primary-2' : 'text-grey-6'
             }`}
           >

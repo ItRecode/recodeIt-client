@@ -15,7 +15,7 @@ export default function ReplyList({
 }) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['getReplyData', recordId],
-    queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
+    queryFn: ({ pageParam = 0 }) => getReply(recordId, pageParam),
     getNextPageParam: (lastPage): number | null => {
       if (lastPage.data.totalPage > lastPage.config.params.page) {
         return lastPage.config.params.page + 1
@@ -24,6 +24,8 @@ export default function ReplyList({
     },
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 60000,
+    refetchInterval: 180000,
   })
 
   const ref = useIntersect(async (entry, observer) => {
@@ -49,16 +51,16 @@ export default function ReplyList({
             numOfSubComment={item.numOfSubComment}
             Recordwriter={Recordwriter}
             writer={item.writer}
+            recordId={recordId}
           />
         ))
       )}
-
+      <div ref={ref} className="h-10 w-full " />
       {hasNextPage && (
         <div className="flex w-full justify-center">
           <Spinner size="small" />
         </div>
       )}
-      <div ref={ref} className="h-10 w-full " />
     </section>
   )
 }

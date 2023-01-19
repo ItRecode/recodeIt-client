@@ -117,7 +117,7 @@ export default function DetailRecord() {
             <BackButton />
             {user?.data === writer && (
               <button
-                className="cursor-pointer bg-grey-1"
+                className="cursor-pointer bg-transparent"
                 onClick={() => setEditModalState(true)}
               >
                 <MoreButton />
