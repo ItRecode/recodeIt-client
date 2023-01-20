@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 import Toast from '@components/Toast'
@@ -12,19 +18,58 @@ interface Props {
 function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
   const [currentImg, setCurrentImg] = useState<string[]>([])
   const [isToast, setIsToast] = useState(false)
+  const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
+    null
+  )
   const MAX_FILE = 3
 
-  const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const getByteSize = (size: number) => {
+    return size / 1000 / 1000
+  }
+
+  const checkFileSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let isOver5MB = false
+    const files = e.target.files as FileList
+    const getSize = () => {
+      for (let i = 0; i < files.length; i++) {
+        const convertedSize = getByteSize(files[i].size)
+        if (convertedSize > 5) {
+          setIsToast(true)
+          setToastType('fileSize')
+          isOver5MB = true
+          break
+        }
+      }
+    }
+    ;[].forEach.call(e.target.files, getSize)
+    return isOver5MB
+  }
+
+  const checkMaxFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let isMaxFile = false
     if (
       e.target.files !== null &&
       currentImg.length + e.target.files?.length > MAX_FILE
     ) {
-      return setIsToast(true)
+      setToastType('maxFile')
+      setIsToast(true)
+      isMaxFile = true
+    }
+    return isMaxFile
+  }
+
+  const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checkedMaxFile: boolean = checkMaxFile(e)
+    if (checkedMaxFile) {
+      return (e.target.value = '')
+    }
+    const checkedFileSize: boolean = checkFileSize(e)
+    if (checkedFileSize) {
+      return (e.target.value = '')
     }
     encodeFileToBase64(e.target.files as FileList)
     // FileList가 이터러블하지 않으나 유사배열이라서 Array를 빌려서 ...메소드를 사용함
     setFiles([...files, ...Array.from(e.target.files as FileList)])
-    e.target.value = ''
   }
 
   useEffect(() => {
@@ -58,21 +103,35 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
     })
   }
 
+  const makeToast = (): ReactNode => {
+    return (
+      <Toast
+        visible={true}
+        timeLimit={2}
+        message={
+          <>
+            {toastType === 'maxFile' ? (
+              <>
+                사진은 최대 3장까지
+                <br />
+                선택 가능합니다
+              </>
+            ) : (
+              <>
+                5MB 이상은 {<br />}
+                첨부할 수 없습니다.
+              </>
+            )}
+          </>
+        }
+        onClose={() => setIsToast(false)}
+      />
+    )
+  }
+
   return (
     <div className="mb-8 flex items-center gap-2">
-      {isToast && (
-        <Toast
-          visible={true}
-          message={
-            <>
-              사진은 최대 3장까지
-              <br />
-              선택 가능합니다
-            </>
-          }
-          onClose={() => setIsToast(false)}
-        />
-      )}
+      {isToast && makeToast()}
       <label className="h-[66px] w-[66px]" htmlFor="file">
         <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
           <img className=" mb-1" src={Camera} alt="camera" />
