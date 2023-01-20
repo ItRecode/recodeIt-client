@@ -19,9 +19,9 @@ export default function MemoryRecord() {
     return <></>
   }
 
-  if (!memoryRecord) {
+  if (!memoryRecord?.pageParams) {
     return (
-      <div className="ml-[2px] mt-6 flex gap-6">
+      <div className="ml-[2px] mt-6 flex gap-6 px-6">
         <div
           className={`flex h-[86px] w-[86px] items-center rounded-2xl bg-primary-4`}
         >
