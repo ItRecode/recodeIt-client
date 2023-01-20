@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { IRecordTodayData } from 'types/recordData'
+// import { ITodayRecord } from 'types/recordData'
 // import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 // import Chip from '@components/Chip'
 // import recordIcons from '@assets/record_icons'

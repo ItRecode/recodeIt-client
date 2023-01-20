@@ -11,7 +11,7 @@ export interface IRecordDataType {
   imageUrls: string[]
 }
 
-export interface IRecordTodayData {
+export interface ITodayRecord {
   title: string
   categoryName: string
   commentCount: number
@@ -20,15 +20,15 @@ export interface IRecordTodayData {
   createdAt: string
 }
 
-export interface IRecordMemoryDataItem {
+export interface IMemoryRecord {
   recordId: number
   title: string
   iconName: string
-  colorName: string
-  commentList: IRecordMemoryCommentItem[]
+  iconColor: string
+  commentList: IRecordMemoryComment[]
 }
 
-export interface IRecordMemoryCommentItem {
+export interface IRecordMemoryComment {
   commentId: number
   content: string
 }
