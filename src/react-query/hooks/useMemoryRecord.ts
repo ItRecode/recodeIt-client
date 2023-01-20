@@ -7,7 +7,10 @@ export const useMemoryRecord = () => {
   const queryClient = useQueryClient()
   const [pageParam, setPageParam] = useState(0)
 
-  const queryFnByMemoryRecord = async () => await getMemoryRecord(pageParam)
+  const queryFnByMemoryRecord = async () => {
+    const { data } = await getMemoryRecord(pageParam)
+    return data
+  }
 
   const { data: memoryRecord = null, isLoading } = useQuery(
     [QUERY_KEYS.memoryRecord, pageParam],
@@ -27,5 +30,7 @@ export const useMemoryRecord = () => {
     )
   }
 
-  return { memoryRecord, isLoading, prefetchMemoryRecord }
+  console.log(memoryRecord)
+
+  return { memoryRecord, isLoading, prefetchMemoryRecord, setPageParam }
 }

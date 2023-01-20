@@ -20,6 +20,13 @@ export interface ITodayRecord {
   createdAt: string
 }
 
+export interface IMemoryRecordList {
+  hasNextPage: boolean
+  isFirstPage: boolean
+  isLastPage: boolean
+  memoryRecordList: IMemoryRecord[]
+}
+
 export interface IMemoryRecord {
   recordId: number
   title: string

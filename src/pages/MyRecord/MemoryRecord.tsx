@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IMemoryRecord } from 'types/recordData'
 import MemoryRecordItem from './MemoryRecordItem'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
@@ -6,7 +6,21 @@ import { ReactComponent as Gift } from '@assets/record_icons/gift.svg'
 import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
 
 export default function MemoryRecord() {
-  const { memoryRecord } = useMemoryRecord()
+  const { memoryRecord, isLoading, prefetchMemoryRecord } = useMemoryRecord()
+  const [page, setPage] = useState(0)
+
+  useEffect(() => {
+    if (!isLoading && memoryRecord) {
+      if (memoryRecord.hasNextPage) {
+        prefetchMemoryRecord(page + 1)
+        setPage(page + 1)
+      }
+    }
+  }, [memoryRecord?.hasNextPage])
+
+  if (isLoading) {
+    return <></>
+  }
 
   if (!memoryRecord) {
     return (
@@ -26,24 +40,24 @@ export default function MemoryRecord() {
 
   return (
     <>
-      {memoryRecord.data.memoryRecordList?.map(
-        (memoryRecord: IMemoryRecord) => (
-          <MemoryRecordItem
-            key={memoryRecord.recordId}
-            recordId={memoryRecord.recordId}
-            title={memoryRecord.title}
-            iconName={memoryRecord.iconName}
-            iconColor={memoryRecord.iconColor}
-            commentList={memoryRecord.commentList}
-          />
-        )
+      {memoryRecord.memoryRecordList?.map((memoryRecord: IMemoryRecord) => (
+        <MemoryRecordItem
+          key={memoryRecord.recordId}
+          recordId={memoryRecord.recordId}
+          title={memoryRecord.title}
+          iconName={memoryRecord.iconName}
+          iconColor={memoryRecord.iconColor}
+          commentList={memoryRecord.commentList}
+        />
+      ))}
+      {memoryRecord.hasNextPage && !memoryRecord.isLastPage && (
+        <button className="relative mb-[130px] w-full cursor-pointer border-t border-t-grey-3 bg-grey-1 py-4">
+          <div className="flex items-center justify-center">
+            <span className="text-sm text-primary-2">더보기</span>
+            <ArrowDown className="ml-[10px]" />
+          </div>
+        </button>
       )}
-      <button className="relative mb-[130px] w-full cursor-pointer border-t border-t-grey-3 bg-grey-1 py-4 ">
-        <div className="flex items-center justify-center">
-          <span className="text-sm text-primary-2">더보기</span>
-          <ArrowDown className="ml-[10px]" />
-        </div>
-      </button>
     </>
   )
 }

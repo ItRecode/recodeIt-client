@@ -30,7 +30,7 @@ export default function TodayRecord() {
   // }
 
   // return (
-  //   <div className="mt-4 mb-10 w-full">
+  //   <div className="mt-4 mb-10 w-full px-6">
   //     {/* TODO: 레코드 만든 날짜 === 오늘 날짜 포맷팅하기*/}
   //     <div className="text-xs">{todayWriteRecord.createdAt}</div>
   //     <div className="mt-4 flex">
