@@ -3,6 +3,7 @@ import { IMemoryRecord } from 'types/recordData'
 import MemoryRecordItem from './MemoryRecordItem'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
 import { ReactComponent as Gift } from '@assets/record_icons/gift.svg'
+import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
 
 export default function MemoryRecord() {
   const { memoryRecord } = useMemoryRecord()
@@ -23,16 +24,26 @@ export default function MemoryRecord() {
     )
   }
 
-  return memoryRecord.data.memoryRecordList?.map(
-    (memoryRecord: IMemoryRecord) => (
-      <MemoryRecordItem
-        key={memoryRecord.recordId}
-        recordId={memoryRecord.recordId}
-        title={memoryRecord.title}
-        iconName={memoryRecord.iconName}
-        iconColor={memoryRecord.iconColor}
-        commentList={memoryRecord.commentList}
-      />
-    )
+  return (
+    <>
+      {memoryRecord.data.memoryRecordList?.map(
+        (memoryRecord: IMemoryRecord) => (
+          <MemoryRecordItem
+            key={memoryRecord.recordId}
+            recordId={memoryRecord.recordId}
+            title={memoryRecord.title}
+            iconName={memoryRecord.iconName}
+            iconColor={memoryRecord.iconColor}
+            commentList={memoryRecord.commentList}
+          />
+        )
+      )}
+      <button className="relative mb-[130px] w-full cursor-pointer border-t border-t-grey-3 bg-grey-1 py-4 ">
+        <div className="flex items-center justify-center">
+          <span className="text-sm text-primary-2">더보기</span>
+          <ArrowDown className="ml-[10px]" />
+        </div>
+      </button>
+    </>
   )
 }

@@ -15,7 +15,7 @@ export default function MemoryRecordItem({
   const RecordIcon = recordIcons[`${iconName}`]
 
   return (
-    <>
+    <div className="mb-4 px-6">
       <div className="ml-[2px] mt-6 flex items-center justify-between">
         <span
           className="cursor-pointer text-sm font-semibold"
@@ -51,6 +51,6 @@ export default function MemoryRecordItem({
           ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }
