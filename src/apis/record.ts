@@ -16,3 +16,11 @@ export const getRecord = async (recordId: string | undefined) => {
     return res.data
   }
 }
+
+export const getMemoryRecord = (pageParam: number) => {
+  return baseInstance.get(`/record/memory-list`, {
+    params: {
+      pageNum: pageParam,
+    },
+  })
+}
