@@ -1,5 +1,5 @@
 import React from 'react'
-import { IRecordMemoryDataItem } from 'types/recordData'
+import { IMemoryRecord } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,11 +7,11 @@ export default function MemoryRecordItem({
   recordId,
   title,
   iconName,
-  colorName,
+  iconColor,
   commentList,
-}: IRecordMemoryDataItem) {
+}: IMemoryRecord) {
   const navigate = useNavigate()
-  const background_color = `bg-${colorName}`
+  const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
 
   return (
