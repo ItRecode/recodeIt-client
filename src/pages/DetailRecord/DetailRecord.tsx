@@ -45,7 +45,6 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
-  console.log(window.history)
   const { user } = useUser()
 
   const background_color = `bg-${colorName}`

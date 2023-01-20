@@ -1,8 +1,10 @@
 import Button from '@components/Button'
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Pin } from '@assets/pin.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import { useNavigate } from 'react-router-dom'
+import { deleteRecord } from '@apis/record'
+import { AxiosError } from 'axios'
 
 export default function EditModal({
   setEditModalState,
@@ -17,8 +19,21 @@ export default function EditModal({
   const navigate = useNavigate()
 
   const handleDeleteButton = () => {
-    setIsDelete(true)
-    setEditModalState(false)
+    const id = window.location.href.split('/')[4]
+    toDeleteData(id)
+  }
+  const toDeleteData = async (id: string) => {
+    try {
+      await deleteRecord(id)
+      setIsDelete(true)
+      setEditModalState(false)
+    } catch (error) {
+      const { response } = error as unknown as AxiosError
+      if (response?.status === 400) {
+        alert('질못된 접근입니다.')
+      }
+      throw error
+    }
   }
 
   return (
