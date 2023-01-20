@@ -1,15 +1,17 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getMemoryRecord } from '@apis/record'
+import { useState } from 'react'
 
 export const useMemoryRecord = () => {
-  const {
-    data: memoryRecord = null,
-    refetch,
-    isLoading,
-  } = useQuery(
-    [QUERY_KEYS.memoryRecord],
-    async ({ pageParam = 0 }) => await getMemoryRecord(pageParam),
+  const queryClient = useQueryClient()
+  const [pageParam, setPageParam] = useState(0)
+
+  const queryFnByMemoryRecord = async () => await getMemoryRecord(pageParam)
+
+  const { data: memoryRecord = null, isLoading } = useQuery(
+    [QUERY_KEYS.memoryRecord, pageParam],
+    queryFnByMemoryRecord,
     {
       retry: false,
       refetchOnMount: false,
@@ -18,5 +20,12 @@ export const useMemoryRecord = () => {
     }
   )
 
-  return { memoryRecord, refetch, isLoading }
+  const prefetchMemoryRecord = (nextPageParams: number) => {
+    queryClient.prefetchQuery(
+      [QUERY_KEYS.memoryRecord, nextPageParams],
+      queryFnByMemoryRecord
+    )
+  }
+
+  return { memoryRecord, isLoading, prefetchMemoryRecord }
 }
