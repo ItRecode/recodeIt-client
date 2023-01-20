@@ -9,9 +9,9 @@ export default function Spinner({ size = 'small' }: ISpinnerProps) {
   const setSpinnerSize = (size: string) => {
     switch (size) {
       case 'small':
-        return 'w-9 h-9'
+        return 'w-10 h-10'
       case 'large':
-        return 'w-[129px] h-[129px]'
+        return 'w-[85] h-[85]'
       case 'button':
         return 'w-10 h-10'
     }
