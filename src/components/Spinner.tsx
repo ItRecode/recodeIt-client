@@ -13,7 +13,7 @@ export default function Spinner({ size = 'small' }: ISpinnerProps) {
       case 'large':
         return 'w-[85] h-[85]'
       case 'button':
-        return 'w-10 h-10'
+        return 'w-[30px] h-[30px]'
     }
   }
 
