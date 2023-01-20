@@ -24,6 +24,7 @@ import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
+import Alert from '@components/Alert'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -44,7 +45,7 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
-
+  console.log(window.history)
   const { user } = useUser()
 
   const background_color = `bg-${colorName}`
@@ -63,6 +64,7 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
+  const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
       alert('해당 레코드를 찾을 수 없습니다.')
@@ -95,6 +97,13 @@ export default function DetailRecord() {
     }
   }, [inputSectionHeight])
 
+  const checkUserHistoryLength = () => {
+    if (window.history.length === 1 || window.history.state === null) {
+      return navigate('/myrecord')
+    }
+    navigate(-1)
+  }
+
   return (
     <>
       {isLoading && <Loading />}
@@ -111,7 +120,29 @@ export default function DetailRecord() {
             />
           </Modal>
         )}
-        {editModalState && <EditModal setEditModalState={setEditModalState} />}
+        {editModalState && (
+          <EditModal
+            setIsDelete={setIsDelete}
+            setEditModalState={setEditModalState}
+          />
+        )}
+        {isDelete && (
+          <Alert
+            mainMessage={
+              <div className="text-base font-semibold leading-6">
+                레코드를
+                <br />
+                삭제하시겠어요?
+              </div>
+            }
+            visible={isDelete}
+            cancelMessage="아니오"
+            confirmMessage="삭제"
+            onClose={() => setIsDelete(false)}
+            onCancel={() => setIsDelete(false)}
+            onConfirm={() => checkUserHistoryLength()}
+          />
+        )}
         <header className="p-4">
           <nav className="flex justify-between">
             <BackButton />
