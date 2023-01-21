@@ -18,11 +18,11 @@ export default function EditModal({
   })
   const navigate = useNavigate()
 
-  const handleDeleteButton = () => {
+  const handleClickDeleteButton = () => {
     const id = window.location.href.split('/')[4]
-    toDeleteData(id)
+    DeleteRecordById(id)
   }
-  const toDeleteData = async (id: string) => {
+  const DeleteRecordById = async (id: string) => {
     try {
       await deleteRecord(id)
       setIsDelete(true)
@@ -56,7 +56,7 @@ export default function EditModal({
             </Button>
           </div>
           <div className="w-full pt-2.5">
-            <Button property="danger" onClick={handleDeleteButton}>
+            <Button property="danger" onClick={handleClickDeleteButton}>
               삭제
             </Button>
           </div>
