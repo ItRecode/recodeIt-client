@@ -17,6 +17,14 @@ export const getRecord = async (recordId: string | undefined) => {
   }
 }
 
+export const getMemoryRecord = (pageParam: number) => {
+  return baseInstance.get(`/record/memory-list`, {
+    params: {
+      pageNum: pageParam,
+    },
+  })
+}
+
 export const deleteRecord = async (recordId: string | undefined) => {
   if (recordId) {
     const res = await baseInstance.delete(`/record/${recordId}`)
