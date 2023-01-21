@@ -6,7 +6,8 @@ export interface CommentData {
   modifiedAt: string
   numOfSubComment: number
   writer?: string
-  Recordwriter?: string
+  recordwriter?: string
+  recordId?: string | undefined
 }
 
 export interface CommentRequestDtoType {
