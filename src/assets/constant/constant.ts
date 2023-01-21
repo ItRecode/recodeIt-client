@@ -28,3 +28,8 @@ export const RECORD_DETAIL_INITIAL_INPUT_HEIGHT = 84
 export const RECORD_DETAIL_INPUT_IMAGE_HEIGHT = 74
 export const RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA = 64
 export const RECORD_DETAIL_HEADER_SECTION_HEIGHT = 61
+
+export const INPUT_MODE = Object.freeze({
+  REPLY: 'reply',
+  NESTEDREPLY: 'nestedReply',
+})

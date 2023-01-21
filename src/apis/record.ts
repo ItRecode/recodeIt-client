@@ -24,3 +24,10 @@ export const getMemoryRecord = (pageParam: number) => {
     },
   })
 }
+
+export const deleteRecord = async (recordId: string | undefined) => {
+  if (recordId) {
+    const res = await baseInstance.delete(`/record/${recordId}`)
+    return res.data
+  }
+}
