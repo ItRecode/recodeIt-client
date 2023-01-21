@@ -11,7 +11,7 @@ export default function Spinner({ size = 'small' }: ISpinnerProps) {
       case 'small':
         return 'w-10 h-10'
       case 'large':
-        return 'w-[85] h-[85]'
+        return 'w-[85px] h-[85px]'
       case 'button':
         return 'w-[30px] h-[30px]'
     }
