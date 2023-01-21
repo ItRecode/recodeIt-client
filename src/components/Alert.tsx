@@ -4,10 +4,10 @@ interface IAlertProps {
   visible: boolean
   mainMessage: ReactNode
   subMessage?: ReactNode
-  cancelMessage: string
+  cancelMessage?: string
   confirmMessage: string
   onClose: () => void
-  onCancel: () => void
+  onCancel?: () => void
   onConfirm: () => void
 }
 
@@ -26,21 +26,26 @@ export default function Alert({
 
   return (
     <Modal visible={visible} onClose={onClose}>
-      <div className="flex h-[171px] w-[270px] flex-col justify-center">
+      <div className="flex h-auto w-[270px] flex-col justify-center">
         <div className="flex flex-col items-center justify-center border-b border-grey-2 py-6 text-center">
           <div className="text-base font-semibold leading-6">{mainMessage}</div>
-          <div className="pt-4 text-xs font-medium text-grey-8">
-            {subMessage}
-          </div>
+          {subMessage && (
+            <div className="pt-4 text-xs font-medium text-grey-8">
+              {subMessage}
+            </div>
+          )}
         </div>
         <div className="flex justify-center align-middle">
-          <button
-            aria-label="alert-cancel-message"
-            className={`${buttonClassName} text-grey-8`}
-            onClick={onCancel}
-          >
-            {cancelMessage}
-          </button>
+          {onCancel && (
+            <button
+              aria-label="alert-cancel-message"
+              className={`${buttonClassName} text-grey-8`}
+              onClick={onCancel}
+            >
+              {cancelMessage}
+            </button>
+          )}
+
           <button
             aria-label="alert-confirm-message"
             className={`${buttonClassName} text-primary-2`}
