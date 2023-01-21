@@ -1,20 +1,14 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
 import { DetailPageInputMode } from '@store/atom'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-const useUrlQuery = () => {
-  const { pathname, search } = useLocation()
-  const query = new URLSearchParams(search)
-  return { pathname, query }
-}
+import { useNavigate } from 'react-router-dom'
 
 export default function ReplyItem({
   content,
@@ -25,29 +19,24 @@ export default function ReplyItem({
   writer,
   commentId,
   recordId,
+  isScroll,
 }: CommentData) {
   const navigate = useNavigate()
-  const { pathname, query } = useUrlQuery()
+  const scrollRef = useRef<HTMLDivElement>(null)
   const { user } = useUser()
   const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
 
-  const scrollToCommentId = (commentId: string | null) => {
-    const comment = document.querySelector(`#comment-${commentId}`)
-    comment?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   useEffect(() => {
-    const commentIdInQuery = query.get('commentId')
-    if (commentIdInQuery) {
-      scrollToCommentId(commentIdInQuery)
-      navigate(pathname, { replace: true })
+    if (isScroll) {
+      scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      navigate(window.location.pathname, { replace: true })
     }
-  }, [])
+  }, [isScroll])
 
   return (
-    <div className="mt-3 mb-4 w-full" id={`comment-${commentId}`}>
+    <div ref={scrollRef} className="mt-3 mb-4 w-full">
       <div className="rounded-lg bg-grey-2 p-3">
         <div className="flex">
           <p className="text-xs font-medium">{writer ? writer : '익명'}</p>

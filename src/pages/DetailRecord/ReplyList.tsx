@@ -2,9 +2,16 @@ import { getReply } from '@apis/reply'
 import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { CommentData } from 'types/replyData'
 import ReplyItem from './ReplyItem'
+
+const useUrlQuery = () => {
+  const { pathname, search } = useLocation()
+  const query = new URLSearchParams(search)
+  return { pathname, query }
+}
 
 export default function ReplyList({
   recordId,
@@ -35,6 +42,17 @@ export default function ReplyList({
     }
   })
 
+  const { query } = useUrlQuery()
+  const [scrollCommentId, setScrollCommentId] = useState<number | null>(null)
+
+  useEffect(() => {
+    const commentIdInQuery = query.get('commentId')
+
+    if (commentIdInQuery) {
+      setScrollCommentId(parseInt(commentIdInQuery, 10))
+    }
+  }, [])
+
   return (
     <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
@@ -52,6 +70,7 @@ export default function ReplyList({
             recordwriter={Recordwriter}
             writer={item.writer}
             recordId={recordId}
+            isScroll={item.commentId === scrollCommentId}
           />
         ))
       )}
