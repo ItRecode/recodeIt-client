@@ -1,7 +1,7 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
 import { DetailPageInputMode } from '@store/atom'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
@@ -13,32 +13,16 @@ export default function ReplyItem({
   content,
   createdAt,
   imageUrl,
-  Recordwriter,
-  // modifiedAt,
+  recordwriter,
   numOfSubComment,
   writer,
   commentId,
   recordId,
 }: CommentData) {
-  const [nickNameResult, setNickNameResult] = useState<string | null>(null)
   const { user } = useUser()
   const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
-
-  useEffect(() => {
-    if (user?.data !== undefined) {
-      if (user?.data === writer) {
-        setNickNameResult('myComment')
-      } else {
-        if (Recordwriter === user?.data) {
-          setNickNameResult('myRecordOtherReply')
-        } else {
-          setNickNameResult('otherRecordOtherReply')
-        }
-      }
-    }
-  }, [Recordwriter, writer, user])
 
   return (
     <div className="mt-3 mb-4 w-full">
@@ -77,27 +61,17 @@ export default function ReplyItem({
             답글달기
           </button>
           <div>
-            {nickNameResult === 'myComment' && (
-              <>
-                <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                  수정
-                </button>
-                <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                  삭제
-                </button>
-              </>
+            {user?.data === writer && (
+              <button className="cursor-pointer bg-transparent text-xs text-grey-5">
+                수정
+              </button>
             )}
-            {nickNameResult === 'myRecordOtherReply' && (
-              <>
-                <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                  삭제
-                </button>
-                <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                  신고
-                </button>
-              </>
+            {recordwriter === user?.data && (
+              <button className="cursor-pointer bg-transparent text-xs text-sub-1">
+                삭제
+              </button>
             )}
-            {nickNameResult === 'otherRecordOtherReply' && (
+            {user?.data !== undefined && user?.data !== writer && (
               <button className="cursor-pointer bg-transparent text-xs text-grey-5">
                 신고
               </button>
@@ -125,7 +99,7 @@ export default function ReplyItem({
 
         {isOpenNestedReplyList && (
           <NestedReplyList
-            Recordwriter={Recordwriter}
+            recordwriter={recordwriter}
             recordId={recordId}
             parentId={commentId}
             numOfSubComment={numOfSubComment}

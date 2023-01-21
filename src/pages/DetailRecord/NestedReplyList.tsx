@@ -7,21 +7,20 @@ import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 
 export default function NestedReplyList({
-  Recordwriter,
+  recordwriter,
   recordId,
   parentId,
-}: // numOfSubComment,
-{
-  Recordwriter: string | undefined
+}: {
+  recordwriter: string | undefined
   recordId: string | undefined
   parentId: number
   numOfSubComment: number
 }) {
-  const [nickNameResult, setNickNameResult] = useState<string | null>(null)
   const { user } = useUser()
   const [nestedCommentList, setNestedCommentList] = useState<
     CommentData[] | null
   >(null)
+
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getNestedReplyData', recordId, parentId],
     () => getReply(recordId, 0, parentId),
@@ -32,20 +31,6 @@ export default function NestedReplyList({
       refetchOnWindowFocus: false,
     }
   )
-
-  useEffect(() => {
-    if (user?.data !== undefined) {
-      if (user?.data === data?.data.writer) {
-        setNickNameResult('myComment')
-      } else {
-        if (Recordwriter === user?.data) {
-          setNickNameResult('myRecordOtherReply')
-        } else {
-          setNickNameResult('otherRecordOtherReply')
-        }
-      }
-    }
-  }, [Recordwriter, data, user])
 
   useEffect(() => {
     if (isError) {
@@ -90,27 +75,17 @@ export default function NestedReplyList({
             </div>
             <div className="mt-1.5 flex w-full justify-end">
               <div>
-                {nickNameResult === 'myComment' && (
-                  <>
-                    <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                      수정
-                    </button>
-                    <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                      삭제
-                    </button>
-                  </>
+                {user?.data === item.writer && (
+                  <button className="cursor-pointer bg-transparent text-xs text-grey-5">
+                    수정
+                  </button>
                 )}
-                {nickNameResult === 'myRecordOtherReply' && (
-                  <>
-                    <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                      삭제
-                    </button>
-                    <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                      신고
-                    </button>
-                  </>
+                {recordwriter === user?.data && (
+                  <button className="cursor-pointer bg-transparent text-xs text-sub-1">
+                    삭제
+                  </button>
                 )}
-                {nickNameResult === 'otherRecordOtherReply' && (
+                {user?.data !== undefined && user?.data !== item.writer && (
                   <button className="cursor-pointer bg-transparent text-xs text-grey-5">
                     신고
                   </button>

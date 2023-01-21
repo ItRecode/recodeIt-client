@@ -49,7 +49,7 @@ export default function ReplyList({
             imageUrl={item.imageUrl}
             modifiedAt={item.modifiedAt}
             numOfSubComment={item.numOfSubComment}
-            Recordwriter={Recordwriter}
+            recordwriter={Recordwriter}
             writer={item.writer}
             recordId={recordId}
           />
