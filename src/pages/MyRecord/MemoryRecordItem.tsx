@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef } from 'react'
+import React, { useRef } from 'react'
 import { IMemoryRecord } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
@@ -11,12 +11,19 @@ export default function MemoryRecordItem({
   iconColor,
   commentList,
 }: IMemoryRecord) {
-  const dragRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>
+  const dragRef = useRef<HTMLDivElement | null>(
+    null
+  ) as React.MutableRefObject<HTMLDivElement>
   const { handleMouseDown } = useSwipe(dragRef)
   const navigate = useNavigate()
   const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
+
+  const handleClickComment = (commentId: number) => {
+    if (dragRef) return
+
+    navigate(`/record/${recordId}?commentId=${commentId}`)
+  }
 
   return (
     <div className="mb-4 px-6">
@@ -51,9 +58,7 @@ export default function MemoryRecordItem({
             <div
               key={commentId}
               className="h-[86px] w-40 rounded-2xl bg-grey-2 py-4 px-5"
-              onClick={() =>
-                navigate(`/record/${recordId}?commentId=${commentId}`)
-              }
+              onClick={() => handleClickComment(commentId)}
             >
               <div className="line-clamp h-[54px] w-full overflow-hidden leading-[18px]">
                 <span className="text-xs">{content}</span>
