@@ -43,6 +43,9 @@ export default function MemoryRecordItem({
             <div
               key={commentId}
               className="h-[86px] w-40 rounded-2xl bg-grey-2 py-4 px-5"
+              onClick={() =>
+                navigate(`/record/${recordId}?commentId=${commentId}`)
+              }
             >
               <div className="line-clamp h-[54px] w-full overflow-hidden leading-[18px]">
                 <span className="text-xs">{content}</span>
