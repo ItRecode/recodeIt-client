@@ -127,7 +127,11 @@ export default function ReplyInput({
   const { mutate: nestedReplyMutate } = useMutation(createReply, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getReplyData', recordIdParams])
-      queryClient.invalidateQueries(['getNestedReplyData', recordIdParams])
+      queryClient.invalidateQueries([
+        'getNestedReplyData',
+        recordIdParams,
+        inputMode.parentId,
+      ])
     },
   })
 
