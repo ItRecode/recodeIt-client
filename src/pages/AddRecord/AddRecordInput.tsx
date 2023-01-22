@@ -32,10 +32,10 @@ function AddRecordInput({
       return
     }
     if (inputValueLength > INPUT_DETAILS.MIN_TYPING) {
-      setCheckAllFilled({ ...checkAllFilled, input: true })
+      setCheckAllFilled({ ...checkAllFilled, input: e.target.value })
     }
     if (inputValueLength === INPUT_DETAILS.MIN_TYPING) {
-      setCheckAllFilled({ ...checkAllFilled, input: false })
+      setCheckAllFilled({ ...checkAllFilled, input: e.target.value })
     }
     setInputValue(e.target.value)
   }

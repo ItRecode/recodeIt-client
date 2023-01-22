@@ -37,8 +37,10 @@ type CategoryDatas = BigCategory[]
 
 function AddRecordCategory({
   currentRecordType,
+  recordCategory,
 }: {
   currentRecordType: keyof CategoryType
+  recordCategory?: number
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
