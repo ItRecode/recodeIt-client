@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
-import { IMemoryRecord } from 'types/recordData'
-import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
+import { IMemoryRecord } from 'types/recordData'
+
 import useSwipe from '@hooks/useSwipe'
+import recordIcons from '@assets/record_icons'
+import { ReactComponent as PlusIcons } from '@assets/myRecordIcon/comment_plus.svg'
 
 export default function MemoryRecordItem({
   recordId,
@@ -42,7 +44,7 @@ export default function MemoryRecordItem({
         </span>
       </div>
       <div
-        className="mt-4 flex cursor-grab gap-4 overflow-auto scroll-smooth"
+        className="mt-4 flex cursor-pointer items-center gap-4 overflow-auto"
         ref={dragRef}
         onMouseDown={handleMouseDown}
       >
@@ -66,6 +68,15 @@ export default function MemoryRecordItem({
             </div>
           ))}
         </div>
+        {commentList.length > 0 && (
+          <div
+            className="ml-2 flex h-full flex-col items-center justify-center"
+            onClick={() => navigate(`/record/${recordId}`)}
+          >
+            <PlusIcons />
+            <p className="mt-[10px] w-[50px] text-primary-2">전체보기</p>
+          </div>
+        )}
       </div>
     </div>
   )

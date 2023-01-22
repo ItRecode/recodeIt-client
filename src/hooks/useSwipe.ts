@@ -30,7 +30,7 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
     document.removeEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
 
-    ref.current.style.cursor = 'grab'
+    ref.current.style.cursor = 'pointer'
     ref.current.style.removeProperty('user-select')
   }
 
