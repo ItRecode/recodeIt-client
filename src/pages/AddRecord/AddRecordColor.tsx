@@ -15,7 +15,6 @@ interface Props {
 function AddRecordColor({ currentRecordType, recordColor }: Props) {
   const [colors, setColors] = useState<colorSourceType[]>(ADD_RECORD_COLORS)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-
   useEffect(() => {
     setColors(
       colors.map((color: colorSourceType, index: number) => {
@@ -28,11 +27,12 @@ function AddRecordColor({ currentRecordType, recordColor }: Props) {
   }, [currentRecordType])
 
   useEffect(() => {
-    setColors(
-      ADD_RECORD_COLORS.map((color) => {
-        return { ...color, choosed: color.src.indexOf(recordColor) !== -1 }
-      })
-    )
+    recordColor &&
+      setColors(
+        ADD_RECORD_COLORS.map((color) => {
+          return { ...color, choosed: color.src.indexOf(recordColor) !== -1 }
+        })
+      )
   }, [])
 
   const handleChooseCurrentColor = (index: number): void => {
