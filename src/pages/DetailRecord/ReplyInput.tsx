@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import {
-  INPUT_MODE,
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
 } from '@assets/constant/constant'
@@ -16,14 +15,17 @@ import { useNavigate } from 'react-router-dom'
 import { useUser } from '@react-query/hooks/useUser'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { DetailPageInputMode } from '@store/atom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function ReplyInput({
   setInputSectionHeight,
-  recordId,
+  recordIdParams,
 }: {
   setInputSectionHeight: Dispatch<SetStateAction<number>>
-  recordId: number
+  recordIdParams: string | undefined
 }) {
+  const queryClient = useQueryClient()
+
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
@@ -33,11 +35,13 @@ export default function ReplyInput({
 
   const [isCheckedUser, setIsCheckedUser] = useState(false)
   const [isAnonymousUser, setIsAnonymousUser] = useState(false)
+
   const navigate = useNavigate()
 
   const { user, isLoading } = useUser()
 
   const inputMode = useRecoilValue(DetailPageInputMode)
+
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +92,7 @@ export default function ReplyInput({
     setImage('')
 
     const writeCommentRequestDto = {
-      recordId: recordId,
+      recordId: recordIdParams,
       comment: text,
       parentId: inputMode.parentId,
     }
@@ -98,7 +102,6 @@ export default function ReplyInput({
     if (imageFile !== null) {
       data.set('attachment', imageFile as Blob, (imageFile as File).name)
     }
-
     data.set(
       'writeCommentRequestDto',
       new Blob([JSON.stringify(writeCommentRequestDto)], {
@@ -106,11 +109,27 @@ export default function ReplyInput({
       })
     )
 
-    const submit = async () => {
-      await createReply(data)
+    if (inputMode.mode === 'reply') {
+      replyMutate(data)
     }
-    submit()
+    if (inputMode.mode === 'nestedReply') {
+      nestedReplyMutate(data)
+    }
+    resetInputMode()
   }
+
+  const { mutate: replyMutate } = useMutation(createReply, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getReplyData', recordIdParams])
+    },
+  })
+
+  const { mutate: nestedReplyMutate } = useMutation(createReply, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getReplyData', recordIdParams])
+      queryClient.invalidateQueries(['getNestedReplyData', recordIdParams])
+    },
+  })
 
   const handleInputFocus = () => {
     if (!user) {
@@ -136,12 +155,12 @@ export default function ReplyInput({
   }, [isAnonymousUser])
   return (
     <form
-      className="flex w-full items-end bg-transparent"
+      className="flex w-full items-end bg-transparent py-4 pl-4 pr-6"
       encType="multipart/form-data"
       onSubmit={handleSubmitReplyData}
     >
       <label htmlFor="imageFile">
-        <div className="relative mr-2.5 mb-3 h-9 w-9 cursor-pointer bg-grey-1">
+        <div className="relative mr-2.5 mb-3 h-9 w-9 cursor-pointer bg-transparent">
           <Camera className="absolute top-[7px] right-[5px]" />
           {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
@@ -153,7 +172,7 @@ export default function ReplyInput({
           className="hidden"
         />
       </label>
-      <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
+      <div className=" w-full rounded-lg bg-grey-2 py-4 px-3">
         {image !== '' && (
           <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
             <img
@@ -182,20 +201,10 @@ export default function ReplyInput({
             onInput={handleResizeHeight}
             onChange={(e) => setText(e.target.value)}
             value={text}
-            className={`h-auto ${
-              inputMode.mode !== INPUT_MODE.NESTEDREPLY ? 'w-[85%]' : 'w-[70%]'
-            } resize-none bg-inherit text-[14px] leading-normal placeholder:text-grey-5 focus:outline-0`}
+            className={`h-auto w-[85%] resize-none bg-inherit text-[14px] leading-normal placeholder:text-grey-5 focus:outline-0`}
             onFocus={handleInputFocus}
             disabled={isLoading}
           />
-          {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
-            <button
-              onClick={resetInputMode}
-              className="mb-1 cursor-pointer text-xs text-primary-2"
-            >
-              답글취소
-            </button>
-          )}
           <button
             ref={submitButtonRef}
             disabled={text === ''}
@@ -223,7 +232,10 @@ export default function ReplyInput({
           confirmMessage="회원가입"
           onClose={() => setIsCheckedUser(false)}
           onCancel={handleCancelSingUp}
-          onConfirm={() => navigate('/login')}
+          onConfirm={() => {
+            resetInputMode
+            navigate('/login')
+          }}
         />
       )}
     </form>
