@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { MutableRefObject, useRef } from 'react'
 import { IMemoryRecord } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
+import useSwipe from '@hooks/useSwipe'
 
 export default function MemoryRecordItem({
   recordId,
@@ -10,6 +11,9 @@ export default function MemoryRecordItem({
   iconColor,
   commentList,
 }: IMemoryRecord) {
+  const dragRef =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>
+  const { handleMouseDown } = useSwipe(dragRef)
   const navigate = useNavigate()
   const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
@@ -30,7 +34,11 @@ export default function MemoryRecordItem({
           전체보기
         </span>
       </div>
-      <div className="mt-4 flex cursor-pointer gap-4 overflow-x-scroll scroll-smooth">
+      <div
+        className="mt-4 flex cursor-grab gap-4 overflow-auto scroll-smooth"
+        ref={dragRef}
+        onMouseDown={handleMouseDown}
+      >
         <div onClick={() => navigate(`/record/${recordId}`)}>
           <div
             className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
