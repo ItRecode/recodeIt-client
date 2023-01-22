@@ -73,8 +73,6 @@ export default function AddRecord() {
     }
   )
 
-  console.log(data, isLoading, isSuccess)
-
   useEffect(() => {
     setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])

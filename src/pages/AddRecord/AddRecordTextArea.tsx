@@ -25,12 +25,10 @@ function AddRecordTextArea({
 
   useEffect(() => {
     setTextAreaValue('')
-    console.log('imhere')
   }, [currentRecordType])
 
   useEffect(() => {
     setTextAreaValue(recordContent ? recordContent : '')
-    console.log(recordContent)
   }, [])
 
   const handleChangeTextArea = (
