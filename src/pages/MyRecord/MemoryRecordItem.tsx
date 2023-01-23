@@ -68,7 +68,7 @@ export default function MemoryRecordItem({
             </div>
           ))}
         </div>
-        {memoryRecordComments.length > 0 && (
+        {memoryRecordComments.length > 4 && (
           <div
             className="ml-2 flex h-full flex-col items-center justify-center"
             onClick={() => navigate(`/record/${recordId}`)}
