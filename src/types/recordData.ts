@@ -32,7 +32,7 @@ export interface IMemoryRecord {
   title: string
   iconName: string
   iconColor: string
-  commentList: IRecordMemoryComment[]
+  memoryRecordComments: IRecordMemoryComment[]
 }
 
 export interface IRecordMemoryComment {

@@ -11,7 +11,7 @@ export default function MemoryRecordItem({
   title,
   iconName,
   iconColor,
-  commentList,
+  memoryRecordComments,
 }: IMemoryRecord) {
   const dragRef = useRef<HTMLDivElement | null>(
     null
@@ -56,7 +56,7 @@ export default function MemoryRecordItem({
           </div>
         </div>
         <div className="flex gap-2">
-          {commentList.map(({ commentId, content }) => (
+          {memoryRecordComments.map(({ commentId, content }) => (
             <div
               key={commentId}
               className="h-[86px] w-40 rounded-2xl bg-grey-2 py-4 px-5"
@@ -68,7 +68,7 @@ export default function MemoryRecordItem({
             </div>
           ))}
         </div>
-        {commentList.length > 0 && (
+        {memoryRecordComments.length > 0 && (
           <div
             className="ml-2 flex h-full flex-col items-center justify-center"
             onClick={() => navigate(`/record/${recordId}`)}
