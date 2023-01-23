@@ -16,13 +16,16 @@ export default function MemoryRecordItem({
   const dragRef = useRef<HTMLDivElement | null>(
     null
   ) as React.MutableRefObject<HTMLDivElement>
-  const { handleMouseDown } = useSwipe(dragRef)
+  const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
   const navigate = useNavigate()
   const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
 
   const handleClickComment = (commentId: number) => {
-    if (dragRef) return
+    if (isDragging) {
+      setIsDragging(false)
+      return
+    }
 
     navigate(`/record/${recordId}?commentId=${commentId}`)
   }
@@ -81,3 +84,4 @@ export default function MemoryRecordItem({
     </div>
   )
 }
+// e: React.MouseEvent<HTMLDivElement, MouseEvent>,

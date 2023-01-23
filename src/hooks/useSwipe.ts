@@ -1,6 +1,7 @@
-import { MutableRefObject } from 'react'
+import { MutableRefObject, useState } from 'react'
 
 const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
+  const [isDragging, setIsDragging] = useState(false)
   let pos = { top: 0, left: 0, x: 0, y: 0 }
 
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
@@ -16,6 +17,8 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
   }
 
   const handleMouseMove = (e: MouseEvent) => {
+    setIsDragging(true)
+
     const dx = e.clientX - pos.x
     const dy = e.clientY - pos.y
 
@@ -34,7 +37,7 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
     ref.current.style.removeProperty('user-select')
   }
 
-  return { handleMouseDown }
+  return { handleMouseDown, isDragging, setIsDragging }
 }
 
 export default useSwipe
