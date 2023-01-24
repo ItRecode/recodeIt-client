@@ -4,6 +4,7 @@ import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from '@components/Chip'
 import recordIcons from '@assets/record_icons'
+import { getDate } from '@utils/getDate'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
@@ -36,7 +37,9 @@ export default function TodayRecord() {
   return (
     <div className="mt-4 mb-10 w-full px-6">
       {/* TODO: 레코드 만든 날짜 === 오늘 날짜 포맷팅하기*/}
-      <div className="text-xs">{todayRecord.createdAt}</div>
+      <div className="text-xs">
+        {getDate(new Date(todayRecord.createdAt), 'point')}
+      </div>
       <div className="mt-4 flex">
         <div
           className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}

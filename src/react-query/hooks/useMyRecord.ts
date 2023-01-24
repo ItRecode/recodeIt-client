@@ -9,7 +9,11 @@ export const useMyRecord = () => {
   const { data: records = null, isLoading } = useQuery(
     [QUERY_KEYS.todayRecord],
     async () =>
-      await getRecordByDate({ date: getDate(today), page: 0, size: 1 }),
+      await getRecordByDate({
+        date: getDate(today, 'hyphen'),
+        page: 0,
+        size: 1,
+      }),
     {
       retry: false,
       refetchOnMount: false,
