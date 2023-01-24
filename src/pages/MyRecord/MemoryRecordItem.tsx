@@ -84,4 +84,3 @@ export default function MemoryRecordItem({
     </div>
   )
 }
-// e: React.MouseEvent<HTMLDivElement, MouseEvent>,
