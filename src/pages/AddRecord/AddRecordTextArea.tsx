@@ -25,11 +25,8 @@ function AddRecordTextArea({
 
   useEffect(() => {
     setTextAreaValue('')
-  }, [currentRecordType])
-
-  useEffect(() => {
     setTextAreaValue(recordContent ? recordContent : '')
-  }, [])
+  }, [currentRecordType])
 
   const handleChangeTextArea = (
     e: React.ChangeEvent<HTMLTextAreaElement>

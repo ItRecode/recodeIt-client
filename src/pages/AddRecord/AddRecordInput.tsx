@@ -7,6 +7,7 @@ interface Props {
   checkAllFilled: CheckAllType
   currentRecordType: string
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
+  recordTitle: string | undefined
 }
 
 function AddRecordInput({
@@ -14,6 +15,7 @@ function AddRecordInput({
   checkAllFilled,
   currentRecordType,
   setIsInputFocus,
+  recordTitle,
 }: Props) {
   const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
@@ -21,9 +23,11 @@ function AddRecordInput({
     celebration: 'ex) 5월 5일 내 생일',
     consolation: 'ex) 오늘 우울해요',
   }
+  console.log(recordTitle)
 
   useEffect(() => {
     setInputValue('')
+    setInputValue(recordTitle ? recordTitle : '')
   }, [currentRecordType])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,9 +61,10 @@ function AddRecordInput({
       }`}
     >
       <input
+        disabled={recordTitle !== undefined}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className="border-none text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+        className="w-full border-none bg-grey-1 text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
         placeholder={
           currentRecordType === 'celebration'
             ? PLACEHOLDER_MESSAGE.celebration
