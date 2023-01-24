@@ -1,5 +1,8 @@
 import { baseInstance } from './instance'
 
+const MEMORY_RECORD_SIZE = 7
+const MEMORY_COMMENT_SIZE = 5
+
 export const getCategory = () => {
   return baseInstance.get('/record/category')
 }
@@ -18,9 +21,11 @@ export const getRecord = async (recordId: string | undefined) => {
 }
 
 export const getMemoryRecord = (pageParam: number) => {
-  return baseInstance.get(`/record/memory-list`, {
+  return baseInstance.get(`/record/memory`, {
     params: {
-      pageNum: pageParam,
+      memoryRecordPage: pageParam,
+      memoryRecordSize: MEMORY_RECORD_SIZE,
+      sizeOfCommentPerRecord: MEMORY_COMMENT_SIZE,
     },
   })
 }

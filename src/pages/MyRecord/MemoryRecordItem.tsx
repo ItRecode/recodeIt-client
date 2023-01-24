@@ -11,18 +11,21 @@ export default function MemoryRecordItem({
   title,
   iconName,
   iconColor,
-  commentList,
+  memoryRecordComments,
 }: IMemoryRecord) {
   const dragRef = useRef<HTMLDivElement | null>(
     null
   ) as React.MutableRefObject<HTMLDivElement>
-  const { handleMouseDown } = useSwipe(dragRef)
+  const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
   const navigate = useNavigate()
   const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
 
   const handleClickComment = (commentId: number) => {
-    if (dragRef) return
+    if (isDragging) {
+      setIsDragging(false)
+      return
+    }
 
     navigate(`/record/${recordId}?commentId=${commentId}`)
   }
@@ -56,7 +59,7 @@ export default function MemoryRecordItem({
           </div>
         </div>
         <div className="flex gap-2">
-          {commentList.map(({ commentId, content }) => (
+          {memoryRecordComments.map(({ commentId, content }) => (
             <div
               key={commentId}
               className="h-[86px] w-40 rounded-2xl bg-grey-2 py-4 px-5"
@@ -68,7 +71,7 @@ export default function MemoryRecordItem({
             </div>
           ))}
         </div>
-        {commentList.length > 0 && (
+        {memoryRecordComments.length > 4 && (
           <div
             className="ml-2 flex h-full flex-col items-center justify-center"
             onClick={() => navigate(`/record/${recordId}`)}
@@ -81,3 +84,4 @@ export default function MemoryRecordItem({
     </div>
   )
 }
+// e: React.MouseEvent<HTMLDivElement, MouseEvent>,
