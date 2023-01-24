@@ -13,12 +13,7 @@ export default function MemoryRecord() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    refetch,
   } = useMemoryRecord()
-
-  useEffect(() => {
-    refetch()
-  }, [isLoading])
 
   if (isLoading) {
     return <></>

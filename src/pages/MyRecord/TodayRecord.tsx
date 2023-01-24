@@ -8,13 +8,9 @@ import { getFormattedDate } from '@utils/getFormattedDate'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, isLoading, refetch } = useMyRecord()
+  const { todayRecord, isLoading } = useMyRecord()
   const background_color = `bg-${todayRecord?.colorName}`
   const RecordIcon = recordIcons[`${todayRecord?.iconName}`]
-
-  useEffect(() => {
-    refetch()
-  }, [isLoading])
 
   if (isLoading) {
     return <></>
