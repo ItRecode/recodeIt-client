@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { IMemoryRecord } from 'types/recordData'
 import MemoryRecordItem from './MemoryRecordItem'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
