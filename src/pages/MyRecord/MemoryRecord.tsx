@@ -19,7 +19,7 @@ export default function MemoryRecord() {
     return <></>
   }
 
-  if (!memoryRecord?.pages[0].data) {
+  if (!memoryRecord?.pages[0].data.totalCount) {
     return (
       <div className="ml-[2px] mt-6 flex gap-6 px-6">
         <div

@@ -12,10 +12,9 @@ export interface IRecordDataType {
 }
 
 export interface IMemoryRecordList {
-  hasNextPage: boolean
-  isFirstPage: boolean
-  isLastPage: boolean
   memoryRecordList: IMemoryRecord[]
+  totalCount: number
+  totalPage: number
 }
 
 export interface IMemoryRecord {
