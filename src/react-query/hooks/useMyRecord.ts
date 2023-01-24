@@ -1,7 +1,7 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { getRecordByDate } from '@apis/record'
-import { getDate } from '@utils/getDate'
+import { getFormattedDate } from '@utils/getFormattedDate'
 
 export const useMyRecord = () => {
   const today = new Date()
@@ -10,7 +10,7 @@ export const useMyRecord = () => {
     [QUERY_KEYS.todayRecord],
     async () =>
       await getRecordByDate({
-        date: getDate(today, 'hyphen'),
+        date: getFormattedDate(today, 'hyphen'),
         page: 0,
         size: 1,
       }),
