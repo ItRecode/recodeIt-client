@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
@@ -8,9 +8,13 @@ import { getFormattedDate } from '@utils/getFormattedDate'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, isLoading } = useMyRecord()
+  const { todayRecord, isLoading, refetch } = useMyRecord()
   const background_color = `bg-${todayRecord?.colorName}`
   const RecordIcon = recordIcons[`${todayRecord?.iconName}`]
+
+  useEffect(() => {
+    refetch()
+  }, [isLoading])
 
   if (isLoading) {
     return <></>
@@ -35,8 +39,10 @@ export default function TodayRecord() {
   }
 
   return (
-    <div className="mt-4 mb-10 w-full px-6">
-      {/* TODO: 레코드 만든 날짜 === 오늘 날짜 포맷팅하기*/}
+    <div
+      className="mt-4 mb-10 w-full px-6"
+      onClick={() => navigate(`/record/${todayRecord.recordId}`)}
+    >
       <div className="text-xs">
         {getFormattedDate(new Date(todayRecord.createdAt), 'point')}
       </div>
@@ -47,13 +53,15 @@ export default function TodayRecord() {
           <RecordIcon className="flex aspect-square w-full" />
         </div>
         <div className="ml-4 flex flex-col">
-          <Chip
-            property="small"
-            icon={getChipIconName(todayRecord.categoryName)}
-            message={`${todayRecord.categoryName}`}
-            active={true}
-            pointer={false}
-          />
+          <div>
+            <Chip
+              property="small"
+              icon={getChipIconName(todayRecord.categoryName)}
+              message={`${todayRecord.categoryName}`}
+              active={true}
+              pointer={false}
+            />
+          </div>
           <h2 className="mt-3 text-lg font-semibold leading-[18px]">
             {todayRecord.title}
           </h2>

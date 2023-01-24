@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IMemoryRecord } from 'types/recordData'
 import MemoryRecordItem from './MemoryRecordItem'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
@@ -13,7 +13,12 @@ export default function MemoryRecord() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   } = useMemoryRecord()
+
+  useEffect(() => {
+    refetch()
+  }, [isLoading])
 
   if (isLoading) {
     return <></>

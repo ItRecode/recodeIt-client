@@ -9,6 +9,7 @@ export const useMemoryRecord = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.memoryRecord],
     queryFn: async ({ pageParam = 0 }) => await getMemoryRecord(pageParam),
@@ -31,5 +32,6 @@ export const useMemoryRecord = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   }
 }
