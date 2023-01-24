@@ -41,21 +41,24 @@ export default function TodayRecord() {
   return (
     <>
       <MyRecordCalendar />
-      <div
-        className="mt-4 mb-10 w-full px-6"
-        onClick={() => navigate(`/record/${todayRecord.recordId}`)}
-      >
-        <div className="text-xs">
+      <div className="mt-4 mb-10 w-full px-6">
+        <div
+          className="cursor-pointer text-xs"
+          onClick={() => navigate(`/record/${todayRecord.recordId}`)}
+        >
           {getFormattedDate(new Date(todayRecord.createdAt), 'point')}
         </div>
-        <div className="mt-4 flex">
+        <div
+          className="mt-4 flex w-fit cursor-pointer"
+          onClick={() => navigate(`/record/${todayRecord.recordId}`)}
+        >
           <div
             className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
           >
             <RecordIcon className="flex aspect-square w-full" />
           </div>
           <div className="ml-4 flex flex-col">
-            <div>
+            <div className="inline">
               <Chip
                 property="small"
                 icon={getChipIconName(todayRecord.categoryName)}
