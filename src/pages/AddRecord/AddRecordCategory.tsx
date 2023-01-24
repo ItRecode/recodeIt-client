@@ -15,6 +15,7 @@ import {
   MySide,
 } from '@assets/chip_icon'
 import { getCategory } from '@apis/record'
+import { useQuery } from '@tanstack/react-query'
 
 type CategorySource = {
   title: string
@@ -38,47 +39,65 @@ type CategoryDatas = BigCategory[]
 function AddRecordCategory({
   currentRecordType,
   recordCategory,
+  isModify,
 }: {
   currentRecordType: keyof CategoryType
-  recordCategory?: number
+  recordCategory: number
+  isModify: boolean
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
 
+  const { data, isSuccess } = useQuery(['getCategory'], getCategory, {
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  })
+
   useEffect(() => {
-    const getData = async () => {
-      const { data } = await getCategory()
-      setCategoryState(makeCategoryData(data))
+    const changeCategoryByModifyMode = () => {
+      if (recordCategory !== undefined) {
+        handleChooseCurrentCategory(recordCategory)
+      }
     }
-    getData()
+    handleChooseCurrentCategory(currentRecordType === 'celebration' ? 3 : 7)
+    isSuccess && changeCategoryByModifyMode()
   }, [currentRecordType])
+
+  useEffect(() => {
+    setCategoryState(makeCategoryData(data?.data))
+  }, [data])
 
   const makeCategoryData = (data: CategoryDatas) => {
     const CELEBRATION = 1
     const CONSOLATION = 0
-    const categoryData: CategoryType = {
-      [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
-        (category: BigCategory, index: number) => {
-          return {
-            title: category.name,
-            choosed: index === 0,
-            id: category.id,
-            iconSrc: getIconSrc(category.id),
+    if (data) {
+      const categoryData: CategoryType = {
+        [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
+          (category: BigCategory, index: number) => {
+            return {
+              title: category.name,
+              choosed: index === 0,
+              id: category.id,
+              iconSrc: getIconSrc(category.id),
+            }
           }
-        }
-      ),
-      [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
-        (category: BigCategory, index: number) => {
-          return {
-            title: category.name,
-            choosed: index === 0 && true,
-            id: category.id,
-            iconSrc: getIconSrc(category.id),
+        ),
+        [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
+          (category: BigCategory, index: number) => {
+            return {
+              title: category.name,
+              choosed: index === 0 && true,
+              id: category.id,
+              iconSrc: getIconSrc(category.id),
+            }
           }
-        }
-      ),
+        ),
+      }
+      return categoryData
     }
-    return categoryData
+    return null
   }
 
   const getIconSrc = (id: number): string => {
@@ -111,10 +130,12 @@ function AddRecordCategory({
       ...categoryState,
       [currentRecordType]:
         categoryState !== null &&
-        categoryState[currentRecordType].map((category: CategorySource) => ({
-          ...category,
-          choosed: category.id === index,
-        })),
+        categoryState[currentRecordType].map((category: CategorySource) => {
+          return {
+            ...category,
+            choosed: category.id === index,
+          }
+        }),
     }
 
     if (categoryState !== null) {
@@ -128,14 +149,17 @@ function AddRecordCategory({
           ].id,
       })
     }
-
     if (currentState !== null && categoryState !== null) {
       setCategoryState(currentState)
     }
   }
 
   return (
-    <div className="mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4">
+    <div
+      className={`${
+        isModify && 'pointer-events-none'
+      } mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4`}
+    >
       {categoryState !== null &&
         categoryState[currentRecordType].map((category: CategorySource) => {
           return (
