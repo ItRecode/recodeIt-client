@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from '@components/Chip'
 import recordIcons from '@assets/record_icons'
 import { getFormattedDate } from '@utils/getFormattedDate'
+import MyRecordCalendar from './MyRecordCalendar'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
@@ -18,54 +19,60 @@ export default function TodayRecord() {
 
   if (!todayRecord) {
     return (
-      <div className="mt-10 mb-[49px] w-full text-center">
-        <span className="text-xs leading-5">
-          오늘 쓴 레코드가 없어요!
-          <br />
-          레코드를 쓰고 추억을 공유해보세요.
-        </span>
-        <div
-          className="mt-4 cursor-pointer text-sm font-semibold leading-5 text-primary-2 underline underline-offset-4"
-          onClick={() => navigate('/record/add')}
-        >
-          레코드 추가하러 가기
+      <>
+        <MyRecordCalendar />
+        <div className="mt-10 mb-[49px] w-full text-center">
+          <span className="text-xs leading-5">
+            오늘 쓴 레코드가 없어요!
+            <br />
+            레코드를 쓰고 추억을 공유해보세요.
+          </span>
+          <div
+            className="mt-4 cursor-pointer text-sm font-semibold leading-5 text-primary-2 underline underline-offset-4"
+            onClick={() => navigate('/record/add')}
+          >
+            레코드 추가하러 가기
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
-    <div
-      className="mt-4 mb-10 w-full px-6"
-      onClick={() => navigate(`/record/${todayRecord.recordId}`)}
-    >
-      <div className="text-xs">
-        {getFormattedDate(new Date(todayRecord.createdAt), 'point')}
-      </div>
-      <div className="mt-4 flex">
-        <div
-          className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
-        >
-          <RecordIcon className="flex aspect-square w-full" />
+    <>
+      <MyRecordCalendar />
+      <div
+        className="mt-4 mb-10 w-full px-6"
+        onClick={() => navigate(`/record/${todayRecord.recordId}`)}
+      >
+        <div className="text-xs">
+          {getFormattedDate(new Date(todayRecord.createdAt), 'point')}
         </div>
-        <div className="ml-4 flex flex-col">
-          <div>
-            <Chip
-              property="small"
-              icon={getChipIconName(todayRecord.categoryName)}
-              message={`${todayRecord.categoryName}`}
-              active={true}
-              pointer={false}
-            />
+        <div className="mt-4 flex">
+          <div
+            className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
+          >
+            <RecordIcon className="flex aspect-square w-full" />
           </div>
-          <h2 className="mt-3 text-lg font-semibold leading-[18px]">
-            {todayRecord.title}
-          </h2>
-          <div className="mt-[14px] text-xs leading-4">
-            댓글 {todayRecord.commentCount}개
+          <div className="ml-4 flex flex-col">
+            <div>
+              <Chip
+                property="small"
+                icon={getChipIconName(todayRecord.categoryName)}
+                message={`${todayRecord.categoryName}`}
+                active={true}
+                pointer={false}
+              />
+            </div>
+            <h2 className="mt-3 text-lg font-semibold leading-[18px]">
+              {todayRecord.title}
+            </h2>
+            <div className="mt-[14px] text-xs leading-4">
+              댓글 {todayRecord.commentCount}개
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
