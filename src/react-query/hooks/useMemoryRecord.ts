@@ -20,9 +20,6 @@ export const useMemoryRecord = () => {
       return null
     },
     retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
   return {

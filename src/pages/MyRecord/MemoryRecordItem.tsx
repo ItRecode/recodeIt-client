@@ -77,11 +77,10 @@ export default function MemoryRecordItem({
             onClick={() => navigate(`/record/${recordId}`)}
           >
             <PlusIcons />
-            <p className="mt-[10px] w-[50px] text-primary-2">전체보기</p>
+            <p className="mt-[10px] w-max text-primary-2">전체보기</p>
           </div>
         )}
       </div>
     </div>
   )
 }
-// e: React.MouseEvent<HTMLDivElement, MouseEvent>,

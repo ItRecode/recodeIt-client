@@ -1,3 +1,9 @@
+import { AxiosResponse } from 'axios'
+import {
+  IMemoryRecordList,
+  IMyRecordRequestParam,
+  IRecordByDateList,
+} from 'types/recordData'
 import { baseInstance } from './instance'
 
 const MEMORY_RECORD_SIZE = 7
@@ -20,7 +26,9 @@ export const getRecord = async (recordId: string | undefined) => {
   }
 }
 
-export const getMemoryRecord = (pageParam: number) => {
+export const getMemoryRecord = (
+  pageParam: number
+): Promise<AxiosResponse<IMemoryRecordList>> => {
   return baseInstance.get(`/record/memory`, {
     params: {
       memoryRecordPage: pageParam,
@@ -35,4 +43,18 @@ export const deleteRecord = async (recordId: string | undefined) => {
     const res = await baseInstance.delete(`/record/${recordId}`)
     return res.data
   }
+}
+
+export const getRecordByDate = ({
+  date,
+  page,
+  size,
+}: IMyRecordRequestParam): Promise<AxiosResponse<IRecordByDateList>> => {
+  return baseInstance.get(`/record`, {
+    params: {
+      date,
+      page,
+      size,
+    },
+  })
 }
