@@ -24,16 +24,13 @@ function AddRecordColor({ currentRecordType, recordColor }: Props) {
         return { ...color, choosed: false }
       })
     )
-  }, [currentRecordType])
-
-  useEffect(() => {
     recordColor &&
       setColors(
         ADD_RECORD_COLORS.map((color) => {
           return { ...color, choosed: color.src.indexOf(recordColor) !== -1 }
         })
       )
-  }, [])
+  }, [currentRecordType])
 
   const handleChooseCurrentColor = (index: number): void => {
     const changeCurrent = colors.map((color) => ({
