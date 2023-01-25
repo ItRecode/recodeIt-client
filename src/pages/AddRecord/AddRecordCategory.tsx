@@ -15,7 +15,6 @@ import {
   MySide,
 } from '@assets/chip_icon'
 import { getCategory } from '@apis/record'
-import { useQuery } from '@tanstack/react-query'
 
 type CategorySource = {
   title: string
@@ -38,91 +37,46 @@ type CategoryDatas = BigCategory[]
 
 function AddRecordCategory({
   currentRecordType,
-  recordCategory,
-  isModify,
 }: {
   currentRecordType: keyof CategoryType
-  recordCategory: number
-  isModify: boolean
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const CELEBRATES = 3
-  const CONSOLATES = 7
-  const { data } = useQuery(['getCategory'], getCategory, {
-    retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  })
 
   useEffect(() => {
-    handleChooseCurrentCategory(currentRecordType === 'celebration' ? 3 : 7)
-    // }
-  }, [currentRecordType])
-
-  useEffect(() => {
-    if (isModify) {
-      if (recordCategory !== undefined) {
-        const madeData = makeCategoryData(data?.data)
-        if (madeData !== null) {
-          const modifyData = {
-            ...madeData,
-            [currentRecordType]: madeData[currentRecordType].map(
-              (category: CategorySource) => {
-                return {
-                  ...category,
-                  choosed: category.id === recordCategory,
-                }
-              }
-            ),
-          }
-          setCategoryState(modifyData)
-          setFormData({
-            ...formData,
-            selectedCategory:
-              modifyData[currentRecordType][
-                currentRecordType === 'celebration'
-                  ? recordCategory - CELEBRATES
-                  : recordCategory - CONSOLATES
-              ].id,
-          })
-        }
-      }
-    } else {
-      setCategoryState(makeCategoryData(data?.data))
+    const getData = async () => {
+      const { data } = await getCategory()
+      setCategoryState(makeCategoryData(data))
     }
-  }, [data])
+    getData()
+  }, [currentRecordType])
 
   const makeCategoryData = (data: CategoryDatas) => {
     const CELEBRATION = 1
     const CONSOLATION = 0
-    if (data) {
-      const categoryData: CategoryType = {
-        [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
-          (category: BigCategory, index: number) => {
-            return {
-              title: category.name,
-              choosed: index === 0,
-              id: category.id,
-              iconSrc: getIconSrc(category.id),
-            }
+    const categoryData: CategoryType = {
+      [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
+        (category: BigCategory, index: number) => {
+          return {
+            title: category.name,
+            choosed: index === 0,
+            id: category.id,
+            iconSrc: getIconSrc(category.id),
           }
-        ),
-        [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
-          (category: BigCategory, index: number) => {
-            return {
-              title: category.name,
-              choosed: index === 0 && true,
-              id: category.id,
-              iconSrc: getIconSrc(category.id),
-            }
+        }
+      ),
+      [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
+        (category: BigCategory, index: number) => {
+          return {
+            title: category.name,
+            choosed: index === 0 && true,
+            id: category.id,
+            iconSrc: getIconSrc(category.id),
           }
-        ),
-      }
-      return categoryData
+        }
+      ),
     }
-    return null
+    return categoryData
   }
 
   const getIconSrc = (id: number): string => {
@@ -149,16 +103,16 @@ function AddRecordCategory({
   }
 
   const handleChooseCurrentCategory = (index: number): void => {
+    const CELEBRATES = 3
+    const CONSOLATES = 7
     const currentState: CategoryType | null = categoryState && {
       ...categoryState,
       [currentRecordType]:
         categoryState !== null &&
-        categoryState[currentRecordType].map((category: CategorySource) => {
-          return {
-            ...category,
-            choosed: category.id === index,
-          }
-        }),
+        categoryState[currentRecordType].map((category: CategorySource) => ({
+          ...category,
+          choosed: category.id === index,
+        })),
     }
 
     if (categoryState !== null) {
@@ -172,17 +126,14 @@ function AddRecordCategory({
           ].id,
       })
     }
+
     if (currentState !== null && categoryState !== null) {
       setCategoryState(currentState)
     }
   }
 
   return (
-    <div
-      className={`${
-        isModify && 'pointer-events-none'
-      } mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4`}
-    >
+    <div className="mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4">
       {categoryState !== null &&
         categoryState[currentRecordType].map((category: CategorySource) => {
           return (
