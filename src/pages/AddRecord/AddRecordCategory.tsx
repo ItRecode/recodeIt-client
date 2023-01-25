@@ -47,8 +47,9 @@ function AddRecordCategory({
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-
-  const { data, isSuccess } = useQuery(['getCategory'], getCategory, {
+  const CELEBRATES = 3
+  const CONSOLATES = 7
+  const { data } = useQuery(['getCategory'], getCategory, {
     retry: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -56,17 +57,41 @@ function AddRecordCategory({
   })
 
   useEffect(() => {
-    const changeCategoryByModifyMode = () => {
-      if (recordCategory !== undefined) {
-        handleChooseCurrentCategory(recordCategory)
-      }
-    }
     handleChooseCurrentCategory(currentRecordType === 'celebration' ? 3 : 7)
-    isSuccess && changeCategoryByModifyMode()
+    // }
   }, [currentRecordType])
 
   useEffect(() => {
-    setCategoryState(makeCategoryData(data?.data))
+    if (isModify) {
+      if (recordCategory !== undefined) {
+        const madeData = makeCategoryData(data?.data)
+        if (madeData !== null) {
+          const modifyData = {
+            ...madeData,
+            [currentRecordType]: madeData[currentRecordType].map(
+              (category: CategorySource) => {
+                return {
+                  ...category,
+                  choosed: category.id === recordCategory,
+                }
+              }
+            ),
+          }
+          setCategoryState(modifyData)
+          setFormData({
+            ...formData,
+            selectedCategory:
+              modifyData[currentRecordType][
+                currentRecordType === 'celebration'
+                  ? recordCategory - CELEBRATES
+                  : recordCategory - CONSOLATES
+              ].id,
+          })
+        }
+      }
+    } else {
+      setCategoryState(makeCategoryData(data?.data))
+    }
   }, [data])
 
   const makeCategoryData = (data: CategoryDatas) => {
@@ -124,8 +149,6 @@ function AddRecordCategory({
   }
 
   const handleChooseCurrentCategory = (index: number): void => {
-    const CELEBRATES = 3
-    const CONSOLATES = 7
     const currentState: CategoryType | null = categoryState && {
       ...categoryState,
       [currentRecordType]:
