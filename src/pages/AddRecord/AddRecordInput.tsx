@@ -23,7 +23,6 @@ function AddRecordInput({
     celebration: 'ex) 5월 5일 내 생일',
     consolation: 'ex) 오늘 우울해요',
   }
-  console.log(recordTitle)
 
   useEffect(() => {
     setInputValue('')
