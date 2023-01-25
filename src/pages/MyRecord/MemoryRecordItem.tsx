@@ -32,18 +32,12 @@ export default function MemoryRecordItem({
 
   return (
     <div className="mb-4 px-6">
-      <div className="ml-[2px] mt-6 flex items-center justify-between">
+      <div className="ml-[2px] mt-6 flex">
         <span
           className="cursor-pointer text-sm font-semibold"
           onClick={() => navigate(`/record/${recordId}`)}
         >
           {title}
-        </span>
-        <span
-          className="cursor-pointer text-xs text-primary-2"
-          onClick={() => navigate(`/record/${recordId}`)}
-        >
-          전체보기
         </span>
       </div>
       <div
