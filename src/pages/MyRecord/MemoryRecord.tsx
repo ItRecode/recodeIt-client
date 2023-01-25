@@ -19,7 +19,7 @@ export default function MemoryRecord() {
     return <></>
   }
 
-  if (!memoryRecord?.pages[0].data) {
+  if (!memoryRecord?.pages[0].data.totalCount) {
     return (
       <div className="ml-[2px] mt-6 flex gap-6 px-6">
         <div
@@ -45,7 +45,7 @@ export default function MemoryRecord() {
             title={memoryRecord.title}
             iconName={memoryRecord.iconName}
             iconColor={memoryRecord.iconColor}
-            commentList={memoryRecord.commentList}
+            memoryRecordComments={memoryRecord.memoryRecordComments}
           />
         ))
       )}

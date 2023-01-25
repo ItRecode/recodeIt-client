@@ -26,7 +26,6 @@ export default function MyRecord() {
           <CloseIcon className="absolute right-[10px] cursor-pointer" />
         </div>
       </section>
-      <h1 className="mt-7 px-6 text-2xl font-semibold">마이 레코드</h1>
       <TodayRecord />
       <h2 className="mt-3 px-6 text-lg font-semibold leading-[18px]">
         나만의 추억 레코드

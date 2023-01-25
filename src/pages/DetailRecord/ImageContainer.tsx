@@ -29,7 +29,7 @@ export default function ImageContainer({
       {haveNext && (
         <button
           onClick={next}
-          className="absolute right-4 cursor-pointer bg-transparent"
+          className="absolute right-4 cursor-pointer bg-transparent p-0"
         >
           <Right_Arrow_icon />
         </button>
@@ -37,7 +37,7 @@ export default function ImageContainer({
       {havePrev && (
         <button
           onClick={prev}
-          className="absolute left-4 cursor-pointer bg-transparent"
+          className="absolute left-4 cursor-pointer bg-transparent p-0"
         >
           <Left_Arrow_icon />
         </button>

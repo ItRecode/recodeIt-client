@@ -11,7 +11,27 @@ export interface IRecordDataType {
   imageUrls: string[]
 }
 
-export interface ITodayRecord {
+export interface IMemoryRecordList {
+  memoryRecordList: IMemoryRecord[]
+  totalCount: number
+  totalPage: number
+}
+
+export interface IMemoryRecord {
+  recordId: number
+  title: string
+  iconName: string
+  iconColor: string
+  memoryRecordComments: IRecordMemoryComment[]
+}
+
+export interface IRecordMemoryComment {
+  commentId: number
+  content: string
+}
+
+export interface IRecordByDate {
+  recordId: number
   title: string
   categoryName: string
   commentCount: number
@@ -20,22 +40,14 @@ export interface ITodayRecord {
   createdAt: string
 }
 
-export interface IMemoryRecordList {
-  hasNextPage: boolean
-  isFirstPage: boolean
-  isLastPage: boolean
-  memoryRecordList: IMemoryRecord[]
+export interface IRecordByDateList {
+  recordByDateDtos: IRecordByDate[]
+  totalCount: number
+  totalPage: number
 }
 
-export interface IMemoryRecord {
-  recordId: number
-  title: string
-  iconName: string
-  iconColor: string
-  commentList: IRecordMemoryComment[]
-}
-
-export interface IRecordMemoryComment {
-  commentId: number
-  content: string
+export interface IMyRecordRequestParam {
+  date: string
+  page: number
+  size: number
 }

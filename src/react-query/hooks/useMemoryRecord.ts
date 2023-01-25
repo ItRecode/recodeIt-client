@@ -14,15 +14,12 @@ export const useMemoryRecord = () => {
     queryFn: async ({ pageParam = 0 }) => await getMemoryRecord(pageParam),
     getNextPageParam: (lastPage): number | null => {
       const { data, config } = lastPage
-      if (data.hasNextPage && !data.isLastPage) {
-        return config.params.pageNum + 1
+      if (data.totalPage > config.params.memoryRecordPage + 1) {
+        return config.params.memoryRecordPage + 1
       }
       return null
     },
     retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
   return {
