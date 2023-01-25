@@ -7,6 +7,7 @@ interface Props {
   checkAllFilled: CheckAllType
   currentRecordType: string
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
+  recordTitle: string | undefined
 }
 
 function AddRecordInput({
@@ -14,6 +15,7 @@ function AddRecordInput({
   checkAllFilled,
   currentRecordType,
   setIsInputFocus,
+  recordTitle,
 }: Props) {
   const [inputValue, setInputValue] = useState('')
   const [inputFocus, setInputFocus] = useState(false)
@@ -24,6 +26,7 @@ function AddRecordInput({
 
   useEffect(() => {
     setInputValue('')
+    setInputValue(recordTitle ? recordTitle : '')
   }, [currentRecordType])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,10 +35,10 @@ function AddRecordInput({
       return
     }
     if (inputValueLength > INPUT_DETAILS.MIN_TYPING) {
-      setCheckAllFilled({ ...checkAllFilled, input: true })
+      setCheckAllFilled({ ...checkAllFilled, input: e.target.value })
     }
     if (inputValueLength === INPUT_DETAILS.MIN_TYPING) {
-      setCheckAllFilled({ ...checkAllFilled, input: false })
+      setCheckAllFilled({ ...checkAllFilled, input: e.target.value })
     }
     setInputValue(e.target.value)
   }
@@ -57,9 +60,10 @@ function AddRecordInput({
       }`}
     >
       <input
+        disabled={recordTitle !== undefined}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className="border-none text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+        className="w-full border-none bg-grey-1 text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
         placeholder={
           currentRecordType === 'celebration'
             ? PLACEHOLDER_MESSAGE.celebration

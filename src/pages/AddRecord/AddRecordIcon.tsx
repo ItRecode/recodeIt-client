@@ -19,17 +19,17 @@ export type IconType = {
   consolation: IconSource[]
 }
 
-function AddRecordIcon({
-  currentRecordType,
-}: {
+interface Props {
   currentRecordType: keyof IconType
-}) {
+  recordIcon: string
+}
+
+function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
   const icons = ADD_RECORD_ICONS
 
   const [iconState, setIconState] = useState<IconType>(icons)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const SLIDE_SPEED = 500
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
@@ -37,6 +37,21 @@ function AddRecordIcon({
 
   useEffect(() => {
     setIconState(icons)
+    const getRecordNumber = icons[currentRecordType]?.filter((record) => {
+      if (record.src.indexOf(recordIcon) !== -1) {
+        return record.id
+      }
+    })[0]
+    if (getRecordNumber) {
+      setCurrentFocus(getRecordNumber.id)
+      setFormData({
+        ...formData,
+        selectedIcon: getIconSrc(
+          icons[currentRecordType][getRecordNumber.id].src
+        ),
+      })
+      slickRef.current?.slickGoTo(getRecordNumber.id)
+    }
   }, [currentRecordType])
 
   useEffect(() => {
@@ -67,7 +82,7 @@ function AddRecordIcon({
   const settings = {
     arrows: false,
     infinite: true,
-    speed: SLIDE_SPEED,
+    speed: TIME_DELAY_MS,
     slidesToShow: 4,
     slidesToScroll: 1,
     swipeToSlide: true,

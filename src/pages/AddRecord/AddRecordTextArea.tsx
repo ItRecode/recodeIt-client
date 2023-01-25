@@ -3,6 +3,7 @@ import { INPUT_DETAILS } from '@assets/constant/constant'
 import { CheckAllType } from './AddRecord'
 
 type userProps = {
+  recordContent: string
   currentRecordType: string
   setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
   checkAllFilled: CheckAllType
@@ -14,6 +15,7 @@ function AddRecordTextArea({
   checkAllFilled,
   currentRecordType,
   setIsInputFocus,
+  recordContent,
 }: userProps) {
   const [textAreaValue, setTextAreaValue] = useState('')
   const PLACEHOLDER_MESSAGE = {
@@ -23,6 +25,7 @@ function AddRecordTextArea({
 
   useEffect(() => {
     setTextAreaValue('')
+    setTextAreaValue(recordContent ? recordContent : '')
   }, [currentRecordType])
 
   const handleChangeTextArea = (
@@ -33,10 +36,10 @@ function AddRecordTextArea({
       return
     }
     if (inputValueLength > 0) {
-      setCheckAllFilled({ ...checkAllFilled, textArea: true })
+      setCheckAllFilled({ ...checkAllFilled, textArea: e.target.value })
     }
     if (inputValueLength === 0) {
-      setCheckAllFilled({ ...checkAllFilled, textArea: false })
+      setCheckAllFilled({ ...checkAllFilled, textArea: e.target.value })
     }
     setTextAreaValue(e.target.value)
   }
@@ -57,7 +60,7 @@ function AddRecordTextArea({
         }
         value={textAreaValue}
       />
-      <div className="text-right text-xs">{`${textAreaValue.length}/${INPUT_DETAILS.MAX_TEXTAREA_TYPING}`}</div>
+      <div className="text-right text-xs">{`${textAreaValue?.length}/${INPUT_DETAILS.MAX_TEXTAREA_TYPING}`}</div>
     </div>
   )
 }
