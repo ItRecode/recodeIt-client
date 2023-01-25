@@ -9,9 +9,6 @@ export const useUser = () => {
     isLoading,
   } = useQuery([QUERY_KEYS.user], async () => await getUserInfo(), {
     retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
   return { user, refetch, isLoading }

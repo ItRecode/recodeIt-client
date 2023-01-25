@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
+import { useThrottle } from '@hooks/useThrottle'
 
 type IconSource = {
   src: string
@@ -18,69 +19,77 @@ export type IconType = {
   consolation: IconSource[]
 }
 
-function AddRecordIcon({
-  currentRecordType,
-}: {
+interface Props {
   currentRecordType: keyof IconType
-}) {
+  recordIcon: string
+}
+
+function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
   const icons = ADD_RECORD_ICONS
 
   const [iconState, setIconState] = useState<IconType>(icons)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const SLIDE_SPEED = 500
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
-  const [throttle, setThrottle] = useState<boolean>(false)
+  const TIME_DELAY_MS = 500
 
   useEffect(() => {
     setIconState(icons)
+    const getRecordNumber = icons[currentRecordType]?.filter((record) => {
+      if (record.src.indexOf(recordIcon) !== -1) {
+        return record.id
+      }
+    })[0]
+    if (getRecordNumber) {
+      setCurrentFocus(getRecordNumber.id)
+      setFormData({
+        ...formData,
+        selectedIcon: getIconSrc(
+          icons[currentRecordType][getRecordNumber.id].src
+        ),
+      })
+      slickRef.current?.slickGoTo(getRecordNumber.id)
+    }
   }, [currentRecordType])
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      selectedIcon: getIconSrc(icons[currentRecordType][currentFocus].src),
+    })
+  }, [currentFocus])
 
   const handleFront = () => {
     slickRef.current?.slickNext()
-    if (throttle) return
-    if (!throttle) {
-      setThrottle(true)
-      if (currentFocus === MAX_FOCUS) {
-        setCurrentFocus(0)
-      } else {
-        setCurrentFocus(currentFocus + 1)
-      }
-      setTimeout(async () => {
-        setThrottle(false)
-      }, 500)
+    if (currentFocus === MAX_FOCUS) {
+      setCurrentFocus(0)
+    } else {
+      setCurrentFocus(currentFocus + 1)
     }
   }
 
   const handleBack = () => {
     slickRef.current?.slickPrev()
-    if (throttle) return
-    if (!throttle) {
-      setThrottle(true)
-      if (currentFocus === MIN_FOCUS) {
-        setCurrentFocus(MAX_FOCUS)
-      } else {
-        setCurrentFocus(currentFocus - 1)
-      }
-      setTimeout(async () => {
-        setThrottle(false)
-      }, 500)
+    if (currentFocus === MIN_FOCUS) {
+      setCurrentFocus(MAX_FOCUS)
+    } else {
+      setCurrentFocus(currentFocus - 1)
     }
   }
 
   const settings = {
     arrows: false,
     infinite: true,
-    speed: SLIDE_SPEED,
-    slidesToShow: 3,
+    speed: TIME_DELAY_MS,
+    slidesToShow: 4,
     slidesToScroll: 1,
+    swipeToSlide: true,
   }
 
-  const handleClick = (id: number, iconSrc: string) => {
+  const handleClick = (id: number) => {
     setCurrentFocus(id)
-    setFormData({ ...formData, selectedIcon: getIconSrc(iconSrc) })
   }
 
   const getIconSrc = (iconSrc: string): string => {
@@ -93,14 +102,14 @@ function AddRecordIcon({
         {iconState[currentRecordType].map((icon) => {
           return (
             <div
-              onClick={() => handleClick(icon.id, icon.src)}
-              className={`relative h-[70px] !w-[70px] rounded-2xl ${
-                currentFocus === icon.id && 'border-2 !border-primary-3'
+              onClick={() => handleClick(icon.id)}
+              className={`relative h-[54px] !w-[54px] rounded-2xl ${
+                currentFocus === icon.id && ' border-2  !border-primary-3'
               }`}
               key={icon.id}
             >
               <img
-                className="block translate-x-[-2px] translate-y-[-2px]"
+                className="h-[52px] !w-[52px] translate-x-[-2px] translate-y-[-2px]"
                 src={icon.src}
                 alt={`icon-${icon.id}-type`}
               />
@@ -110,13 +119,13 @@ function AddRecordIcon({
       </Slider>
       <div
         className="absolute top-[1/2] left-0 cursor-pointer"
-        onClick={handleBack}
+        onClick={useThrottle(handleBack, TIME_DELAY_MS)}
       >
         <Back />
       </div>
       <div
         className="absolute top-[1/2] right-0 cursor-pointer"
-        onClick={handleFront}
+        onClick={useThrottle(handleFront, TIME_DELAY_MS)}
       >
         <Front />
       </div>
