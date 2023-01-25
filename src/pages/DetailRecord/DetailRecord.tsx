@@ -62,7 +62,6 @@ export default function DetailRecord() {
     () => getRecord(recordIdParams),
     {
       retry: false,
-      refetchOnMount: true,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     }

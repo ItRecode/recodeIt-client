@@ -45,7 +45,6 @@ export const deleteRecord = async (recordId: string | undefined) => {
   }
 }
 
-
 export const modifyRecord = async (
   recordId: string | undefined,
   data: FormData
@@ -54,8 +53,8 @@ export const modifyRecord = async (
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
-  
- export const getRecordByDate = ({
+
+export const getRecordByDate = ({
   date,
   page,
   size,
