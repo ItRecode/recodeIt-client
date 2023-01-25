@@ -13,9 +13,21 @@ interface Props {
   currentRecordType: string
   setFiles: Dispatch<SetStateAction<File[]>>
   files: File[]
+  recordFiles: string[]
+  isModify: boolean
+  toDeleteFiles: string[]
+  setToDeleteFiles: Dispatch<SetStateAction<string[]>>
 }
 
-function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
+function AddRecordFile({
+  currentRecordType,
+  setFiles,
+  files,
+  recordFiles,
+  isModify,
+  toDeleteFiles,
+  setToDeleteFiles,
+}: Props) {
   const [currentImg, setCurrentImg] = useState<string[]>([])
   const [isToast, setIsToast] = useState(false)
   const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
@@ -74,6 +86,9 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
 
   useEffect(() => {
     setCurrentImg([])
+    if (recordFiles) {
+      setCurrentImg(recordFiles)
+    }
   }, [currentRecordType])
 
   const encodeFileToBase64 = (fileBlob: FileList) => {
@@ -93,6 +108,13 @@ function AddRecordFile({ currentRecordType, setFiles, files }: Props) {
   const handleDelete = (toDeleteIndex: number): void => {
     setCurrentImg(filterArray(currentImg, toDeleteIndex))
     setFiles(filterArray(files, toDeleteIndex))
+
+    if (isModify && recordFiles.includes(currentImg[toDeleteIndex])) {
+      setToDeleteFiles([
+        ...toDeleteFiles,
+        recordFiles[toDeleteIndex].split('/')[4],
+      ])
+    }
   }
 
   function filterArray<T>(array: Array<T>, toDeleteIndex: number): T[] {

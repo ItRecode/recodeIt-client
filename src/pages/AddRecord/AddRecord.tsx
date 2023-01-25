@@ -13,7 +13,7 @@ import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom } from '@store/atom'
 import { useRecoilState } from 'recoil'
-import { enrollRecord } from '@apis/record'
+import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
 import { getRecord } from '@apis/record'
@@ -39,6 +39,14 @@ export interface WriteRecordRequestDto {
   title: string
 }
 
+interface modifyRecordRequestDto {
+  colorName: string
+  content: string
+  iconName: string
+  title: string
+  deleteImages: string[]
+}
+
 export type IsInputFocusType = {
   isTextAreaFocused: boolean
   isInputFocused: boolean
@@ -60,12 +68,14 @@ export default function AddRecord() {
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
   const ID = LocalStorage.get('postId') as string
-  const { data, isLoading, isError, isSuccess } = useQuery(
+  const isModify = LocalStorage.get('modifyMode') === 'true'
+  const { data, isLoading, isSuccess } = useQuery(
     ['getRecordData', ID],
     () => getRecord(ID),
     {
-      enabled: LocalStorage.get('modifyMode') === 'true',
+      enabled: isModify,
       retry: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
@@ -74,12 +84,12 @@ export default function AddRecord() {
   )
 
   useEffect(() => {
-    setCheckAllFilled({ input: '', textArea: '' })
+    !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
   useEffect(() => {
     if (data !== undefined) {
-      setCheckAllFilled({ ...checkAllFilled, textArea: data?.content })
+      setCheckAllFilled({ input: data?.title, textArea: data?.content })
       setFormDatas({ ...formDatas, selectedColor: data?.colorName })
     }
   }, [data])
@@ -102,6 +112,17 @@ export default function AddRecord() {
   }, [isInputFocus])
 
   useEffect(() => {
+    const changeCurrentType = () => {
+      const dataCategoryId = data?.categoryId
+      if (dataCategoryId) {
+        if (dataCategoryId >= 3 && dataCategoryId <= 6) {
+          setRecordType(CELEBRATION)
+        } else if (dataCategoryId >= 7 && dataCategoryId <= 10) {
+          setRecordType('consolation')
+        }
+      }
+    }
+    isModify && changeCurrentType()
     return () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
@@ -125,7 +146,23 @@ export default function AddRecord() {
         alert('레코드 추가 실패 - TODO: toast로 변경')
       }
     }
-    enroll()
+    const modify = async () => {
+      try {
+        const response = await modifyRecord(ID, formData)
+        setFiles([])
+        navigate(`/record/${response.data}`, {
+          replace: true,
+        })
+      } catch {
+        setIsLoadingWhileSubmit(false)
+        alert('레코드 추가 실패 - TODO: toast로 변경')
+      }
+    }
+    if (isModify) {
+      modify()
+    } else {
+      enroll()
+    }
   }
 
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
@@ -139,6 +176,14 @@ export default function AddRecord() {
       title: target[4].value,
     }
 
+    const modifyFormData: modifyRecordRequestDto = {
+      title: target[4].value,
+      content: target[5].value,
+      colorName: selectedColor,
+      iconName: selectedIcon,
+      deleteImages: toDeleteFiles,
+    }
+
     const data = new FormData()
     if (files !== undefined && files.length > 0) {
       files?.forEach((file) => {
@@ -146,8 +191,10 @@ export default function AddRecord() {
       })
     }
     data.append(
-      'writeRecordRequestDto',
-      new Blob([JSON.stringify(formData)], { type: 'application/json' })
+      isModify ? 'modifyRecordRequestDto' : 'writeRecordRequestDto',
+      new Blob([JSON.stringify(isModify ? modifyFormData : formData)], {
+        type: 'application/json',
+      })
     )
     return data
   }
@@ -160,7 +207,11 @@ export default function AddRecord() {
           <div className="ml-[18px]">
             <BackButton onClick={() => setIsBackButton(true)} />
           </div>
-          <div className="sticky top-0 left-0 z-[5] bg-grey-1">
+          <div
+            className={`${
+              isModify && 'pointer-events-none'
+            } sticky top-0 left-0 z-[5] bg-grey-1`}
+          >
             <MainCategoryTap
               currentRecordType={recordType}
               onSetRecordType={setRecordType}
@@ -172,11 +223,13 @@ export default function AddRecord() {
             onSubmit={handleSubmitData}
           >
             <AddRecordCategory
+              isModify={isModify}
               recordCategory={data?.categoryId}
               currentRecordType={recordType}
             />
             <AddRecordTitle title={'레코드 제목'} />
             <AddRecordInput
+              recordTitle={data?.title}
               currentRecordType={recordType}
               checkAllFilled={checkAllFilled}
               setCheckAllFilled={setCheckAllFilled}
@@ -196,9 +249,16 @@ export default function AddRecord() {
               currentRecordType={recordType}
             />
             <AddRecordTitle title={'레코드 아이콘'} />
-            <AddRecordIcon currentRecordType={recordType} />
+            <AddRecordIcon
+              recordIcon={data?.iconName}
+              currentRecordType={recordType}
+            />
             <AddRecordTitle title={'레코드 이미지'} />
             <AddRecordFile
+              toDeleteFiles={toDeleteFiles}
+              setToDeleteFiles={setToDeleteFiles}
+              isModify={isModify}
+              recordFiles={data?.imageUrls}
               currentRecordType={recordType}
               files={files}
               setFiles={setFiles}
@@ -222,7 +282,7 @@ export default function AddRecord() {
                 }
                 loading={isLoadingWhileSubmit}
               >
-                레코드 추가하기
+                {isModify ? '수정하기' : '레코드 추가하기'}
               </Button>
             </div>
             {isClickBackButton && (
