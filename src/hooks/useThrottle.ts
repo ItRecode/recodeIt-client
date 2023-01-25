@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useThrottle = <T extends any[]>(
   callback: (...params: T) => void,
   delay: number
@@ -9,8 +8,8 @@ export const useThrottle = <T extends any[]>(
 
   return (...params: T) => {
     if (!timer.current) {
-      callback(...params)
       timer.current = setTimeout(() => {
+        callback(...params)
         timer.current = null
       }, delay)
     }

@@ -2,16 +2,9 @@ import { getReply } from '@apis/reply'
 import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React from 'react'
 import { CommentData } from 'types/replyData'
 import ReplyItem from './ReplyItem'
-
-const useUrlQuery = () => {
-  const { pathname, search } = useLocation()
-  const query = new URLSearchParams(search)
-  return { pathname, query }
-}
 
 export default function ReplyList({
   recordId,
@@ -22,7 +15,7 @@ export default function ReplyList({
 }) {
   const { data, isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ['getReplyData', recordId],
-    queryFn: ({ pageParam = 0 }) => getReply(recordId, pageParam),
+    queryFn: ({ pageParam = 0 }) => getReply(pageParam, recordId),
     getNextPageParam: (lastPage): number | null => {
       if (lastPage.data.totalPage > lastPage.config.params.page) {
         return lastPage.config.params.page + 1
@@ -31,8 +24,6 @@ export default function ReplyList({
     },
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 60000,
-    refetchInterval: 180000,
   })
 
   const ref = useIntersect(async (entry, observer) => {
@@ -42,21 +33,14 @@ export default function ReplyList({
     }
   })
 
-  const { query } = useUrlQuery()
-  const [scrollCommentId, setScrollCommentId] = useState<number | null>(null)
-
-  useEffect(() => {
-    const commentIdInQuery = query.get('commentId')
-
-    if (commentIdInQuery) {
-      setScrollCommentId(parseInt(commentIdInQuery, 10))
-    }
-  }, [])
-
   return (
     <section id="reply" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
-
+      {isLoading && (
+        <div className="flex w-full justify-center">
+          <Spinner size="small" />
+        </div>
+      )}
       {data?.pages.map((page) =>
         page.data.commentList.map((item: CommentData) => (
           <ReplyItem
@@ -67,19 +51,12 @@ export default function ReplyList({
             imageUrl={item.imageUrl}
             modifiedAt={item.modifiedAt}
             numOfSubComment={item.numOfSubComment}
-            recordwriter={Recordwriter}
+            Recordwriter={Recordwriter}
             writer={item.writer}
-            recordId={recordId}
-            isScroll={item.commentId === scrollCommentId}
           />
         ))
       )}
       <div ref={ref} className="h-10 w-full " />
-      {hasNextPage && (
-        <div className="flex w-full justify-center">
-          <Spinner size="small" />
-        </div>
-      )}
     </section>
   )
 }

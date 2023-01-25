@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Camera } from '@assets/camera.svg'
 import { ReactComponent as Plus } from '@assets/plus.svg'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
@@ -13,36 +13,22 @@ import { createReply } from '@apis/reply'
 import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@react-query/hooks/useUser'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { DetailPageInputMode } from '@store/atom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function ReplyInput({
   setInputSectionHeight,
-  recordIdParams,
+  recordId,
 }: {
   setInputSectionHeight: Dispatch<SetStateAction<number>>
-  recordIdParams: string | undefined
+  recordId: number
 }) {
-  const queryClient = useQueryClient()
-
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
-
   const textRef = useRef<HTMLTextAreaElement>(null)
-  const submitButtonRef = useRef<HTMLButtonElement>(null)
-
   const [isCheckedUser, setIsCheckedUser] = useState(false)
   const [isAnonymousUser, setIsAnonymousUser] = useState(false)
-
   const navigate = useNavigate()
-
   const { user, isLoading } = useUser()
-
-  const inputMode = useRecoilValue(DetailPageInputMode)
-
-  const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -86,15 +72,17 @@ export default function ReplyInput({
     }
   }, [])
 
-  const handleSubmitReplyData = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitReplyData = (
+    e: React.FormEvent<HTMLFormElement>,
+    parentId?: number
+  ) => {
     e.preventDefault()
-    setText('')
-    setImage('')
 
+    setText('')
     const writeCommentRequestDto = {
-      recordId: recordIdParams,
+      recordId: recordId,
       comment: text,
-      parentId: inputMode.parentId,
+      parentId: parentId || '',
     }
 
     const data = new FormData()
@@ -102,6 +90,7 @@ export default function ReplyInput({
     if (imageFile !== null) {
       data.set('attachment', imageFile as Blob, (imageFile as File).name)
     }
+
     data.set(
       'writeCommentRequestDto',
       new Blob([JSON.stringify(writeCommentRequestDto)], {
@@ -109,31 +98,11 @@ export default function ReplyInput({
       })
     )
 
-    if (inputMode.mode === 'reply') {
-      replyMutate(data)
+    const submit = async () => {
+      await createReply(data)
     }
-    if (inputMode.mode === 'nestedReply') {
-      nestedReplyMutate(data)
-    }
-    resetInputMode()
+    submit()
   }
-
-  const { mutate: replyMutate } = useMutation(createReply, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['getReplyData', recordIdParams])
-    },
-  })
-
-  const { mutate: nestedReplyMutate } = useMutation(createReply, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['getReplyData', recordIdParams])
-      queryClient.invalidateQueries([
-        'getNestedReplyData',
-        recordIdParams,
-        inputMode.parentId,
-      ])
-    },
-  })
 
   const handleInputFocus = () => {
     if (!user) {
@@ -146,25 +115,47 @@ export default function ReplyInput({
     setIsAnonymousUser(true)
   }
 
-  useEffect(() => {
-    if (inputMode.mode === 'nestedReply') {
-      textRef.current?.focus()
-    }
-  }, [inputMode.mode])
-
-  useEffect(() => {
-    if (isAnonymousUser) {
-      textRef.current?.focus()
-    }
-  }, [isAnonymousUser])
   return (
     <form
-      className="flex w-full items-end bg-transparent py-4 pl-4 pr-6"
+      className="flex w-full items-end bg-grey-1"
       encType="multipart/form-data"
       onSubmit={handleSubmitReplyData}
     >
+      <div className="w-[90%] rounded-lg bg-grey-2 py-4 px-3">
+        {image !== '' && (
+          <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
+            <img
+              className=" h-full w-full rounded-2xl"
+              src={image}
+              alt="user-selected-record-image"
+            />
+            <Close
+              className="absolute top-1.5 right-1.5 cursor-pointer"
+              onClick={handleDeleteImageFile}
+            />
+          </div>
+        )}
+        <div className="flex items-end">
+          <textarea
+            ref={textRef}
+            rows={1}
+            maxLength={100}
+            required={true}
+            placeholder="따뜻한 마음을 남겨주세요"
+            onInput={handleResizeHeight}
+            onChange={(e) => setText(e.target.value)}
+            value={text}
+            className="h-auto w-[85%] resize-none bg-inherit text-[14px] placeholder:text-grey-5 focus:outline-0"
+            onFocus={handleInputFocus}
+            disabled={isLoading}
+          />
+          <button className="cursor-pointer text-[12px] text-primary-2">
+            확인
+          </button>
+        </div>
+      </div>
       <label htmlFor="imageFile">
-        <div className="relative mr-2.5 mb-3 h-9 w-9 cursor-pointer bg-transparent">
+        <div className="relative ml-2 mb-2 h-9 w-9 cursor-pointer bg-grey-1">
           <Camera className="absolute top-[7px] right-[5px]" />
           {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
         </div>
@@ -176,51 +167,6 @@ export default function ReplyInput({
           className="hidden"
         />
       </label>
-      <div className=" w-full rounded-lg bg-grey-2 py-4 px-3">
-        {image !== '' && (
-          <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
-            <img
-              className="aspect-square w-full rounded-2xl object-cover"
-              src={image}
-              alt="user-selected-record-image"
-            />
-            <Close
-              className="absolute top-1.5 right-1.5 cursor-pointer"
-              onClick={handleDeleteImageFile}
-            />
-          </div>
-        )}
-
-        <div className="flex w-full items-end justify-center">
-          <textarea
-            ref={textRef}
-            rows={1}
-            maxLength={100}
-            required={true}
-            placeholder={
-              inputMode.mode === 'reply'
-                ? '따뜻한 마음을 남겨주세요. (100자 이내)'
-                : '답글 추가... (100자 이내)'
-            }
-            onInput={handleResizeHeight}
-            onChange={(e) => setText(e.target.value)}
-            value={text}
-            className={`h-auto w-[85%] resize-none bg-inherit text-[14px] leading-normal placeholder:text-grey-5 focus:outline-0`}
-            onFocus={handleInputFocus}
-            disabled={isLoading}
-          />
-          <button
-            ref={submitButtonRef}
-            disabled={text === ''}
-            className={`mb-1 cursor-pointer text-xs ${
-              text !== '' ? 'text-primary-2' : 'text-grey-6'
-            }`}
-          >
-            완료
-          </button>
-        </div>
-      </div>
-
       {isCheckedUser && (
         <Alert
           visible={isCheckedUser && !isAnonymousUser}
@@ -236,10 +182,7 @@ export default function ReplyInput({
           confirmMessage="회원가입"
           onClose={() => setIsCheckedUser(false)}
           onCancel={handleCancelSingUp}
-          onConfirm={() => {
-            resetInputMode
-            navigate('/login')
-          }}
+          onConfirm={() => navigate('/login')}
         />
       )}
     </form>

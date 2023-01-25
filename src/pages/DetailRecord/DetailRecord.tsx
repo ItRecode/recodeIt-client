@@ -8,7 +8,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
-  INPUT_MODE,
   RECORD_DETAIL_HEADER_SECTION_HEIGHT,
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
 } from '@assets/constant/constant'
@@ -24,11 +23,6 @@ import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
-import { useUser } from '@react-query/hooks/useUser'
-import Alert from '@components/Alert'
-import { DetailPageInputMode } from '@store/atom'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -49,7 +43,6 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
-  const { user } = useUser()
 
   const background_color = `bg-${colorName}`
 
@@ -62,11 +55,11 @@ export default function DetailRecord() {
     () => getRecord(recordIdParams),
     {
       retry: false,
+      refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     }
   )
-  const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
       alert('해당 레코드를 찾을 수 없습니다.')
@@ -99,16 +92,6 @@ export default function DetailRecord() {
     }
   }, [inputSectionHeight])
 
-  const checkUserHistoryLength = () => {
-    if (window.history.length === 1 || window.history.state === null) {
-      return navigate('/myrecord')
-    }
-    navigate(-1)
-  }
-
-  const inputMode = useRecoilValue(DetailPageInputMode)
-  const resetInputMode = useResetRecoilState(DetailPageInputMode)
-
   return (
     <>
       {isLoading && <Loading />}
@@ -125,40 +108,16 @@ export default function DetailRecord() {
             />
           </Modal>
         )}
-        {editModalState && (
-          <EditModal
-            setIsDelete={setIsDelete}
-            setEditModalState={setEditModalState}
-          />
-        )}
-        {isDelete && (
-          <Alert
-            mainMessage={
-              <div className="text-base font-semibold leading-6">
-                레코드를
-                <br />
-                삭제하시겠어요?
-              </div>
-            }
-            visible={isDelete}
-            cancelMessage="아니오"
-            confirmMessage="삭제"
-            onClose={() => setIsDelete(false)}
-            onCancel={() => setIsDelete(false)}
-            onConfirm={() => checkUserHistoryLength()}
-          />
-        )}
+        {editModalState && <EditModal setEditModalState={setEditModalState} />}
         <header className="p-4">
           <nav className="flex justify-between">
             <BackButton />
-            {user?.data === writer && (
-              <button
-                className="cursor-pointer bg-transparent"
-                onClick={() => setEditModalState(true)}
-              >
-                <MoreButton />
-              </button>
-            )}
+            <button
+              className="cursor-pointer bg-grey-1"
+              onClick={() => setEditModalState(true)}
+            >
+              <MoreButton />
+            </button>
           </nav>
         </header>
         <div className="mb-3 overflow-auto" ref={scrollSection}>
@@ -191,31 +150,21 @@ export default function DetailRecord() {
             <Button onClick={() => setShareStatus(true)}>
               <p className="text-base font-semibold">공유하기</p>
             </Button>
-            <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
-              <p className="w-full">{content}</p>
+            <div className="mt-6 mb-10 w-full px-1.5 text-[14px]">
+              <p className="w-full ">{content}</p>
             </div>
           </section>
           <section id="record_reply_list">
             <ReplyList recordId={recordIdParams} Recordwriter={writer} />
           </section>
         </div>
-
         <section
           id="record_reply_input"
-          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1"
+          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1 px-6 py-4 "
         >
-          {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
-            <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
-              <p className="text-xs text-grey-6">답글 작성중...</p>
-              <button onClick={resetInputMode} className="cursor-pointer p-0">
-                <CloseIcon />
-              </button>
-            </div>
-          )}
-
           <ReplyInput
             setInputSectionHeight={setInputSectionHeight}
-            recordIdParams={recordIdParams}
+            recordId={recordId}
           />
         </section>
       </div>

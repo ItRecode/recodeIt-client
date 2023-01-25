@@ -53,6 +53,9 @@ module.exports = {
 
         kakao: '#FEE500',
       },
+      fontFamily: {
+        sans: ['San Francisco'],
+      },
       spacing: {
         85: '335px',
       },

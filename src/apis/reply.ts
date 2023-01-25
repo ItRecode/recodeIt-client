@@ -1,23 +1,22 @@
 import { baseInstance } from './instance'
 
 export const createReply = async (data: FormData) => {
-  return await baseInstance.post('/comment', data, {
+  return baseInstance.post('/comment', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
 
 export const getReply = async (
+  pageParam: number,
   recordId?: string | undefined,
-  pageParam?: number,
-  parentId?: number,
-  size?: number
+  parentId?: number
 ) => {
   return await baseInstance.get('/comment', {
     params: {
-      page: pageParam ? pageParam : 0,
+      page: pageParam,
       parentId: parentId ? parentId : '',
       recordId: recordId,
-      size: size ? size : 10,
+      size: 10,
     },
   })
 }

@@ -23,7 +23,6 @@ export const useImageSwipe = (imageUrl: string[]) => {
         setHavePrev(true)
       }
       if (imageState !== 0) setHavePrev(true)
-      if (imageState !== imageUrl.length) setHaveNext(true)
     }
   }, [imageUrl, imageState])
 

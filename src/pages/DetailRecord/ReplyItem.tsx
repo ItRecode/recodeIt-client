@@ -1,42 +1,43 @@
-import { INPUT_MODE } from '@assets/constant/constant'
-import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode } from '@store/atom'
-import React, { useEffect, useRef, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { getNickname } from '@apis/auth'
+import React, { useEffect, useState } from 'react'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
-import NestedReplyList from './NestedReplyList'
-import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
-import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
-import { useNavigate } from 'react-router-dom'
 
 export default function ReplyItem({
   content,
   createdAt,
   imageUrl,
-  recordwriter,
-  numOfSubComment,
+  Recordwriter,
+  // modifiedAt,
+  // numOfSubComment,
   writer,
-  commentId,
-  recordId,
-  isScroll,
 }: CommentData) {
-  const navigate = useNavigate()
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const { user } = useUser()
-  const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
-
-  const setInputMode = useSetRecoilState(DetailPageInputMode)
+  const [nickName, setNickName] = useState<string | null>(null)
+  const [nickNameResult, setNickNameResult] = useState<string | null>(null)
+  useEffect(() => {
+    const getUserNickName = async () => {
+      const nickName = await getNickname()
+      setNickName(nickName.data)
+    }
+    getUserNickName()
+  }, [])
 
   useEffect(() => {
-    if (isScroll) {
-      scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      navigate(window.location.pathname, { replace: true })
+    if (nickName !== null) {
+      if (nickName === writer) {
+        setNickNameResult('myComment')
+      } else {
+        if (Recordwriter === nickName) {
+          setNickNameResult('myRecordOtherReply')
+        } else {
+          setNickNameResult('otherRecordOtherReply')
+        }
+      }
     }
-  }, [isScroll])
+  }, [Recordwriter, writer, nickName])
 
   return (
-    <div ref={scrollRef} className="mt-3 mb-4 w-full">
+    <div className="mt-3">
       <div className="rounded-lg bg-grey-2 p-3">
         <div className="flex">
           <p className="text-xs font-medium">{writer ? writer : '익명'}</p>
@@ -47,75 +48,47 @@ export default function ReplyItem({
         {imageUrl !== null && (
           <div className="relative my-2.5 aspect-square w-[130px] rounded-2xl">
             <img
-              className="aspect-square w-full rounded-2xl object-cover"
+              className=" h-full w-full rounded-2xl"
               src={imageUrl}
               alt="user-selected-record-image"
             />
           </div>
         )}
-        <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
-          {content}
-        </p>
+        <p className="mt-1.5 text-xs font-normal text-grey-8">{content}</p>
       </div>
       <div>
         <div className="mt-2 flex w-full justify-between">
-          <button
-            onClick={() =>
-              setInputMode({
-                mode: INPUT_MODE.NESTEDREPLY,
-                recordId,
-                parentId: commentId,
-              })
-            }
-            className="cursor-pointer bg-transparent text-xs text-grey-5"
-          >
+          <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
             답글달기
           </button>
           <div>
-            {user?.data === writer && (
-              <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                수정
-              </button>
+            {nickNameResult === 'myComment' && (
+              <>
+                <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
+                  수정
+                </button>
+                <button className="cursor-pointer bg-grey-1 text-xs text-sub-1">
+                  삭제
+                </button>
+              </>
             )}
-            {recordwriter === user?.data && (
-              <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                삭제
-              </button>
+            {nickNameResult === 'myRecordOtherReply' && (
+              <>
+                <button className="cursor-pointer bg-grey-1 text-xs text-sub-1">
+                  삭제
+                </button>
+                <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
+                  신고
+                </button>
+              </>
             )}
-            {user?.data !== undefined && user?.data !== writer && (
-              <button className="cursor-pointer bg-transparent text-xs text-grey-5">
+            {nickNameResult === 'otherRecordOtherReply' && (
+              <button className="cursor-pointer bg-grey-1 text-xs text-grey-5">
                 신고
               </button>
             )}
           </div>
         </div>
-
-        {numOfSubComment > 0 && (
-          <div className="mt-2.5 mb-4">
-            <button
-              onClick={() => setIsOpenNestedReplyList((prev) => !prev)}
-              className="flex cursor-pointer bg-transparent text-[12px] leading-none text-primary-2"
-            >
-              <p className="mr-1">
-                {isOpenNestedReplyList ? (
-                  <Arrow_Up_icon />
-                ) : (
-                  <Arrow_Down_icon />
-                )}
-              </p>
-              답글 {numOfSubComment > 999 ? '999' : numOfSubComment}개
-            </button>
-          </div>
-        )}
-
-        {isOpenNestedReplyList && (
-          <NestedReplyList
-            recordwriter={recordwriter}
-            recordId={recordId}
-            parentId={commentId}
-            numOfSubComment={numOfSubComment}
-          />
-        )}
       </div>
     </div>
   )

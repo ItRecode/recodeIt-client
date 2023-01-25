@@ -25,7 +25,7 @@ export const getChipIconName = (categoryName: string) => {
       return Depress
     case '공감이 필요해요':
       return Sympathy
-    case '내편이 되어주세요':
+    case '내 편이 되어주세요':
       return MySide
     default:
       return ''

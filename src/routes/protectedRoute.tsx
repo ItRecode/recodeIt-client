@@ -37,27 +37,6 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
     )
   }
 
-  if (!user && route === '/myrecord') {
-    return (
-      <Alert
-        visible={true}
-        mainMessage={
-          <div className="text-base font-semibold leading-6">
-            비회원은 레코드를
-            <br />
-            <span className="text-sub-1">확인</span> 할 수 없어요
-          </div>
-        }
-        subMessage={<>회원가입하고 추억을 공유해보세요.</>}
-        cancelMessage="닫기"
-        confirmMessage="회원가입"
-        onClose={() => navigate('/')}
-        onCancel={() => navigate('/')}
-        onConfirm={() => navigate('/login')}
-      />
-    )
-  }
-
   return children
 }
 

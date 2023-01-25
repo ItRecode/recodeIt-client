@@ -43,11 +43,8 @@ export const getCreatedDate = (createdAt: string) => {
   // 게시물 작성 일주일 이상 작성 날짜,시간 반환
   if (differenceTime > 24) {
     const date = new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: 'numeric',
-      minute: 'numeric',
+      dateStyle: 'medium',
+      timeStyle: 'short',
       hour12: false,
     }).format(createdTime)
     return date
