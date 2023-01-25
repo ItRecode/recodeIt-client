@@ -44,6 +44,13 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
     })[0]
     if (getRecordNumber) {
       setCurrentFocus(getRecordNumber.id)
+      setFormData({
+        ...formData,
+        selectedIcon: getIconSrc(
+          icons[currentRecordType][getRecordNumber.id].src
+        ),
+      })
+      slickRef.current?.slickGoTo(getRecordNumber.id)
     }
   }, [currentRecordType])
 
@@ -53,10 +60,6 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
       selectedIcon: getIconSrc(icons[currentRecordType][currentFocus].src),
     })
   }, [currentFocus])
-
-  // useEffect(()=>{
-  //   re
-  // },[])
 
   const handleFront = () => {
     slickRef.current?.slickNext()
