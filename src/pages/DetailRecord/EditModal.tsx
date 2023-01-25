@@ -5,7 +5,6 @@ import useClickOutside from '@hooks/useClickOutside'
 import { useNavigate } from 'react-router-dom'
 import { deleteRecord } from '@apis/record'
 import { AxiosError } from 'axios'
-import { LocalStorage } from '@utils/localStorage'
 
 export default function EditModal({
   setEditModalState,
@@ -17,11 +16,11 @@ export default function EditModal({
   const editRef = useClickOutside<HTMLDivElement>(() => {
     setEditModalState(false)
   })
-  const POST_ID = window.location.href.split('/')[4]
   const navigate = useNavigate()
 
   const handleClickDeleteButton = () => {
-    DeleteRecordById(POST_ID)
+    const id = window.location.href.split('/')[4]
+    DeleteRecordById(id)
   }
   const DeleteRecordById = async (id: string) => {
     try {
@@ -37,11 +36,6 @@ export default function EditModal({
     }
   }
 
-  const handleClickModifyButton = () => {
-    LocalStorage.set('modifyMode', 'true')
-    LocalStorage.set('postId', `${POST_ID}`)
-    navigate('/record/add')
-  }
   return (
     <>
       <div
@@ -56,7 +50,7 @@ export default function EditModal({
             <Button
               property="danger"
               normal={true}
-              onClick={handleClickModifyButton}
+              onClick={() => navigate('/record/add')}
             >
               수정
             </Button>

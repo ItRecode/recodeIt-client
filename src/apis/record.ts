@@ -45,15 +45,6 @@ export const deleteRecord = async (recordId: string | undefined) => {
   }
 }
 
-export const modifyRecord = async (
-  recordId: string | undefined,
-  data: FormData
-) => {
-  return baseInstance.put(`/record/${recordId}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
-}
-
 export const getRecordByDate = ({
   date,
   page,
