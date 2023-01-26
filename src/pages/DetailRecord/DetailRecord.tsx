@@ -203,7 +203,7 @@ export default function DetailRecord() {
 
         <section
           id="record_reply_input"
-          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1"
+          className="sticky bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1"
         >
           {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
             <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
