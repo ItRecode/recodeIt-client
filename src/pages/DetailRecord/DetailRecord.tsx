@@ -65,7 +65,6 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
-  console.log(data)
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
