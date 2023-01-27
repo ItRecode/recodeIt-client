@@ -26,7 +26,7 @@ export default function ImageContainer({
       {imageState === 0 && iconName !== '' && (
         <RecordIcon width={160} height={160} />
       )}
-      {haveNext && (
+      {haveNext && imageUrls?.length !== 0 && (
         <button
           onClick={next}
           className="absolute right-4 cursor-pointer bg-transparent p-0"
