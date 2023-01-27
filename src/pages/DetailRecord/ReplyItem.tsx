@@ -9,6 +9,9 @@ import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteReply } from '@apis/reply'
+import Alert from '@components/Alert'
 
 export default function ReplyItem({
   content,
@@ -25,6 +28,7 @@ export default function ReplyItem({
   const scrollRef = useRef<HTMLDivElement>(null)
   const { user } = useUser()
   const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
+  const [deleteAlert, setDeleteAlert] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
 
@@ -34,6 +38,15 @@ export default function ReplyItem({
       navigate(window.location.pathname, { replace: true })
     }
   }, [isScroll])
+
+  const queryClient = useQueryClient()
+
+  const { mutate: onDeleteReply } = useMutation(() => deleteReply(commentId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getReplyData', recordId])
+      setDeleteAlert(false)
+    },
+  })
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -53,7 +66,7 @@ export default function ReplyItem({
             />
           </div>
         )}
-        <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
+        <p className="mt-1.5 w-full whitespace-normal break-words text-xs font-normal leading-normal text-grey-8">
           {content}
         </p>
       </div>
@@ -78,7 +91,10 @@ export default function ReplyItem({
               </button>
             )}
             {recordwriter === user?.data && (
-              <button className="cursor-pointer bg-transparent text-xs text-sub-1">
+              <button
+                onClick={() => setDeleteAlert(true)}
+                className="cursor-pointer bg-transparent text-xs text-sub-1"
+              >
                 삭제
               </button>
             )}
@@ -117,6 +133,21 @@ export default function ReplyItem({
           />
         )}
       </div>
+      {deleteAlert && (
+        <Alert
+          visible={deleteAlert}
+          mainMessage={<>댓글을 삭제하시겠습니까?</>}
+          subMessage={<>삭제 후 복구는 불가능해요.</>}
+          cancelMessage="아니오"
+          confirmMessage="예"
+          onClose={() => setDeleteAlert(false)}
+          onCancel={() => setDeleteAlert(false)}
+          onConfirm={() => {
+            onDeleteReply()
+          }}
+          danger={true}
+        />
+      )}
     </div>
   )
 }

@@ -9,7 +9,6 @@ import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
   INPUT_MODE,
-  RECORD_DETAIL_HEADER_SECTION_HEIGHT,
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
 } from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
@@ -83,19 +82,15 @@ export default function DetailRecord() {
     }
   }, [recordData])
 
-  const scrollSection = useRef<HTMLDivElement>(null)
+  const scrollSectionFragments = useRef<HTMLDivElement>(null)
   const [inputSectionHeight, setInputSectionHeight] = useState(
     RECORD_DETAIL_INITIAL_INPUT_HEIGHT
   )
 
   useEffect(() => {
-    if (scrollSection.current !== null) {
-      scrollSection.current.style.height = 'auto'
-      scrollSection.current.style.height =
-        window.innerHeight -
-        inputSectionHeight -
-        RECORD_DETAIL_HEADER_SECTION_HEIGHT +
-        'px'
+    if (scrollSectionFragments.current !== null) {
+      scrollSectionFragments.current.style.height = 'auto'
+      scrollSectionFragments.current.style.height = inputSectionHeight + 'px'
     }
   }, [inputSectionHeight])
 
@@ -112,7 +107,7 @@ export default function DetailRecord() {
   return (
     <>
       {isLoading && <Loading />}
-      <div className="relative h-full w-full">
+      <div className="relative h-screen w-full">
         {shareStatus && (
           <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
             <ShareModal
@@ -161,10 +156,10 @@ export default function DetailRecord() {
             )}
           </nav>
         </header>
-        <div className="mb-3 overflow-auto" ref={scrollSection}>
+        <div className="overflow-y-auto">
           <section id="title" className="flex flex-col px-6">
-            <div className="flex justify-between">
-              <p className="flex items-center text-2xl font-semibold">
+            <div className="flex justify-between whitespace-nowrap">
+              <p className="flex items-center whitespace-nowrap text-2xl font-semibold">
                 {title}
               </p>
               <Chip
@@ -198,11 +193,11 @@ export default function DetailRecord() {
           <section id="record_reply_list">
             <ReplyList recordId={recordIdParams} Recordwriter={writer} />
           </section>
+          <div ref={scrollSectionFragments} />
         </div>
-
         <section
           id="record_reply_input"
-          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1"
+          className="fixed bottom-0 w-full max-w-[420px] border-t border-solid border-t-grey-2 bg-grey-1"
         >
           {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
             <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">

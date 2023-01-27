@@ -6,8 +6,10 @@ import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import {
+  RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
+  RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT,
 } from '@assets/constant/constant'
 import { createReply } from '@apis/reply'
 import Alert from '@components/Alert'
@@ -31,7 +33,6 @@ export default function ReplyInput({
   const [text, setText] = useState('')
 
   const textRef = useRef<HTMLTextAreaElement>(null)
-  const submitButtonRef = useRef<HTMLButtonElement>(null)
 
   const [isCheckedUser, setIsCheckedUser] = useState(false)
   const [isAnonymousUser, setIsAnonymousUser] = useState(false)
@@ -90,6 +91,13 @@ export default function ReplyInput({
     e.preventDefault()
     setText('')
     setImage('')
+
+    if (textRef.current !== null) {
+      textRef.current.style.height =
+        RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT + 'px'
+    }
+
+    setInputSectionHeight(RECORD_DETAIL_INITIAL_INPUT_HEIGHT)
 
     const writeCommentRequestDto = {
       recordId: recordIdParams,
@@ -210,7 +218,6 @@ export default function ReplyInput({
             disabled={isLoading}
           />
           <button
-            ref={submitButtonRef}
             disabled={text === ''}
             className={`mb-1 cursor-pointer text-xs ${
               text !== '' ? 'text-primary-2' : 'text-grey-6'

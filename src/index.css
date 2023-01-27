@@ -98,8 +98,6 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  /* font: inherit; */
-
   vertical-align: baseline;
   text-decoration: none;
 }
@@ -166,4 +164,8 @@ textarea {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+body {
+  min-height: -webkit-fill-available;
 }

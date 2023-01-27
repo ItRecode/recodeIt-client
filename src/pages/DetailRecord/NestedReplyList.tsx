@@ -1,7 +1,8 @@
-import { getReply } from '@apis/reply'
+import { deleteReply, getReply } from '@apis/reply'
+import Alert from '@components/Alert'
 import Spinner from '@components/Spinner'
 import { useUser } from '@react-query/hooks/useUser'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
@@ -20,6 +21,10 @@ export default function NestedReplyList({
   const [nestedCommentList, setNestedCommentList] = useState<
     CommentData[] | null
   >(null)
+
+  const [deleteAlert, setDeleteAlert] = useState(false)
+
+  const queryClient = useQueryClient()
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getNestedReplyData', recordId, parentId],
@@ -41,6 +46,21 @@ export default function NestedReplyList({
     }
   }, [data, isSuccess])
 
+  const { mutate: onDeleteNestedReply } = useMutation(
+    (commentId: number) => deleteReply(commentId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['getReplyData', recordId])
+        queryClient.invalidateQueries([
+          'getNestedReplyData',
+          recordId,
+          parentId,
+        ])
+        setDeleteAlert(false)
+      },
+    }
+  )
+
   return (
     <>
       {isLoading && (
@@ -48,6 +68,7 @@ export default function NestedReplyList({
           <Spinner size="small" />
         </div>
       )}
+
       {nestedCommentList !== null &&
         nestedCommentList.map((item, index) => (
           <div key={index} className="mb-4 pr-[3.5rem]">
@@ -73,6 +94,21 @@ export default function NestedReplyList({
                 {item.content}
               </p>
             </div>
+            {deleteAlert && (
+              <Alert
+                visible={deleteAlert}
+                mainMessage={<>댓글을 삭제하시겠습니까?</>}
+                subMessage={<>삭제 후 복구는 불가능해요.</>}
+                cancelMessage="아니오"
+                confirmMessage="예"
+                onClose={() => setDeleteAlert(false)}
+                onCancel={() => setDeleteAlert(false)}
+                onConfirm={() => {
+                  onDeleteNestedReply(item.commentId)
+                }}
+                danger={true}
+              />
+            )}
             <div className="mt-1.5 flex w-full justify-end">
               <div>
                 {user?.data === item.writer && (
@@ -81,7 +117,10 @@ export default function NestedReplyList({
                   </button>
                 )}
                 {recordwriter === user?.data && (
-                  <button className="cursor-pointer bg-transparent text-xs text-sub-1">
+                  <button
+                    onClick={() => setDeleteAlert(true)}
+                    className="cursor-pointer bg-transparent text-xs text-sub-1"
+                  >
                     삭제
                   </button>
                 )}
