@@ -123,9 +123,14 @@ export default function AddRecord() {
       }
     }
     isModify && changeCurrentType()
-    return () => {
+    const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
+    }
+    window.addEventListener('beforeunload', removeModifyMode)
+    return () => {
+      removeModifyMode()
+      window.removeEventListener('beforeunload', removeModifyMode)
     }
   }, [])
 
