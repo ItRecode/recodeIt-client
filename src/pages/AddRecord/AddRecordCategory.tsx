@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import Chip from '@components/Chip'
-import { useRecoilState } from 'recoil'
-import { formDataAtom } from '@store/atom'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { formDataAtom, recordTypeAtom } from '@store/atom'
 import {
   Cake,
   Celebrate,
@@ -47,6 +47,7 @@ function AddRecordCategory({
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
+  const recordType = useRecoilValue(recordTypeAtom)
   const CELEBRATES = 3
   const CONSOLATES = 7
   const { data } = useQuery(['getCategory'], getCategory, {
@@ -58,8 +59,7 @@ function AddRecordCategory({
 
   useEffect(() => {
     handleChooseCurrentCategory(currentRecordType === 'celebration' ? 3 : 7)
-    // }
-  }, [currentRecordType])
+  }, [recordType])
 
   useEffect(() => {
     if (isModify) {
@@ -68,7 +68,7 @@ function AddRecordCategory({
         if (madeData !== null) {
           const modifyData = {
             ...madeData,
-            [currentRecordType]: madeData[currentRecordType].map(
+            [recordType]: madeData[recordType].map(
               (category: CategorySource) => {
                 return {
                   ...category,
@@ -81,17 +81,18 @@ function AddRecordCategory({
           setFormData({
             ...formData,
             selectedCategory:
-              modifyData[currentRecordType][
-                currentRecordType === 'celebration'
+              modifyData[recordType][
+                recordType === 'celebration'
                   ? recordCategory - CELEBRATES
                   : recordCategory - CONSOLATES
-              ].id,
+              ]?.id,
           })
         }
       }
     } else {
       setCategoryState(makeCategoryData(data?.data))
     }
+    // }
   }, [data])
 
   const makeCategoryData = (data: CategoryDatas) => {

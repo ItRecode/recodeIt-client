@@ -8,10 +8,10 @@ import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import MainCategoryTap from '@components/MainCategoryTap'
-import AddRecordIcon, { IconType } from './AddRecordIcon'
+import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
-import { formDataAtom } from '@store/atom'
+import { formDataAtom, recordTypeAtom } from '@store/atom'
 import { useRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
@@ -54,7 +54,6 @@ export type IsInputFocusType = {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
-  const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: '',
     textArea: '',
@@ -69,6 +68,7 @@ export default function AddRecord() {
   const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
+  const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
   const { data, isLoading, isSuccess } = useQuery(
