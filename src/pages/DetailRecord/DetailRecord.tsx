@@ -157,7 +157,7 @@ export default function DetailRecord() {
             )}
           </nav>
         </header>
-        <div className="h-screen overflow-y-auto">
+        <div className="overflow-y-auto">
           <section id="title" className="flex flex-col px-6">
             <div className="flex justify-between whitespace-nowrap">
               <p className="flex items-center whitespace-nowrap text-2xl font-semibold">
