@@ -66,7 +66,7 @@ export default function ReplyItem({
             />
           </div>
         )}
-        <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
+        <p className="mt-1.5 w-full whitespace-normal break-words text-xs font-normal leading-normal text-grey-8">
           {content}
         </p>
       </div>
