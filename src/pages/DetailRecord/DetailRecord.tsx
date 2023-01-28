@@ -106,7 +106,7 @@ export default function DetailRecord() {
   const inputMode = useRecoilValue(DetailPageInputMode)
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
-  const DeleteRecordById = async (id: string) => {
+  const deleteRecordById = async (id: string) => {
     try {
       await deleteRecord(id)
       setIsDelete(true)
@@ -161,7 +161,7 @@ export default function DetailRecord() {
             onCancel={() => setIsDelete(false)}
             onConfirm={() => {
               checkUserHistoryLength()
-              DeleteRecordById(POST_ID)
+              deleteRecordById(POST_ID)
             }}
           />
         )}
