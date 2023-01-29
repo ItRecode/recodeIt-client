@@ -18,6 +18,7 @@ import { useUser } from '@react-query/hooks/useUser'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { DetailPageInputMode } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { LocalStorage } from '@utils/localStorage'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -154,6 +155,12 @@ export default function ReplyInput({
     setIsAnonymousUser(true)
   }
 
+  const handleConfirmSignUp = () => {
+    LocalStorage.set('redirectUrl', `/record/${recordIdParams}`)
+    resetInputMode()
+    navigate('/login')
+  }
+
   useEffect(() => {
     if (inputMode.mode === 'nestedReply') {
       textRef.current?.focus()
@@ -243,10 +250,7 @@ export default function ReplyInput({
           confirmMessage="회원가입"
           onClose={() => setIsCheckedUser(false)}
           onCancel={handleCancelSingUp}
-          onConfirm={() => {
-            resetInputMode
-            navigate('/login')
-          }}
+          onConfirm={handleConfirmSignUp}
         />
       )}
     </form>

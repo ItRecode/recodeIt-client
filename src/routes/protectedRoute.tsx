@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
 import Loading from '@components/Loading'
+import { LocalStorage } from '@utils/localStorage'
 interface RouteProps {
   children: React.ReactElement
   route?: string
@@ -11,6 +12,11 @@ interface RouteProps {
 const ProtectedRoute = ({ children, route }: RouteProps) => {
   const navigate = useNavigate()
   const { user, isLoading } = useUser()
+
+  const redirectPage = (url: string) => {
+    LocalStorage.set('redirectUrl', url)
+    navigate('/login')
+  }
 
   if (isLoading) {
     return <Loading />
@@ -32,7 +38,7 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
         confirmMessage="회원가입"
         onClose={() => navigate('/')}
         onCancel={() => navigate('/')}
-        onConfirm={() => navigate('/login')}
+        onConfirm={() => redirectPage('/record/add')}
       />
     )
   }
@@ -53,7 +59,7 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
         confirmMessage="회원가입"
         onClose={() => navigate('/')}
         onCancel={() => navigate('/')}
-        onConfirm={() => navigate('/login')}
+        onConfirm={() => redirectPage('/myrecord')}
       />
     )
   }
