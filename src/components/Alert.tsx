@@ -41,7 +41,7 @@ export default function Alert({
           {onCancel && (
             <button
               aria-label="alert-cancel-message"
-              className={`${buttonClassName} text-grey-8`}
+              className={`${buttonClassName} border-r border-r-grey-2 text-grey-8`}
               onClick={onCancel}
             >
               {cancelMessage}

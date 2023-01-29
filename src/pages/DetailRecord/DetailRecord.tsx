@@ -18,7 +18,7 @@ import ShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
 import Modal from '@components/Modal'
-import { getRecord } from '@apis/record'
+import { deleteRecord, getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
@@ -28,6 +28,7 @@ import Alert from '@components/Alert'
 import { DetailPageInputMode } from '@store/atom'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
+import { AxiosError } from 'axios'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -65,6 +66,7 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
+  const POST_ID = window.location.href.split('/')[4]
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
@@ -104,6 +106,20 @@ export default function DetailRecord() {
   const inputMode = useRecoilValue(DetailPageInputMode)
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
+  const deleteRecordById = async (id: string) => {
+    try {
+      await deleteRecord(id)
+      setIsDelete(true)
+      setEditModalState(false)
+    } catch (error) {
+      const { response } = error as unknown as AxiosError
+      if (response?.status === 400) {
+        alert('질못된 접근입니다.')
+      }
+      throw error
+    }
+  }
+
   return (
     <>
       {isLoading && <Loading />}
@@ -122,6 +138,7 @@ export default function DetailRecord() {
         )}
         {editModalState && (
           <EditModal
+            POST_ID={POST_ID}
             setIsDelete={setIsDelete}
             setEditModalState={setEditModalState}
           />
@@ -130,17 +147,22 @@ export default function DetailRecord() {
           <Alert
             mainMessage={
               <div className="text-base font-semibold leading-6">
-                레코드를
+                정말로 이 레코드를
                 <br />
-                삭제하시겠어요?
+                <span className="text-sub-1">삭제</span>하시겠어요?
               </div>
             }
+            subMessage={<>삭제 후 복구는 불가능해요.</>}
             visible={isDelete}
-            cancelMessage="아니오"
+            cancelMessage="취소"
             confirmMessage="삭제"
+            danger={true}
             onClose={() => setIsDelete(false)}
             onCancel={() => setIsDelete(false)}
-            onConfirm={() => checkUserHistoryLength()}
+            onConfirm={() => {
+              checkUserHistoryLength()
+              deleteRecordById(POST_ID)
+            }}
           />
         )}
         <header className="p-4">
