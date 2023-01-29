@@ -106,9 +106,6 @@ export default function ReplyInput({
 
   const handleSubmitReplyData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setText('')
-    setImage('')
-    setImageFile(null)
 
     if (inputMode.mode === 'nestedReply') {
       setNestedReplyList({ commentId: +inputMode.parentId, state: true })
@@ -157,9 +154,12 @@ export default function ReplyInput({
           type: 'application/json',
         })
       )
-      updateReplyMutate({ data, commentId: updateReply.commentId })
+      updateReplyMutate({ data: data, commentId: updateReply.commentId })
       resetUpdateReply
     }
+    setText('')
+    setImage('')
+    setImageFile(null)
     resetInputMode()
   }
 
@@ -190,6 +190,7 @@ export default function ReplyInput({
       ])
     },
   })
+
   const handleInputFocus = () => {
     if (!user) {
       setIsCheckedUser(true)
@@ -208,8 +209,8 @@ export default function ReplyInput({
   }
 
   useEffect(() => {
-    if (inputMode.mode === 'nestedReply') {
-      textRef.current?.focus()
+    if (inputMode.mode === 'nestedReply' && !user) {
+      setIsCheckedUser(true)
     }
     if (inputMode.mode === 'update') {
       setText(updateReply.content)
@@ -218,7 +219,7 @@ export default function ReplyInput({
   }, [inputMode.mode])
 
   useEffect(() => {
-    if (isAnonymousUser) {
+    if (isAnonymousUser === true) {
       textRef.current?.focus()
     }
   }, [isAnonymousUser])

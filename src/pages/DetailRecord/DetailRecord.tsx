@@ -127,6 +127,7 @@ export default function DetailRecord() {
               description={content}
               backgroundColor={background_color}
               iconName={iconName}
+              imageUrl={imageUrls[0]}
             />
           </Modal>
         )}
