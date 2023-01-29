@@ -67,6 +67,7 @@ export default function AddRecord() {
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
+  //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
@@ -270,7 +271,7 @@ export default function AddRecord() {
             />
             <div
               className={`${
-                isInputFocus && isMobile ? 'hidden' : 'sticky'
+                isInputFocus && isMobile && 'block'
               } bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6`}
             >
               <Button
