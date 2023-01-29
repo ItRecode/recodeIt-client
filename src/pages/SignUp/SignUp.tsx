@@ -19,9 +19,9 @@ export default function SignUp() {
   const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
-    // if (!location.state?.tempSessionId) {
-    //   navigate('/login')
-    // }
+    if (!location.state?.tempSessionId) {
+      navigate('/login')
+    }
   }, [])
 
   useDebounce(
