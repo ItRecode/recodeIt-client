@@ -131,19 +131,19 @@ function AddRecordCategory({
       case 3:
         return Celebrate
       case 4:
-        return Happy
-      case 5:
         return Cake
-      case 6:
+      case 5:
         return Love
+      case 6:
+        return Happy
       case 7:
         return Consolate
       case 8:
-        return Depress
-      case 9:
         return Sympathy
-      case 10:
+      case 9:
         return MySide
+      case 10:
+        return Depress
       default:
         return Celebrate
     }
