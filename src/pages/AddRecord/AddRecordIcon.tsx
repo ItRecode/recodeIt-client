@@ -51,6 +51,8 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
         ),
       })
       slickRef.current?.slickGoTo(getRecordNumber.id)
+    } else {
+      setCurrentFocus(0)
     }
   }, [currentRecordType])
 
