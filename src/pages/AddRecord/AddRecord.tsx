@@ -12,7 +12,7 @@ import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
@@ -72,6 +72,8 @@ export default function AddRecord() {
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
+  const resetFormDataAtom = useResetRecoilState(formDataAtom)
+  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
   const { data, isLoading, isSuccess } = useQuery(
     ['getRecordData', ID],
     () => getRecord(ID),
@@ -130,7 +132,8 @@ export default function AddRecord() {
     }
     window.addEventListener('beforeunload', removeModifyMode)
     return () => {
-      setRecordType(CELEBRATION)
+      resetRecordTypeAtom()
+      resetFormDataAtom()
       removeModifyMode()
       window.removeEventListener('beforeunload', removeModifyMode)
     }
