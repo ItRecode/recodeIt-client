@@ -130,6 +130,7 @@ export default function AddRecord() {
     }
     window.addEventListener('beforeunload', removeModifyMode)
     return () => {
+      setRecordType(CELEBRATION)
       removeModifyMode()
       window.removeEventListener('beforeunload', removeModifyMode)
     }
