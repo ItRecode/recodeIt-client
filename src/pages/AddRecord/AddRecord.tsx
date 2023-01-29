@@ -161,7 +161,7 @@ export default function AddRecord() {
         })
       } catch {
         setIsLoadingWhileSubmit(false)
-        alert('레코드 추가 실패 - TODO: toast로 변경')
+        alert('레코드 수정 실패 - TODO: toast로 변경')
       }
     }
     if (isModify) {
