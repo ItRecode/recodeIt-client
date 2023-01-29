@@ -10,7 +10,11 @@ function BackButton({ onClick }: { onClick?: () => void }) {
       return onClick()
     }
 
-    navigate(-1)
+    if (navigate(-1) === undefined) {
+      navigate('/')
+    } else {
+      navigate(-1)
+    }
   }
 
   return <Back className="cursor-pointer" onClick={handleLocateBack} />

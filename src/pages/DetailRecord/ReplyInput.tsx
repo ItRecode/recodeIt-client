@@ -6,18 +6,21 @@ import { useState } from 'react'
 import { useRef } from 'react'
 import { useCallback } from 'react'
 import {
-  INPUT_MODE,
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
   RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
   RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT,
 } from '@assets/constant/constant'
-import { createReply } from '@apis/reply'
+import { createReply, updateComment } from '@apis/reply'
 import Alert from '@components/Alert'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@react-query/hooks/useUser'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
-import { DetailPageInputMode, nestedReplyState } from '@store/atom'
+import {
+  DetailPageInputMode,
+  modifyComment,
+  nestedReplyState,
+} from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { LocalStorage } from '@utils/localStorage'
 import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
@@ -45,9 +48,12 @@ export default function ReplyInput({
   const { user, isLoading } = useUser()
 
   const inputMode = useRecoilValue(DetailPageInputMode)
+  const updateReply = useRecoilValue(modifyComment)
+  const resetUpdateReply = useResetRecoilState(modifyComment)
+  const [deleteImageUrl, setDeleteImageUrl] = useState<string[]>([])
 
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
-  const setIsOpenNestedReplyList = useSetRecoilState(nestedReplyState)
+  const setNestedReplyList = useSetRecoilState(nestedReplyState)
 
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     encodeFile((e.target.files as FileList)[0])
@@ -75,9 +81,16 @@ export default function ReplyInput({
   }
 
   const handleDeleteImageFile = () => {
+    if (inputMode.mode === 'update') {
+      if (image.slice(60, 63) === 'dev') {
+        setDeleteImageUrl(() => [image.slice(64)])
+      } else {
+        setDeleteImageUrl(() => [image.slice(65)])
+      }
+    }
+    setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
     setImage('')
     setImageFile(null)
-    setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
   }
 
   const handleResizeHeight = useCallback(() => {
@@ -93,45 +106,60 @@ export default function ReplyInput({
 
   const handleSubmitReplyData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setText('')
-    setImage('')
-    setImageFile(null)
 
     if (inputMode.mode === 'nestedReply') {
-      setIsOpenNestedReplyList({ commentId: +inputMode.parentId, state: true })
+      setNestedReplyList({ commentId: +inputMode.parentId, state: true })
     }
-
     if (textRef.current !== null) {
       textRef.current.style.height =
         RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT + 'px'
     }
-
     setInputSectionHeight(RECORD_DETAIL_INITIAL_INPUT_HEIGHT)
-
-    const writeCommentRequestDto = {
-      recordId: recordIdParams,
-      comment: text,
-      parentId: inputMode.parentId,
-    }
 
     const data = new FormData()
 
     if (imageFile !== null) {
       data.set('attachment', imageFile as Blob, (imageFile as File).name)
     }
-    data.set(
-      'writeCommentRequestDto',
-      new Blob([JSON.stringify(writeCommentRequestDto)], {
-        type: 'application/json',
-      })
-    )
 
-    if (inputMode.mode === 'reply') {
-      replyMutate(data)
+    if (inputMode.mode !== 'update') {
+      const writeCommentRequestDto = {
+        recordId: recordIdParams,
+        comment: text,
+        parentId: inputMode.parentId,
+      }
+      data.set(
+        'writeCommentRequestDto',
+        new Blob([JSON.stringify(writeCommentRequestDto)], {
+          type: 'application/json',
+        })
+      )
+
+      if (inputMode.mode === 'reply') {
+        replyMutate(data)
+      }
+      if (inputMode.mode === 'nestedReply') {
+        nestedReplyMutate(data)
+      }
     }
-    if (inputMode.mode === 'nestedReply') {
-      nestedReplyMutate(data)
+
+    if (inputMode.mode === 'update') {
+      const modifyCommentRequestDto = {
+        comment: text,
+        deleteImages: deleteImageUrl,
+      }
+      data.set(
+        'modifyCommentRequestDto',
+        new Blob([JSON.stringify(modifyCommentRequestDto)], {
+          type: 'application/json',
+        })
+      )
+      updateReplyMutate({ data: data, commentId: updateReply.commentId })
+      resetUpdateReply
     }
+    setText('')
+    setImage('')
+    setImageFile(null)
     resetInputMode()
   }
 
@@ -142,6 +170,17 @@ export default function ReplyInput({
   })
 
   const { mutate: nestedReplyMutate } = useMutation(createReply, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getReplyData', recordIdParams])
+      queryClient.invalidateQueries([
+        'getNestedReplyData',
+        recordIdParams,
+        inputMode.parentId,
+      ])
+    },
+  })
+
+  const { mutate: updateReplyMutate } = useMutation(updateComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getReplyData', recordIdParams])
       queryClient.invalidateQueries([
@@ -170,25 +209,34 @@ export default function ReplyInput({
   }
 
   useEffect(() => {
-    if (inputMode.mode === 'nestedReply') {
-      textRef.current?.focus()
+    if (inputMode.mode === 'nestedReply' && !user) {
+      setIsCheckedUser(true)
+    }
+    if (inputMode.mode === 'update') {
+      setText(updateReply.content)
+      setImage(updateReply.imageUrl)
     }
   }, [inputMode.mode])
 
   useEffect(() => {
-    if (isAnonymousUser) {
+    if (isAnonymousUser === true) {
       textRef.current?.focus()
     }
   }, [isAnonymousUser])
+
   return (
     <>
-      {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
+      {(inputMode.mode === 'nestedReply' || inputMode.mode === 'update') && (
         <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
-          <p className="text-xs text-grey-6">답글 작성중...</p>
+          <p className="text-xs text-grey-6">
+            {inputMode.mode === 'nestedReply' ? '답글 작성중...' : '수정중...'}
+          </p>
           <button
             onClick={() => {
               resetInputMode()
               setText('')
+              setImage('')
+              setImageFile(null)
             }}
             className="cursor-pointer p-0"
           >
@@ -212,6 +260,7 @@ export default function ReplyInput({
             type="file"
             accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
             className="hidden"
+            disabled={image !== ''}
           />
         </label>
         <div className=" w-full rounded-lg bg-grey-2 py-4 px-3">
