@@ -19,9 +19,9 @@ export default function SignUp() {
   const [isInputClicked, setIsInputClicked] = useState(false)
 
   useEffect(() => {
-    if (!location.state?.tempSessionId) {
-      navigate('/login')
-    }
+    // if (!location.state?.tempSessionId) {
+    //   navigate('/login')
+    // }
   }, [])
 
   useDebounce(
@@ -101,20 +101,24 @@ export default function SignUp() {
         <br />
         사용하시겠어요?
       </h1>
-      <Input
-        property={setPropertyWithIsCheckedNickname()}
-        name="nickname"
-        label="닉네임"
-        value={nickname}
-        maxLength={8}
-        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
-        message={isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage}
-        onChange={(e) => setNickname(e.target.value)}
-        onRemove={handleRemoveNickname}
-        onFocus={() => setIsInputClicked(true)}
-        onBlur={() => setIsInputClicked(false)}
-        autoFocus={false}
-      />
+      <div className="h-[105px]">
+        <Input
+          property={setPropertyWithIsCheckedNickname()}
+          name="nickname"
+          label="닉네임"
+          value={nickname}
+          maxLength={8}
+          placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
+          message={
+            isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage
+          }
+          onChange={(e) => setNickname(e.target.value)}
+          onRemove={handleRemoveNickname}
+          onFocus={() => setIsInputClicked(true)}
+          onBlur={() => setIsInputClicked(false)}
+          autoFocus={false}
+        />
+      </div>
       <div className="mt-[104px]">
         <Button
           type="submit"
