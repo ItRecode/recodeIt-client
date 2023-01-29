@@ -28,3 +28,11 @@ export const recordTypeAtom = atom<keyof IconType>({
   key: 'recordType',
   default: TEXT_DETAILS.CELEBRATION,
 })
+
+export const nestedReplyState = atom({
+  key: 'nestedReplyState',
+  default: {
+    commentId: 0,
+    state: false,
+  },
+})

@@ -1,8 +1,8 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode } from '@store/atom'
+import { DetailPageInputMode, nestedReplyState } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
@@ -27,7 +27,8 @@ export default function ReplyItem({
   const navigate = useNavigate()
   const scrollRef = useRef<HTMLDivElement>(null)
   const { user } = useUser()
-  const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
+  const [isOpenNestedReplyList, setIsOpenNestedReplyList] =
+    useRecoilState(nestedReplyState)
   const [deleteAlert, setDeleteAlert] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
@@ -41,12 +42,15 @@ export default function ReplyItem({
 
   const queryClient = useQueryClient()
 
-  const { mutate: onDeleteReply } = useMutation(() => deleteReply(commentId), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['getReplyData', recordId])
-      setDeleteAlert(false)
-    },
-  })
+  const { mutate: onDeleteReply } = useMutation(
+    () => deleteReply(commentId, recordId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['getReplyData', recordId])
+        setDeleteAlert(false)
+      },
+    }
+  )
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -90,14 +94,15 @@ export default function ReplyItem({
                 수정
               </button>
             )}
-            {recordwriter === user?.data && (
-              <button
-                onClick={() => setDeleteAlert(true)}
-                className="cursor-pointer bg-transparent text-xs text-sub-1"
-              >
-                삭제
-              </button>
-            )}
+            {recordwriter === user?.data ||
+              (writer === user?.data && (
+                <button
+                  onClick={() => setDeleteAlert(true)}
+                  className="cursor-pointer bg-transparent text-xs text-sub-1"
+                >
+                  삭제
+                </button>
+              ))}
             {user?.data !== undefined && user?.data !== writer && (
               <button className="cursor-pointer bg-transparent text-xs text-grey-5">
                 신고
@@ -109,7 +114,11 @@ export default function ReplyItem({
         {numOfSubComment > 0 && (
           <div className="mt-2.5 mb-4">
             <button
-              onClick={() => setIsOpenNestedReplyList((prev) => !prev)}
+              onClick={() =>
+                setIsOpenNestedReplyList((prev) => {
+                  return { ...prev, state: !prev.state, commentId: commentId }
+                })
+              }
               className="flex cursor-pointer bg-transparent text-[12px] leading-none text-primary-2"
             >
               <p className="mr-1">
@@ -124,14 +133,15 @@ export default function ReplyItem({
           </div>
         )}
 
-        {isOpenNestedReplyList && (
-          <NestedReplyList
-            recordwriter={recordwriter}
-            recordId={recordId}
-            parentId={commentId}
-            numOfSubComment={numOfSubComment}
-          />
-        )}
+        {isOpenNestedReplyList.state &&
+          isOpenNestedReplyList.commentId === commentId && (
+            <NestedReplyList
+              recordwriter={recordwriter}
+              recordId={recordId}
+              parentId={commentId}
+              numOfSubComment={numOfSubComment}
+            />
+          )}
       </div>
       {deleteAlert && (
         <Alert

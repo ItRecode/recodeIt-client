@@ -8,7 +8,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
-  INPUT_MODE,
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
 } from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
@@ -27,7 +26,7 @@ import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
 import { DetailPageInputMode } from '@store/atom'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
+
 import { AxiosError } from 'axios'
 
 export default function DetailRecord() {
@@ -102,9 +101,6 @@ export default function DetailRecord() {
     }
     navigate(-1)
   }
-
-  const inputMode = useRecoilValue(DetailPageInputMode)
-  const resetInputMode = useResetRecoilState(DetailPageInputMode)
 
   const deleteRecordById = async (id: string) => {
     try {
@@ -181,19 +177,21 @@ export default function DetailRecord() {
         <div className="overflow-y-auto">
           <section id="title" className="flex flex-col px-6">
             <div className="flex justify-between whitespace-nowrap">
-              <p className="flex items-center whitespace-nowrap text-2xl font-semibold">
+              <p className="flex items-center whitespace-nowrap text-2xl font-semibold leading-none">
                 {title}
               </p>
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex">
+                <p className="flex items-center text-[14px]">{writer}</p>
+                <p className="px-2 text-xs text-grey-5">{date}</p>
+              </div>
               <Chip
                 active={true}
                 icon={getChipIconName(categoryName)}
                 message={`${categoryName}`}
                 property="small"
               />
-            </div>
-            <div className="mt-4 flex">
-              <p className="text-[14px]">{writer}</p>
-              <p className="px-4 text-xs text-grey-5">{date}</p>
             </div>
           </section>
           <section
@@ -221,15 +219,6 @@ export default function DetailRecord() {
           id="record_reply_input"
           className="fixed bottom-0 w-full max-w-[420px] border-t border-solid border-t-grey-2 bg-grey-1"
         >
-          {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
-            <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
-              <p className="text-xs text-grey-6">답글 작성중...</p>
-              <button onClick={resetInputMode} className="cursor-pointer p-0">
-                <CloseIcon />
-              </button>
-            </div>
-          )}
-
           <ReplyInput
             setInputSectionHeight={setInputSectionHeight}
             recordIdParams={recordIdParams}

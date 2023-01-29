@@ -22,6 +22,9 @@ export const getReply = async (
   })
 }
 
-export const deleteReply = async (commentId: number) => {
-  return await baseInstance.delete(`/comment/${commentId}`)
+export const deleteReply = async (
+  commentId: number,
+  recordId: string | undefined
+) => {
+  return await baseInstance.delete(`/comment/${commentId}?recordId=${recordId}`)
 }

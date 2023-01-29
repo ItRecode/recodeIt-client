@@ -47,7 +47,7 @@ export default function NestedReplyList({
   }, [data, isSuccess])
 
   const { mutate: onDeleteNestedReply } = useMutation(
-    (commentId: number) => deleteReply(commentId),
+    (commentId: number) => deleteReply(commentId, recordId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['getReplyData', recordId])

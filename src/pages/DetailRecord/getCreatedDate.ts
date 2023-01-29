@@ -46,9 +46,6 @@ export const getCreatedDate = (createdAt: string) => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
     }).format(createdTime)
     return date
   }
