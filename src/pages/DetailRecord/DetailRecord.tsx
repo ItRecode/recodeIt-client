@@ -24,8 +24,6 @@ import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
-import { DetailPageInputMode } from '@store/atom'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
 
 import { AxiosError } from 'axios'
 
