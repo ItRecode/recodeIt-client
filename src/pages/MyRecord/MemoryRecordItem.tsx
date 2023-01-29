@@ -58,7 +58,7 @@ export default function MemoryRecordItem({
             onClick={() => navigate(`/record/${recordId}`)}
           >
             <p className="text-sm font-semibold">아직 댓글이 없어요</p>
-            <p className="pt-1 text-xs">첫 번째 댓글의 주인공이 되어주세요.</p>
+            <p className="pt-1 text-xs">첫 번째 댓글을 기다리고 있어요.</p>
           </div>
         )}
         <div className="flex gap-2">
