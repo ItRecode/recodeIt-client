@@ -83,9 +83,9 @@ export default function ReplyInput({
   const handleDeleteImageFile = () => {
     if (inputMode.mode === 'update') {
       if (image.slice(60, 63) === 'dev') {
-        setDeleteImageUrl(() => [image.slice(65)])
+        setDeleteImageUrl(() => [image.slice(64)])
       } else {
-        setDeleteImageUrl(() => [image.slice(66)])
+        setDeleteImageUrl(() => [image.slice(65)])
       }
     }
     setInputSectionHeight((prev) => prev - RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
