@@ -152,7 +152,7 @@ function AddRecordFile({
     )
   }
 
-  const notDeletedRecordFiles = recordFiles.filter((file) => {
+  const notDeletedRecordFiles = recordFiles?.filter((file) => {
     return !toDeleteFiles.includes(file.split('/')[4])
   })
   return (
