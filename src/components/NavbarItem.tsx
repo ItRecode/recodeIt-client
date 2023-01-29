@@ -69,7 +69,7 @@ export default function NavbarItem({
   return (
     <Link to={linkSrc} className={`${containerFormat} ${className}`}>
       {navbarIcon(linkSrc)}
-      <p className={`${textFormat} ${checkPathWithText(linkSrc)}`}>
+      <p className={`${textFormat} ${checkPathWithText(linkSrc)} w-max`}>
         {pageName}
       </p>
     </Link>
