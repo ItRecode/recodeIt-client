@@ -47,7 +47,7 @@ export default function NestedReplyList({
   }, [data, isSuccess])
 
   const { mutate: onDeleteNestedReply } = useMutation(
-    (commentId: number) => deleteReply(commentId),
+    (commentId: number) => deleteReply(commentId, recordId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['getReplyData', recordId])
@@ -116,14 +116,15 @@ export default function NestedReplyList({
                     수정
                   </button>
                 )}
-                {recordwriter === user?.data && (
-                  <button
-                    onClick={() => setDeleteAlert(true)}
-                    className="cursor-pointer bg-transparent text-xs text-sub-1"
-                  >
-                    삭제
-                  </button>
-                )}
+                {recordwriter === user?.data ||
+                  (item.writer === user?.data && (
+                    <button
+                      onClick={() => setDeleteAlert(true)}
+                      className="cursor-pointer bg-transparent text-xs text-sub-1"
+                    >
+                      삭제
+                    </button>
+                  ))}
                 {user?.data !== undefined && user?.data !== item.writer && (
                   <button className="cursor-pointer bg-transparent text-xs text-grey-5">
                     신고
