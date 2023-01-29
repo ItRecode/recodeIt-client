@@ -21,7 +21,10 @@ export const ShareKakao = ({
     content: {
       title: title,
       description: description,
-      imageUrl: imageUrl,
+      imageUrl: imageUrl
+        ? imageUrl
+        : 'https://record-it.s3.ap-northeast-2.amazonaws.com/imagefile-dev/sharing+img',
+
       link: {
         webUrl: process.env.REACT_APP_WEB_URL,
         mobileWebUrl: process.env.REACT_APP_WEB_URL,

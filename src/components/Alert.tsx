@@ -9,6 +9,7 @@ interface IAlertProps {
   onClose: () => void
   onCancel?: () => void
   onConfirm: () => void
+  danger?: boolean
 }
 
 export default function Alert({
@@ -20,6 +21,7 @@ export default function Alert({
   onClose,
   onCancel,
   onConfirm,
+  danger,
 }: IAlertProps) {
   const buttonClassName =
     'h-full w-1/2 cursor-pointer bg-transparent py-4 text-base font-semibold'
@@ -39,7 +41,7 @@ export default function Alert({
           {onCancel && (
             <button
               aria-label="alert-cancel-message"
-              className={`${buttonClassName} text-grey-8`}
+              className={`${buttonClassName} border-r border-r-grey-2 text-grey-8`}
               onClick={onCancel}
             >
               {cancelMessage}
@@ -48,7 +50,9 @@ export default function Alert({
 
           <button
             aria-label="alert-confirm-message"
-            className={`${buttonClassName} text-primary-2`}
+            className={`${buttonClassName} ${
+              danger ? 'text-sub-2' : 'text-primary-2'
+            }`}
             onClick={onConfirm}
           >
             {confirmMessage}

@@ -3,38 +3,25 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Pin } from '@assets/pin.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import { useNavigate } from 'react-router-dom'
-import { deleteRecord } from '@apis/record'
-import { AxiosError } from 'axios'
 import { LocalStorage } from '@utils/localStorage'
 
 export default function EditModal({
   setEditModalState,
   setIsDelete,
+  POST_ID,
 }: {
   setEditModalState: Dispatch<SetStateAction<boolean>>
   setIsDelete: Dispatch<SetStateAction<boolean>>
+  POST_ID: string
 }) {
   const editRef = useClickOutside<HTMLDivElement>(() => {
     setEditModalState(false)
   })
-  const POST_ID = window.location.href.split('/')[4]
   const navigate = useNavigate()
 
   const handleClickDeleteButton = () => {
-    DeleteRecordById(POST_ID)
-  }
-  const DeleteRecordById = async (id: string) => {
-    try {
-      await deleteRecord(id)
-      setIsDelete(true)
-      setEditModalState(false)
-    } catch (error) {
-      const { response } = error as unknown as AxiosError
-      if (response?.status === 400) {
-        alert('질못된 접근입니다.')
-      }
-      throw error
-    }
+    setIsDelete(true)
+    setEditModalState(false)
   }
 
   const handleClickModifyButton = () => {

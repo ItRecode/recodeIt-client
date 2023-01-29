@@ -8,10 +8,10 @@ import AddRecordFile from './AddRecordFile'
 import AddRecordTitle from './AddRecordTitle'
 import { TEXT_DETAILS } from '@assets/constant/constant'
 import MainCategoryTap from '@components/MainCategoryTap'
-import AddRecordIcon, { IconType } from './AddRecordIcon'
+import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
-import { formDataAtom } from '@store/atom'
+import { formDataAtom, recordTypeAtom } from '@store/atom'
 import { useRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
@@ -54,7 +54,6 @@ export type IsInputFocusType = {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
-  const [recordType, setRecordType] = useState<keyof IconType>(CELEBRATION)
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: '',
     textArea: '',
@@ -68,7 +67,9 @@ export default function AddRecord() {
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
+  //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
+  const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
   const { data, isLoading, isSuccess } = useQuery(
@@ -123,9 +124,14 @@ export default function AddRecord() {
       }
     }
     isModify && changeCurrentType()
-    return () => {
+    const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
+    }
+    window.addEventListener('beforeunload', removeModifyMode)
+    return () => {
+      removeModifyMode()
+      window.removeEventListener('beforeunload', removeModifyMode)
     }
   }, [])
 
@@ -265,7 +271,7 @@ export default function AddRecord() {
             />
             <div
               className={`${
-                isInputFocus && isMobile ? 'hidden' : 'sticky'
+                isInputFocus && isMobile && 'block'
               } bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] border-t border-grey-2 bg-grey-1 py-4 px-6`}
             >
               <Button

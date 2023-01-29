@@ -50,6 +50,8 @@ export default function ReplyList({
 
     if (commentIdInQuery) {
       setScrollCommentId(parseInt(commentIdInQuery, 10))
+    } else {
+      setScrollCommentId(null)
     }
   }, [])
 

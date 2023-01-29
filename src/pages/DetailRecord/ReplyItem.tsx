@@ -1,14 +1,17 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode } from '@store/atom'
+import { DetailPageInputMode, nestedReplyState } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteReply } from '@apis/reply'
+import Alert from '@components/Alert'
 
 export default function ReplyItem({
   content,
@@ -24,7 +27,9 @@ export default function ReplyItem({
   const navigate = useNavigate()
   const scrollRef = useRef<HTMLDivElement>(null)
   const { user } = useUser()
-  const [isOpenNestedReplyList, setIsOpenNestedReplyList] = useState(false)
+  const [isOpenNestedReplyList, setIsOpenNestedReplyList] =
+    useRecoilState(nestedReplyState)
+  const [deleteAlert, setDeleteAlert] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
 
@@ -34,6 +39,18 @@ export default function ReplyItem({
       navigate(window.location.pathname, { replace: true })
     }
   }, [isScroll])
+
+  const queryClient = useQueryClient()
+
+  const { mutate: onDeleteReply } = useMutation(
+    () => deleteReply(commentId, recordId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['getReplyData', recordId])
+        setDeleteAlert(false)
+      },
+    }
+  )
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -53,7 +70,7 @@ export default function ReplyItem({
             />
           </div>
         )}
-        <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
+        <p className="mt-1.5 w-full whitespace-normal break-words text-xs font-normal leading-normal text-grey-8">
           {content}
         </p>
       </div>
@@ -77,11 +94,15 @@ export default function ReplyItem({
                 수정
               </button>
             )}
-            {recordwriter === user?.data && (
-              <button className="cursor-pointer bg-transparent text-xs text-sub-1">
-                삭제
-              </button>
-            )}
+            {recordwriter === user?.data ||
+              (writer === user?.data && (
+                <button
+                  onClick={() => setDeleteAlert(true)}
+                  className="cursor-pointer bg-transparent text-xs text-sub-1"
+                >
+                  삭제
+                </button>
+              ))}
             {user?.data !== undefined && user?.data !== writer && (
               <button className="cursor-pointer bg-transparent text-xs text-grey-5">
                 신고
@@ -93,7 +114,11 @@ export default function ReplyItem({
         {numOfSubComment > 0 && (
           <div className="mt-2.5 mb-4">
             <button
-              onClick={() => setIsOpenNestedReplyList((prev) => !prev)}
+              onClick={() =>
+                setIsOpenNestedReplyList((prev) => {
+                  return { ...prev, state: !prev.state, commentId: commentId }
+                })
+              }
               className="flex cursor-pointer bg-transparent text-[12px] leading-none text-primary-2"
             >
               <p className="mr-1">
@@ -108,15 +133,31 @@ export default function ReplyItem({
           </div>
         )}
 
-        {isOpenNestedReplyList && (
-          <NestedReplyList
-            recordwriter={recordwriter}
-            recordId={recordId}
-            parentId={commentId}
-            numOfSubComment={numOfSubComment}
-          />
-        )}
+        {isOpenNestedReplyList.state &&
+          isOpenNestedReplyList.commentId === commentId && (
+            <NestedReplyList
+              recordwriter={recordwriter}
+              recordId={recordId}
+              parentId={commentId}
+              numOfSubComment={numOfSubComment}
+            />
+          )}
       </div>
+      {deleteAlert && (
+        <Alert
+          visible={deleteAlert}
+          mainMessage={<>댓글을 삭제하시겠습니까?</>}
+          subMessage={<>삭제 후 복구는 불가능해요.</>}
+          cancelMessage="아니오"
+          confirmMessage="예"
+          onClose={() => setDeleteAlert(false)}
+          onCancel={() => setDeleteAlert(false)}
+          onConfirm={() => {
+            onDeleteReply()
+          }}
+          danger={true}
+        />
+      )}
     </div>
   )
 }

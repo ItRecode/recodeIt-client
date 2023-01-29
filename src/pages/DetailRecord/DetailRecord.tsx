@@ -8,8 +8,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
-  INPUT_MODE,
-  RECORD_DETAIL_HEADER_SECTION_HEIGHT,
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
 } from '@assets/constant/constant'
 import { getCreatedDate } from './getCreatedDate'
@@ -19,16 +17,15 @@ import ShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
 import Modal from '@components/Modal'
-import { getRecord } from '@apis/record'
+import { deleteRecord, getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
-import { DetailPageInputMode } from '@store/atom'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
+
+import { AxiosError } from 'axios'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -66,6 +63,7 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
+  const POST_ID = window.location.href.split('/')[4]
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
@@ -83,19 +81,15 @@ export default function DetailRecord() {
     }
   }, [recordData])
 
-  const scrollSection = useRef<HTMLDivElement>(null)
+  const scrollSectionFragments = useRef<HTMLDivElement>(null)
   const [inputSectionHeight, setInputSectionHeight] = useState(
     RECORD_DETAIL_INITIAL_INPUT_HEIGHT
   )
 
   useEffect(() => {
-    if (scrollSection.current !== null) {
-      scrollSection.current.style.height = 'auto'
-      scrollSection.current.style.height =
-        window.innerHeight -
-        inputSectionHeight -
-        RECORD_DETAIL_HEADER_SECTION_HEIGHT +
-        'px'
+    if (scrollSectionFragments.current !== null) {
+      scrollSectionFragments.current.style.height = 'auto'
+      scrollSectionFragments.current.style.height = inputSectionHeight + 'px'
     }
   }, [inputSectionHeight])
 
@@ -106,13 +100,24 @@ export default function DetailRecord() {
     navigate(-1)
   }
 
-  const inputMode = useRecoilValue(DetailPageInputMode)
-  const resetInputMode = useResetRecoilState(DetailPageInputMode)
+  const deleteRecordById = async (id: string) => {
+    try {
+      await deleteRecord(id)
+      setIsDelete(true)
+      setEditModalState(false)
+    } catch (error) {
+      const { response } = error as unknown as AxiosError
+      if (response?.status === 400) {
+        alert('질못된 접근입니다.')
+      }
+      throw error
+    }
+  }
 
   return (
     <>
       {isLoading && <Loading />}
-      <div className="relative h-full w-full">
+      <div className="relative h-screen w-full">
         {shareStatus && (
           <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
             <ShareModal
@@ -127,6 +132,7 @@ export default function DetailRecord() {
         )}
         {editModalState && (
           <EditModal
+            POST_ID={POST_ID}
             setIsDelete={setIsDelete}
             setEditModalState={setEditModalState}
           />
@@ -135,17 +141,22 @@ export default function DetailRecord() {
           <Alert
             mainMessage={
               <div className="text-base font-semibold leading-6">
-                레코드를
+                정말로 이 레코드를
                 <br />
-                삭제하시겠어요?
+                <span className="text-sub-1">삭제</span>하시겠어요?
               </div>
             }
+            subMessage={<>삭제 후 복구는 불가능해요.</>}
             visible={isDelete}
-            cancelMessage="아니오"
+            cancelMessage="취소"
             confirmMessage="삭제"
+            danger={true}
             onClose={() => setIsDelete(false)}
             onCancel={() => setIsDelete(false)}
-            onConfirm={() => checkUserHistoryLength()}
+            onConfirm={() => {
+              checkUserHistoryLength()
+              deleteRecordById(POST_ID)
+            }}
           />
         )}
         <header className="p-4">
@@ -161,22 +172,24 @@ export default function DetailRecord() {
             )}
           </nav>
         </header>
-        <div className="mb-3 overflow-auto" ref={scrollSection}>
+        <div className="overflow-y-auto">
           <section id="title" className="flex flex-col px-6">
-            <div className="flex justify-between">
-              <p className="flex items-center text-2xl font-semibold">
+            <div className="flex justify-between whitespace-nowrap">
+              <p className="flex items-center whitespace-nowrap text-2xl font-semibold leading-none">
                 {title}
               </p>
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex">
+                <p className="flex items-center text-[14px]">{writer}</p>
+                <p className="px-2 text-xs text-grey-5">{date}</p>
+              </div>
               <Chip
                 active={true}
                 icon={getChipIconName(categoryName)}
                 message={`${categoryName}`}
                 property="small"
               />
-            </div>
-            <div className="mt-4 flex">
-              <p className="text-[14px]">{writer}</p>
-              <p className="px-4 text-xs text-grey-5">{date}</p>
             </div>
           </section>
           <section
@@ -198,21 +211,12 @@ export default function DetailRecord() {
           <section id="record_reply_list">
             <ReplyList recordId={recordIdParams} Recordwriter={writer} />
           </section>
+          <div ref={scrollSectionFragments} />
         </div>
-
         <section
           id="record_reply_input"
-          className="absolute bottom-0 w-full border-t border-solid border-t-grey-2 bg-grey-1"
+          className="fixed bottom-0 w-full max-w-[420px] border-t border-solid border-t-grey-2 bg-grey-1"
         >
-          {inputMode.mode === INPUT_MODE.NESTEDREPLY && (
-            <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
-              <p className="text-xs text-grey-6">답글 작성중...</p>
-              <button onClick={resetInputMode} className="cursor-pointer p-0">
-                <CloseIcon />
-              </button>
-            </div>
-          )}
-
           <ReplyInput
             setInputSectionHeight={setInputSectionHeight}
             recordIdParams={recordIdParams}

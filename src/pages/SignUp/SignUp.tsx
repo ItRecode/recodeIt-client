@@ -46,6 +46,8 @@ export default function SignUp() {
     const spacePattern = /\s/g
     const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
     const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
+    const emojiPattern =
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
 
     if (nickname.length < NICKNAME_MIN_LENGTH) {
       setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요.`)
@@ -64,6 +66,11 @@ export default function SignUp() {
 
     if (nickname.match(consonantAndVowelPattern)) {
       setErrorMessage('자음이나 모음만은 사용할 수 없어요.')
+      return false
+    }
+
+    if (nickname.match(emojiPattern)) {
+      setErrorMessage('이모지는 사용할 수 없어요.')
       return false
     }
 
@@ -94,20 +101,24 @@ export default function SignUp() {
         <br />
         사용하시겠어요?
       </h1>
-      <Input
-        property={setPropertyWithIsCheckedNickname()}
-        name="nickname"
-        label="닉네임"
-        value={nickname}
-        maxLength={8}
-        placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
-        message={isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage}
-        onChange={(e) => setNickname(e.target.value)}
-        onRemove={handleRemoveNickname}
-        onFocus={() => setIsInputClicked(true)}
-        onBlur={() => setIsInputClicked(false)}
-        autoFocus={false}
-      />
+      <div className="h-[105px]">
+        <Input
+          property={setPropertyWithIsCheckedNickname()}
+          name="nickname"
+          label="닉네임"
+          value={nickname}
+          maxLength={8}
+          placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
+          message={
+            isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage
+          }
+          onChange={(e) => setNickname(e.target.value)}
+          onRemove={handleRemoveNickname}
+          onFocus={() => setIsInputClicked(true)}
+          onBlur={() => setIsInputClicked(false)}
+          autoFocus={false}
+        />
+      </div>
       <div className="mt-[104px]">
         <Button
           type="submit"
