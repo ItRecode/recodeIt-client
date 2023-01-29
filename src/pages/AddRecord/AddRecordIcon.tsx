@@ -52,6 +52,10 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
       slickRef.current?.slickGoTo(getRecordNumber.id)
     } else {
       setCurrentFocus(0)
+      setFormData({
+        ...formData,
+        selectedIcon: getIconSrc(iconState[currentRecordType][0].src),
+      })
       setIconState(icons)
     }
   }, [currentRecordType])

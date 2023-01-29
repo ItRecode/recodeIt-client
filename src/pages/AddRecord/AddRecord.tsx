@@ -87,6 +87,10 @@ export default function AddRecord() {
   )
 
   useEffect(() => {
+    setFormDatas({
+      ...formDatas,
+      selectedColor: 'icon-purple',
+    })
     !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
