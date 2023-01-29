@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
@@ -9,9 +9,13 @@ import MyRecordCalendar from './MyRecordCalendar'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, isLoading } = useMyRecord()
+  const { todayRecord, isLoading, refetch } = useMyRecord()
   const background_color = `bg-${todayRecord?.colorName}`
   const RecordIcon = recordIcons[`${todayRecord?.iconName}`]
+
+  useEffect(() => {
+    refetch()
+  }, [todayRecord])
 
   if (isLoading) {
     return <></>
