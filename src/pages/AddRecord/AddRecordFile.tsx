@@ -33,7 +33,7 @@ function AddRecordFile({
   const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
     null
   )
-  const MAX_FILE = 3
+  const MAX_FILE = 1
 
   const getByteSize = (size: number) => {
     return size / 1000 / 1000
@@ -174,8 +174,7 @@ function AddRecordFile({
         </div>
       </label>
       <input
-        multiple
-        disabled={currentImg.length === 3}
+        disabled={currentImg.length === 1}
         onChange={handleSelectImageFile}
         className="hidden"
         id="file"
