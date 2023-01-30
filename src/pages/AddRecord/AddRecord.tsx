@@ -180,7 +180,6 @@ export default function AddRecord() {
     }
   }
 
-  console.log(formDatas)
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
