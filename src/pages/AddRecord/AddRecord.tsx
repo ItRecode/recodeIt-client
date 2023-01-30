@@ -228,6 +228,7 @@ export default function AddRecord() {
             } sticky top-0 left-0 z-[5] bg-grey-1`}
           >
             <MainCategoryTap
+              isModify={isModify}
               currentRecordType={recordType}
               onSetRecordType={setRecordType}
             />

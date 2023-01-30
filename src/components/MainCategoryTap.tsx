@@ -5,12 +5,19 @@ import { TEXT_DETAILS } from '@assets/constant/constant'
 type MainCategory = {
   onSetRecordType: Dispatch<SetStateAction<'celebration' | 'consolation'>>
   currentRecordType: string
+  isModify: boolean
 }
-function MainCategoryTap({ onSetRecordType, currentRecordType }: MainCategory) {
+function MainCategoryTap({
+  onSetRecordType,
+  currentRecordType,
+  isModify,
+}: MainCategory) {
   const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
 
   const typeConfig = {
-    active: 'text-primary-2 border-b-2 border-current',
+    active: `${
+      isModify ? 'text-grey-7' : 'text-primary-2'
+    } border-b-2 border-current`,
     inactive: 'text-gray-600',
   }
 
