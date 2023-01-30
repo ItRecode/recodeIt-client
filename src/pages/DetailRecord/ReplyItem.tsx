@@ -43,7 +43,7 @@ export default function ReplyItem({
       navigate(window.location.pathname, { replace: true })
     }
   }, [isScroll])
-
+  const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const queryClient = useQueryClient()
 
   const { mutate: onDeleteReply } = useMutation(
@@ -85,8 +85,8 @@ export default function ReplyItem({
             />
           </div>
         )}
-        <p className="mt-1.5 w-full whitespace-normal break-words text-xs font-normal leading-normal text-grey-8">
-          {content}
+        <p className="mt-1.5 w-full whitespace-pre-wrap break-words text-xs font-normal leading-normal text-grey-8">
+          {text}
         </p>
       </div>
       <div>

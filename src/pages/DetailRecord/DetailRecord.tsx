@@ -46,6 +46,7 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
+  const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const { user } = useUser()
 
   const background_color = `bg-${colorName}`
@@ -206,7 +207,7 @@ export default function DetailRecord() {
               <p className="text-base font-semibold">공유하기</p>
             </Button>
             <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
-              <p className="w-full">{content}</p>
+              <p className="w-full whitespace-pre-wrap break-words">{text}</p>
             </div>
           </section>
           <section id="record_reply_list">

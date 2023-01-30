@@ -2,7 +2,7 @@ import { deleteReply, getReply } from '@apis/reply'
 import Alert from '@components/Alert'
 import Spinner from '@components/Spinner'
 import { useUser } from '@react-query/hooks/useUser'
-import { modifyComment } from '@store/atom'
+import { DetailPageInputMode, modifyComment } from '@store/atom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
@@ -24,6 +24,7 @@ export default function NestedReplyList({
     CommentData[] | null
   >(null)
 
+  const setInputMode = useSetRecoilState(DetailPageInputMode)
   const setModifyCommentDto = useSetRecoilState(modifyComment)
   const [deleteAlert, setDeleteAlert] = useState(false)
 
@@ -93,8 +94,8 @@ export default function NestedReplyList({
                   />
                 </div>
               )}
-              <p className="mt-1.5 text-xs font-normal leading-normal text-grey-8">
-                {item.content}
+              <p className="mt-1.5 whitespace-pre-wrap break-words text-xs font-normal leading-normal text-grey-8">
+                {item.content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')}
               </p>
             </div>
             {deleteAlert && (
@@ -116,13 +117,16 @@ export default function NestedReplyList({
               <div>
                 {user?.data === item.writer && (
                   <button
-                    onClick={() =>
+                    onClick={() => {
+                      setInputMode((prev) => {
+                        return { ...prev, mode: 'update', parentId: parentId }
+                      })
                       setModifyCommentDto({
                         commentId: item.commentId,
                         content: item.content,
                         imageUrl: item.imageUrl ? item.imageUrl : '',
                       })
-                    }
+                    }}
                     className="cursor-pointer bg-transparent text-xs text-grey-5"
                   >
                     수정

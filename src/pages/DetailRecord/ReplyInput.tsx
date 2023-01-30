@@ -125,7 +125,7 @@ export default function ReplyInput({
     if (inputMode.mode !== 'update') {
       const writeCommentRequestDto = {
         recordId: recordIdParams,
-        comment: text,
+        comment: text.replaceAll(/(\n|\r\n)/g, '<br>'),
         parentId: inputMode.parentId,
       }
       data.set(
@@ -145,7 +145,7 @@ export default function ReplyInput({
 
     if (inputMode.mode === 'update') {
       const modifyCommentRequestDto = {
-        comment: text,
+        comment: text.replaceAll(/(\n|\r\n)/g, '<br>'),
         deleteImages: deleteImageUrl,
       }
       data.set(
