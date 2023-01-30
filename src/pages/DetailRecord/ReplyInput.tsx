@@ -213,7 +213,7 @@ export default function ReplyInput({
       setIsCheckedUser(true)
     }
     if (inputMode.mode === 'update') {
-      setText(updateReply.content)
+      setText(updateReply.content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n'))
       setImage(updateReply.imageUrl)
     }
   }, [inputMode.mode])
