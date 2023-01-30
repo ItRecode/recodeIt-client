@@ -88,7 +88,8 @@ export default function AddRecord() {
 
   useEffect(() => {
     setFormDatas({
-      ...formDatas,
+      selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
+      selectedCategory: recordType === 'celebration' ? 3 : 7,
       selectedColor: 'icon-purple',
     })
     !isModify && setCheckAllFilled({ input: '', textArea: '' })
@@ -129,7 +130,7 @@ export default function AddRecord() {
         }
       }
     }
-    isModify && changeCurrentType()
+    changeCurrentType()
     const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
@@ -179,6 +180,7 @@ export default function AddRecord() {
     }
   }
 
+  console.log(formDatas)
   const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
@@ -236,11 +238,12 @@ export default function AddRecord() {
             className="px-6"
             onSubmit={handleSubmitData}
           >
-            <AddRecordCategory
-              isModify={isModify}
-              recordCategory={data?.categoryId}
-              currentRecordType={recordType}
-            />
+            {((isModify && data) || !isModify) && (
+              <AddRecordCategory
+                isModify={isModify}
+                recordCategory={data?.categoryId}
+              />
+            )}
             <AddRecordTitle title={'레코드 제목'} />
             <AddRecordInput
               recordTitle={data?.title}
