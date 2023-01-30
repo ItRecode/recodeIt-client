@@ -24,8 +24,14 @@ import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
-
 import { AxiosError } from 'axios'
+import { createBrowserHistory } from 'history'
+import { useResetRecoilState } from 'recoil'
+import {
+  DetailPageInputMode,
+  modifyComment,
+  nestedReplyState,
+} from '@store/atom'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -107,6 +113,22 @@ export default function DetailRecord() {
       throw error
     }
   }
+
+  const history = createBrowserHistory()
+  const resetInputMode = useResetRecoilState(DetailPageInputMode)
+  const resetNestedReplyState = useResetRecoilState(nestedReplyState)
+  const resetModifyComment = useResetRecoilState(modifyComment)
+
+  useEffect(() => {
+    const unlistenHistoryEvent = history.listen(({ action }) => {
+      if (action === 'POP' || action === 'PUSH') {
+        resetInputMode()
+        resetNestedReplyState()
+        resetModifyComment()
+      }
+      return unlistenHistoryEvent
+    })
+  }, [history])
 
   return (
     <>
