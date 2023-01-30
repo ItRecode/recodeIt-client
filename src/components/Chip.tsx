@@ -29,7 +29,7 @@ function Chip({
             ? `${isModify ? 'bg-grey-7' : 'bg-primary-2'} text-grey-1`
             : ' bg-grey-2 text-grey-4'
         }
-        ${property === 'default' ? 'px-4 py-3' : 'px-3 py-[9px]'}\
+        ${property === 'default' ? 'px-4 py-3' : 'px-3 py-[9px]'}
       `}
     >
       {icon && (
