@@ -25,7 +25,11 @@ function AddRecordTextArea({
 
   useEffect(() => {
     setTextAreaValue('')
-    setTextAreaValue(recordContent ? recordContent : '')
+    setTextAreaValue(
+      recordContent
+        ? recordContent.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
+        : ''
+    )
   }, [currentRecordType])
 
   const handleChangeTextArea = (
