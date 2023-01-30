@@ -12,7 +12,7 @@ import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
@@ -72,6 +72,8 @@ export default function AddRecord() {
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
+  const resetFormDataAtom = useResetRecoilState(formDataAtom)
+  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
   const { data, isLoading, isSuccess } = useQuery(
     ['getRecordData', ID],
     () => getRecord(ID),
@@ -85,6 +87,11 @@ export default function AddRecord() {
   )
 
   useEffect(() => {
+    setFormDatas({
+      selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
+      selectedCategory: recordType === 'celebration' ? 3 : 7,
+      selectedColor: 'icon-purple',
+    })
     !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
@@ -123,13 +130,15 @@ export default function AddRecord() {
         }
       }
     }
-    isModify && changeCurrentType()
+    changeCurrentType()
     const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
     }
     window.addEventListener('beforeunload', removeModifyMode)
     return () => {
+      resetRecordTypeAtom()
+      resetFormDataAtom()
       removeModifyMode()
       window.removeEventListener('beforeunload', removeModifyMode)
     }
@@ -161,7 +170,7 @@ export default function AddRecord() {
         })
       } catch {
         setIsLoadingWhileSubmit(false)
-        alert('레코드 추가 실패 - TODO: toast로 변경')
+        alert('레코드 수정 실패 - TODO: toast로 변경')
       }
     }
     if (isModify) {
@@ -228,11 +237,12 @@ export default function AddRecord() {
             className="px-6"
             onSubmit={handleSubmitData}
           >
-            <AddRecordCategory
-              isModify={isModify}
-              recordCategory={data?.categoryId}
-              currentRecordType={recordType}
-            />
+            {((isModify && data) || !isModify) && (
+              <AddRecordCategory
+                isModify={isModify}
+                recordCategory={data?.categoryId}
+              />
+            )}
             <AddRecordTitle title={'레코드 제목'} />
             <AddRecordInput
               recordTitle={data?.title}

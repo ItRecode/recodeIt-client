@@ -55,7 +55,7 @@ function AddRecordInput({
 
   return (
     <div
-      className={` mb-10 flex justify-between border-b transition-all duration-300 ${
+      className={`mb-10 flex items-end justify-between border-b pb-[2px] transition-all duration-300 ${
         inputFocus ? 'border-primary-2' : 'border-grey-4'
       }`}
     >
@@ -63,7 +63,7 @@ function AddRecordInput({
         disabled={recordTitle !== undefined}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className="w-full border-none bg-grey-1 text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+        className="w-full border-none bg-grey-1 p-0 text-sm text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
         placeholder={
           currentRecordType === 'celebration'
             ? PLACEHOLDER_MESSAGE.celebration
@@ -73,7 +73,7 @@ function AddRecordInput({
         type="text"
         value={inputValue}
       />
-      <span className="pb-2 text-xs">{`${inputValue.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
+      <span className=" text-xs text-grey-4">{`${inputValue.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
     </div>
   )
 }

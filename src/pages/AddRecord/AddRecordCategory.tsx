@@ -37,15 +37,15 @@ type BigCategory = {
 type CategoryDatas = BigCategory[]
 
 function AddRecordCategory({
-  currentRecordType,
   recordCategory,
   isModify,
 }: {
-  currentRecordType: keyof CategoryType
   recordCategory: number
   isModify: boolean
 }) {
   const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
+  const [modifyCategoryState, setModifyCategoryState] =
+    useState<CategoryType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const recordType = useRecoilValue(recordTypeAtom)
   const CELEBRATES = 3
@@ -58,42 +58,33 @@ function AddRecordCategory({
   })
 
   useEffect(() => {
-    handleChooseCurrentCategory(currentRecordType === 'celebration' ? 3 : 7)
-  }, [recordType])
-
-  useEffect(() => {
-    if (isModify) {
-      if (recordCategory !== undefined) {
-        const madeData = makeCategoryData(data?.data)
-        if (madeData !== null) {
-          const modifyData = {
-            ...madeData,
-            [recordType]: madeData[recordType].map(
-              (category: CategorySource) => {
-                return {
-                  ...category,
-                  choosed: category.id === recordCategory,
-                }
-              }
-            ),
-          }
-          setCategoryState(modifyData)
-          setFormData({
-            ...formData,
-            selectedCategory:
-              modifyData[recordType][
-                recordType === 'celebration'
-                  ? recordCategory - CELEBRATES
-                  : recordCategory - CONSOLATES
-              ]?.id,
-          })
+    if (isModify && data && recordCategory !== undefined) {
+      const madeData = makeCategoryData(data?.data)
+      if (madeData !== null) {
+        const modifyData = {
+          ...madeData,
+          [recordType]: madeData[recordType].map((category: CategorySource) => {
+            return {
+              ...category,
+              choosed: category.id === recordCategory,
+            }
+          }),
         }
+        setModifyCategoryState(modifyData)
+        setFormData({
+          ...formData,
+          selectedCategory:
+            modifyData[recordType][
+              recordType === 'celebration'
+                ? recordCategory - CELEBRATES
+                : recordCategory - CONSOLATES
+            ]?.id,
+        })
       }
-    } else {
-      setCategoryState(makeCategoryData(data?.data))
     }
-    // }
+    setCategoryState(makeCategoryData(data?.data))
   }, [data])
+  //data를 만들면 > 이걸 categoryState에 저장 > 화면 리렌더링 > 레코드 타입이 생성됨 > 화면 다시리렌더링
 
   const makeCategoryData = (data: CategoryDatas) => {
     const CELEBRATION = 1
@@ -131,19 +122,19 @@ function AddRecordCategory({
       case 3:
         return Celebrate
       case 4:
-        return Happy
-      case 5:
         return Cake
-      case 6:
+      case 5:
         return Love
+      case 6:
+        return Happy
       case 7:
         return Consolate
       case 8:
-        return Depress
-      case 9:
         return Sympathy
-      case 10:
+      case 9:
         return MySide
+      case 10:
+        return Depress
       default:
         return Celebrate
     }
@@ -152,9 +143,9 @@ function AddRecordCategory({
   const handleChooseCurrentCategory = (index: number): void => {
     const currentState: CategoryType | null = categoryState && {
       ...categoryState,
-      [currentRecordType]:
+      [recordType]:
         categoryState !== null &&
-        categoryState[currentRecordType].map((category: CategorySource) => {
+        categoryState[recordType].map((category: CategorySource) => {
           return {
             ...category,
             choosed: category.id === index,
@@ -166,8 +157,8 @@ function AddRecordCategory({
       setFormData({
         ...formData,
         selectedCategory:
-          categoryState[currentRecordType][
-            currentRecordType === 'celebration'
+          categoryState[recordType][
+            recordType === 'celebration'
               ? index - CELEBRATES
               : index - CONSOLATES
           ].id,
@@ -185,7 +176,10 @@ function AddRecordCategory({
       } mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4`}
     >
       {categoryState !== null &&
-        categoryState[currentRecordType].map((category: CategorySource) => {
+        (isModify && modifyCategoryState !== null
+          ? modifyCategoryState[recordType]
+          : categoryState[recordType]
+        ).map((category: CategorySource) => {
           return (
             <div
               key={category.id}

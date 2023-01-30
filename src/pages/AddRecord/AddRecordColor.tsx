@@ -24,12 +24,13 @@ function AddRecordColor({ currentRecordType, recordColor }: Props) {
         return { ...color, choosed: false }
       })
     )
-    recordColor &&
-      setColors(
+    if (recordColor) {
+      return setColors(
         ADD_RECORD_COLORS.map((color) => {
           return { ...color, choosed: color.src.indexOf(recordColor) !== -1 }
         })
       )
+    }
   }, [currentRecordType])
 
   const handleChooseCurrentColor = (index: number): void => {
@@ -40,9 +41,13 @@ function AddRecordColor({ currentRecordType, recordColor }: Props) {
     const colorSrc = colors[index].src
     setFormData({
       ...formData,
-      selectedColor: colorSrc.slice(colorSrc.indexOf('-') + 1),
+      selectedColor: makeColorSrcToColor(colorSrc),
     })
     setColors(changeCurrent)
+  }
+
+  const makeColorSrcToColor = (colorSrc: string) => {
+    return colorSrc.slice(colorSrc.indexOf('-') + 1)
   }
 
   return (
