@@ -12,7 +12,7 @@ import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
@@ -72,6 +72,8 @@ export default function AddRecord() {
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
   const ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
+  const resetFormDataAtom = useResetRecoilState(formDataAtom)
+  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
   const { data, isLoading, isSuccess } = useQuery(
     ['getRecordData', ID],
     () => getRecord(ID),
@@ -85,6 +87,13 @@ export default function AddRecord() {
   )
 
   useEffect(() => {
+    if (!isModify) {
+      setFormDatas({
+        selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
+        selectedCategory: recordType === 'celebration' ? 3 : 7,
+        selectedColor: 'icon-purple',
+      })
+    }
     !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
@@ -123,13 +132,15 @@ export default function AddRecord() {
         }
       }
     }
-    isModify && changeCurrentType()
+    changeCurrentType()
     const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
     }
     window.addEventListener('beforeunload', removeModifyMode)
     return () => {
+      resetRecordTypeAtom()
+      resetFormDataAtom()
       removeModifyMode()
       window.removeEventListener('beforeunload', removeModifyMode)
     }
@@ -149,7 +160,7 @@ export default function AddRecord() {
         })
       } catch {
         setIsLoadingWhileSubmit(false)
-        alert('레코드 추가 실패 - TODO: toast로 변경')
+        alert('레코드 추가 실패 - 새로고침해서 다시 작성해주세요.')
       }
     }
     const modify = async () => {
@@ -160,8 +171,9 @@ export default function AddRecord() {
           replace: true,
         })
       } catch {
+        alert('레코드 수정 실패')
         setIsLoadingWhileSubmit(false)
-        alert('레코드 추가 실패 - TODO: toast로 변경')
+        navigate(`/record/${ID}`, { replace: true })
       }
     }
     if (isModify) {
@@ -176,7 +188,7 @@ export default function AddRecord() {
     const target = e.target as any
     const formData: WriteRecordRequestDto = {
       colorName: selectedColor,
-      content: target[5].value,
+      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
       title: target[4].value,
@@ -184,7 +196,7 @@ export default function AddRecord() {
 
     const modifyFormData: modifyRecordRequestDto = {
       title: target[4].value,
-      content: target[5].value,
+      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
@@ -219,6 +231,7 @@ export default function AddRecord() {
             } sticky top-0 left-0 z-[5] bg-grey-1`}
           >
             <MainCategoryTap
+              isModify={isModify}
               currentRecordType={recordType}
               onSetRecordType={setRecordType}
             />
@@ -228,12 +241,13 @@ export default function AddRecord() {
             className="px-6"
             onSubmit={handleSubmitData}
           >
-            <AddRecordCategory
-              isModify={isModify}
-              recordCategory={data?.categoryId}
-              currentRecordType={recordType}
-            />
-            <AddRecordTitle title={'레코드 제목'} />
+            {((isModify && data) || !isModify) && (
+              <AddRecordCategory
+                isModify={isModify}
+                recordCategory={data?.categoryId}
+              />
+            )}
+            <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
               recordTitle={data?.title}
               currentRecordType={recordType}

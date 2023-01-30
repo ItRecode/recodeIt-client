@@ -25,6 +25,7 @@ export default function ShareModal({
   iconName,
 }: IModalProps) {
   const RecordIcon = recordIcons[`${iconName}`]
+
   return (
     <section className="z-20 h-[187px] w-[270px] rounded-2xl bg-grey-1 py-4 px-3">
       <div className="flex justify-between">

@@ -46,6 +46,7 @@ export default function DetailRecord() {
     createdAt,
     imageUrls,
   } = recordData
+  const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const { user } = useUser()
 
   const background_color = `bg-${colorName}`
@@ -93,13 +94,6 @@ export default function DetailRecord() {
     }
   }, [inputSectionHeight])
 
-  const checkUserHistoryLength = () => {
-    if (window.history.length === 1 || window.history.state === null) {
-      return navigate('/myrecord')
-    }
-    navigate(-1)
-  }
-
   const deleteRecordById = async (id: string) => {
     try {
       await deleteRecord(id)
@@ -127,6 +121,7 @@ export default function DetailRecord() {
               description={content}
               backgroundColor={background_color}
               iconName={iconName}
+              imageUrl={imageUrls[0]}
             />
           </Modal>
         )}
@@ -154,8 +149,8 @@ export default function DetailRecord() {
             onClose={() => setIsDelete(false)}
             onCancel={() => setIsDelete(false)}
             onConfirm={() => {
-              checkUserHistoryLength()
               deleteRecordById(POST_ID)
+              navigate('/myrecord')
             }}
           />
         )}
@@ -173,7 +168,7 @@ export default function DetailRecord() {
           </nav>
         </header>
         <div className="overflow-y-auto">
-          <section id="title" className="flex flex-col px-6">
+          <section id="title" className="flex flex-col px-[18px]">
             <div className="flex justify-between whitespace-nowrap">
               <p className="flex items-center whitespace-nowrap text-2xl font-semibold leading-none">
                 {title}
@@ -205,7 +200,7 @@ export default function DetailRecord() {
               <p className="text-base font-semibold">공유하기</p>
             </Button>
             <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
-              <p className="w-full">{content}</p>
+              <p className="w-full whitespace-pre-wrap break-words">{text}</p>
             </div>
           </section>
           <section id="record_reply_list">

@@ -36,7 +36,6 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
   const TIME_DELAY_MS = 500
 
   useEffect(() => {
-    setIconState(icons)
     const getRecordNumber = icons[currentRecordType]?.filter((record) => {
       if (record.src.indexOf(recordIcon) !== -1) {
         return record.id
@@ -51,6 +50,13 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
         ),
       })
       slickRef.current?.slickGoTo(getRecordNumber.id)
+    } else {
+      setCurrentFocus(0)
+      setFormData({
+        ...formData,
+        selectedIcon: getIconSrc(iconState[currentRecordType][0].src),
+      })
+      setIconState(icons)
     }
   }, [currentRecordType])
 

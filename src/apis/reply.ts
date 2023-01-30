@@ -28,3 +28,15 @@ export const deleteReply = async (
 ) => {
   return await baseInstance.delete(`/comment/${commentId}?recordId=${recordId}`)
 }
+
+export const updateComment = async ({
+  data,
+  commentId,
+}: {
+  data: FormData
+  commentId: number
+}) => {
+  return await baseInstance.put(`/comment/${commentId}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}
