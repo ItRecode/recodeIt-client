@@ -246,7 +246,7 @@ export default function AddRecord() {
                 recordCategory={data?.categoryId}
               />
             )}
-            <AddRecordTitle title={'레코드 제목'} />
+            <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
               recordTitle={data?.title}
               currentRecordType={recordType}
