@@ -8,7 +8,7 @@ export const ShareKakao = ({
   recordId,
   title,
   description,
-  imageUrl = '',
+  imageUrl,
 }: IShareDataType) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { Kakao }: any = window
@@ -21,7 +21,10 @@ export const ShareKakao = ({
     content: {
       title: title,
       description: description,
-      imageUrl: imageUrl,
+      imageUrl: imageUrl
+        ? imageUrl
+        : 'https://record-it.s3.ap-northeast-2.amazonaws.com/imagefile-dev/sharing+png',
+
       link: {
         webUrl: process.env.REACT_APP_WEB_URL,
         mobileWebUrl: process.env.REACT_APP_WEB_URL,

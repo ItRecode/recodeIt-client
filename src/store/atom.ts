@@ -12,7 +12,7 @@ export const formDataAtom = atom({
 })
 
 export const DetailPageInputMode = atom<{
-  mode: 'reply' | 'nestedReply'
+  mode: 'reply' | 'nestedReply' | 'update'
   recordId: string | undefined
   parentId: number | string
 }>({
@@ -27,4 +27,25 @@ export const DetailPageInputMode = atom<{
 export const recordTypeAtom = atom<keyof IconType>({
   key: 'recordType',
   default: TEXT_DETAILS.CELEBRATION,
+})
+
+export const nestedReplyState = atom({
+  key: 'nestedReplyState',
+  default: {
+    commentId: 0,
+    state: false,
+  },
+})
+
+export const modifyComment = atom<{
+  commentId: number
+  content: string
+  imageUrl: string
+}>({
+  key: 'modifyComment',
+  default: {
+    commentId: 0,
+    content: '',
+    imageUrl: '',
+  },
 })

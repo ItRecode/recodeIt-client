@@ -6,7 +6,11 @@ import { getFormattedDate } from '@utils/getFormattedDate'
 export const useMyRecord = () => {
   const today = new Date()
 
-  const { data: records = null, isLoading } = useQuery(
+  const {
+    data: records = null,
+    isLoading,
+    refetch,
+  } = useQuery(
     [QUERY_KEYS.todayRecord],
     async () =>
       await getRecordByDate({
@@ -22,5 +26,6 @@ export const useMyRecord = () => {
   return {
     todayRecord: records?.data.recordByDateDtos[0],
     isLoading,
+    refetch,
   }
 }

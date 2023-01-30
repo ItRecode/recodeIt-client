@@ -176,7 +176,7 @@ export default function AddRecord() {
     const target = e.target as any
     const formData: WriteRecordRequestDto = {
       colorName: selectedColor,
-      content: target[5].value,
+      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
       title: target[4].value,
@@ -184,7 +184,7 @@ export default function AddRecord() {
 
     const modifyFormData: modifyRecordRequestDto = {
       title: target[4].value,
-      content: target[5].value,
+      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
