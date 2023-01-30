@@ -87,11 +87,13 @@ export default function AddRecord() {
   )
 
   useEffect(() => {
-    setFormDatas({
-      selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
-      selectedCategory: recordType === 'celebration' ? 3 : 7,
-      selectedColor: 'icon-purple',
-    })
+    if (!isModify) {
+      setFormDatas({
+        selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
+        selectedCategory: recordType === 'celebration' ? 3 : 7,
+        selectedColor: 'icon-purple',
+      })
+    }
     !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
