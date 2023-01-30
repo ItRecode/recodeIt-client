@@ -160,7 +160,7 @@ export default function AddRecord() {
         })
       } catch {
         setIsLoadingWhileSubmit(false)
-        alert('레코드 추가 실패 - TODO: toast로 변경')
+        alert('레코드 추가 실패 - 새로고침해서 다시 작성해주세요.')
       }
     }
     const modify = async () => {
@@ -171,8 +171,9 @@ export default function AddRecord() {
           replace: true,
         })
       } catch {
+        alert('레코드 수정 실패')
         setIsLoadingWhileSubmit(false)
-        alert('레코드 수정 실패 - TODO: toast로 변경')
+        navigate(`/record/${ID}`, { replace: true })
       }
     }
     if (isModify) {
