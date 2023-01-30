@@ -139,7 +139,12 @@ export default function ReplyItem({
               className="flex cursor-pointer bg-transparent text-[12px] leading-none text-primary-2"
             >
               <p className="mr-1">
-                {nestedReplyList ? <Arrow_Up_icon /> : <Arrow_Down_icon />}
+                {nestedReplyList.state &&
+                nestedReplyList.commentId === commentId ? (
+                  <Arrow_Up_icon />
+                ) : (
+                  <Arrow_Down_icon />
+                )}
               </p>
               답글 {numOfSubComment > 999 ? '999' : numOfSubComment}개
             </button>
