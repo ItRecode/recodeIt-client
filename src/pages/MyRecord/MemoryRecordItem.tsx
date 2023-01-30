@@ -69,7 +69,9 @@ export default function MemoryRecordItem({
               onClick={() => handleClickComment(commentId)}
             >
               <div className="line-clamp h-[54px] w-full overflow-hidden leading-[18px]">
-                <span className="text-xs">{content}</span>
+                <span className="text-xs">
+                  {content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')}
+                </span>
               </div>
             </div>
           ))}
