@@ -14,7 +14,6 @@ function MainCategoryTap({
 }: MainCategory) {
   const { CELEBRATION, CONSOLATION } = TEXT_DETAILS
 
-  console.log(isModify)
   const typeConfig = {
     active: `${
       isModify ? 'text-grey-7' : 'text-primary-2'
