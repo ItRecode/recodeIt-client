@@ -7,7 +7,7 @@ export const formDataAtom = atom({
   default: {
     selectedCategory: 3,
     selectedColor: 'icon-purple',
-    selectedIcon: 'heart',
+    selectedIcon: 'gift',
   },
 })
 
