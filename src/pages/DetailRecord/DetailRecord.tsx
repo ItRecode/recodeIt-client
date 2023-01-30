@@ -94,13 +94,6 @@ export default function DetailRecord() {
     }
   }, [inputSectionHeight])
 
-  const checkUserHistoryLength = () => {
-    if (window.history.length === 1 || window.history.state === null) {
-      return navigate('/myrecord')
-    }
-    navigate(-1)
-  }
-
   const deleteRecordById = async (id: string) => {
     try {
       await deleteRecord(id)
@@ -156,8 +149,8 @@ export default function DetailRecord() {
             onClose={() => setIsDelete(false)}
             onCancel={() => setIsDelete(false)}
             onConfirm={() => {
-              checkUserHistoryLength()
               deleteRecordById(POST_ID)
+              navigate('/myrecord')
             }}
           />
         )}
