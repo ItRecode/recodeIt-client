@@ -192,6 +192,7 @@ function AddRecordCategory({
               onClick={() => handleChooseCurrentCategory(category.id)}
             >
               <Chip
+                isModify={isModify}
                 type="button"
                 active={category.choosed}
                 message={category.title}

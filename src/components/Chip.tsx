@@ -7,6 +7,7 @@ interface chipProps {
   message: string
   pointer?: boolean
   property?: 'default' | 'small'
+  isModify?: boolean
 }
 
 function Chip({
@@ -16,13 +17,18 @@ function Chip({
   type,
   pointer = true,
   property = 'default',
+  isModify,
 }: chipProps) {
   return (
     <button
       type={type}
       className={`flex items-center rounded-full
         ${pointer && 'cursor-pointer'}
-        ${active ? ' bg-primary-2 text-grey-1' : ' bg-grey-2 text-grey-4'}
+        ${
+          active
+            ? `${isModify ? 'bg-grey-7' : 'bg-primary-2'} text-grey-1`
+            : ' bg-grey-2 text-grey-4'
+        }
         ${property === 'default' ? 'px-4 py-3' : 'px-3 py-[9px]'}
       `}
     >
