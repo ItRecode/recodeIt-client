@@ -1,13 +1,9 @@
-import { deleteReply, getReply } from '@apis/reply'
-import Alert from '@components/Alert'
+import { getReply } from '@apis/reply'
 import Spinner from '@components/Spinner'
-import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode, modifyComment } from '@store/atom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
-import { getCreatedDate } from './getCreatedDate'
+import NestedReplyItem from './NestedReplyItem'
 
 export default function NestedReplyList({
   recordwriter,
@@ -19,16 +15,9 @@ export default function NestedReplyList({
   parentId: number
   numOfSubComment: number
 }) {
-  const { user } = useUser()
   const [nestedCommentList, setNestedCommentList] = useState<
     CommentData[] | null
   >(null)
-
-  const setInputMode = useSetRecoilState(DetailPageInputMode)
-  const setModifyCommentDto = useSetRecoilState(modifyComment)
-  const [deleteAlert, setDeleteAlert] = useState(false)
-
-  const queryClient = useQueryClient()
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getNestedReplyData', recordId, parentId],
@@ -50,21 +39,6 @@ export default function NestedReplyList({
     }
   }, [data, isSuccess])
 
-  const { mutate: onDeleteNestedReply } = useMutation(
-    (commentId: number) => deleteReply(commentId, recordId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['getReplyData', recordId])
-        queryClient.invalidateQueries([
-          'getNestedReplyData',
-          recordId,
-          parentId,
-        ])
-        setDeleteAlert(false)
-      },
-    }
-  )
-
   return (
     <>
       {isLoading && (
@@ -75,80 +49,18 @@ export default function NestedReplyList({
 
       {nestedCommentList !== null &&
         nestedCommentList.map((item, index) => (
-          <div key={index} className="mb-4 pr-[3.5rem]">
-            <div className="rounded-lg bg-grey-2 p-3" key={index}>
-              <div className="flex">
-                <p className="text-xs font-medium">
-                  {item.writer ? item.writer : '익명'}
-                </p>
-                <p className="mx-1.5 text-xs font-normal text-grey-5">
-                  {getCreatedDate(item.createdAt)}
-                </p>
-              </div>
-              {item.imageUrl !== null && (
-                <div className="relative my-2.5 aspect-square w-[130px] rounded-2xl">
-                  <img
-                    className="aspect-square w-full rounded-2xl object-cover"
-                    src={item.imageUrl}
-                    alt="user-selected-record-image"
-                  />
-                </div>
-              )}
-              <p className="mt-1.5 whitespace-pre-wrap break-words text-xs font-normal leading-normal text-grey-8">
-                {item.content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')}
-              </p>
-            </div>
-            {deleteAlert && (
-              <Alert
-                visible={deleteAlert}
-                mainMessage={<>댓글을 삭제하시겠습니까?</>}
-                subMessage={<>삭제 후 복구는 불가능해요.</>}
-                cancelMessage="아니오"
-                confirmMessage="예"
-                onClose={() => setDeleteAlert(false)}
-                onCancel={() => setDeleteAlert(false)}
-                onConfirm={() => {
-                  onDeleteNestedReply(item.commentId)
-                }}
-                danger={true}
-              />
-            )}
-            <div className="mt-1.5 flex w-full justify-end">
-              <div>
-                {user?.data === item.writer && (
-                  <button
-                    onClick={() => {
-                      setInputMode((prev) => {
-                        return { ...prev, mode: 'update', parentId: parentId }
-                      })
-                      setModifyCommentDto({
-                        commentId: item.commentId,
-                        content: item.content,
-                        imageUrl: item.imageUrl ? item.imageUrl : '',
-                      })
-                    }}
-                    className="cursor-pointer bg-transparent text-xs text-grey-5"
-                  >
-                    수정
-                  </button>
-                )}
-                {(recordwriter === user?.data ||
-                  item.writer === user?.data) && (
-                  <button
-                    onClick={() => setDeleteAlert(true)}
-                    className="cursor-pointer bg-transparent text-xs text-sub-1"
-                  >
-                    삭제
-                  </button>
-                )}
-                {user?.data !== undefined && user?.data !== item.writer && (
-                  <button className="cursor-pointer bg-transparent text-xs text-grey-5">
-                    신고
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+          <NestedReplyItem
+            key={index}
+            recordwriter={recordwriter}
+            content={item.content}
+            createdAt={item.createdAt}
+            imageUrl={item.imageUrl}
+            writer={item.writer}
+            commentId={item.commentId}
+            recordId={recordId}
+            parentId={parentId}
+            modifiedAt={item.modifiedAt}
+          />
         ))}
     </>
   )

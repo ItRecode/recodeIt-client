@@ -6,8 +6,8 @@ export const createReply = async (data: FormData) => {
   })
 }
 
-export const getReply = async (
-  recordId?: string | undefined,
+export const getReply = async <T>(
+  recordId?: T,
   pageParam?: number,
   parentId?: number,
   size?: number
