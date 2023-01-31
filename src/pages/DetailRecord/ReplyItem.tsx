@@ -6,7 +6,7 @@ import {
   nestedReplyState,
 } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
@@ -31,7 +31,7 @@ export default function ReplyItem({
   const navigate = useNavigate()
   const { user } = useUser()
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [nestedReplyList, setNestedReplyList] = useRecoilState(nestedReplyState)
+  const nestedReplyList = useRecoilValue(nestedReplyState)
   const [openNestedReplyList, setOpenNestedReplyList] = useState<boolean>(false)
   const [deleteAlert, setDeleteAlert] = useState(false)
 
