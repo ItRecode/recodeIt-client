@@ -70,7 +70,6 @@ export default function ReplyItem({
   }
 
   useEffect(() => {
-    console.log(nestedReplyList)
     if (
       nestedReplyList.state === true &&
       commentId === nestedReplyList.commentId
