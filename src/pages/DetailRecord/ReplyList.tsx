@@ -44,7 +44,7 @@ export default function ReplyList({
       <h2 className="text-lg font-semibold">댓글</h2>
 
       {replyList?.pages.map((page) =>
-        page.data.commentList.map((item: CommentData, index: number) => (
+        page.data.commentList.map((item: CommentData) => (
           <ReplyItem
             key={item.commentId}
             commentId={item.commentId}
@@ -56,7 +56,6 @@ export default function ReplyList({
             recordwriter={Recordwriter}
             writer={item.writer}
             recordId={recordId}
-            index={index}
           />
         ))
       )}

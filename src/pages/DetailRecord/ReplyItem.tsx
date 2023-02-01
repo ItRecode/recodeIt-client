@@ -13,13 +13,10 @@ import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteReply } from '@apis/reply'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteReply, getReply } from '@apis/reply'
 import Alert from '@components/Alert'
 
-interface ReplyItemProps extends CommentData {
-  index: number
-}
 export default function ReplyItem({
   content,
   createdAt,
@@ -29,8 +26,7 @@ export default function ReplyItem({
   writer,
   commentId,
   recordId,
-  index,
-}: ReplyItemProps) {
+}: CommentData) {
   const { user } = useUser()
   const scrollRef = useRef<HTMLDivElement>(null)
   const nestedReplyList = useRecoilValue(nestedReplyState)
@@ -81,6 +77,17 @@ export default function ReplyItem({
       setOpenNestedReplyList(true)
     }
   }, [nestedReplyList])
+
+  const { data: nestedReplyData, isLoading } = useQuery(
+    ['getNestedReplyData', recordId, commentId],
+    () => getReply(recordId, 0, commentId),
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  )
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -159,10 +166,13 @@ export default function ReplyItem({
 
         {openNestedReplyList && (
           <NestedReplyList
+            nestedReplyData={
+              nestedReplyData && nestedReplyData.data.commentList
+            }
+            isLoading={isLoading}
             recordwriter={recordwriter}
             recordId={recordId}
             parentId={commentId}
-            numOfSubComment={numOfSubComment}
           />
         )}
       </div>
