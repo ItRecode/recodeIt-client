@@ -122,7 +122,9 @@ export default function ReplyInput({
   const { mutate: replyMutate } = useMutation(createReply, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getReplyData', recordIdParams])
-      setScrollTargetId(0)
+      setScrollTargetId((prev) => {
+        return { ...prev, scrollReset: true }
+      })
     },
     onError: () => {
       alert('댓글 작성에 실패했습니다.')
@@ -137,7 +139,9 @@ export default function ReplyInput({
         recordIdParams,
         inputMode.parentId,
       ])
-      setScrollTargetId(inputMode.parentId as number)
+      setScrollTargetId((prev) => {
+        return { ...prev, commentId: inputMode.parentId as number }
+      })
     },
     onError: () => {
       alert('답글 작성에 실패했습니다.')

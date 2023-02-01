@@ -43,9 +43,9 @@ export default function ReplyItem({
   const setModifyCommentDto = useSetRecoilState(modifyComment)
 
   useEffect(() => {
-    if (index === scrollTargetId || commentId === scrollTargetId) {
+    if (commentId === scrollTargetId.commentId) {
       scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      resetSrollTarget
+      resetSrollTarget()
     }
   }, [scrollTargetId])
 

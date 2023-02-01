@@ -50,7 +50,10 @@ export const modifyComment = atom<{
   },
 })
 
-export const scrollTarget = atom<number | null>({
+export const scrollTarget = atom<{
+  scrollReset: boolean
+  commentId: number | null
+}>({
   key: 'scrollToReply',
-  default: null,
+  default: { scrollReset: false, commentId: null },
 })

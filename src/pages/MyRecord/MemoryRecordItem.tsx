@@ -29,7 +29,9 @@ export default function MemoryRecordItem({
       setIsDragging(false)
       return
     }
-    setScrollTargetId(commentId)
+    setScrollTargetId((prev) => {
+      return { ...prev, commentId }
+    })
     navigate(`/record/${recordId}`)
   }
 
