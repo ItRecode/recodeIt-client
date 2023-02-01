@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
@@ -13,6 +13,7 @@ import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
+  scrollTarget,
 } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import InputSnackBar from './InputSnackBar'
@@ -42,6 +43,8 @@ export default function ReplyInput({
   const resetUpdateReply = useResetRecoilState(modifyComment)
 
   const setNestedReplyList = useSetRecoilState(nestedReplyState)
+
+  const setScrollTargetId = useSetRecoilState(scrollTarget)
 
   const getDeleteImageFileId = () => {
     if (inputMode.mode === 'update') {
@@ -119,6 +122,10 @@ export default function ReplyInput({
   const { mutate: replyMutate } = useMutation(createReply, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getReplyData', recordIdParams])
+      setScrollTargetId(0)
+    },
+    onError: () => {
+      alert('댓글 작성에 실패했습니다.')
     },
   })
 
@@ -130,6 +137,10 @@ export default function ReplyInput({
         recordIdParams,
         inputMode.parentId,
       ])
+      setScrollTargetId(inputMode.parentId as number)
+    },
+    onError: () => {
+      alert('답글 작성에 실패했습니다.')
     },
   })
 
@@ -141,6 +152,9 @@ export default function ReplyInput({
         recordIdParams,
         inputMode.parentId,
       ])
+    },
+    onError: () => {
+      alert('수정에 실패했습니다.')
     },
   })
 

@@ -1,6 +1,5 @@
 import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
-import { useScrollCommentId } from '@hooks/useScrollCommentId'
 import { useGetReply } from '@react-query/hooks/useGetReply'
 import React from 'react'
 import { CommentData } from 'types/replyData'
@@ -23,14 +22,12 @@ export default function ReplyList({
     }
   })
 
-  const { scrollCommentId } = useScrollCommentId()
-
   return (
     <section id="replyList" className="px-6">
       <h2 className="text-lg font-semibold">댓글</h2>
 
       {replyList?.pages.map((page) =>
-        page.data.commentList.map((item: CommentData) => (
+        page.data.commentList.map((item: CommentData, index: number) => (
           <ReplyItem
             key={item.commentId}
             commentId={item.commentId}
@@ -42,7 +39,7 @@ export default function ReplyList({
             recordwriter={Recordwriter}
             writer={item.writer}
             recordId={recordId}
-            isScroll={item.commentId === scrollCommentId}
+            index={index}
           />
         ))
       )}

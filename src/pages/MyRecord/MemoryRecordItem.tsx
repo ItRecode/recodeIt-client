@@ -5,6 +5,8 @@ import { IMemoryRecord } from 'types/recordData'
 import useSwipe from '@hooks/useSwipe'
 import recordIcons from '@assets/record_icons'
 import { ReactComponent as PlusIcons } from '@assets/myRecordIcon/comment_plus.svg'
+import { useSetRecoilState } from 'recoil'
+import { scrollTarget } from '@store/atom'
 
 export default function MemoryRecordItem({
   recordId,
@@ -20,14 +22,15 @@ export default function MemoryRecordItem({
   const navigate = useNavigate()
   const background_color = `bg-${iconColor}`
   const RecordIcon = recordIcons[`${iconName}`]
+  const setScrollTargetId = useSetRecoilState(scrollTarget)
 
   const handleClickComment = (commentId: number) => {
     if (isDragging) {
       setIsDragging(false)
       return
     }
-
-    navigate(`/record/${recordId}?commentId=${commentId}`)
+    setScrollTargetId(commentId)
+    navigate(`/record/${recordId}`)
   }
 
   return (

@@ -4,19 +4,22 @@ import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
+  scrollTarget,
 } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
-import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteReply } from '@apis/reply'
 import Alert from '@components/Alert'
 
+interface ReplyItemProps extends CommentData {
+  index: number
+}
 export default function ReplyItem({
   content,
   createdAt,
@@ -26,24 +29,25 @@ export default function ReplyItem({
   writer,
   commentId,
   recordId,
-  isScroll,
-}: CommentData) {
-  const navigate = useNavigate()
+  index,
+}: ReplyItemProps) {
   const { user } = useUser()
   const scrollRef = useRef<HTMLDivElement>(null)
   const nestedReplyList = useRecoilValue(nestedReplyState)
   const [openNestedReplyList, setOpenNestedReplyList] = useState<boolean>(false)
   const [deleteAlert, setDeleteAlert] = useState(false)
+  const scrollTargetId = useRecoilValue(scrollTarget)
+  const resetSrollTarget = useResetRecoilState(scrollTarget)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
   const setModifyCommentDto = useSetRecoilState(modifyComment)
 
   useEffect(() => {
-    if (isScroll) {
+    if (index === scrollTargetId || commentId === scrollTargetId) {
       scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      navigate(window.location.pathname, { replace: true })
+      resetSrollTarget
     }
-  }, [isScroll])
+  }, [scrollTargetId])
 
   const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const queryClient = useQueryClient()
