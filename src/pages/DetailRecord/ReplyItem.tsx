@@ -6,7 +6,7 @@ import {
   nestedReplyState,
 } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
@@ -29,9 +29,10 @@ export default function ReplyItem({
   isScroll,
 }: CommentData) {
   const navigate = useNavigate()
-  const scrollRef = useRef<HTMLDivElement>(null)
   const { user } = useUser()
-  const [nestedReplyList, setNestedReplyList] = useRecoilState(nestedReplyState)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const nestedReplyList = useRecoilValue(nestedReplyState)
+  const [openNestedReplyList, setOpenNestedReplyList] = useState<boolean>(false)
   const [deleteAlert, setDeleteAlert] = useState(false)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
@@ -43,6 +44,7 @@ export default function ReplyItem({
       navigate(window.location.pathname, { replace: true })
     }
   }, [isScroll])
+
   const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const queryClient = useQueryClient()
 
@@ -66,6 +68,15 @@ export default function ReplyItem({
       imageUrl: imageUrl ? imageUrl : '',
     })
   }
+
+  useEffect(() => {
+    if (
+      nestedReplyList.state === true &&
+      commentId === nestedReplyList.commentId
+    ) {
+      setOpenNestedReplyList(true)
+    }
+  }, [nestedReplyList])
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -131,27 +142,18 @@ export default function ReplyItem({
         {numOfSubComment > 0 && (
           <div className="mt-2.5 mb-4">
             <button
-              onClick={() =>
-                setNestedReplyList((prev) => {
-                  return { ...prev, state: !prev.state, commentId: commentId }
-                })
-              }
+              onClick={() => setOpenNestedReplyList((prev) => !prev)}
               className="flex cursor-pointer bg-transparent text-[12px] leading-none text-primary-2"
             >
               <p className="mr-1">
-                {nestedReplyList.state &&
-                nestedReplyList.commentId === commentId ? (
-                  <Arrow_Up_icon />
-                ) : (
-                  <Arrow_Down_icon />
-                )}
+                {openNestedReplyList ? <Arrow_Up_icon /> : <Arrow_Down_icon />}
               </p>
               답글 {numOfSubComment > 999 ? '999' : numOfSubComment}개
             </button>
           </div>
         )}
 
-        {nestedReplyList.state && nestedReplyList.commentId === commentId && (
+        {openNestedReplyList && (
           <NestedReplyList
             recordwriter={recordwriter}
             recordId={recordId}

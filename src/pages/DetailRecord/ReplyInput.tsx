@@ -1,6 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
-import { ReactComponent as Camera } from '@assets/camera.svg'
-import { ReactComponent as Plus } from '@assets/plus.svg'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
@@ -23,7 +21,8 @@ import {
 } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { LocalStorage } from '@utils/localStorage'
-import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
+import InputSnackBar from './InputSnackBar'
+import ReplyInputAddImage from './InputAddImage'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -34,9 +33,13 @@ export default function ReplyInput({
 }) {
   const queryClient = useQueryClient()
 
+  const screenAvailWidth = window.screen.availWidth
+
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
+  const [inputPlaceholder, setInputPlaceholder] =
+    useState('따뜻한 마음을 남겨주세요')
 
   const textRef = useRef<HTMLTextAreaElement>(null)
 
@@ -55,32 +58,7 @@ export default function ReplyInput({
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
   const setNestedReplyList = useSetRecoilState(nestedReplyState)
 
-  const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    encodeFile((e.target.files as FileList)[0])
-
-    setImage(e.target.value)
-    setImageFile((e.target.files as FileList)[0])
-
-    setInputSectionHeight((prev) => prev + RECORD_DETAIL_INPUT_IMAGE_HEIGHT)
-    e.target.value = ''
-  }
-
-  const encodeFile = (fileBlob: File) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(fileBlob)
-    return new Promise<void>((resolve, reject) => {
-      reader.onload = () => {
-        try {
-          setImage(reader.result as string)
-          resolve()
-        } catch (error) {
-          reject(error)
-        }
-      }
-    })
-  }
-
-  const handleDeleteImageFile = () => {
+  const getDeleteImageFileId = () => {
     if (inputMode.mode === 'update') {
       if (image.slice(60, 63) === 'dev') {
         setDeleteImageUrl(() => [image.slice(64)])
@@ -140,6 +118,7 @@ export default function ReplyInput({
       }
       if (inputMode.mode === 'nestedReply') {
         nestedReplyMutate(data)
+        setNestedReplyList({ state: true, commentId: +inputMode.parentId })
       }
     }
 
@@ -224,45 +203,30 @@ export default function ReplyInput({
     }
   }, [isAnonymousUser])
 
+  useEffect(() => {
+    if (screenAvailWidth > 340) {
+      setInputPlaceholder('따뜻한 마음을 남겨주세요. (100자 이내)')
+    }
+  }, [])
+
   return (
     <>
-      {(inputMode.mode === 'nestedReply' || inputMode.mode === 'update') && (
-        <div className="flex h-[48px] w-full items-center justify-between bg-grey-2 py-2 px-4">
-          <p className="text-xs text-grey-6">
-            {inputMode.mode === 'nestedReply' ? '답글 작성중...' : '수정중...'}
-          </p>
-          <button
-            onClick={() => {
-              resetInputMode()
-              setText('')
-              setImage('')
-              setImageFile(null)
-            }}
-            className="cursor-pointer p-0"
-          >
-            <CloseIcon />
-          </button>
-        </div>
-      )}
+      <InputSnackBar
+        setText={setText}
+        setImage={setImage}
+        setImageFile={setImageFile}
+      />
       <form
         className="flex w-full items-end bg-transparent py-4 pl-4 pr-6"
         encType="multipart/form-data"
         onSubmit={handleSubmitReplyData}
       >
-        <label htmlFor="imageFile">
-          <div className="relative mr-2.5 mb-3 h-9 w-9 cursor-pointer bg-transparent">
-            <Camera className="absolute top-[7px] right-[5px]" />
-            {image === '' && <Plus className="absolute right-0.5 top-[5px]" />}
-          </div>
-          <input
-            onChange={handleSelectImageFile}
-            id="imageFile"
-            type="file"
-            accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
-            className="hidden"
-            disabled={image !== ''}
-          />
-        </label>
+        <ReplyInputAddImage
+          image={image}
+          setImage={setImage}
+          setImageFile={setImageFile}
+          setInputSectionHeight={setInputSectionHeight}
+        />
         <div className=" w-full rounded-lg bg-grey-2 py-4 px-3">
           {image !== '' && (
             <div className="relative mb-2.5 aspect-square w-[60px] rounded-2xl">
@@ -273,7 +237,7 @@ export default function ReplyInput({
               />
               <Close
                 className="absolute top-1.5 right-1.5 cursor-pointer"
-                onClick={handleDeleteImageFile}
+                onClick={getDeleteImageFileId}
               />
             </div>
           )}
@@ -286,7 +250,7 @@ export default function ReplyInput({
               required={true}
               placeholder={
                 inputMode.mode === 'reply'
-                  ? '따뜻한 마음을 남겨주세요. (100자 이내)'
+                  ? inputPlaceholder
                   : '답글 추가... (100자 이내)'
               }
               onInput={handleResizeHeight}
@@ -298,7 +262,7 @@ export default function ReplyInput({
             />
             <button
               disabled={text === ''}
-              className={`mb-1 cursor-pointer text-xs ${
+              className={`mb-1 cursor-pointer  whitespace-nowrap bg-transparent text-xs ${
                 text !== '' ? 'text-primary-2' : 'text-grey-6'
               }`}
             >
