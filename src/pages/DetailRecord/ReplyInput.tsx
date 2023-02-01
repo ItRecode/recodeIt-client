@@ -33,9 +33,13 @@ export default function ReplyInput({
 }) {
   const queryClient = useQueryClient()
 
+  const screenAvailWidth = window.screen.availWidth
+
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [text, setText] = useState('')
+  const [inputPlaceholder, setInputPlaceholder] =
+    useState('따뜻한 마음을 남겨주세요')
 
   const textRef = useRef<HTMLTextAreaElement>(null)
 
@@ -199,6 +203,12 @@ export default function ReplyInput({
     }
   }, [isAnonymousUser])
 
+  useEffect(() => {
+    if (screenAvailWidth > 340) {
+      setInputPlaceholder('따뜻한 마음을 남겨주세요. (100자 이내)')
+    }
+  }, [])
+
   return (
     <>
       <InputSnackBar
@@ -240,7 +250,7 @@ export default function ReplyInput({
               required={true}
               placeholder={
                 inputMode.mode === 'reply'
-                  ? '따뜻한 마음을 남겨주세요. (100자 이내)'
+                  ? inputPlaceholder
                   : '답글 추가... (100자 이내)'
               }
               onInput={handleResizeHeight}
@@ -252,7 +262,7 @@ export default function ReplyInput({
             />
             <button
               disabled={text === ''}
-              className={`mb-1 cursor-pointer  bg-transparent text-xs ${
+              className={`mb-1 cursor-pointer  whitespace-nowrap bg-transparent text-xs ${
                 text !== '' ? 'text-primary-2' : 'text-grey-6'
               }`}
             >
