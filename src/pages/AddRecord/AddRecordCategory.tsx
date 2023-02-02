@@ -117,8 +117,8 @@ function AddRecordCategory({
     return null
   }
 
-  const getIconSrc = (id: number): string => {
-    switch (id) {
+  const getIconSrc = (iconId: number): string => {
+    switch (iconId) {
       case 3:
         return Celebrate
       case 4:
@@ -141,19 +141,19 @@ function AddRecordCategory({
   }
 
   const handleChooseCurrentCategory = (index: number): void => {
-    const currentState: CategoryType | null = categoryState && {
-      ...categoryState,
-      [recordType]:
-        categoryState !== null &&
-        categoryState[recordType].map((category: CategorySource) => {
-          return {
-            ...category,
-            choosed: category.id === index,
-          }
-        }),
-    }
-
     if (categoryState !== null) {
+      const currentState: CategoryType | null = categoryState && {
+        ...categoryState,
+        [recordType]: categoryState[recordType].map(
+          (category: CategorySource) => {
+            return {
+              ...category,
+              choosed: category.id === index,
+            }
+          }
+        ),
+      }
+
       setFormData({
         ...formData,
         selectedCategory:
@@ -163,8 +163,7 @@ function AddRecordCategory({
               : index - CONSOLATES
           ].id,
       })
-    }
-    if (currentState !== null && categoryState !== null) {
+
       setCategoryState(currentState)
     }
   }
