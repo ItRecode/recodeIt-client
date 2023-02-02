@@ -13,10 +13,9 @@ import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
 import { useRecoilState, useResetRecoilState } from 'recoil'
-import { enrollRecord, modifyRecord } from '@apis/record'
+import { enrollRecord, modifyRecord, getRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
-import { getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 
@@ -54,15 +53,19 @@ export type IsInputFocusType = {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
+  const ID = LocalStorage.get('postId') as string
+  const isModify = LocalStorage.get('modifyMode') === 'true'
+
+  const navigate = useNavigate()
+
   const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
     input: '',
     textArea: '',
   })
-  const [formDatas, setFormDatas] = useRecoilState(formDataAtom)
+  const [formData, setFormData] = useRecoilState(formDataAtom)
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
-    formDatas
+    formData
   const [files, setFiles] = useState<File[]>([])
-  const navigate = useNavigate()
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
@@ -70,10 +73,6 @@ export default function AddRecord() {
   //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
-  const ID = LocalStorage.get('postId') as string
-  const isModify = LocalStorage.get('modifyMode') === 'true'
-  const resetFormDataAtom = useResetRecoilState(formDataAtom)
-  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
   const { data, isLoading, isSuccess } = useQuery(
     ['getRecordData', ID],
     () => getRecord(ID),
@@ -88,19 +87,44 @@ export default function AddRecord() {
 
   useEffect(() => {
     if (!isModify) {
-      setFormDatas({
+      setFormData({
         selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
         selectedCategory: recordType === 'celebration' ? 3 : 7,
         selectedColor: 'icon-purple',
       })
+      setCheckAllFilled({ input: '', textArea: '' })
     }
-    !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
   useEffect(() => {
     if (data !== undefined) {
-      setCheckAllFilled({ input: data?.title, textArea: data?.content })
-      setFormDatas({ ...formDatas, selectedColor: data?.colorName })
+      setCheckAllFilled({ input: data.title, textArea: data.content })
+      setFormData({ ...formData, selectedColor: data.colorName })
+      const changeCurrentType = () => {
+        const CELEBRATION_ID = Object.freeze({
+          max: 6,
+          min: 3,
+        })
+        const CONSOLATION_ID = Object.freeze({
+          max: 10,
+          min: 7,
+        })
+        const dataCategoryId = data?.categoryId
+        if (dataCategoryId) {
+          if (
+            dataCategoryId >= CELEBRATION_ID.min &&
+            dataCategoryId <= CELEBRATION_ID.max
+          ) {
+            setRecordType(CELEBRATION)
+          } else if (
+            dataCategoryId >= CONSOLATION_ID.min &&
+            dataCategoryId <= CONSOLATION_ID.max
+          ) {
+            setRecordType('consolation')
+          }
+        }
+      }
+      changeCurrentType()
     }
   }, [data])
 
@@ -121,18 +145,10 @@ export default function AddRecord() {
     setIsMobile(detectMobileDevice(window.navigator.userAgent))
   }, [isInputFocus])
 
+  const resetFormDataAtom = useResetRecoilState(formDataAtom)
+  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
+
   useEffect(() => {
-    const changeCurrentType = () => {
-      const dataCategoryId = data?.categoryId
-      if (dataCategoryId) {
-        if (dataCategoryId >= 3 && dataCategoryId <= 6) {
-          setRecordType(CELEBRATION)
-        } else if (dataCategoryId >= 7 && dataCategoryId <= 10) {
-          setRecordType('consolation')
-        }
-      }
-    }
-    changeCurrentType()
     const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
@@ -149,7 +165,7 @@ export default function AddRecord() {
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     if (isLoadingWhileSubmit) return
-    const formData = makeFormDatas(e)
+    const formData = makeFormData(e)
     setIsLoadingWhileSubmit(true)
     const enroll = async () => {
       try {
@@ -163,6 +179,7 @@ export default function AddRecord() {
         alert('레코드 추가 실패 - 새로고침해서 다시 작성해주세요.')
       }
     }
+
     const modify = async () => {
       try {
         const response = await modifyRecord(ID, formData)
@@ -183,20 +200,24 @@ export default function AddRecord() {
     }
   }
 
-  const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
+  const makeLineBreak = (content: string): string => {
+    return content.replaceAll(/(\n|\r\n)/g, '<br>')
+  }
+
+  const makeFormData = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
     const formData: WriteRecordRequestDto = {
+      title: target[4].value,
+      content: makeLineBreak(target[5].value),
       colorName: selectedColor,
-      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
-      title: target[4].value,
     }
 
     const modifyFormData: modifyRecordRequestDto = {
       title: target[4].value,
-      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
+      content: makeLineBreak(target[5].value),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
@@ -204,10 +225,11 @@ export default function AddRecord() {
 
     const data = new FormData()
     if (files !== undefined && files.length > 0) {
-      files?.forEach((file) => {
-        data.append('attachments', file as File, file?.name)
+      files.forEach((file) => {
+        data.append('attachments', file as File, file.name)
       })
     }
+
     data.append(
       isModify ? 'modifyRecordRequestDto' : 'writeRecordRequestDto',
       new Blob([JSON.stringify(isModify ? modifyFormData : formData)], {
