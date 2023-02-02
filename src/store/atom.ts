@@ -49,3 +49,11 @@ export const modifyComment = atom<{
     imageUrl: '',
   },
 })
+
+export const scrollTarget = atom<{
+  scrollReset: boolean
+  commentId: number | null
+}>({
+  key: 'scrollToReply',
+  default: { scrollReset: false, commentId: null },
+})

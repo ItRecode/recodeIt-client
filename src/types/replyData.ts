@@ -8,7 +8,6 @@ export interface CommentData {
   writer?: string
   recordwriter?: string
   recordId?: string | undefined
-  isScroll?: boolean
 }
 
 export interface CommentRequestDtoType {
