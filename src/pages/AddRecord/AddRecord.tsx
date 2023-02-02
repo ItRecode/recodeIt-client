@@ -286,10 +286,7 @@ export default function AddRecord() {
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 컬러'} />
-            <AddRecordColor
-              recordColor={data?.colorName}
-              currentRecordType={recordType}
-            />
+            <AddRecordColor recordColor={data?.colorName} />
             <AddRecordTitle title={'레코드 아이콘'} />
             <AddRecordIcon
               recordIcon={data?.iconName}
