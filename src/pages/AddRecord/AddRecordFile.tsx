@@ -8,9 +8,10 @@ import React, {
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 import Toast from '@components/Toast'
+import { useRecoilValue } from 'recoil'
+import { recordTypeAtom } from '@store/atom'
 
 interface Props {
-  currentRecordType: string
   setFiles: Dispatch<SetStateAction<File[]>>
   files: File[]
   recordFiles: string[]
@@ -20,7 +21,6 @@ interface Props {
 }
 
 function AddRecordFile({
-  currentRecordType,
   setFiles,
   files,
   recordFiles,
@@ -33,7 +33,9 @@ function AddRecordFile({
   const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
     null
   )
+  const currentRecordType = useRecoilValue(recordTypeAtom)
   const MAX_FILE = 3
+  const MAX_FILE_SIZE = 5
 
   const getByteSize = (size: number) => {
     return size / 1000 / 1000
@@ -45,7 +47,7 @@ function AddRecordFile({
     const getSize = () => {
       for (let i = 0; i < files.length; i++) {
         const convertedSize = getByteSize(files[i].size)
-        if (convertedSize > 5) {
+        if (convertedSize > MAX_FILE_SIZE) {
           setIsToast(true)
           setToastType('fileSize')
           isOver5MB = true

@@ -298,7 +298,6 @@ export default function AddRecord() {
               setToDeleteFiles={setToDeleteFiles}
               isModify={isModify}
               recordFiles={data?.imageUrls}
-              currentRecordType={recordType}
               files={files}
               setFiles={setFiles}
             />
