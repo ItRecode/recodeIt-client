@@ -33,7 +33,7 @@ function AddRecordFile({
   const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
     null
   )
-  const MAX_FILE = 1
+  const MAX_FILE = 3
 
   const getByteSize = (size: number) => {
     return size / 1000 / 1000
@@ -79,18 +79,13 @@ function AddRecordFile({
     if (checkedFileSize) {
       return (e.target.value = '')
     }
+
     encodeFileToBase64(e.target.files as FileList)
+    // encodeFileToBase64(e.target.files as FileList)
     // FileList가 이터러블하지 않으나 유사배열이라서 Array를 빌려서 ...메소드를 사용함
     setFiles([...files, ...Array.from(e.target.files as FileList)])
     e.target.value = ''
   }
-
-  useEffect(() => {
-    setCurrentImg([])
-    if (recordFiles) {
-      setCurrentImg(recordFiles)
-    }
-  }, [currentRecordType])
 
   const encodeFileToBase64 = (fileBlob: FileList) => {
     const readAndPreview = (file: File) => {
@@ -105,6 +100,13 @@ function AddRecordFile({
       ;[].forEach.call(fileBlob, readAndPreview)
     }
   }
+
+  useEffect(() => {
+    setCurrentImg([])
+    if (recordFiles) {
+      setCurrentImg(recordFiles)
+    }
+  }, [currentRecordType])
 
   const handleDelete = (toDeleteIndex: number): void => {
     setCurrentImg(filterArray(currentImg, toDeleteIndex))
@@ -152,9 +154,6 @@ function AddRecordFile({
     )
   }
 
-  const notDeletedRecordFiles = recordFiles?.filter((file) => {
-    return !toDeleteFiles.includes(file.split('/')[4])
-  })
   return (
     <div className="mb-8 flex items-center gap-2">
       {isToast && makeToast()}
@@ -165,16 +164,15 @@ function AddRecordFile({
             <span
               className={`${!currentImg ? 'text-grey-4' : 'text-primary-2'}`}
             >
-              {isModify && notDeletedRecordFiles.length !== 0
-                ? notDeletedRecordFiles.length
-                : currentImg.length}
+              {currentImg.length}
             </span>
             {`/${MAX_FILE}`}
           </p>
         </div>
       </label>
       <input
-        disabled={currentImg.length === 1}
+        multiple
+        disabled={currentImg.length === MAX_FILE}
         onChange={handleSelectImageFile}
         className="hidden"
         id="file"
@@ -182,10 +180,7 @@ function AddRecordFile({
         accept=".jpg, .jpeg, .png, .svg, image/*;capture=camera"
       />
       {currentImg.length > 0 &&
-        (isModify && notDeletedRecordFiles.length !== 0
-          ? notDeletedRecordFiles
-          : currentImg
-        ).map((imgSrc, index) => {
+        currentImg.map((imgSrc, index) => {
           return (
             <div key={index} className="relative h-[66px] w-[66px]">
               <img
