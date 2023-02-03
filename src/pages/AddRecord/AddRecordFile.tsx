@@ -103,6 +103,7 @@ function AddRecordFile({
 
   useEffect(() => {
     setCurrentImg([])
+    setFiles([])
     if (recordFiles) {
       setCurrentImg(recordFiles)
     }
