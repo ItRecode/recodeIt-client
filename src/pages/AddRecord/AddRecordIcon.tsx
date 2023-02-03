@@ -41,14 +41,15 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
         }
       }
     )[0]
-    const { id } = recordIconData
     if (recordIconData) {
-      setCurrentFocus(id)
+      setCurrentFocus(recordIconData.id)
       setFormData({
         ...formData,
-        selectedIcon: getIconSrc(ADD_RECORD_ICONS[currentRecordType][id].src),
+        selectedIcon: getIconSrc(
+          ADD_RECORD_ICONS[currentRecordType][recordIconData.id].src
+        ),
       })
-      slickRef.current?.slickGoTo(id)
+      slickRef.current?.slickGoTo(recordIconData.id)
     } else {
       setCurrentFocus(0)
       setFormData({
