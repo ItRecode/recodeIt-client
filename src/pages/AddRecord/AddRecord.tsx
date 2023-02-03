@@ -208,17 +208,20 @@ export default function AddRecord() {
   const makeFormData = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
+    const formTitle = target[4].value
+    const formContent = target[5].value
+
     const formData: WriteRecordRequestDto = {
-      title: target[4].value,
-      content: makeLineBreak(target[5].value),
+      title: formTitle,
+      content: makeLineBreak(formContent),
       colorName: selectedColor,
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
     }
 
     const modifyFormData: modifyRecordRequestDto = {
-      title: target[4].value,
-      content: makeLineBreak(target[5].value),
+      title: formTitle,
+      content: makeLineBreak(formContent),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
@@ -264,12 +267,10 @@ export default function AddRecord() {
             className="px-6"
             onSubmit={handleSubmitData}
           >
-            {((isModify && data) || !isModify) && (
-              <AddRecordCategory
-                isModify={isModify}
-                recordCategory={data?.categoryId}
-              />
-            )}
+            <AddRecordCategory
+              isModify={isModify}
+              recordCategory={data?.categoryId}
+            />
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
               recordTitle={data?.title}
