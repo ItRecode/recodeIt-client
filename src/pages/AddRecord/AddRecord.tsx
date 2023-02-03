@@ -272,7 +272,6 @@ export default function AddRecord() {
             )}
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
-              isInputFocus={isInputFocus}
               recordTitle={data?.title}
               isInputsHasValue={isInputsHasValue}
               setIsInputsHasValue={setIsInputsHasValue}
