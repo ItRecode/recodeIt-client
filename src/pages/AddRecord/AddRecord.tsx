@@ -19,9 +19,9 @@ import { LocalStorage } from '@utils/localStorage'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 
-export type CheckAllType = {
-  input: string
-  textArea: string
+export type IsInputsHasValueType = {
+  input: boolean
+  textArea: boolean
 }
 
 export type FormDataType = {
@@ -58,10 +58,11 @@ export default function AddRecord() {
 
   const navigate = useNavigate()
 
-  const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
-    input: '',
-    textArea: '',
-  })
+  const [isInputsHasValue, setIsInputsHasValue] =
+    useState<IsInputsHasValueType>({
+      input: false,
+      textArea: false,
+    })
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     formData
@@ -92,13 +93,13 @@ export default function AddRecord() {
         selectedCategory: recordType === 'celebration' ? 3 : 7,
         selectedColor: 'icon-purple',
       })
-      setCheckAllFilled({ input: '', textArea: '' })
+      setIsInputsHasValue({ input: false, textArea: false })
     }
   }, [recordType])
 
   useEffect(() => {
     if (data !== undefined) {
-      setCheckAllFilled({ input: data.title, textArea: data.content })
+      setIsInputsHasValue({ input: data.title, textArea: data.content })
       setFormData({ ...formData, selectedColor: data.colorName })
       const changeCurrentType = () => {
         const CELEBRATION_ID = Object.freeze({
@@ -271,17 +272,17 @@ export default function AddRecord() {
             )}
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
+              isInputFocus={isInputFocus}
               recordTitle={data?.title}
-              currentRecordType={recordType}
-              checkAllFilled={checkAllFilled}
-              setCheckAllFilled={setCheckAllFilled}
+              isInputsHasValue={isInputsHasValue}
+              setIsInputsHasValue={setIsInputsHasValue}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 설명'} />
             <AddRecordTextArea
               recordContent={data?.content}
-              checkAllFilled={checkAllFilled}
-              setCheckAllFilled={setCheckAllFilled}
+              isInputsHasValue={isInputsHasValue}
+              setIsInputsHasValue={setIsInputsHasValue}
               currentRecordType={recordType}
               setIsInputFocus={setIsInputFocus}
             />
@@ -309,15 +310,11 @@ export default function AddRecord() {
               <Button
                 property={'solid'}
                 disabled={
-                  !(
-                    checkAllFilled.input !== '' &&
-                    checkAllFilled.textArea !== ''
-                  ) || isLoadingWhileSubmit
+                  !(isInputsHasValue.input && isInputsHasValue.textArea) ||
+                  isLoadingWhileSubmit
                 }
                 type="submit"
-                active={
-                  checkAllFilled.input !== '' && checkAllFilled.textArea !== ''
-                }
+                active={isInputsHasValue.input && isInputsHasValue.textArea}
                 loading={isLoadingWhileSubmit}
               >
                 {isModify ? '수정하기' : '레코드 추가하기'}

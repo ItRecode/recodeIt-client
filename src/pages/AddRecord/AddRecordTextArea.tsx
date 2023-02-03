@@ -1,18 +1,18 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { INPUT_DETAILS } from '@assets/constant/constant'
-import { CheckAllType } from './AddRecord'
+import { IsInputsHasValueType } from './AddRecord'
 
 type userProps = {
   recordContent: string
   currentRecordType: string
-  setCheckAllFilled: Dispatch<SetStateAction<CheckAllType>>
-  checkAllFilled: CheckAllType
+  setIsInputsHasValue: Dispatch<SetStateAction<IsInputsHasValueType>>
+  isInputsHasValue: IsInputsHasValueType
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
 }
 
 function AddRecordTextArea({
-  setCheckAllFilled,
-  checkAllFilled,
+  setIsInputsHasValue,
+  isInputsHasValue,
   currentRecordType,
   setIsInputFocus,
   recordContent,
@@ -40,10 +40,10 @@ function AddRecordTextArea({
       return
     }
     if (inputValueLength > 0) {
-      setCheckAllFilled({ ...checkAllFilled, textArea: e.target.value })
+      setIsInputsHasValue({ ...isInputsHasValue, textArea: true })
     }
     if (inputValueLength === 0) {
-      setCheckAllFilled({ ...checkAllFilled, textArea: e.target.value })
+      setIsInputsHasValue({ ...isInputsHasValue, textArea: false })
     }
     setTextAreaValue(e.target.value)
   }
