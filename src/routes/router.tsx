@@ -13,6 +13,7 @@ import Setting from '@pages/Setting/Setting'
 import NotService from '@pages/NotService/NotService'
 import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
+import NotRecord from '@pages/NotRecord/NotRecord'
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
   },
   { path: 'record/:recordIdParams', element: <DetailRecord /> },
   { path: '*', element: <NotFound /> },
+  { path: '/notrecord', element: <NotRecord /> },
   {
     path: '/notservice',
     element: <NotService />,

@@ -75,7 +75,7 @@ export default function DetailRecord() {
   useEffect(() => {
     if (isError) {
       alert('해당 레코드를 찾을 수 없습니다.')
-      navigate('/notFound')
+      navigate('/notrecord')
     }
     if (isSuccess) {
       setRecordData(data)
