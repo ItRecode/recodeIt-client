@@ -10,6 +10,7 @@ import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 import Toast from '@components/Toast'
 import { useRecoilValue } from 'recoil'
 import { recordTypeAtom } from '@store/atom'
+import { checkFileSize } from '@utils/fileSize'
 
 interface Props {
   setFiles: Dispatch<SetStateAction<File[]>>
@@ -35,28 +36,9 @@ function AddRecordFile({
   )
   const currentRecordType = useRecoilValue(recordTypeAtom)
   const MAX_FILE = 3
-  const MAX_FILE_SIZE = 5
-
-  const getByteSize = (size: number) => {
-    return size / 1000 / 1000
-  }
-
-  const checkFileSize = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let isOver5MB = false
-    const files = e.target.files as FileList
-    const getSize = () => {
-      for (let i = 0; i < files.length; i++) {
-        const convertedSize = getByteSize(files[i].size)
-        if (convertedSize > MAX_FILE_SIZE) {
-          setIsToast(true)
-          setToastType('fileSize')
-          isOver5MB = true
-          break
-        }
-      }
-    }
-    ;[].forEach.call(e.target.files, getSize)
-    return isOver5MB
+  const setToast = () => {
+    setIsToast(true)
+    setToastType('fileSize')
   }
 
   const checkMaxFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +59,7 @@ function AddRecordFile({
     if (checkedMaxFile) {
       return (e.target.value = '')
     }
-    const checkedFileSize: boolean = checkFileSize(e)
+    const checkedFileSize: boolean = checkFileSize(e, setToast)
     if (checkedFileSize) {
       return (e.target.value = '')
     }
