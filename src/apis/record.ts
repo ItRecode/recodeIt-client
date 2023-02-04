@@ -67,3 +67,9 @@ export const getRecordByDate = ({
     },
   })
 }
+
+export const getRandomRecordData = async (recordCategoryId: 1 | 2) => {
+  return await baseInstance.get('/record/random', {
+    params: { recordCategoryId, size: 5 },
+  })
+}
