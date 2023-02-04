@@ -15,17 +15,17 @@ type CategorySource = {
   id: number
 }
 
-type CategoryType = {
+type CategoryDataType = {
   celebration: CategorySource[]
   consolation: CategorySource[]
 }
 
-type SubCategoryType = {
+type CategoryType = {
   id: number
   name: string
   subcategories: []
 }
-type CategoryDatas = SubCategoryType[]
+type CategoryDatas = CategoryType[]
 
 function AddRecordCategory({
   recordCategory,
@@ -34,9 +34,11 @@ function AddRecordCategory({
   recordCategory: number
   isModify: boolean
 }) {
-  const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
+  const [categoryState, setCategoryState] = useState<CategoryDataType | null>(
+    null
+  )
   const [modifyCategoryState, setModifyCategoryState] =
-    useState<CategoryType | null>(null)
+    useState<CategoryDataType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const currentRecordType = useRecoilValue(recordTypeAtom)
   const CELEBRATES_ID = 3
@@ -56,10 +58,10 @@ function AddRecordCategory({
         const earlyModifyData = {
           ...categoryData,
           [currentRecordType]: categoryData[currentRecordType].map(
-            (category: CategorySource) => {
+            (item: CategorySource) => {
               return {
-                ...category,
-                choosed: category.id === recordCategory,
+                ...item,
+                choosed: item.id === recordCategory,
               }
             }
           ),
@@ -83,9 +85,9 @@ function AddRecordCategory({
     const CELEBRATION_INDEX = 1
     const CONSOLATION_INDEX = 0
     if (data) {
-      const categoryData: CategoryType = {
+      const categoryData: CategoryDataType = {
         [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION_INDEX].subcategories.map(
-          (category: SubCategoryType, index: number) => {
+          (category: CategoryType, index: number) => {
             return {
               title: category.name,
               choosed: index === 0,
@@ -95,7 +97,7 @@ function AddRecordCategory({
           }
         ),
         [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION_INDEX].subcategories.map(
-          (category: SubCategoryType, index: number) => {
+          (category: CategoryType, index: number) => {
             return {
               title: category.name,
               choosed: index === 0 && true,
@@ -112,7 +114,7 @@ function AddRecordCategory({
 
   const handleChooseCurrentCategory = (index: number): void => {
     if (categoryState !== null) {
-      const currentState: CategoryType | null = categoryState && {
+      const currentState: CategoryDataType | null = categoryState && {
         ...categoryState,
         [currentRecordType]: categoryState[currentRecordType].map(
           (category: CategorySource) => {

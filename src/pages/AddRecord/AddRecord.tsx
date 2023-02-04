@@ -53,7 +53,7 @@ export type IsInputFocusType = {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
-  const ID = LocalStorage.get('postId') as string
+  const RECORD_ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
 
   const navigate = useNavigate()
@@ -70,21 +70,21 @@ export default function AddRecord() {
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
-  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [isMobile, setIsMobile] = useState(false)
   //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
-  const { data, isLoading, isSuccess } = useQuery(
-    ['getRecordData', ID],
-    () => getRecord(ID),
-    {
-      enabled: isModify,
-      retry: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  )
+  const {
+    data: recordData,
+    isLoading,
+    isSuccess,
+  } = useQuery(['getRecordData', RECORD_ID], () => getRecord(RECORD_ID), {
+    enabled: isModify,
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  })
 
   useEffect(() => {
     if (!isModify) {
@@ -98,36 +98,35 @@ export default function AddRecord() {
   }, [recordType])
 
   useEffect(() => {
-    if (data !== undefined) {
-      setIsInputsHasValue({ input: data.title, textArea: data.content })
-      setFormData({ ...formData, selectedColor: data.colorName })
-      const changeCurrentType = () => {
-        const CELEBRATION_ID = Object.freeze({
-          max: 6,
-          min: 3,
-        })
-        const CONSOLATION_ID = Object.freeze({
-          max: 10,
-          min: 7,
-        })
-        const dataCategoryId = data?.categoryId
-        if (dataCategoryId) {
+    if (recordData !== undefined) {
+      setIsInputsHasValue({
+        input: recordData.title,
+        textArea: recordData.content,
+      })
+      setFormData({ ...formData, selectedColor: recordData.colorName })
+      const changeCurrentRecordType = () => {
+        const categoryName = recordData?.categoryName
+        if (categoryName) {
           if (
-            dataCategoryId >= CELEBRATION_ID.min &&
-            dataCategoryId <= CELEBRATION_ID.max
+            categoryName === '축하해주세요' ||
+            categoryName === '기념일이에요' ||
+            categoryName === '연애중이에요' ||
+            categoryName === '행복해요'
           ) {
             setRecordType(CELEBRATION)
           } else if (
-            dataCategoryId >= CONSOLATION_ID.min &&
-            dataCategoryId <= CONSOLATION_ID.max
+            categoryName === '위로해주세요' ||
+            categoryName === '공감이 필요해요' ||
+            categoryName === '내편이 되어주세요' ||
+            categoryName === '우울해요'
           ) {
             setRecordType('consolation')
           }
         }
       }
-      changeCurrentType()
+      changeCurrentRecordType()
     }
-  }, [data])
+  }, [recordData])
 
   useEffect(() => {
     function detectMobileDevice(agent: string): boolean {
@@ -183,7 +182,7 @@ export default function AddRecord() {
 
     const modify = async () => {
       try {
-        const response = await modifyRecord(ID, formData)
+        const response = await modifyRecord(RECORD_ID, formData)
         setFiles([])
         navigate(`/record/${response.data}`, {
           replace: true,
@@ -191,7 +190,7 @@ export default function AddRecord() {
       } catch {
         alert('레코드 수정 실패')
         setIsLoadingWhileSubmit(false)
-        navigate(`/record/${ID}`, { replace: true })
+        navigate(`/record/${RECORD_ID}`, { replace: true })
       }
     }
     if (isModify) {
@@ -245,8 +244,8 @@ export default function AddRecord() {
 
   return (
     <div className="relative pt-4">
-      {isLoading && data !== undefined && <Loading />}
-      {(isSuccess || data === undefined) && (
+      {isLoading && recordData !== undefined && <Loading />}
+      {(isSuccess || recordData === undefined) && (
         <>
           <div className="ml-[18px]">
             <BackButton onClick={() => setIsBackButton(true)} />
@@ -269,28 +268,28 @@ export default function AddRecord() {
           >
             <AddRecordCategory
               isModify={isModify}
-              recordCategory={data?.categoryId}
+              recordCategory={recordData?.categoryId}
             />
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
-              recordTitle={data?.title}
+              recordTitle={recordData?.title}
               isInputsHasValue={isInputsHasValue}
               setIsInputsHasValue={setIsInputsHasValue}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 설명'} />
             <AddRecordTextArea
-              recordContent={data?.content}
+              recordContent={recordData?.content}
               isInputsHasValue={isInputsHasValue}
               setIsInputsHasValue={setIsInputsHasValue}
               currentRecordType={recordType}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 컬러'} />
-            <AddRecordColor recordColor={data?.colorName} />
+            <AddRecordColor recordColor={recordData?.colorName} />
             <AddRecordTitle title={'레코드 아이콘'} />
             <AddRecordIcon
-              recordIcon={data?.iconName}
+              recordIcon={recordData?.iconName}
               currentRecordType={recordType}
             />
             <AddRecordTitle title={'레코드 이미지'} />
@@ -298,7 +297,7 @@ export default function AddRecord() {
               toDeleteFiles={toDeleteFiles}
               setToDeleteFiles={setToDeleteFiles}
               isModify={isModify}
-              recordFiles={data?.imageUrls}
+              recordFiles={recordData?.imageUrls}
               files={files}
               setFiles={setFiles}
             />
