@@ -25,7 +25,9 @@ export default function Together({
     () => getRandomRecordData(categoryId),
     {
       retry: false,
+      refetchOnMount: false,
       refetchOnWindowFocus: false,
+      staleTime: Infinity,
     }
   )
 
@@ -61,7 +63,10 @@ export default function Together({
         {isLoading ? (
           <Spinner size="large" />
         ) : (
-          <TogethderSlider randomRecordData={randomRecordData} />
+          <TogethderSlider
+            randomRecordData={randomRecordData}
+            categoryId={categoryId}
+          />
         )}
       </section>
     </div>

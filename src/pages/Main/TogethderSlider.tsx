@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { IRandomRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
@@ -6,8 +6,10 @@ import useSwipe from '@hooks/useSwipe'
 
 export default function TogethderSlider({
   randomRecordData,
+  categoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
+  categoryId: 1 | 2
 }) {
   const navigate = useNavigate()
 
@@ -25,6 +27,9 @@ export default function TogethderSlider({
     navigate(`/record/${recordId}`)
   }
 
+  useEffect(() => {
+    dragRef.current.scrollLeft = 0
+  }, [categoryId])
   return (
     <div
       className="relative ml-6 flex h-full flex-nowrap overflow-x-hidden"
