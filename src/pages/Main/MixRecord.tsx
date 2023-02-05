@@ -141,7 +141,7 @@ export default function MixRecord() {
           </Slider>
           <div className="absolute bottom-[25px] flex w-full justify-center bg-inherit">
             <button
-              className="h-[32px] w-[118px] cursor-pointer rounded-full bg-grey-1 bg-opacity-50 text-grey-1"
+              className="h-[32px] w-[118px] cursor-pointer rounded-full bg-grey-1/50 text-grey-1"
               onClick={stopSlider}
             >
               {sliderStop ? '믹스 레코드 멈춤' : '믹스 레코드 재생중'}
