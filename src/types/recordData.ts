@@ -57,3 +57,11 @@ export interface IRandomRecordData
   commentCount: number
   colorName: string
 }
+
+export interface IMixRecordData {
+  recordId: number
+  colorName: string
+  iconName: string
+  commentId: number
+  commentContent: string
+}
