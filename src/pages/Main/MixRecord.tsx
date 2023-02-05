@@ -130,7 +130,7 @@ export default function MixRecord() {
                       onClick={() => handleClick(item.recordId)}
                     />
                     <p
-                      className="mt-2 w-[160px] cursor-pointer text-center text-[12px] leading-normal text-grey-1"
+                      className="line-clamp mt-2 h-[54px] w-[160px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
                       onClick={() => handleClick(item.recordId, item.commentId)}
                     >
                       {item.commentContent}
