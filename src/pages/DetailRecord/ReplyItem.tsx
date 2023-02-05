@@ -4,17 +4,17 @@ import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
+  scrollTarget,
 } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
 import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
-import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteReply } from '@apis/reply'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteReply, getReply } from '@apis/reply'
 import Alert from '@components/Alert'
 
 export default function ReplyItem({
@@ -26,24 +26,24 @@ export default function ReplyItem({
   writer,
   commentId,
   recordId,
-  isScroll,
 }: CommentData) {
-  const navigate = useNavigate()
   const { user } = useUser()
   const scrollRef = useRef<HTMLDivElement>(null)
   const nestedReplyList = useRecoilValue(nestedReplyState)
   const [openNestedReplyList, setOpenNestedReplyList] = useState<boolean>(false)
   const [deleteAlert, setDeleteAlert] = useState(false)
+  const scrollTargetId = useRecoilValue(scrollTarget)
+  const resetSrollTarget = useResetRecoilState(scrollTarget)
 
   const setInputMode = useSetRecoilState(DetailPageInputMode)
   const setModifyCommentDto = useSetRecoilState(modifyComment)
 
   useEffect(() => {
-    if (isScroll) {
+    if (commentId === scrollTargetId.commentId) {
       scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      navigate(window.location.pathname, { replace: true })
+      resetSrollTarget()
     }
-  }, [isScroll])
+  }, [scrollTargetId])
 
   const text = content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
   const queryClient = useQueryClient()
@@ -77,6 +77,17 @@ export default function ReplyItem({
       setOpenNestedReplyList(true)
     }
   }, [nestedReplyList])
+
+  const { data: nestedReplyData, isLoading } = useQuery(
+    ['getNestedReplyData', recordId, commentId],
+    () => getReply(recordId, 0, commentId),
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  )
 
   return (
     <div ref={scrollRef} className="mt-3 mb-4 w-full">
@@ -155,10 +166,13 @@ export default function ReplyItem({
 
         {openNestedReplyList && (
           <NestedReplyList
+            nestedReplyData={
+              nestedReplyData && nestedReplyData.data.commentList
+            }
+            isLoading={isLoading}
             recordwriter={recordwriter}
             recordId={recordId}
             parentId={commentId}
-            numOfSubComment={numOfSubComment}
           />
         )}
       </div>

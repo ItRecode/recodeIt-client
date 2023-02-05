@@ -33,9 +33,9 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
             <span className="text-sub-1">추가</span> 할 수 없어요
           </div>
         }
-        subMessage={<>회원가입하고 추억을 공유해보세요.</>}
+        subMessage={<>로그인하고 추억을 공유해보세요.</>}
         cancelMessage="닫기"
-        confirmMessage="회원가입"
+        confirmMessage="로그인"
         onClose={() => navigate('/')}
         onCancel={() => navigate('/')}
         onConfirm={() => redirectPage('/record/add')}
@@ -54,9 +54,9 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
             <span className="text-sub-1">확인</span> 할 수 없어요
           </div>
         }
-        subMessage={<>회원가입하고 추억을 공유해보세요.</>}
+        subMessage={<>로그인하고 추억을 공유해보세요.</>}
         cancelMessage="닫기"
-        confirmMessage="회원가입"
+        confirmMessage="로그인"
         onClose={() => navigate('/')}
         onCancel={() => navigate('/')}
         onConfirm={() => redirectPage('/myrecord')}

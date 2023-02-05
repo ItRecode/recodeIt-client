@@ -51,3 +51,17 @@ export interface IMyRecordRequestParam {
   page: number
   size: number
 }
+
+export interface IRandomRecordData
+  extends Omit<IMemoryRecord, 'memoryRecordComments' | 'iconColor'> {
+  commentCount: number
+  colorName: string
+}
+
+export interface IMixRecordData {
+  recordId: number
+  colorName: string
+  iconName: string
+  commentId: number
+  commentContent: string
+}

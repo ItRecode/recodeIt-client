@@ -13,11 +13,17 @@ import Setting from '@pages/Setting/Setting'
 import NotService from '@pages/NotService/NotService'
 import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
+import NotRecord from '@pages/NotRecord/NotRecord'
+import ScrollTop from '@components/ScrollTop'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <NavBar />,
+    element: (
+      <ScrollTop>
+        <NavBar />
+      </ScrollTop>
+    ),
     children: [
       { index: true, element: <Main /> },
       { path: 'rank', element: <Rank /> },
@@ -55,12 +61,15 @@ const router = createBrowserRouter([
     path: '/record/add',
     element: (
       <ProtectedRoute route={'/record/add'}>
-        <AddRecord />
+        <ScrollTop>
+          <AddRecord />
+        </ScrollTop>
       </ProtectedRoute>
     ),
   },
   { path: 'record/:recordIdParams', element: <DetailRecord /> },
   { path: '*', element: <NotFound /> },
+  { path: '/notrecord', element: <NotRecord /> },
   {
     path: '/notservice',
     element: <NotService />,

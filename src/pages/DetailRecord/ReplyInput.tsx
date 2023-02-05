@@ -1,28 +1,24 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
-import { useCallback } from 'react'
 import {
   RECORD_DETAIL_INITIAL_INPUT_HEIGHT,
-  RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA,
   RECORD_DETAIL_INPUT_IMAGE_HEIGHT,
   RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT,
 } from '@assets/constant/constant'
 import { createReply, updateComment } from '@apis/reply'
-import Alert from '@components/Alert'
-import { useNavigate } from 'react-router-dom'
-import { useUser } from '@react-query/hooks/useUser'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
+  scrollTarget,
 } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { LocalStorage } from '@utils/localStorage'
 import InputSnackBar from './InputSnackBar'
 import ReplyInputAddImage from './InputAddImage'
+import InputTextarea from './InputTextarea'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -33,30 +29,22 @@ export default function ReplyInput({
 }) {
   const queryClient = useQueryClient()
 
-  const screenAvailWidth = window.screen.availWidth
-
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
-  const [text, setText] = useState('')
-  const [inputPlaceholder, setInputPlaceholder] =
-    useState('따뜻한 마음을 남겨주세요')
-
-  const textRef = useRef<HTMLTextAreaElement>(null)
-
-  const [isCheckedUser, setIsCheckedUser] = useState(false)
-  const [isAnonymousUser, setIsAnonymousUser] = useState(false)
-
-  const navigate = useNavigate()
-
-  const { user, isLoading } = useUser()
-
-  const inputMode = useRecoilValue(DetailPageInputMode)
-  const updateReply = useRecoilValue(modifyComment)
-  const resetUpdateReply = useResetRecoilState(modifyComment)
   const [deleteImageUrl, setDeleteImageUrl] = useState<string[]>([])
 
+  const [text, setText] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const inputMode = useRecoilValue(DetailPageInputMode)
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
+
+  const updateReply = useRecoilValue(modifyComment)
+  const resetUpdateReply = useResetRecoilState(modifyComment)
+
   const setNestedReplyList = useSetRecoilState(nestedReplyState)
+
+  const setScrollTargetId = useSetRecoilState(scrollTarget)
 
   const getDeleteImageFileId = () => {
     if (inputMode.mode === 'update') {
@@ -71,25 +59,14 @@ export default function ReplyInput({
     setImageFile(null)
   }
 
-  const handleResizeHeight = useCallback(() => {
-    if (textRef.current !== null) {
-      textRef.current.style.height = 'auto'
-      textRef.current.style.height = textRef.current.scrollHeight + 'px'
-      setInputSectionHeight(
-        RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA +
-          textRef.current.scrollHeight
-      )
-    }
-  }, [])
-
   const handleSubmitReplyData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (inputMode.mode === 'nestedReply') {
       setNestedReplyList({ commentId: +inputMode.parentId, state: true })
     }
-    if (textRef.current !== null) {
-      textRef.current.style.height =
+    if (textareaRef.current !== null) {
+      textareaRef.current.style.height =
         RECORD_DETAIL_INPUT_TEXTAREAT_INITIAL_HEIGHT + 'px'
     }
     setInputSectionHeight(RECORD_DETAIL_INITIAL_INPUT_HEIGHT)
@@ -145,6 +122,12 @@ export default function ReplyInput({
   const { mutate: replyMutate } = useMutation(createReply, {
     onSuccess: () => {
       queryClient.invalidateQueries(['getReplyData', recordIdParams])
+      setScrollTargetId((prev) => {
+        return { ...prev, scrollReset: true }
+      })
+    },
+    onError: () => {
+      alert('댓글 작성에 실패했습니다.')
     },
   })
 
@@ -156,6 +139,12 @@ export default function ReplyInput({
         recordIdParams,
         inputMode.parentId,
       ])
+      setScrollTargetId((prev) => {
+        return { ...prev, commentId: inputMode.parentId as number }
+      })
+    },
+    onError: () => {
+      alert('답글 작성에 실패했습니다.')
     },
   })
 
@@ -168,46 +157,10 @@ export default function ReplyInput({
         inputMode.parentId,
       ])
     },
+    onError: () => {
+      alert('수정에 실패했습니다.')
+    },
   })
-
-  const handleInputFocus = () => {
-    if (!user) {
-      setIsCheckedUser(true)
-    }
-  }
-
-  const handleCancelSingUp = () => {
-    setIsCheckedUser(false)
-    setIsAnonymousUser(true)
-  }
-
-  const handleConfirmSignUp = () => {
-    LocalStorage.set('redirectUrl', `/record/${recordIdParams}`)
-    resetInputMode()
-    navigate('/login')
-  }
-
-  useEffect(() => {
-    if (inputMode.mode === 'nestedReply' && !user) {
-      setIsCheckedUser(true)
-    }
-    if (inputMode.mode === 'update') {
-      setText(updateReply.content.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n'))
-      setImage(updateReply.imageUrl)
-    }
-  }, [inputMode.mode])
-
-  useEffect(() => {
-    if (isAnonymousUser === true) {
-      textRef.current?.focus()
-    }
-  }, [isAnonymousUser])
-
-  useEffect(() => {
-    if (screenAvailWidth > 340) {
-      setInputPlaceholder('따뜻한 마음을 남겨주세요. (100자 이내)')
-    }
-  }, [])
 
   return (
     <>
@@ -243,22 +196,12 @@ export default function ReplyInput({
           )}
 
           <div className="flex w-full items-end justify-center">
-            <textarea
-              ref={textRef}
-              rows={1}
-              maxLength={100}
-              required={true}
-              placeholder={
-                inputMode.mode === 'reply'
-                  ? inputPlaceholder
-                  : '답글 추가... (100자 이내)'
-              }
-              onInput={handleResizeHeight}
-              onChange={(e) => setText(e.target.value)}
-              value={text}
-              className={`h-auto w-[85%] resize-none bg-inherit text-[14px] leading-normal placeholder:text-grey-5 focus:outline-0`}
-              onFocus={handleInputFocus}
-              disabled={isLoading}
+            <InputTextarea
+              textareaRef={textareaRef}
+              text={text}
+              setText={setText}
+              setInputSectionHeight={setInputSectionHeight}
+              recordIdParams={recordIdParams}
             />
             <button
               disabled={text === ''}
@@ -270,25 +213,6 @@ export default function ReplyInput({
             </button>
           </div>
         </div>
-
-        {isCheckedUser && (
-          <Alert
-            visible={isCheckedUser && !isAnonymousUser}
-            mainMessage={
-              <>
-                비회원은 댓글을
-                <br />
-                <span className="text-sub-1">수정, 삭제</span> 할 수 없어요
-              </>
-            }
-            subMessage={<>회원가입하고 추억을 공유해보세요.</>}
-            cancelMessage="괜찮아요"
-            confirmMessage="회원가입"
-            onClose={() => setIsCheckedUser(false)}
-            onCancel={handleCancelSingUp}
-            onConfirm={handleConfirmSignUp}
-          />
-        )}
       </form>
     </>
   )

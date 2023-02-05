@@ -1,8 +1,9 @@
 import Spinner from '@components/Spinner'
 import { useIntersect } from '@hooks/useIntersectionObserver'
-import { useScrollCommentId } from '@hooks/useScrollCommentId'
 import { useGetReply } from '@react-query/hooks/useGetReply'
-import React from 'react'
+import { scrollTarget } from '@store/atom'
+import React, { useEffect, useRef } from 'react'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import ReplyItem from './ReplyItem'
 
@@ -23,10 +24,23 @@ export default function ReplyList({
     }
   })
 
-  const { scrollCommentId } = useScrollCommentId()
+  const scrollTargetId = useRecoilValue(scrollTarget)
+  const resetSrollTarget = useResetRecoilState(scrollTarget)
+
+  const scrollResetRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scrollTargetId.scrollReset) {
+      scrollResetRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+      resetSrollTarget()
+    }
+  }, [scrollTargetId])
 
   return (
-    <section id="replyList" className="px-6">
+    <section id="replyList" className="px-6" ref={scrollResetRef}>
       <h2 className="text-lg font-semibold">댓글</h2>
 
       {replyList?.pages.map((page) =>
@@ -42,7 +56,6 @@ export default function ReplyList({
             recordwriter={Recordwriter}
             writer={item.writer}
             recordId={recordId}
-            isScroll={item.commentId === scrollCommentId}
           />
         ))
       )}

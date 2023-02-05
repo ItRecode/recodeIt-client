@@ -5,6 +5,7 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
   let pos = { top: 0, left: 0, x: 0, y: 0 }
 
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault()
     pos = {
       left: ref.current.scrollLeft,
       top: ref.current.scrollTop,
@@ -17,8 +18,9 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
   }
 
   const handleMouseMove = (e: MouseEvent) => {
-    setIsDragging(true)
-
+    if (!isDragging) {
+      setIsDragging(true)
+    }
     const dx = e.clientX - pos.x
     const dy = e.clientY - pos.y
 
@@ -29,7 +31,11 @@ const useSwipe = (ref: MutableRefObject<HTMLElement>) => {
     ref.current.style.userSelect = 'none'
   }
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: MouseEvent) => {
+    if (isDragging) {
+      e.stopPropagation()
+      setIsDragging(false)
+    }
     document.removeEventListener('mousemove', handleMouseMove)
     document.removeEventListener('mouseup', handleMouseUp)
 
