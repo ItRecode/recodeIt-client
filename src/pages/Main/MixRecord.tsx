@@ -44,7 +44,7 @@ export default function MixRecord() {
     data: initailMixData,
     isLoading,
     refetch,
-  } = useQuery(['mixRecordData'], () => getMixRecordData(), {
+  } = useQuery(['mixRecordData'], getMixRecordData, {
     retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
