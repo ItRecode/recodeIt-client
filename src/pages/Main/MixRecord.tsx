@@ -126,7 +126,7 @@ export default function MixRecord() {
                     <RecordIcon
                       width={100}
                       height={100}
-                      className="mt-16 cursor-pointer"
+                      className="mt-20 cursor-pointer"
                       onClick={() => handleClick(item.recordId)}
                     />
                     <p
