@@ -41,7 +41,7 @@ export default function MixRecord() {
   }
 
   const {
-    data: initailMixData,
+    data: initialMixData,
     isLoading,
     refetch,
   } = useQuery(['mixRecordData'], getMixRecordData, {
@@ -51,19 +51,19 @@ export default function MixRecord() {
   })
 
   useEffect(() => {
-    if (initailMixData) {
+    if (initialMixData) {
       if (mixRecordData !== null) {
         setMixRecordData1((prev) => {
           if (prev !== null) {
-            return [...prev, ...initailMixData.data.mixRecordDto]
+            return [...prev, ...initialMixData.data.mixRecordDto]
           }
           return prev
         })
       } else {
-        setMixRecordData1(initailMixData.data.mixRecordDto)
+        setMixRecordData1(initialMixData.data.mixRecordDto)
       }
     }
-  }, [initailMixData])
+  }, [initialMixData])
 
   const deleteData = () => {
     setMixRecordData1((prev) => {
