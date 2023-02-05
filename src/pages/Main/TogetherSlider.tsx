@@ -45,20 +45,16 @@ export default function TogetherSlider({
           return (
             <div
               key={item.recordId}
-              className={`mr-1.5 h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex items-center justify-center`}
+              className={`mr-1.5 h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex cursor-pointer flex-col items-center justify-center`}
+              onClick={() => handleClickRecord(item.recordId)}
             >
-              <div
-                className="flex cursor-pointer flex-col items-center justify-center duration-300 ease-in hover:scale-105"
-                onClick={() => handleClickRecord(item.recordId)}
-              >
-                <RecordIcon width={100} height={100} />
-                <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
-                  {item.title}
-                </p>
-                <p className="mt-2.5 text-xs leading-none">
-                  댓글 {item.commentCount}개
-                </p>
-              </div>
+              <RecordIcon width={100} height={100} />
+              <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
+                {item.title}
+              </p>
+              <p className="mt-2.5 text-xs leading-none">
+                댓글 {item.commentCount}개
+              </p>
             </div>
           )
         })}
