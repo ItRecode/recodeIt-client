@@ -4,7 +4,7 @@ import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
 import useSwipe from '@hooks/useSwipe'
 
-export default function TogethderSlider({
+export default function TogetherSlider({
   randomRecordData,
   categoryId,
 }: {
@@ -48,7 +48,7 @@ export default function TogethderSlider({
               className={`mr-1.5 h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex items-center justify-center`}
             >
               <div
-                className="flex cursor-pointer flex-col items-center justify-center hover:scale-110"
+                className="flex cursor-pointer flex-col items-center justify-center duration-300 ease-in hover:scale-105"
                 onClick={() => handleClickRecord(item.recordId)}
               >
                 <RecordIcon width={100} height={100} />

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IRandomRecordData } from 'types/recordData'
-import TogethderSlider from './TogethderSlider'
+import TogetherSlider from './TogetherSlider'
 import TogetherTab from './TogetherTab'
 
 export default function Together({
@@ -63,7 +63,7 @@ export default function Together({
         {isLoading ? (
           <Spinner size="large" />
         ) : (
-          <TogethderSlider
+          <TogetherSlider
             randomRecordData={randomRecordData}
             categoryId={categoryId}
           />

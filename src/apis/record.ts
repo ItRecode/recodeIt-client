@@ -73,3 +73,7 @@ export const getRandomRecordData = async (recordCategoryId: 1 | 2) => {
     params: { recordCategoryId, size: 5 },
   })
 }
+
+export const getMixRecordData = async () => {
+  return await baseInstance.get('/record/mix')
+}
