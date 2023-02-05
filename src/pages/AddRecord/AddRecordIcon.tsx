@@ -25,9 +25,7 @@ interface Props {
 }
 
 function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
-  const icons = ADD_RECORD_ICONS
-
-  const [iconState, setIconState] = useState<IconType>(icons)
+  const [iconState, setIconState] = useState<IconType>(ADD_RECORD_ICONS)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
@@ -36,43 +34,49 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
   const TIME_DELAY_MS = 500
 
   useEffect(() => {
-    const getRecordNumber = icons[currentRecordType]?.filter((record) => {
-      if (record.src.indexOf(recordIcon) !== -1) {
-        return record.id
+    const recordIconData = ADD_RECORD_ICONS[currentRecordType]?.filter(
+      (record) => {
+        if (record.src.indexOf(recordIcon) !== -1) {
+          return record.id
+        }
       }
-    })[0]
-    if (getRecordNumber) {
-      setCurrentFocus(getRecordNumber.id)
+    )[0]
+    if (recordIconData) {
+      setCurrentFocus(recordIconData.id)
       setFormData({
         ...formData,
         selectedIcon: getIconSrc(
-          icons[currentRecordType][getRecordNumber.id].src
+          ADD_RECORD_ICONS[currentRecordType][recordIconData.id].src
         ),
       })
-      slickRef.current?.slickGoTo(getRecordNumber.id)
+      slickRef.current?.slickGoTo(recordIconData.id)
     } else {
       setCurrentFocus(0)
       setFormData({
         ...formData,
         selectedIcon: getIconSrc(iconState[currentRecordType][0].src),
       })
-      setIconState(icons)
+      setIconState(ADD_RECORD_ICONS)
     }
   }, [currentRecordType])
 
   useEffect(() => {
     setFormData({
       ...formData,
-      selectedIcon: getIconSrc(icons[currentRecordType][currentFocus].src),
+      selectedIcon: getIconSrc(
+        ADD_RECORD_ICONS[currentRecordType][currentFocus].src
+      ),
     })
   }, [currentFocus])
+
+  const MOVE_PER_CLICK = 1
 
   const handleFront = () => {
     slickRef.current?.slickNext()
     if (currentFocus === MAX_FOCUS) {
       setCurrentFocus(0)
     } else {
-      setCurrentFocus(currentFocus + 1)
+      setCurrentFocus(currentFocus + MOVE_PER_CLICK)
     }
   }
 
@@ -81,7 +85,7 @@ function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
     if (currentFocus === MIN_FOCUS) {
       setCurrentFocus(MAX_FOCUS)
     } else {
-      setCurrentFocus(currentFocus - 1)
+      setCurrentFocus(currentFocus - MOVE_PER_CLICK)
     }
   }
 

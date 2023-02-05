@@ -13,16 +13,15 @@ import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
 import { useRecoilState, useResetRecoilState } from 'recoil'
-import { enrollRecord, modifyRecord } from '@apis/record'
+import { enrollRecord, modifyRecord, getRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
-import { getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 
-export type CheckAllType = {
-  input: string
-  textArea: string
+export type IsInputsHasValueType = {
+  input: boolean
+  textArea: boolean
 }
 
 export type FormDataType = {
@@ -54,55 +53,80 @@ export type IsInputFocusType = {
 
 export default function AddRecord() {
   const { CELEBRATION } = TEXT_DETAILS
-  const [checkAllFilled, setCheckAllFilled] = useState<CheckAllType>({
-    input: '',
-    textArea: '',
-  })
-  const [formDatas, setFormDatas] = useRecoilState(formDataAtom)
-  const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
-    formDatas
-  const [files, setFiles] = useState<File[]>([])
+  const RECORD_ID = LocalStorage.get('postId') as string
+  const isModify = LocalStorage.get('modifyMode') === 'true'
+
   const navigate = useNavigate()
+
+  const [isInputsHasValue, setIsInputsHasValue] =
+    useState<IsInputsHasValueType>({
+      input: false,
+      textArea: false,
+    })
+  const [formData, setFormData] = useRecoilState(formDataAtom)
+  const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
+    formData
+  const [files, setFiles] = useState<File[]>([])
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
-  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [isMobile, setIsMobile] = useState(false)
   //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
   const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
-  const ID = LocalStorage.get('postId') as string
-  const isModify = LocalStorage.get('modifyMode') === 'true'
-  const resetFormDataAtom = useResetRecoilState(formDataAtom)
-  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
-  const { data, isLoading, isSuccess } = useQuery(
-    ['getRecordData', ID],
-    () => getRecord(ID),
-    {
-      enabled: isModify,
-      retry: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  )
+  const {
+    data: recordData,
+    isLoading,
+    isSuccess,
+  } = useQuery(['getRecordData', RECORD_ID], () => getRecord(RECORD_ID), {
+    enabled: isModify,
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  })
 
   useEffect(() => {
     if (!isModify) {
-      setFormDatas({
+      setFormData({
         selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
         selectedCategory: recordType === 'celebration' ? 3 : 7,
         selectedColor: 'icon-purple',
       })
+      setIsInputsHasValue({ input: false, textArea: false })
     }
-    !isModify && setCheckAllFilled({ input: '', textArea: '' })
   }, [recordType])
 
   useEffect(() => {
-    if (data !== undefined) {
-      setCheckAllFilled({ input: data?.title, textArea: data?.content })
-      setFormDatas({ ...formDatas, selectedColor: data?.colorName })
+    if (recordData !== undefined) {
+      setIsInputsHasValue({
+        input: recordData.title,
+        textArea: recordData.content,
+      })
+      setFormData({ ...formData, selectedColor: recordData.colorName })
+      const changeCurrentRecordType = () => {
+        const categoryName = recordData?.categoryName
+        if (categoryName) {
+          if (
+            categoryName === '축하해주세요' ||
+            categoryName === '기념일이에요' ||
+            categoryName === '연애중이에요' ||
+            categoryName === '행복해요'
+          ) {
+            setRecordType(CELEBRATION)
+          } else if (
+            categoryName === '위로해주세요' ||
+            categoryName === '공감이 필요해요' ||
+            categoryName === '내편이 되어주세요' ||
+            categoryName === '우울해요'
+          ) {
+            setRecordType('consolation')
+          }
+        }
+      }
+      changeCurrentRecordType()
     }
-  }, [data])
+  }, [recordData])
 
   useEffect(() => {
     function detectMobileDevice(agent: string): boolean {
@@ -121,18 +145,10 @@ export default function AddRecord() {
     setIsMobile(detectMobileDevice(window.navigator.userAgent))
   }, [isInputFocus])
 
+  const resetFormDataAtom = useResetRecoilState(formDataAtom)
+  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
+
   useEffect(() => {
-    const changeCurrentType = () => {
-      const dataCategoryId = data?.categoryId
-      if (dataCategoryId) {
-        if (dataCategoryId >= 3 && dataCategoryId <= 6) {
-          setRecordType(CELEBRATION)
-        } else if (dataCategoryId >= 7 && dataCategoryId <= 10) {
-          setRecordType('consolation')
-        }
-      }
-    }
-    changeCurrentType()
     const removeModifyMode = () => {
       LocalStorage.remove('postId')
       LocalStorage.remove('modifyMode')
@@ -149,7 +165,7 @@ export default function AddRecord() {
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     if (isLoadingWhileSubmit) return
-    const formData = makeFormDatas(e)
+    const formData = makeFormData(e)
     setIsLoadingWhileSubmit(true)
     const enroll = async () => {
       try {
@@ -163,9 +179,10 @@ export default function AddRecord() {
         alert('레코드 추가 실패 - 새로고침해서 다시 작성해주세요.')
       }
     }
+
     const modify = async () => {
       try {
-        const response = await modifyRecord(ID, formData)
+        const response = await modifyRecord(RECORD_ID, formData)
         setFiles([])
         navigate(`/record/${response.data}`, {
           replace: true,
@@ -173,7 +190,7 @@ export default function AddRecord() {
       } catch {
         alert('레코드 수정 실패')
         setIsLoadingWhileSubmit(false)
-        navigate(`/record/${ID}`, { replace: true })
+        navigate(`/record/${RECORD_ID}`, { replace: true })
       }
     }
     if (isModify) {
@@ -183,20 +200,27 @@ export default function AddRecord() {
     }
   }
 
-  const makeFormDatas = (e: React.FormEvent<HTMLFormElement>) => {
+  const makeLineBreak = (content: string): string => {
+    return content.replaceAll(/(\n|\r\n)/g, '<br>')
+  }
+
+  const makeFormData = (e: React.FormEvent<HTMLFormElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const target = e.target as any
+    const formTitle = target[4].value
+    const formContent = target[5].value
+
     const formData: WriteRecordRequestDto = {
+      title: formTitle,
+      content: makeLineBreak(formContent),
       colorName: selectedColor,
-      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
-      title: target[4].value,
     }
 
     const modifyFormData: modifyRecordRequestDto = {
-      title: target[4].value,
-      content: target[5].value.replaceAll(/(\n|\r\n)/g, '<br>'),
+      title: formTitle,
+      content: makeLineBreak(formContent),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
@@ -204,10 +228,11 @@ export default function AddRecord() {
 
     const data = new FormData()
     if (files !== undefined && files.length > 0) {
-      files?.forEach((file) => {
-        data.append('attachments', file as File, file?.name)
+      files.forEach((file) => {
+        data.append('attachments', file as File, file.name)
       })
     }
+
     data.append(
       isModify ? 'modifyRecordRequestDto' : 'writeRecordRequestDto',
       new Blob([JSON.stringify(isModify ? modifyFormData : formData)], {
@@ -219,8 +244,8 @@ export default function AddRecord() {
 
   return (
     <div className="relative pt-4">
-      {isLoading && data !== undefined && <Loading />}
-      {(isSuccess || data === undefined) && (
+      {isLoading && recordData !== undefined && <Loading />}
+      {(isSuccess || recordData === undefined) && (
         <>
           <div className="ml-[18px]">
             <BackButton onClick={() => setIsBackButton(true)} />
@@ -241,36 +266,30 @@ export default function AddRecord() {
             className="px-6"
             onSubmit={handleSubmitData}
           >
-            {((isModify && data) || !isModify) && (
-              <AddRecordCategory
-                isModify={isModify}
-                recordCategory={data?.categoryId}
-              />
-            )}
+            <AddRecordCategory
+              isModify={isModify}
+              recordCategory={recordData?.categoryId}
+            />
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
-              recordTitle={data?.title}
-              currentRecordType={recordType}
-              checkAllFilled={checkAllFilled}
-              setCheckAllFilled={setCheckAllFilled}
+              recordTitle={recordData?.title}
+              isInputsHasValue={isInputsHasValue}
+              setIsInputsHasValue={setIsInputsHasValue}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 설명'} />
             <AddRecordTextArea
-              recordContent={data?.content}
-              checkAllFilled={checkAllFilled}
-              setCheckAllFilled={setCheckAllFilled}
+              recordContent={recordData?.content}
+              isInputsHasValue={isInputsHasValue}
+              setIsInputsHasValue={setIsInputsHasValue}
               currentRecordType={recordType}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 컬러'} />
-            <AddRecordColor
-              recordColor={data?.colorName}
-              currentRecordType={recordType}
-            />
+            <AddRecordColor recordColor={recordData?.colorName} />
             <AddRecordTitle title={'레코드 아이콘'} />
             <AddRecordIcon
-              recordIcon={data?.iconName}
+              recordIcon={recordData?.iconName}
               currentRecordType={recordType}
             />
             <AddRecordTitle title={'레코드 이미지'} />
@@ -278,8 +297,7 @@ export default function AddRecord() {
               toDeleteFiles={toDeleteFiles}
               setToDeleteFiles={setToDeleteFiles}
               isModify={isModify}
-              recordFiles={data?.imageUrls}
-              currentRecordType={recordType}
+              recordFiles={recordData?.imageUrls}
               files={files}
               setFiles={setFiles}
             />
@@ -291,15 +309,11 @@ export default function AddRecord() {
               <Button
                 property={'solid'}
                 disabled={
-                  !(
-                    checkAllFilled.input !== '' &&
-                    checkAllFilled.textArea !== ''
-                  ) || isLoadingWhileSubmit
+                  !(isInputsHasValue.input && isInputsHasValue.textArea) ||
+                  isLoadingWhileSubmit
                 }
                 type="submit"
-                active={
-                  checkAllFilled.input !== '' && checkAllFilled.textArea !== ''
-                }
+                active={isInputsHasValue.input && isInputsHasValue.textArea}
                 loading={isLoadingWhileSubmit}
               >
                 {isModify ? '수정하기' : '레코드 추가하기'}

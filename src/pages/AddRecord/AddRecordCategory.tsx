@@ -4,18 +4,9 @@ import { TEXT_DETAILS } from '@assets/constant/constant'
 import Chip from '@components/Chip'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
-import {
-  Cake,
-  Celebrate,
-  Consolate,
-  Happy,
-  Love,
-  Depress,
-  Sympathy,
-  MySide,
-} from '@assets/chip_icon'
 import { getCategory } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
+import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 
 type CategorySource = {
   title: string
@@ -24,17 +15,17 @@ type CategorySource = {
   id: number
 }
 
-type CategoryType = {
+type CategoryDataType = {
   celebration: CategorySource[]
   consolation: CategorySource[]
 }
 
-type BigCategory = {
+type CategoryType = {
   id: number
   name: string
   subcategories: []
 }
-type CategoryDatas = BigCategory[]
+type CategoryDatas = CategoryType[]
 
 function AddRecordCategory({
   recordCategory,
@@ -43,13 +34,15 @@ function AddRecordCategory({
   recordCategory: number
   isModify: boolean
 }) {
-  const [categoryState, setCategoryState] = useState<CategoryType | null>(null)
+  const [categoryState, setCategoryState] = useState<CategoryDataType | null>(
+    null
+  )
   const [modifyCategoryState, setModifyCategoryState] =
-    useState<CategoryType | null>(null)
+    useState<CategoryDataType | null>(null)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const recordType = useRecoilValue(recordTypeAtom)
-  const CELEBRATES = 3
-  const CONSOLATES = 7
+  const currentRecordType = useRecoilValue(recordTypeAtom)
+  const CELEBRATES_ID = 3
+  const CONSOLATES_ID = 7
   const { data } = useQuery(['getCategory'], getCategory, {
     retry: false,
     refetchOnMount: false,
@@ -60,54 +53,56 @@ function AddRecordCategory({
   useEffect(() => {
     setCategoryState(makeCategoryData(data?.data))
     if (isModify && data && recordCategory !== undefined) {
-      const madeData = makeCategoryData(data?.data)
-      if (madeData !== null) {
-        const modifyData = {
-          ...madeData,
-          [recordType]: madeData[recordType].map((category: CategorySource) => {
-            return {
-              ...category,
-              choosed: category.id === recordCategory,
+      const categoryData = makeCategoryData(data?.data)
+      if (categoryData !== null) {
+        const earlyModifyData = {
+          ...categoryData,
+          [currentRecordType]: categoryData[currentRecordType].map(
+            (item: CategorySource) => {
+              return {
+                ...item,
+                choosed: item.id === recordCategory,
+              }
             }
-          }),
+          ),
         }
-        setModifyCategoryState(modifyData)
+        setModifyCategoryState(earlyModifyData)
         setFormData({
           ...formData,
           selectedCategory:
-            modifyData[recordType][
-              recordType === 'celebration'
-                ? recordCategory - CELEBRATES
-                : recordCategory - CONSOLATES
+            earlyModifyData[currentRecordType][
+              currentRecordType === 'celebration'
+                ? recordCategory - CELEBRATES_ID
+                : recordCategory - CONSOLATES_ID
             ]?.id,
         })
       }
     }
-  }, [data, recordType])
+  }, [data, currentRecordType])
   //data를 만들면 > 이걸 categoryState에 저장 > 화면 리렌더링 > 레코드 타입이 생성됨 > 화면 다시리렌더링
 
   const makeCategoryData = (data: CategoryDatas) => {
-    const CELEBRATION = 1
-    const CONSOLATION = 0
+    const CELEBRATION_INDEX = 1
+    const CONSOLATION_INDEX = 0
     if (data) {
-      const categoryData: CategoryType = {
-        [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION].subcategories.map(
-          (category: BigCategory, index: number) => {
+      const categoryData: CategoryDataType = {
+        [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION_INDEX].subcategories.map(
+          (category: CategoryType, index: number) => {
             return {
               title: category.name,
               choosed: index === 0,
               id: category.id,
-              iconSrc: getIconSrc(category.id),
+              iconSrc: getChipIconName(category.name),
             }
           }
         ),
-        [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION].subcategories.map(
-          (category: BigCategory, index: number) => {
+        [TEXT_DETAILS.CONSOLATION]: data[CONSOLATION_INDEX].subcategories.map(
+          (category: CategoryType, index: number) => {
             return {
               title: category.name,
               choosed: index === 0 && true,
               id: category.id,
-              iconSrc: getIconSrc(category.id),
+              iconSrc: getChipIconName(category.name),
             }
           }
         ),
@@ -117,54 +112,30 @@ function AddRecordCategory({
     return null
   }
 
-  const getIconSrc = (id: number): string => {
-    switch (id) {
-      case 3:
-        return Celebrate
-      case 4:
-        return Cake
-      case 5:
-        return Love
-      case 6:
-        return Happy
-      case 7:
-        return Consolate
-      case 8:
-        return Sympathy
-      case 9:
-        return MySide
-      case 10:
-        return Depress
-      default:
-        return Celebrate
-    }
-  }
-
   const handleChooseCurrentCategory = (index: number): void => {
-    const currentState: CategoryType | null = categoryState && {
-      ...categoryState,
-      [recordType]:
-        categoryState !== null &&
-        categoryState[recordType].map((category: CategorySource) => {
-          return {
-            ...category,
-            choosed: category.id === index,
-          }
-        }),
-    }
-
     if (categoryState !== null) {
+      const currentState: CategoryDataType | null = categoryState && {
+        ...categoryState,
+        [currentRecordType]: categoryState[currentRecordType].map(
+          (category: CategorySource) => {
+            return {
+              ...category,
+              choosed: category.id === index,
+            }
+          }
+        ),
+      }
+
       setFormData({
         ...formData,
         selectedCategory:
-          categoryState[recordType][
-            recordType === 'celebration'
-              ? index - CELEBRATES
-              : index - CONSOLATES
+          categoryState[currentRecordType][
+            currentRecordType === 'celebration'
+              ? index - CELEBRATES_ID
+              : index - CONSOLATES_ID
           ].id,
       })
-    }
-    if (currentState !== null && categoryState !== null) {
+
       setCategoryState(currentState)
     }
   }
@@ -177,8 +148,8 @@ function AddRecordCategory({
     >
       {categoryState !== null &&
         (isModify && modifyCategoryState !== null
-          ? modifyCategoryState[recordType]
-          : categoryState[recordType]
+          ? modifyCategoryState[currentRecordType]
+          : categoryState[currentRecordType]
         ).map((category: CategorySource) => {
           return (
             <div
