@@ -74,7 +74,6 @@ export default function DetailRecord() {
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
-      alert('해당 레코드를 찾을 수 없습니다.')
       navigate('/notrecord')
     }
     if (isSuccess) {
