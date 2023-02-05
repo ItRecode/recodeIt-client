@@ -41,7 +41,7 @@ export default function MixRecord() {
   }
 
   const {
-    data: initailMixData,
+    data: initialMixData,
     isLoading,
     refetch,
   } = useQuery(['mixRecordData'], getMixRecordData, {
@@ -51,19 +51,19 @@ export default function MixRecord() {
   })
 
   useEffect(() => {
-    if (initailMixData) {
+    if (initialMixData) {
       if (mixRecordData !== null) {
         setMixRecordData1((prev) => {
           if (prev !== null) {
-            return [...prev, ...initailMixData.data.mixRecordDto]
+            return [...prev, ...initialMixData.data.mixRecordDto]
           }
           return prev
         })
       } else {
-        setMixRecordData1(initailMixData.data.mixRecordDto)
+        setMixRecordData1(initialMixData.data.mixRecordDto)
       }
     }
-  }, [initailMixData])
+  }, [initialMixData])
 
   const deleteData = () => {
     setMixRecordData1((prev) => {
@@ -130,7 +130,7 @@ export default function MixRecord() {
                       onClick={() => handleClick(item.recordId)}
                     />
                     <p
-                      className="mt-2 w-[160px] cursor-pointer text-center text-[12px] leading-normal text-grey-1"
+                      className="line-clamp mt-2 h-[54px] w-[143px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
                       onClick={() => handleClick(item.recordId, item.commentId)}
                     >
                       {item.commentContent}
@@ -141,7 +141,7 @@ export default function MixRecord() {
           </Slider>
           <div className="absolute bottom-[25px] flex w-full justify-center bg-inherit">
             <button
-              className="h-[32px] w-[118px] cursor-pointer rounded-full bg-grey-1/50 text-grey-1"
+              className="h-[32px] w-[118px] cursor-pointer whitespace-nowrap rounded-full bg-grey-1/50 text-grey-1"
               onClick={stopSlider}
             >
               {sliderStop ? '믹스 레코드 멈춤' : '믹스 레코드 재생중'}

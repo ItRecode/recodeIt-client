@@ -30,9 +30,10 @@ export default function TogetherSlider({
   useEffect(() => {
     dragRef.current.scrollLeft = 0
   }, [categoryId])
+
   return (
     <div
-      className="relative ml-6 flex h-full flex-nowrap overflow-x-hidden"
+      className="relative ml-6 flex h-full flex-nowrap overflow-scroll"
       ref={dragRef}
       onMouseDownCapture={(e) => {
         handleMouseDown(e)
