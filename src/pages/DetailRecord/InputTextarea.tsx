@@ -115,9 +115,9 @@ export default function InputTextarea({
               <span className="text-sub-1">수정, 삭제</span> 할 수 없어요
             </>
           }
-          subMessage={<>회원가입하고 추억을 공유해보세요.</>}
+          subMessage={<>로그인하고 추억을 공유해보세요.</>}
           cancelMessage="괜찮아요"
-          confirmMessage="회원가입"
+          confirmMessage="로그인"
           onClose={() => setIsCheckedUser(false)}
           onCancel={handleCancelSingUp}
           onConfirm={handleConfirmSignUp}
