@@ -130,7 +130,7 @@ export default function MixRecord() {
                       onClick={() => handleClick(item.recordId)}
                     />
                     <p
-                      className="line-clamp mt-2 h-[54px] w-[160px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
+                      className="line-clamp mt-2 h-[54px] w-[143px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
                       onClick={() => handleClick(item.recordId, item.commentId)}
                     >
                       {item.commentContent}
@@ -141,7 +141,7 @@ export default function MixRecord() {
           </Slider>
           <div className="absolute bottom-[25px] flex w-full justify-center bg-inherit">
             <button
-              className="h-[32px] w-[118px] cursor-pointer rounded-full bg-grey-1/50 text-grey-1"
+              className="h-[32px] w-[118px] cursor-pointer whitespace-nowrap rounded-full bg-grey-1/50 text-grey-1"
               onClick={stopSlider}
             >
               {sliderStop ? '믹스 레코드 멈춤' : '믹스 레코드 재생중'}
