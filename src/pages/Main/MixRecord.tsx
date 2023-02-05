@@ -16,7 +16,7 @@ export default function MixRecord() {
   const [mixRecordData, setMixRecordData1] = useState<IMixRecordData[] | null>(
     null
   )
-  const stopRef = useRef<any>(null)
+  const stopRef = useRef<Slider>(null)
   const [dataState, setDataState] = useState({
     activeSlide: 0,
     activeSlide2: 0,
