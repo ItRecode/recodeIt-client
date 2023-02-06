@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { IRandomRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
