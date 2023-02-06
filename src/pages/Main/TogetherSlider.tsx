@@ -34,8 +34,6 @@ export default function TogetherSlider({
     dragRef.current.scrollLeft = 0
   }, [categoryId])
 
-  console.log(isMobile)
-
   return (
     <div
       className="relative ml-6 flex h-full flex-nowrap overflow-scroll"
@@ -56,9 +54,7 @@ export default function TogetherSlider({
             >
               <RecordIcon width={100} height={100} />
               <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
-                {isMobile && item.title.length < 7 ? (
-                  item.title
-                ) : (
+                {!isMobile && item.title.length > 6 ? (
                   <>
                     <p>{item.title.substring(0, 6)}</p>
                     <p className="text-center">
@@ -67,6 +63,8 @@ export default function TogetherSlider({
                         .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
                     </p>
                   </>
+                ) : (
+                  item.title
                 )}
               </p>
               <p className="mt-2.5 text-xs leading-none">
