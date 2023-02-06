@@ -9,7 +9,7 @@ export default function Main() {
   const navigate = useNavigate()
   return (
     <>
-      <div className="h-full w-full overflow-scroll">
+      <div className="h-full w-full">
         {/* <MixRecord /> */}
         <div className="w-full cursor-pointer p-0">
           <HomeImg
@@ -20,7 +20,7 @@ export default function Main() {
         </div>
         <Together categoryId={categoryId} setCategoryId={setCategoryId} />
       </div>
-      <div className="h-[70px] w-full" />
+      <div className="h-[110px] w-full" />
     </>
   )
 }
