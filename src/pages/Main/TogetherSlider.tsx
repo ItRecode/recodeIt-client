@@ -51,7 +51,10 @@ export default function TogetherSlider({
             >
               <RecordIcon width={100} height={100} />
               <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
-                {item.title}
+                {item.title.length < 7
+                  ? item.title
+                  : item.title.substring(0, 6)}
+                <p className="text-center">{item.title.substring(7)}</p>
               </p>
               <p className="mt-2.5 text-xs leading-none">
                 댓글 {item.commentCount}개
