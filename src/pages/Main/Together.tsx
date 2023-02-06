@@ -38,7 +38,7 @@ export default function Together({
   }, [data, isSuccess])
 
   return (
-    <div className="h-[50px] w-full">
+    <div className="h-[50px] w-full pt-3.5">
       <section id="tab">
         <TogetherTab categoryId={categoryId} setCategoryId={setCategoryId} />
       </section>
