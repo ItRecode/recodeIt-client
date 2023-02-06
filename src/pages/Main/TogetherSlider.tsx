@@ -54,7 +54,11 @@ export default function TogetherSlider({
                 {item.title.length < 7
                   ? item.title
                   : item.title.substring(0, 6)}
-                <p className="text-center">{item.title.substring(7)}</p>
+                <p className="text-center">
+                  {item.title
+                    .substring(6)
+                    .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                </p>
               </p>
               <p className="mt-2.5 text-xs leading-none">
                 댓글 {item.commentCount}개
