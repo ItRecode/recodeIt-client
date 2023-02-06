@@ -58,7 +58,7 @@ export default function Together({
       </section>
       <section
         id="slider"
-        className="flex h-[200px] items-center justify-center "
+        className="flex h-[200px] items-center justify-center"
       >
         {isLoading ? (
           <Spinner size="large" />

@@ -28,8 +28,10 @@ export default function MixRecord() {
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    // autoplay: true,
     autoplaySpeed: 4000,
+    nextArrow: <div style={{ display: 'none' }} />,
+    prevArrow: <div style={{ display: 'none' }} />,
     beforeChange: (current: number, next: number) =>
       setDataState((prev) => {
         return { ...prev, activeSlide: next }
