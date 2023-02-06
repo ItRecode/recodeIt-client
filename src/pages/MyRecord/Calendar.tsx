@@ -1,9 +1,24 @@
-import React from 'react'
+import useClickOutside from '@hooks/useClickOutside'
+import React, { Dispatch, SetStateAction } from 'react'
 
-export default function Calendar() {
+interface CalendarProps {
+  setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
+}
+
+export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
+  const calendarRef = useClickOutside<HTMLDivElement>(() => {
+    setIsOpenCalendar(false)
+  })
+
   return (
-    <div className="absolute bottom-0 z-20 flex w-full animate-[popUp_150ms_linear] flex-col items-center justify-center rounded-t-lg bg-grey-1">
-      Calendar
+    <div className="fixed top-0 z-20 block h-full w-full ">
+      <div className="absolute h-full w-screen max-w-[420px] bg-grey-10 opacity-50" />
+      <div
+        ref={calendarRef}
+        className="fixed bottom-0 z-20 flex h-[478px] w-full max-w-[420px] animate-[popUp_150ms_linear] flex-col items-center justify-center rounded-t-2xl bg-grey-1"
+      >
+        Calendar
+      </div>
     </div>
   )
 }

@@ -43,7 +43,7 @@ export default function MyRecord() {
         </h2>
         <MemoryRecord />
       </div>
-      {isOpenCalendar && <Calendar />}
+      {isOpenCalendar && <Calendar setIsOpenCalendar={setIsOpenCalendar} />}
     </>
   )
 }
