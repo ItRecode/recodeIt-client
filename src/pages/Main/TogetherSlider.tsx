@@ -3,6 +3,7 @@ import { IRandomRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
 import useSwipe from '@hooks/useSwipe'
+import { parentCategoryID } from 'types/category'
 import { useCheckMobile } from '@hooks/useCheckMobile'
 
 export default function TogetherSlider({
@@ -10,15 +11,14 @@ export default function TogetherSlider({
   categoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
-  categoryId: 1 | 2
+  categoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
+  const { isMobile } = useCheckMobile()
 
   const dragRef = useRef<HTMLDivElement | null>(
     null
   ) as React.MutableRefObject<HTMLDivElement>
-
-  const { isMobile } = useCheckMobile()
 
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
 
@@ -53,7 +53,7 @@ export default function TogetherSlider({
               onClick={() => handleClickRecord(item.recordId)}
             >
               <RecordIcon width={100} height={100} />
-              <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
+              <div className="mt-4 text-sm font-semibold text-grey-10">
                 {!isMobile && item.title.length > 6 ? (
                   <>
                     <p>{item.title.substring(0, 6)}</p>
@@ -66,7 +66,7 @@ export default function TogetherSlider({
                 ) : (
                   item.title
                 )}
-              </p>
+              </div>
               <p className="mt-2.5 text-xs leading-none">
                 댓글 {item.commentCount}개
               </p>

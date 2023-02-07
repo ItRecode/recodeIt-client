@@ -13,34 +13,12 @@ export default function MixRecord() {
   const navigate = useNavigate()
   const setScrollTargetId = useSetRecoilState(scrollTarget)
 
-  const [mixRecordData, setMixRecordData1] = useState<IMixRecordData[] | null>(
+  const [mixRecordData, setMixRecordData] = useState<IMixRecordData[] | null>(
     null
   )
   const stopRef = useRef<Slider>(null)
-  const [dataState, setDataState] = useState({
-    activeSlide: 0,
-    activeSlide2: 0,
-  })
+  const [sliderState, setSliderState] = useState(0)
   const [sliderStop, setSliderStop] = useState(false)
-
-  const sliderSettings = {
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    // autoplay: true,
-    autoplaySpeed: 4000,
-    nextArrow: <div style={{ display: 'none' }} />,
-    prevArrow: <div style={{ display: 'none' }} />,
-    beforeChange: (current: number, next: number) =>
-      setDataState((prev) => {
-        return { ...prev, activeSlide: next }
-      }),
-    afterChange: (current: number) =>
-      setDataState((prev) => {
-        return { ...prev, activeSlide2: current }
-      }),
-  }
 
   const {
     data: initialMixData,
@@ -49,26 +27,28 @@ export default function MixRecord() {
   } = useQuery(['mixRecordData'], getMixRecordData, {
     retry: false,
     refetchOnMount: false,
+    refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   useEffect(() => {
     if (initialMixData) {
       if (mixRecordData !== null) {
-        setMixRecordData1((prev) => {
+        setMixRecordData((prev) => {
           if (prev !== null) {
             return [...prev, ...initialMixData.data.mixRecordDto]
           }
           return prev
         })
       } else {
-        setMixRecordData1(initialMixData.data.mixRecordDto)
+        setMixRecordData(initialMixData.data.mixRecordDto)
       }
     }
   }, [initialMixData])
 
   const deleteData = () => {
-    setMixRecordData1((prev) => {
+    setMixRecordData((prev) => {
       if (prev !== null) {
         return prev.slice(10)
       }
@@ -97,13 +77,24 @@ export default function MixRecord() {
   }
 
   useEffect(() => {
-    if (dataState.activeSlide === 8 && dataState.activeSlide2 === 8) {
+    if (sliderState === 8) {
       refetch()
     }
-    if (dataState.activeSlide === 18 && dataState.activeSlide2 === 18) {
+    if (sliderState === 18) {
       deleteData()
     }
-  }, [dataState])
+  }, [sliderState])
+
+  const sliderSettings = {
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    arrows: false,
+    afterChange: (current: number) => setSliderState(current),
+  }
 
   return (
     <div className="relative flex w-full items-center justify-center">
