@@ -3,15 +3,18 @@ import { IRandomRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useNavigate } from 'react-router-dom'
 import useSwipe from '@hooks/useSwipe'
+import { parentCategoryID } from 'types/category'
+import { useCheckMobile } from '@hooks/useCheckMobile'
 
 export default function TogetherSlider({
   randomRecordData,
   categoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
-  categoryId: 1 | 2
+  categoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
+  const { isMobile } = useCheckMobile()
 
   const dragRef = useRef<HTMLDivElement | null>(
     null
@@ -50,16 +53,20 @@ export default function TogetherSlider({
               onClick={() => handleClickRecord(item.recordId)}
             >
               <RecordIcon width={100} height={100} />
-              <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
-                {item.title.length < 7
-                  ? item.title
-                  : item.title.substring(0, 6)}
-                <p className="text-center">
-                  {item.title
-                    .substring(6)
-                    .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
-                </p>
-              </p>
+              <div className="mt-4 text-sm font-semibold text-grey-10">
+                {isMobile && item.title.length < 7 ? (
+                  item.title
+                ) : (
+                  <>
+                    <p className="leading-none">{item.title.substring(0, 6)}</p>
+                    <p className="text-center">
+                      {item.title
+                        .substring(6)
+                        .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                    </p>
+                  </>
+                )}
+              </div>
               <p className="mt-2.5 text-xs leading-none">
                 댓글 {item.commentCount}개
               </p>

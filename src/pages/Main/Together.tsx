@@ -1,8 +1,10 @@
 import { getRandomRecordData } from '@apis/record'
+import { CELEBRATION_ID } from '@assets/constant/constant'
 import Spinner from '@components/Spinner'
 import { useQuery } from '@tanstack/react-query'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { parentCategoryID } from 'types/category'
 import { IRandomRecordData } from 'types/recordData'
 import TogetherSlider from './TogetherSlider'
 import TogetherTab from './TogetherTab'
@@ -11,8 +13,8 @@ export default function Together({
   categoryId,
   setCategoryId,
 }: {
-  categoryId: 1 | 2
-  setCategoryId: Dispatch<SetStateAction<1 | 2>>
+  categoryId: parentCategoryID
+  setCategoryId: Dispatch<SetStateAction<parentCategoryID>>
 }) {
   const navigate = useNavigate()
 
@@ -26,6 +28,7 @@ export default function Together({
     {
       retry: false,
       refetchOnMount: false,
+      refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
     }
@@ -47,7 +50,7 @@ export default function Together({
         className="mt-10 mb-6 flex w-full justify-between px-6"
       >
         <p className="text-[24px] font-semibold leading-none">
-          함께 {categoryId === 1 ? '축하' : '위로'}해보세요!
+          함께 {categoryId === CELEBRATION_ID ? '축하' : '위로'}해보세요!
         </p>
         <button
           className="cursor-pointer bg-transparent text-grey-6"

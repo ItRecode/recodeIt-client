@@ -1,22 +1,24 @@
+import { CELEBRATION_ID, CONSOLATION_ID } from '@assets/constant/constant'
 import React, { Dispatch, SetStateAction } from 'react'
+import { parentCategoryID } from 'types/category'
 
 export default function TogetherTab({
   categoryId,
   setCategoryId,
 }: {
   categoryId: number
-  setCategoryId: Dispatch<SetStateAction<1 | 2>>
+  setCategoryId: Dispatch<SetStateAction<parentCategoryID>>
 }) {
   return (
     <>
       <div className="flex h-full w-full">
         <button
           className="flex h-full w-1/2 border-collapse cursor-pointer items-center justify-center bg-transparent p-0"
-          onClick={() => setCategoryId(1)}
+          onClick={() => setCategoryId(CELEBRATION_ID)}
         >
           <p
             className={`h-full w-fit border-collapse text-lg font-semibold leading-[50px] ${
-              categoryId === 1
+              categoryId === CELEBRATION_ID
                 ? 'border-b-2 border-solid border-b-primary-2 text-primary-2'
                 : 'text-grey-6'
             }`}
@@ -26,11 +28,11 @@ export default function TogetherTab({
         </button>
         <button
           className="flex h-full w-1/2 cursor-pointer items-center justify-center bg-transparent p-0"
-          onClick={() => setCategoryId(2)}
+          onClick={() => setCategoryId(CONSOLATION_ID)}
         >
           <p
             className={`h-full w-fit text-lg font-semibold leading-[50px] ${
-              categoryId === 2
+              categoryId === CONSOLATION_ID
                 ? 'border-b-2 border-solid border-b-primary-2 text-primary-2'
                 : 'text-grey-6'
             }`}

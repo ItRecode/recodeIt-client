@@ -9,6 +9,9 @@ export const TEXT_DETAILS = Object.freeze({
   CONSOLATION: 'consolation',
 })
 
+export const CELEBRATION_ID = 1
+export const CONSOLATION_ID = 2
+
 export const INITIAL_RECORD_DATA = {
   recordId: 0,
   categoryId: 0,
