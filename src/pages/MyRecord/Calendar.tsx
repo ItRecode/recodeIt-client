@@ -1,10 +1,13 @@
-import useClickOutside from '@hooks/useClickOutside'
 import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
+import useClickOutside from '@hooks/useClickOutside'
+import DateBox from './DateBox'
 
 interface CalendarProps {
   setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
 }
+
+const DAYS_WITH_KR = ['일', '월', '화', '수', '목', '금', '토']
 
 export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
@@ -29,6 +32,19 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
             />
           </div>
           <div className="pt-10">2023년 1월</div>
+          <div className="mt-6 grid grid-cols-7 justify-items-center gap-2">
+            {DAYS_WITH_KR.map((day, i) => (
+              <p key={`${day}-${i}`} className="text-xs text-grey-6">
+                {day}
+              </p>
+            ))}
+          </div>
+          <div className="mt-2 grid grid-cols-7 justify-items-center gap-2">
+            <DateBox date={1} />
+            {[...Array(31)].map((_, i) =>
+              i > 0 ? <DateBox key={i} date={i + 1} /> : null
+            )}
+          </div>
         </div>
       </div>
     </div>
