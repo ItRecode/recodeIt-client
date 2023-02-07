@@ -54,17 +54,17 @@ export default function TogetherSlider({
             >
               <RecordIcon width={100} height={100} />
               <div className="mt-4 text-sm font-semibold text-grey-10">
-                {isMobile && item.title.length < 7 ? (
-                  item.title
-                ) : (
+                {!isMobile && item.title.length > 6 ? (
                   <>
-                    <p className="leading-none">{item.title.substring(0, 6)}</p>
+                    <p>{item.title.substring(0, 6)}</p>
                     <p className="text-center">
                       {item.title
                         .substring(6)
                         .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
                     </p>
                   </>
+                ) : (
+                  item.title
                 )}
               </div>
               <p className="mt-2.5 text-xs leading-none">
