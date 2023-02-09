@@ -29,6 +29,7 @@ export default function EditModal({
     LocalStorage.set('postId', `${POST_ID}`)
     navigate('/record/add')
   }
+
   return (
     <>
       <div

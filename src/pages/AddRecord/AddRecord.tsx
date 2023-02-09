@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import BackButton from '@components/BackButton'
 import AddRecordCategory from './AddRecordCategory'
-import AddRecordInput from './AddRecordInput'
+
 import AddRecordTextArea from './AddRecordTextArea'
 import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
-import AddRecordTitle from './AddRecordTitle'
-import { TEXT_DETAILS } from '@assets/constant/constant'
-import MainCategoryTap from '@components/MainCategoryTap'
+
 import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
-import { formDataAtom, recordTypeAtom } from '@store/atom'
+import { formDataAtom } from '@store/atom'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { enrollRecord, modifyRecord, getRecord } from '@apis/record'
 import Alert from '@components/Alert'
 import { LocalStorage } from '@utils/localStorage'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
+import { parentCategoryID } from 'types/category'
+import { CELEBRATION_ID } from '@assets/constant/constant'
+import ParentCategoryTab from '@components/ParrentCategoryTab'
+import AddRecordTitle from './AddRecordTitle'
+import AddRecordInput from './AddRecordInput'
+import { useCheckMobile } from '@hooks/useCheckMobile'
 
 export type IsInputsHasValueType = {
   input: boolean
@@ -52,11 +56,12 @@ export type IsInputFocusType = {
 }
 
 export default function AddRecord() {
-  const { CELEBRATION } = TEXT_DETAILS
   const RECORD_ID = LocalStorage.get('postId') as string
   const isModify = LocalStorage.get('modifyMode') === 'true'
-
   const navigate = useNavigate()
+
+  const [parentCategoryId, setParentCategoryId] =
+    useState<parentCategoryID>(CELEBRATION_ID)
 
   const [isInputsHasValue, setIsInputsHasValue] =
     useState<IsInputsHasValueType>({
@@ -66,14 +71,15 @@ export default function AddRecord() {
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     formData
+
+  const [recordTitle, setRecordTitle] = useState('')
+  const [recordContent, setRecordContent] = useState('')
   const [files, setFiles] = useState<File[]>([])
   const [isClickBackButton, setIsBackButton] = useState(false)
   const [isLoadingWhileSubmit, setIsLoadingWhileSubmit] = useState(false)
   const [isInputFocus, setIsInputFocus] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  //isMobile,isInputFocus가 휴대폰 일때 버튼 스티키를 유지해주기 위한 상태인데 이거 나중에 다시 이걸로 돌아올 수도 있을것 같아서 놔둘게요
   const [toDeleteFiles, setToDeleteFiles] = useState<string[]>([])
-  const [recordType, setRecordType] = useRecoilState(recordTypeAtom)
+
   const {
     data: recordData,
     isLoading,
@@ -89,13 +95,13 @@ export default function AddRecord() {
   useEffect(() => {
     if (!isModify) {
       setFormData({
-        selectedIcon: recordType === 'celebration' ? 'gift' : 'moon',
-        selectedCategory: recordType === 'celebration' ? 3 : 7,
+        selectedIcon: parentCategoryId === CELEBRATION_ID ? 'gift' : 'moon',
+        selectedCategory: parentCategoryId === CELEBRATION_ID ? 3 : 7,
         selectedColor: 'icon-purple',
       })
       setIsInputsHasValue({ input: false, textArea: false })
     }
-  }, [recordType])
+  }, [parentCategoryId])
 
   useEffect(() => {
     if (recordData !== undefined) {
@@ -104,68 +110,17 @@ export default function AddRecord() {
         textArea: recordData.content,
       })
       setFormData({ ...formData, selectedColor: recordData.colorName })
-      const changeCurrentRecordType = () => {
-        const categoryName = recordData?.categoryName
-        if (categoryName) {
-          if (
-            categoryName === '축하해주세요' ||
-            categoryName === '기념일이에요' ||
-            categoryName === '연애중이에요' ||
-            categoryName === '행복해요'
-          ) {
-            setRecordType(CELEBRATION)
-          } else if (
-            categoryName === '위로해주세요' ||
-            categoryName === '공감이 필요해요' ||
-            categoryName === '내편이 되어주세요' ||
-            categoryName === '우울해요'
-          ) {
-            setRecordType('consolation')
-          }
-        }
-      }
-      changeCurrentRecordType()
     }
   }, [recordData])
 
-  useEffect(() => {
-    function detectMobileDevice(agent: string): boolean {
-      const mobileRegex = [
-        /Android/i,
-        /iPhone/i,
-        /iPad/i,
-        /iPod/i,
-        /BlackBerry/i,
-        /Windows Phone/i,
-      ]
-
-      return mobileRegex.some((mobile) => agent.match(mobile))
-    }
-
-    setIsMobile(detectMobileDevice(window.navigator.userAgent))
-  }, [isInputFocus])
+  const { isMobile } = useCheckMobile()
 
   const resetFormDataAtom = useResetRecoilState(formDataAtom)
-  const resetRecordTypeAtom = useResetRecoilState(recordTypeAtom)
-
-  useEffect(() => {
-    const removeModifyMode = () => {
-      LocalStorage.remove('postId')
-      LocalStorage.remove('modifyMode')
-    }
-    window.addEventListener('beforeunload', removeModifyMode)
-    return () => {
-      resetRecordTypeAtom()
-      resetFormDataAtom()
-      removeModifyMode()
-      window.removeEventListener('beforeunload', removeModifyMode)
-    }
-  }, [])
 
   const handleSubmitData = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     if (isLoadingWhileSubmit) return
-    const formData = makeFormData(e)
+    const formData = makeFormData()
     setIsLoadingWhileSubmit(true)
     const enroll = async () => {
       try {
@@ -184,6 +139,8 @@ export default function AddRecord() {
       try {
         const response = await modifyRecord(RECORD_ID, formData)
         setFiles([])
+        LocalStorage.clear()
+        resetFormDataAtom()
         navigate(`/record/${response.data}`, {
           replace: true,
         })
@@ -204,23 +161,18 @@ export default function AddRecord() {
     return content.replaceAll(/(\n|\r\n)/g, '<br>')
   }
 
-  const makeFormData = (e: React.FormEvent<HTMLFormElement>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const target = e.target as any
-    const formTitle = target[4].value
-    const formContent = target[5].value
-
+  const makeFormData = () => {
     const formData: WriteRecordRequestDto = {
-      title: formTitle,
-      content: makeLineBreak(formContent),
+      title: recordTitle,
+      content: makeLineBreak(recordContent),
       colorName: selectedColor,
       iconName: selectedIcon,
       recordCategoryId: selectedCategory,
     }
 
     const modifyFormData: modifyRecordRequestDto = {
-      title: formTitle,
-      content: makeLineBreak(formContent),
+      title: recordTitle,
+      content: makeLineBreak(recordContent),
       colorName: selectedColor,
       iconName: selectedIcon,
       deleteImages: toDeleteFiles,
@@ -242,6 +194,13 @@ export default function AddRecord() {
     return data
   }
 
+  useEffect(() => {
+    if (isSuccess) {
+      setRecordTitle(recordData.title)
+      setRecordContent(recordData.content)
+    }
+  }, [recordData, isSuccess])
+
   return (
     <div className="relative pt-4">
       {isLoading && recordData !== undefined && <Loading />}
@@ -255,10 +214,10 @@ export default function AddRecord() {
               isModify && 'pointer-events-none'
             } sticky top-0 left-0 z-[5] bg-grey-1`}
           >
-            <MainCategoryTap
+            <ParentCategoryTab
+              parentCategoryId={parentCategoryId}
+              setParentCategoryId={setParentCategoryId}
               isModify={isModify}
-              currentRecordType={recordType}
-              onSetRecordType={setRecordType}
             />
           </div>
           <form
@@ -267,33 +226,42 @@ export default function AddRecord() {
             onSubmit={handleSubmitData}
           >
             <AddRecordCategory
+              parentCategoryId={parentCategoryId}
               isModify={isModify}
               recordCategory={recordData?.categoryId}
             />
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
-              recordTitle={recordData?.title}
+              recordTitle={recordTitle}
+              setRecordTitle={setRecordTitle}
               isInputsHasValue={isInputsHasValue}
               setIsInputsHasValue={setIsInputsHasValue}
               setIsInputFocus={setIsInputFocus}
+              parentCategoryId={parentCategoryId}
+              isModify={isModify}
             />
             <AddRecordTitle title={'레코드 설명'} />
             <AddRecordTextArea
-              recordContent={recordData?.content}
+              recordContent={recordContent}
+              setRecordContent={setRecordContent}
               isInputsHasValue={isInputsHasValue}
               setIsInputsHasValue={setIsInputsHasValue}
-              currentRecordType={recordType}
+              currentRecordType={parentCategoryId}
               setIsInputFocus={setIsInputFocus}
             />
             <AddRecordTitle title={'레코드 컬러'} />
-            <AddRecordColor recordColor={recordData?.colorName} />
+            <AddRecordColor
+              recordColor={recordData?.colorName}
+              parentCategoryId={parentCategoryId}
+            />
             <AddRecordTitle title={'레코드 아이콘'} />
             <AddRecordIcon
               recordIcon={recordData?.iconName}
-              currentRecordType={recordType}
+              parentCategoryId={parentCategoryId}
             />
             <AddRecordTitle title={'레코드 이미지'} />
             <AddRecordFile
+              parentCategoryId={parentCategoryId}
               toDeleteFiles={toDeleteFiles}
               setToDeleteFiles={setToDeleteFiles}
               isModify={isModify}

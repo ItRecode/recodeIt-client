@@ -8,10 +8,10 @@ import { useCheckMobile } from '@hooks/useCheckMobile'
 
 export default function TogetherSlider({
   randomRecordData,
-  parrentCategoryId,
+  parentCategoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
-  parrentCategoryId: parentCategoryID
+  parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
   const { isMobile } = useCheckMobile()
@@ -32,7 +32,7 @@ export default function TogetherSlider({
 
   useEffect(() => {
     dragRef.current.scrollLeft = 0
-  }, [parrentCategoryId])
+  }, [parentCategoryId])
 
   return (
     <div

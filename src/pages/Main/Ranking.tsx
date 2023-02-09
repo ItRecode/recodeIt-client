@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import Category from '@components/Category'
 
 export default function Ranking({
-  parrentCategoryId,
+  parentCategoryId,
 }: {
-  parrentCategoryId: parentCategoryID
+  parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
   const [choosedCategoryId, setChoosedCategoryId] = useState(0)
@@ -27,7 +27,7 @@ export default function Ranking({
       <section id="category" className="mt-6 pl-6">
         <Category
           slider={true}
-          parrentCategoryId={parrentCategoryId}
+          parentCategoryId={parentCategoryId}
           choosedCategoryId={choosedCategoryId}
           setChoosedCategoryId={setChoosedCategoryId}
         />
