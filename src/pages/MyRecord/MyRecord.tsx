@@ -11,7 +11,7 @@ import Calendar from './Calendar'
 export default function MyRecord() {
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const navigate = useNavigate()
-  const { isLoading } = useMyRecord()
+  const { isLoading, monthYear } = useMyRecord()
 
   if (isLoading) {
     return <></>
@@ -43,7 +43,9 @@ export default function MyRecord() {
         </h2>
         <MemoryRecord />
       </div>
-      {isOpenCalendar && <Calendar setIsOpenCalendar={setIsOpenCalendar} />}
+      {isOpenCalendar && (
+        <Calendar monthYear={monthYear} setIsOpenCalendar={setIsOpenCalendar} />
+      )}
     </>
   )
 }
