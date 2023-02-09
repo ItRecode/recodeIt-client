@@ -8,12 +8,10 @@ function AddRecordCategory({
   parentCategoryId,
   recordCategory,
   isModify,
-  choosedCategoryIdAtModify,
 }: {
   parentCategoryId: parentCategoryID
   recordCategory: number
   isModify: boolean
-  choosedCategoryIdAtModify?: number
 }) {
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const [choosedCategoryId, setChoosedCategoryId] = useState(0)
