@@ -3,6 +3,7 @@ import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import DateBox from './DateBox'
 import { MonthYear } from './getCalendarDetail'
+import Button from '@components/Button'
 
 interface CalendarProps {
   monthYear: MonthYear
@@ -51,6 +52,15 @@ export default function Calendar({
             {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
               i > 0 ? <DateBox key={i} date={i + 1} /> : null
             )}
+          </div>
+          <div className="mt-8 w-full">
+            <Button
+              aria-label="select-record-date-button"
+              property={'solid'}
+              active={false}
+            >
+              선택
+            </Button>
           </div>
         </div>
       </div>
