@@ -8,10 +8,10 @@ import { useCheckMobile } from '@hooks/useCheckMobile'
 
 export default function TogetherSlider({
   randomRecordData,
-  categoryId,
+  parrentCategoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
-  categoryId: parentCategoryID
+  parrentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
   const { isMobile } = useCheckMobile()
@@ -32,11 +32,11 @@ export default function TogetherSlider({
 
   useEffect(() => {
     dragRef.current.scrollLeft = 0
-  }, [categoryId])
+  }, [parrentCategoryId])
 
   return (
     <div
-      className="relative ml-6 flex h-full flex-nowrap overflow-scroll"
+      className="relative ml-6 flex h-full flex-nowrap gap-1.5 overflow-scroll pr-4"
       ref={dragRef}
       onMouseDownCapture={(e) => {
         handleMouseDown(e)
@@ -49,7 +49,7 @@ export default function TogetherSlider({
           return (
             <div
               key={item.recordId}
-              className={`mr-1.5 h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex cursor-pointer flex-col items-center justify-center`}
+              className={`h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex cursor-pointer flex-col items-center justify-center`}
               onClick={() => handleClickRecord(item.recordId)}
             >
               <RecordIcon width={100} height={100} />
