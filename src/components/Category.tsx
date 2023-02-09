@@ -6,10 +6,12 @@ import Chip from './Chip'
 import useSwipe from '@hooks/useSwipe'
 
 export default function Category({
+  slider,
   parrentCategoryId,
   choosedCategoryId,
   setChoosedCategoryId,
 }: {
+  slider: boolean
   parrentCategoryId: parentCategoryID
   choosedCategoryId: number
   setChoosedCategoryId: Dispatch<SetStateAction<number>>
@@ -38,7 +40,9 @@ export default function Category({
   }
   return (
     <div
-      className="flex flex-nowrap gap-1 overflow-scroll pr-4"
+      className={`flex pr-4 ${
+        slider ? 'gap-1 overflow-scroll ' : 'flex-wrap gap-2'
+      }`}
       ref={dragRef}
       onMouseDownCapture={(e) => {
         handleMouseDown(e)

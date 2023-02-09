@@ -26,6 +26,7 @@ export default function Ranking({
       </section>
       <section id="category" className="mt-6 pl-6">
         <Category
+          slider={true}
           parrentCategoryId={parrentCategoryId}
           choosedCategoryId={choosedCategoryId}
           setChoosedCategoryId={setChoosedCategoryId}
