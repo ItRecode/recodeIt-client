@@ -43,7 +43,7 @@ function AddRecordCategory({
   const currentRecordType = useRecoilValue(recordTypeAtom)
   const CELEBRATES_ID = 3
   const CONSOLATES_ID = 7
-  const { data } = useQuery(['getCategory'], getCategory, {
+  const { data } = useQuery(['getCategory'], () => getCategory(), {
     retry: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
