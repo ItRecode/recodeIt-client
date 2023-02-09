@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { parentCategoryID } from './../../types/category'
 
 type categoryDataType = { id: number; name: string }
-export const useGetCategoty = (parentCategoryId: parentCategoryID) => {
+export const useGetCategory = (parentCategoryId: parentCategoryID) => {
   const [categoryData, setCategoryData] = useState<categoryDataType[]>()
   const { data, isSuccess, refetch } = useQuery(
     ['category', parentCategoryId],

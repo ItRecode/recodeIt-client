@@ -10,9 +10,9 @@ import { baseInstance } from './instance'
 const MEMORY_RECORD_SIZE = 7
 const MEMORY_COMMENT_SIZE = 5
 
-export const getCategory = async (categotyId: parentCategoryID) => {
+export const getCategory = async (categoryId?: parentCategoryID) => {
   return await baseInstance.get('/record/category', {
-    params: { parentRecordCategoryId: categotyId },
+    params: { parentRecordCategoryId: categoryId },
   })
 }
 

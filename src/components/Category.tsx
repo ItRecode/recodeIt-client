@@ -1,4 +1,4 @@
-import { useGetCategoty } from '@react-query/hooks/useGetCategory'
+import { useGetCategory } from '@react-query/hooks/useGetCategory'
 import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react'
 import { parentCategoryID } from 'types/category'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
@@ -16,7 +16,7 @@ export default function Category({
   choosedCategoryId: number
   setChoosedCategoryId: Dispatch<SetStateAction<number>>
 }) {
-  const { categoryData } = useGetCategoty(parrentCategoryId)
+  const { categoryData } = useGetCategory(parrentCategoryId)
 
   const dragRef = useRef<HTMLDivElement | null>(
     null
