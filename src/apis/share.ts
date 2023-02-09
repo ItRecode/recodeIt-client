@@ -20,7 +20,7 @@ export const ShareKakao = ({
     objectType: 'feed',
     content: {
       title: title,
-      description: description,
+      description: description.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n'),
       imageUrl: imageUrl
         ? imageUrl
         : 'https://record-it.s3.ap-northeast-2.amazonaws.com/imagefile-dev/sharing+png',
