@@ -2,14 +2,19 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import DateBox from './DateBox'
+import { MonthYear } from './getCalendarDetail'
 
 interface CalendarProps {
+  monthYear: MonthYear
   setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
 }
 
-const DAYS_WITH_KR = ['일', '월', '화', '수', '목', '금', '토']
+const WEEK_TO_KR = ['일', '월', '화', '수', '목', '금', '토']
 
-export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
+export default function Calendar({
+  setIsOpenCalendar,
+  monthYear,
+}: CalendarProps) {
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
   })
@@ -31,17 +36,19 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               onClick={() => setIsOpenCalendar(false)}
             />
           </div>
-          <div className="pt-10">2023년 1월</div>
+          <div className="pt-10">
+            {monthYear.year}년 {monthYear.month + 1}월
+          </div>
           <div className="mt-6 grid grid-cols-7 justify-items-center gap-2">
-            {DAYS_WITH_KR.map((day, i) => (
+            {WEEK_TO_KR.map((day, i) => (
               <p key={`${day}-${i}`} className="text-xs text-grey-6">
                 {day}
               </p>
             ))}
           </div>
           <div className="mt-2 grid grid-cols-7 justify-items-center gap-2">
-            <DateBox date={1} />
-            {[...Array(31)].map((_, i) =>
+            <DateBox date={1} gridColumnStart={monthYear.startDayOfMonth + 1} />
+            {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
               i > 0 ? <DateBox key={i} date={i + 1} /> : null
             )}
           </div>
