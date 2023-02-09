@@ -25,7 +25,7 @@ function AddRecordCategory({
 
   useEffect(() => {
     if (isModify) {
-      setChoosedCategoryId(recordCategory!)
+      setChoosedCategoryId(recordCategory)
     }
   }, [])
   return (
