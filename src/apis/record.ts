@@ -1,3 +1,4 @@
+import { parentCategoryID } from './../types/category'
 import { AxiosResponse } from 'axios'
 import {
   IMemoryRecordList,
@@ -9,8 +10,10 @@ import { baseInstance } from './instance'
 const MEMORY_RECORD_SIZE = 7
 const MEMORY_COMMENT_SIZE = 5
 
-export const getCategory = () => {
-  return baseInstance.get('/record/category')
+export const getCategory = async (categotyId: parentCategoryID) => {
+  return await baseInstance.get('/record/category', {
+    params: { parentRecordCategoryId: categotyId },
+  })
 }
 
 export const enrollRecord = async (data: FormData) => {

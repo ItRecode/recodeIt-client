@@ -4,8 +4,7 @@ import { TEXT_DETAILS } from '@assets/constant/constant'
 import Chip from '@components/Chip'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { formDataAtom, recordTypeAtom } from '@store/atom'
-import { getCategory } from '@apis/record'
-import { useQuery } from '@tanstack/react-query'
+
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 
 type CategorySource = {
@@ -43,42 +42,36 @@ function AddRecordCategory({
   const currentRecordType = useRecoilValue(recordTypeAtom)
   const CELEBRATES_ID = 3
   const CONSOLATES_ID = 7
-  const { data } = useQuery(['getCategory'], getCategory, {
-    retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  })
 
-  useEffect(() => {
-    setCategoryState(makeCategoryData(data?.data))
-    if (isModify && data && recordCategory !== undefined) {
-      const categoryData = makeCategoryData(data?.data)
-      if (categoryData !== null) {
-        const earlyModifyData = {
-          ...categoryData,
-          [currentRecordType]: categoryData[currentRecordType].map(
-            (item: CategorySource) => {
-              return {
-                ...item,
-                choosed: item.id === recordCategory,
-              }
-            }
-          ),
-        }
-        setModifyCategoryState(earlyModifyData)
-        setFormData({
-          ...formData,
-          selectedCategory:
-            earlyModifyData[currentRecordType][
-              currentRecordType === 'celebration'
-                ? recordCategory - CELEBRATES_ID
-                : recordCategory - CONSOLATES_ID
-            ]?.id,
-        })
-      }
-    }
-  }, [data, currentRecordType])
+  // useEffect(() => {
+  //   setCategoryState(makeCategoryData(data?.data))
+  //   if (isModify && data && recordCategory !== undefined) {
+  //     const categoryData = makeCategoryData(data?.data)
+  //     if (categoryData !== null) {
+  //       const earlyModifyData = {
+  //         ...categoryData,
+  //         [currentRecordType]: categoryData[currentRecordType].map(
+  //           (item: CategorySource) => {
+  //             return {
+  //               ...item,
+  //               choosed: item.id === recordCategory,
+  //             }
+  //           }
+  //         ),
+  //       }
+  //       setModifyCategoryState(earlyModifyData)
+  //       setFormData({
+  //         ...formData,
+  //         selectedCategory:
+  //           earlyModifyData[currentRecordType][
+  //             currentRecordType === 'celebration'
+  //               ? recordCategory - CELEBRATES_ID
+  //               : recordCategory - CONSOLATES_ID
+  //           ]?.id,
+  //       })
+  //     }
+  //   }
+  // }, [data, currentRecordType])
   //data를 만들면 > 이걸 categoryState에 저장 > 화면 리렌더링 > 레코드 타입이 생성됨 > 화면 다시리렌더링
 
   const makeCategoryData = (data: CategoryDatas) => {

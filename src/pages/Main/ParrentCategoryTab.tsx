@@ -2,23 +2,23 @@ import { CELEBRATION_ID, CONSOLATION_ID } from '@assets/constant/constant'
 import React, { Dispatch, SetStateAction } from 'react'
 import { parentCategoryID } from 'types/category'
 
-export default function TogetherTab({
-  categoryId,
-  setCategoryId,
+export default function ParrentCategoryTab({
+  parrentCategoryId,
+  setParrentCategoryId,
 }: {
-  categoryId: number
-  setCategoryId: Dispatch<SetStateAction<parentCategoryID>>
+  parrentCategoryId: number
+  setParrentCategoryId: Dispatch<SetStateAction<parentCategoryID>>
 }) {
   return (
     <>
-      <div className="flex h-full w-full">
+      <div className="flex h-full w-full pt-3.5">
         <button
           className="flex h-full w-1/2 border-collapse cursor-pointer items-center justify-center bg-transparent p-0"
-          onClick={() => setCategoryId(CELEBRATION_ID)}
+          onClick={() => setParrentCategoryId(CELEBRATION_ID)}
         >
           <p
             className={`h-full w-fit border-collapse text-lg font-semibold leading-[50px] ${
-              categoryId === CELEBRATION_ID
+              parrentCategoryId === CELEBRATION_ID
                 ? 'border-b-2 border-solid border-b-primary-2 text-primary-2'
                 : 'text-grey-6'
             }`}
@@ -28,11 +28,11 @@ export default function TogetherTab({
         </button>
         <button
           className="flex h-full w-1/2 cursor-pointer items-center justify-center bg-transparent p-0"
-          onClick={() => setCategoryId(CONSOLATION_ID)}
+          onClick={() => setParrentCategoryId(CONSOLATION_ID)}
         >
           <p
             className={`h-full w-fit text-lg font-semibold leading-[50px] ${
-              categoryId === CONSOLATION_ID
+              parrentCategoryId === CONSOLATION_ID
                 ? 'border-b-2 border-solid border-b-primary-2 text-primary-2'
                 : 'text-grey-6'
             }`}
