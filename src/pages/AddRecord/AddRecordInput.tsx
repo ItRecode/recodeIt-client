@@ -11,6 +11,7 @@ interface Props {
   setRecordTitle: Dispatch<SetStateAction<string>>
   parentCategoryId: parentCategoryID
   isModify?: boolean
+  modifyTitle: string
 }
 
 function AddRecordInput({
@@ -21,6 +22,7 @@ function AddRecordInput({
   setRecordTitle,
   parentCategoryId,
   isModify,
+  modifyTitle,
 }: Props) {
   const [isFocus, setIsFocus] = useState(false)
   const PLACEHOLDER_MESSAGE =
@@ -68,7 +70,7 @@ function AddRecordInput({
         placeholder={PLACEHOLDER_MESSAGE}
         onChange={(e) => handleChange(e)}
         type="text"
-        value={recordTitle}
+        value={modifyTitle ? modifyTitle : recordTitle}
       />
       <span className=" text-xs text-grey-4">{`${recordTitle.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
     </div>

@@ -4,6 +4,7 @@ import { parentCategoryID } from 'types/category'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from './Chip'
 import useSwipe from '@hooks/useSwipe'
+import { CELEBRATION_ID, CONSOLATION_ID } from '@assets/constant/constant'
 
 export default function Category({
   slider,
@@ -26,11 +27,15 @@ export default function Category({
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
 
   useEffect(() => {
-    setChoosedCategoryId(0)
+    if (slider) setChoosedCategoryId(0)
+    if (!slider) {
+      if (parentCategoryId === CELEBRATION_ID) setChoosedCategoryId(3)
+      if (parentCategoryId === CONSOLATION_ID) setChoosedCategoryId(7)
+    }
   }, [parentCategoryId])
 
   const handleClickChip = (id?: number) => {
-    if (isDragging) {
+    if (slider && isDragging) {
       setIsDragging(false)
       return
     }

@@ -10,6 +10,7 @@ type userProps = {
   setIsInputsHasValue: Dispatch<SetStateAction<IsInputsHasValueType>>
   isInputsHasValue: IsInputsHasValueType
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
+  modifyTitle: string
 }
 
 function AddRecordTextArea({
@@ -19,6 +20,7 @@ function AddRecordTextArea({
   setIsInputFocus,
   recordContent,
   setRecordContent,
+  modifyTitle,
 }: userProps) {
   const PLACEHOLDER_MESSAGE = {
     celebration: 'ex) 오늘은 나의 생일이에요! 모두 축하해주세요!',
@@ -26,9 +28,8 @@ function AddRecordTextArea({
   }
 
   useEffect(() => {
-    setRecordContent('')
     setRecordContent(
-      recordContent
+      modifyTitle
         ? recordContent.replaceAll(/(<br>|<br\/>|<br \/>)/g, '\r\n')
         : ''
     )
