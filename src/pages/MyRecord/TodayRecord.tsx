@@ -5,11 +5,10 @@ import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from '@components/Chip'
 import recordIcons from '@assets/record_icons'
 import { getFormattedDate } from '@utils/getFormattedDate'
-import MyRecordCalendar from './MyRecordCalendar'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, isLoading, refetch } = useMyRecord()
+  const { todayRecord, refetch } = useMyRecord()
   const background_color = `bg-${todayRecord?.colorName}`
   const RecordIcon = recordIcons[`${todayRecord?.iconName}`]
 
@@ -17,14 +16,9 @@ export default function TodayRecord() {
     refetch()
   }, [todayRecord])
 
-  if (isLoading) {
-    return <></>
-  }
-
   if (!todayRecord) {
     return (
       <>
-        <MyRecordCalendar />
         <div className="mt-10 mb-[49px] w-full text-center">
           <span className="text-xs leading-5">
             오늘 쓴 레코드가 없어요!
@@ -44,7 +38,6 @@ export default function TodayRecord() {
 
   return (
     <>
-      <MyRecordCalendar />
       <div className="mt-4 mb-10 w-full px-6">
         <div
           className="cursor-pointer text-xs"

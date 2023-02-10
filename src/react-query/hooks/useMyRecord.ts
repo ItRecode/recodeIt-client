@@ -2,9 +2,11 @@ import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { getRecordByDate } from '@apis/record'
 import { getFormattedDate } from '@utils/getFormattedDate'
+import { getMonthYearDetail } from '@pages/MyRecord/getCalendarDetail'
 
 export const useMyRecord = () => {
   const today = new Date()
+  const currentMonthYear = getMonthYearDetail(new Date(today))
 
   const {
     data: records = null,
@@ -27,5 +29,6 @@ export const useMyRecord = () => {
     todayRecord: records?.data.recordByDateDtos[0],
     isLoading,
     refetch,
+    monthYear: currentMonthYear,
   }
 }
