@@ -15,6 +15,8 @@ import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
 import NotRecord from '@pages/NotRecord/NotRecord'
 import ScrollTop from '@components/ScrollTop'
+import SearchRecord from '@pages/MyRecord/Search/SearchRecord'
+import CalendarRecord from '@pages/MyRecord/Calendar/CalendarRecord'
 
 const router = createBrowserRouter([
   {
@@ -74,6 +76,8 @@ const router = createBrowserRouter([
     path: '/notservice',
     element: <NotService />,
   },
+  { path: '/myrecord/search', element: <SearchRecord /> },
+  { path: '/myrecord/date', element: <CalendarRecord /> },
 ])
 
 export default router

@@ -16,7 +16,7 @@ export default function MyRecord() {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      navigate('/notservice')
+      navigate('/myrecord/search', { state: keyword })
     }
   }
 
@@ -34,7 +34,7 @@ export default function MyRecord() {
           <div className="relative flex items-center">
             <SearchIcon className="absolute left-[12px] h-[14px] w-[14px]" />
             <input
-              className="w-full rounded-[10px] bg-grey-2 py-[10px] pl-[38px] text-sm font-medium leading-[14px] outline-none placeholder:text-grey-5"
+              className="w-full rounded-[10px] bg-grey-2 py-[10px] pl-[38px] text-[14px] font-medium outline-none placeholder:text-grey-5"
               id="search-record-input"
               placeholder="레코드 제목을 입력하세요"
               onChange={(e) => setKeyword(e.target.value)}
