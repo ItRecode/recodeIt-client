@@ -16,7 +16,7 @@ export default function MyRecord() {
   const [keyword, setKeyword] = useState('')
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && keyword.length > 0) {
       navigate('/myrecord/search', { state: keyword })
     }
   }
