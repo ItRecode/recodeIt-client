@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
 import useClickOutside from '@hooks/useClickOutside'
-import DateBox from './DateBox'
-import { MonthYear } from './getCalendarDetail'
 import Button from '@components/Button'
+import { MonthYear } from './getCalendarDetail'
+import DateBox from './DateBox'
 
 interface CalendarProps {
   monthYear: MonthYear
