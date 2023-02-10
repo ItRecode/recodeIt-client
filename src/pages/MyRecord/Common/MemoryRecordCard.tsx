@@ -8,7 +8,7 @@ import { ReactComponent as PlusIcons } from '@assets/myRecordIcon/comment_plus.s
 import { useSetRecoilState } from 'recoil'
 import { scrollTarget } from '@store/atom'
 
-export default function MemoryRecordItem({
+export default function MemoryRecordCard({
   recordId,
   title,
   iconName,
