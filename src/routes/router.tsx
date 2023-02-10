@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
 import NavBar from '@components/Navbar'
 import Main from '@pages/Main/Main'
-import Rank from '@pages/Rank/Rank'
+import Collect from '@pages/Collect/Collect'
 import MyRecord from '@pages/MyRecord/MyRecord'
 import Login from '@pages/Login/Login'
 import AddRecord from '@pages/AddRecord/AddRecord'
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Main /> },
-      { path: 'rank', element: <Rank /> },
+      { path: 'collect', element: <Collect /> },
       {
         path: 'myrecord',
         element: (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ReactComponent as NotServiceIcon } from '@assets/umbrella_big.svg'
 
-export default function Rank() {
+export default function Collect() {
   return (
     <div className="flex h-full flex-col items-center justify-center px-5">
       <NotServiceIcon className=" mb-10" />
