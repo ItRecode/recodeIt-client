@@ -7,6 +7,7 @@ import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
 import Calendar from './Calendar'
+import SearchInput from './SearchInput'
 
 export default function MyRecord() {
   const navigate = useNavigate()
@@ -31,17 +32,7 @@ export default function MyRecord() {
           id="search-bar"
           className="sticky top-0 left-0 bg-grey-1 py-4 px-6"
         >
-          <div className="relative flex items-center">
-            <SearchIcon className="absolute left-[12px] h-[14px] w-[14px]" />
-            <input
-              className="w-full rounded-[10px] bg-grey-2 py-[10px] pl-[38px] text-[14px] font-medium outline-none placeholder:text-grey-5"
-              id="search-record-input"
-              placeholder="레코드 제목을 입력하세요"
-              onChange={(e) => setKeyword(e.target.value)}
-              onKeyUp={handleSearch}
-            />
-            <CloseIcon className="absolute right-[10px] cursor-pointer" />
-          </div>
+          <SearchInput onKeyUp={handleSearch} setKeyword={setKeyword} />
         </section>
         <section id="my-today-record">
           <div className="mt-3 px-6">
