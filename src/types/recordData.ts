@@ -28,8 +28,12 @@ export interface IMemoryRecord extends RecordCategory {
   memoryRecordComments: IRecordMemoryComment[]
 }
 
-export interface CategoryCard extends RecordCategory {
+export interface CategoryCard {
+  colorName: string
   commentCount: number
+  iconName: string
+  recordId: number
+  title: string
 }
 
 export interface IRecordMemoryComment {
