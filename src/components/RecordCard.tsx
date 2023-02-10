@@ -1,19 +1,30 @@
 import React, { Dispatch, SetStateAction } from 'react'
-import { CategoryCard } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 import { useCheckMobile } from '@hooks/useCheckMobile'
 import { useNavigate } from 'react-router-dom'
 
 interface CardProps {
-  item: CategoryCard
+  title: string
+  recordId: number
+  colorName: string
+  iconName: string
+  commentCount: number
   isDragging?: boolean
   setIsDragging?: Dispatch<SetStateAction<boolean>>
 }
 
-function Card({ item, isDragging, setIsDragging }: CardProps) {
+function RecordCard({
+  recordId,
+  title,
+  colorName,
+  iconName,
+  commentCount,
+  isDragging,
+  setIsDragging,
+}: CardProps) {
   const { isMobile } = useCheckMobile()
-  const colorName = `bg-${item.colorName}`
-  const RecordIcon = recordIcons[`${item.iconName}`]
+  const ColorName = `bg-${colorName}`
+  const RecordIcon = recordIcons[`${iconName}`]
   const navigate = useNavigate()
 
   const handleClickRecord = (recordId: number) => {
@@ -25,26 +36,26 @@ function Card({ item, isDragging, setIsDragging }: CardProps) {
   }
   return (
     <div
-      key={item.recordId}
-      className={`h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex cursor-pointer flex-col items-center justify-center`}
-      onClick={() => handleClickRecord(item.recordId)}
+      key={recordId}
+      className={`h-full w-[164px] shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
+      onClick={() => handleClickRecord(recordId)}
     >
       <RecordIcon width={100} height={100} />
       <div className="mt-4 text-sm font-semibold text-grey-10">
-        {!isMobile && item.title.length > 6 ? (
+        {!isMobile && title.length > 6 ? (
           <>
-            <p>{item.title.substring(0, 6)}</p>
+            <p>{title.substring(0, 6)}</p>
             <p className="text-center">
-              {item.title.substring(6).replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+              {title.substring(6).replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
             </p>
           </>
         ) : (
-          item.title
+          title
         )}
       </div>
-      <p className="mt-2.5 text-xs leading-none">댓글 {item.commentCount}개</p>
+      <p className="mt-2.5 text-xs leading-none">댓글 {commentCount}개</p>
     </div>
   )
 }
 
-export default Card
+export default RecordCard

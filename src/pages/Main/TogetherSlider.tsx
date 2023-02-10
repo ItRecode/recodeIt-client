@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { IRandomRecordData } from 'types/recordData'
 import useSwipe from '@hooks/useSwipe'
 import { parentCategoryID } from 'types/category'
-import Card from '@components/Card'
+import RecordCard from '@components/RecordCard'
 
 export default function TogetherSlider({
   randomRecordData,
@@ -32,11 +32,15 @@ export default function TogetherSlider({
       {randomRecordData !== null &&
         randomRecordData.map((item) => {
           return (
-            <Card
+            <RecordCard
               key={item.recordId}
               isDragging={isDragging}
               setIsDragging={setIsDragging}
-              item={item}
+              title={item.title}
+              colorName={item.colorName}
+              iconName={item.iconName}
+              commentCount={item.commentCount}
+              recordId={item.recordId}
             />
           )
         })}
