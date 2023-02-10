@@ -104,7 +104,33 @@ export default function AddRecord() {
   }, [parentCategoryId])
 
   useEffect(() => {
+    window.addEventListener('beforeunload', () => LocalStorage.clear())
+    return () => {
+      resetFormDataAtom()
+      window.removeEventListener('beforeunload', () => LocalStorage.clear())
+    }
+  }, [])
+
+  useEffect(() => {
     if (recordData !== undefined) {
+      const categoryName = recordData.categoryName
+      if (categoryName) {
+        if (
+          categoryName === '축하해주세요' ||
+          categoryName === '기념일이에요' ||
+          categoryName === '연애중이에요' ||
+          categoryName === '행복해요'
+        ) {
+          setParentCategoryId(1)
+        } else if (
+          categoryName === '위로해주세요' ||
+          categoryName === '공감이 필요해요' ||
+          categoryName === '내편이 되어주세요' ||
+          categoryName === '우울해요'
+        ) {
+          setParentCategoryId(2)
+        }
+      }
       setIsInputsHasValue({
         input: recordData.title,
         textArea: recordData.content,
@@ -232,6 +258,7 @@ export default function AddRecord() {
             />
             <AddRecordTitle isModify={isModify} title={'레코드 제목'} />
             <AddRecordInput
+              modifyTitle={recordData?.title}
               recordTitle={recordTitle}
               setRecordTitle={setRecordTitle}
               isInputsHasValue={isInputsHasValue}
@@ -242,6 +269,7 @@ export default function AddRecord() {
             />
             <AddRecordTitle title={'레코드 설명'} />
             <AddRecordTextArea
+              modifyTitle={recordData?.content}
               recordContent={recordContent}
               setRecordContent={setRecordContent}
               isInputsHasValue={isInputsHasValue}
@@ -277,11 +305,17 @@ export default function AddRecord() {
               <Button
                 property={'solid'}
                 disabled={
-                  !(isInputsHasValue.input && isInputsHasValue.textArea) ||
-                  isLoadingWhileSubmit
+                  isModify
+                    ? false
+                    : !(recordTitle.length > 0 && recordContent.length > 0) ||
+                      isLoadingWhileSubmit
                 }
                 type="submit"
-                active={isInputsHasValue.input && isInputsHasValue.textArea}
+                active={
+                  isModify
+                    ? true
+                    : recordTitle.length > 0 && recordContent.length > 0
+                }
                 loading={isLoadingWhileSubmit}
               >
                 {isModify ? '수정하기' : '레코드 추가하기'}

@@ -14,7 +14,7 @@ function AddRecordCategory({
   isModify: boolean
 }) {
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const [choosedCategoryId, setChoosedCategoryId] = useState(0)
+  const [choosedCategoryId, setChoosedCategoryId] = useState(3)
 
   useEffect(() => {
     setFormData({
@@ -34,15 +34,13 @@ function AddRecordCategory({
         isModify && 'pointer-events-none'
       } mt-6 mb-10 flex flex-wrap gap-x-2 gap-y-4`}
     >
-      {recordCategory && (
-        <Category
-          isModify={isModify}
-          slider={false}
-          parentCategoryId={parentCategoryId}
-          choosedCategoryId={choosedCategoryId}
-          setChoosedCategoryId={setChoosedCategoryId}
-        />
-      )}
+      <Category
+        isModify={isModify}
+        slider={false}
+        parentCategoryId={parentCategoryId}
+        choosedCategoryId={recordCategory ? recordCategory : choosedCategoryId}
+        setChoosedCategoryId={setChoosedCategoryId}
+      />
     </div>
   )
 }
