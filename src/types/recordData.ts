@@ -17,12 +17,23 @@ export interface IMemoryRecordList {
   totalPage: number
 }
 
-export interface IMemoryRecord {
+interface RecordCategory {
   recordId: number
   title: string
   iconName: string
   iconColor: string
+}
+
+export interface IMemoryRecord extends RecordCategory {
   memoryRecordComments: IRecordMemoryComment[]
+}
+
+export interface CategoryCard {
+  colorName: string
+  commentCount: number
+  iconName: string
+  recordId: number
+  title: string
 }
 
 export interface IRecordMemoryComment {
