@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
-import { ReactComponent as SearchIcon } from '@assets/myRecordIcon/search.svg'
 import { ReactComponent as CalendarIcon } from '@assets/myRecordIcon/calendar.svg'
 import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
-import Calendar from './Calendar'
-import SearchInput from './SearchInput'
+import SearchInput from './Common/SearchInput'
+import Calendar from './Calendar/Calendar'
 
 export default function MyRecord() {
   const navigate = useNavigate()

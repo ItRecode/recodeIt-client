@@ -23,7 +23,10 @@ export default function SearchInput({
         onChange={(e) => setKeyword(e.target.value)}
         onKeyUp={onKeyUp}
       />
-      <CloseIcon className="absolute right-[10px] cursor-pointer" />
+      <CloseIcon
+        className="absolute right-[10px] cursor-pointer"
+        onClick={() => setKeyword('')}
+      />
     </div>
   )
 }
