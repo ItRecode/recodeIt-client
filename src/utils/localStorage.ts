@@ -10,4 +10,8 @@ export const LocalStorage = {
   remove(key: string) {
     localStorage.removeItem(key)
   },
+
+  clear() {
+    localStorage.clear()
+  },
 }

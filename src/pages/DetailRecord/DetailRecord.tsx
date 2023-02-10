@@ -4,7 +4,7 @@ import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
@@ -60,6 +60,7 @@ export default function DetailRecord() {
   const { recordIdParams } = useParams()
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
@@ -70,7 +71,8 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
-  const POST_ID = window.location.href.split('/')[4]
+  const POST_ID = location.pathname.substring(8)
+
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {

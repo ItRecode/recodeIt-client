@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as Check } from '@assets/check.svg'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { formDataAtom, recordTypeAtom } from '@store/atom'
+import { useRecoilState } from 'recoil'
+import { formDataAtom } from '@store/atom'
 import {
   ADD_RECORD_COLORS,
   colorSourceType,
 } from '@assets/constant/RecordColors'
+import { parentCategoryID } from 'types/category'
 
 interface Props {
   recordColor: string
+  parentCategoryId: parentCategoryID
 }
 
-function AddRecordColor({ recordColor }: Props) {
+function AddRecordColor({ recordColor, parentCategoryId }: Props) {
   const [colors, setColors] = useState<colorSourceType[]>(ADD_RECORD_COLORS)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const currentRecordType = useRecoilValue(recordTypeAtom)
 
   useEffect(() => {
     setColors(
@@ -33,7 +34,7 @@ function AddRecordColor({ recordColor }: Props) {
         })
       )
     }
-  }, [currentRecordType])
+  }, [parentCategoryId])
 
   const handleChooseCurrentColor = (index: number): void => {
     const changeCurrent = colors.map((color) => ({

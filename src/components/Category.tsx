@@ -7,16 +7,18 @@ import useSwipe from '@hooks/useSwipe'
 
 export default function Category({
   slider,
-  parrentCategoryId,
+  parentCategoryId,
   choosedCategoryId,
   setChoosedCategoryId,
+  isModify = false,
 }: {
   slider: boolean
-  parrentCategoryId: parentCategoryID
+  parentCategoryId: parentCategoryID
   choosedCategoryId: number
   setChoosedCategoryId: Dispatch<SetStateAction<number>>
+  isModify?: boolean
 }) {
-  const { categoryData } = useGetCategory(parrentCategoryId)
+  const { categoryData } = useGetCategory(parentCategoryId)
 
   const dragRef = useRef<HTMLDivElement | null>(
     null
@@ -25,7 +27,7 @@ export default function Category({
 
   useEffect(() => {
     setChoosedCategoryId(0)
-  }, [parrentCategoryId])
+  }, [parentCategoryId])
 
   const handleClickChip = (id?: number) => {
     if (isDragging) {
@@ -48,13 +50,15 @@ export default function Category({
         handleMouseDown(e)
       }}
     >
-      <Chip
-        icon={null}
-        active={choosedCategoryId === 0}
-        message="전체"
-        type={'button'}
-        onClick={() => handleClickChip()}
-      />
+      {slider && (
+        <Chip
+          icon={null}
+          active={choosedCategoryId === 0}
+          message="전체"
+          type={'button'}
+          onClick={() => handleClickChip()}
+        />
+      )}
       {categoryData &&
         categoryData.map((item) => (
           <Chip
@@ -64,6 +68,7 @@ export default function Category({
             message={item.name}
             type={'button'}
             onClick={() => handleClickChip(item.id)}
+            isModify={isModify}
           />
         ))}
     </div>

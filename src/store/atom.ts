@@ -1,5 +1,3 @@
-import { TEXT_DETAILS } from '@assets/constant/constant'
-import { IconType } from '@pages/AddRecord/AddRecordIcon'
 import { atom } from 'recoil'
 
 export const formDataAtom = atom({
@@ -22,11 +20,6 @@ export const DetailPageInputMode = atom<{
     recordId: '',
     parentId: '',
   },
-})
-
-export const recordTypeAtom = atom<keyof IconType>({
-  key: 'recordType',
-  default: TEXT_DETAILS.CELEBRATION,
 })
 
 export const nestedReplyState = atom({

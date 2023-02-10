@@ -1,13 +1,13 @@
 import { CELEBRATION_ID } from '@assets/constant/constant'
+import ParentCategoryTab from '@components/ParrentCategoryTab'
 import React, { useState } from 'react'
 import { parentCategoryID } from 'types/category'
 import MixRecord from './MixRecord'
 import Ranking from './Ranking'
 import Together from './Together'
-import ParrentCategoryTab from './ParrentCategoryTab'
 
 export default function Main() {
-  const [parrentCategoryId, setParrentCategoryId] =
+  const [parentCategoryId, setParentCategoryId] =
     useState<parentCategoryID>(CELEBRATION_ID)
   return (
     <>
@@ -15,17 +15,17 @@ export default function Main() {
         <section id="mixRecord">
           <MixRecord />
         </section>
-        <section id="tab">
-          <ParrentCategoryTab
-            parrentCategoryId={parrentCategoryId}
-            setParrentCategoryId={setParrentCategoryId}
+        <section id="tab" className="pt-3.5">
+          <ParentCategoryTab
+            parentCategoryId={parentCategoryId}
+            setParentCategoryId={setParentCategoryId}
           />
         </section>
         <section id="Together">
-          <Together parrentCategoryId={parrentCategoryId} />
+          <Together parentCategoryId={parentCategoryId} />
         </section>
         <section id="Ranking">
-          <Ranking parrentCategoryId={parrentCategoryId} />
+          <Ranking parentCategoryId={parentCategoryId} />
         </section>
       </div>
       <div className="h-[150px] w-full" />

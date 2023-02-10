@@ -9,9 +9,9 @@ import { IRandomRecordData } from 'types/recordData'
 import TogetherSlider from './TogetherSlider'
 
 export default function Together({
-  parrentCategoryId,
+  parentCategoryId,
 }: {
-  parrentCategoryId: parentCategoryID
+  parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
 
@@ -20,8 +20,8 @@ export default function Together({
   >(null)
 
   const { data, isLoading, isSuccess } = useQuery(
-    ['randomRecordData', parrentCategoryId],
-    () => getRandomRecordData(parrentCategoryId),
+    ['randomRecordData', parentCategoryId],
+    () => getRandomRecordData(parentCategoryId),
     {
       retry: false,
       refetchOnMount: false,
@@ -44,7 +44,7 @@ export default function Together({
         className="mt-10 mb-6 flex w-full justify-between px-6"
       >
         <p className="text-[24px] font-semibold leading-none">
-          함께 {parrentCategoryId === CELEBRATION_ID ? '축하' : '위로'}해보세요!
+          함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}해보세요!
         </p>
         <button
           className="cursor-pointer bg-transparent text-grey-6"
@@ -62,7 +62,7 @@ export default function Together({
         ) : (
           <TogetherSlider
             randomRecordData={randomRecordData}
-            parrentCategoryId={parrentCategoryId}
+            parentCategoryId={parentCategoryId}
           />
         )}
       </section>

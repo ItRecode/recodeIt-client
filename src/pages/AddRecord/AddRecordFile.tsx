@@ -8,9 +8,8 @@ import React, {
 import Camera from '@assets/camera.svg'
 import { ReactComponent as DeleteIcon } from '@assets/deleteIcon.svg'
 import Toast from '@components/Toast'
-import { useRecoilValue } from 'recoil'
-import { recordTypeAtom } from '@store/atom'
 import { checkFileSize } from '@utils/fileSize'
+import { parentCategoryID } from 'types/category'
 
 interface Props {
   setFiles: Dispatch<SetStateAction<File[]>>
@@ -19,6 +18,7 @@ interface Props {
   isModify: boolean
   toDeleteFiles: string[]
   setToDeleteFiles: Dispatch<SetStateAction<string[]>>
+  parentCategoryId: parentCategoryID
 }
 
 function AddRecordFile({
@@ -28,13 +28,14 @@ function AddRecordFile({
   isModify,
   toDeleteFiles,
   setToDeleteFiles,
+  parentCategoryId,
 }: Props) {
   const [currentImg, setCurrentImg] = useState<string[]>([])
   const [isToast, setIsToast] = useState(false)
   const [toastType, setToastType] = useState<'fileSize' | 'maxFile' | null>(
     null
   )
-  const currentRecordType = useRecoilValue(recordTypeAtom)
+
   const MAX_FILE = 3
   const setToast = () => {
     setIsToast(true)
@@ -91,7 +92,7 @@ function AddRecordFile({
     if (recordFiles) {
       setCurrentImg(recordFiles)
     }
-  }, [currentRecordType])
+  }, [parentCategoryId])
 
   const handleDelete = (toDeleteIndex: number): void => {
     setCurrentImg(filterArray(currentImg, toDeleteIndex))
