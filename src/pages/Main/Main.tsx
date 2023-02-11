@@ -11,23 +11,21 @@ export default function Main() {
     useState<parentCategoryID>(CELEBRATION_ID)
   return (
     <>
-      <div className="h-full w-full">
-        <section id="mixRecord">
-          <MixRecord />
-        </section>
-        <section id="tab" className="pt-3.5">
-          <ParentCategoryTab
-            parentCategoryId={parentCategoryId}
-            setParentCategoryId={setParentCategoryId}
-          />
-        </section>
-        <section id="Together">
-          <Together parentCategoryId={parentCategoryId} />
-        </section>
-        <section id="Ranking">
-          <Ranking parentCategoryId={parentCategoryId} />
-        </section>
-      </div>
+      <section id="mixRecord">
+        <MixRecord />
+      </section>
+      <section id="tab" className="pt-3.5">
+        <ParentCategoryTab
+          parentCategoryId={parentCategoryId}
+          setParentCategoryId={setParentCategoryId}
+        />
+      </section>
+      <section id="Together">
+        <Together parentCategoryId={parentCategoryId} />
+      </section>
+      <section id="Ranking">
+        <Ranking parentCategoryId={parentCategoryId} />
+      </section>
       <div className="h-[150px] w-full" />
     </>
   )
