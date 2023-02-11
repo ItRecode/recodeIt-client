@@ -3,4 +3,5 @@ export const QUERY_KEYS = {
   nickname: 'nickname',
   myRecord: 'myRecord',
   memoryRecord: 'memoryRecord',
+  searchRecord: 'searchRecord',
 }
