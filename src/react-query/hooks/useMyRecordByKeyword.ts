@@ -11,7 +11,6 @@ export const useMyRecordByKeyword = (stateKeyword: string) => {
     isLoading,
     hasNextPage,
     fetchNextPage,
-    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.searchRecord, keywordWithQuery],
     queryFn: async ({ pageParam = 0 }) =>
@@ -32,6 +31,5 @@ export const useMyRecordByKeyword = (stateKeyword: string) => {
     isLoading,
     hasNextPage,
     fetchNextPage,
-    isFetchingNextPage,
   }
 }
