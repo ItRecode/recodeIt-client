@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMyRecord } from '@react-query/hooks/useMyRecord'
 import MyRecordCard from './Common/MyRecordCard'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, refetch } = useMyRecord()
-
-  useEffect(() => {
-    refetch()
-  }, [todayRecord])
+  const { todayRecord } = useMyRecord()
 
   if (!todayRecord) {
     return (
