@@ -19,6 +19,7 @@ export default function SearchInput({
         className="w-full rounded-[10px] bg-grey-2 py-[10px] pl-[38px] text-[14px] font-medium outline-none placeholder:text-grey-5"
         id="search-record-input"
         placeholder="레코드 제목을 입력하세요"
+        autoComplete="off"
         onChange={(e) => setKeyword(e.target.value)}
         onKeyUp={onKeyUp}
         {...props}
