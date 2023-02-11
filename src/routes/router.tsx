@@ -31,11 +31,32 @@ const router = createBrowserRouter([
       { path: 'rank', element: <Rank /> },
       {
         path: 'myrecord',
-        element: (
-          <ProtectedRoute route={'/myrecord'}>
-            <MyRecord />
-          </ProtectedRoute>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <ProtectedRoute route={'/myrecord'}>
+                <MyRecord />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'search',
+            element: (
+              <ProtectedRoute route={'/myrecord/search'}>
+                <SearchRecord />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'date',
+            element: (
+              <ProtectedRoute route={'/myrecord/date'}>
+                <CalendarRecord />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: 'setting',
@@ -76,8 +97,6 @@ const router = createBrowserRouter([
     path: '/notservice',
     element: <NotService />,
   },
-  { path: '/myrecord/search', element: <SearchRecord /> },
-  { path: '/myrecord/date', element: <CalendarRecord /> },
 ])
 
 export default router
