@@ -5,7 +5,7 @@ import { getFormattedDate } from '@utils/getFormattedDate'
 import { getMonthYearDetail } from '@pages/MyRecord/Calendar/getCalendarDetail'
 import { useState } from 'react'
 
-export const useRecordByDate = () => {
+export const useMyRecordByDate = () => {
   const [todayRecordId, setTodayRecordId] = useState<number | null>(null)
   const today = new Date()
   const currentMonthYear = getMonthYearDetail(new Date(today))
