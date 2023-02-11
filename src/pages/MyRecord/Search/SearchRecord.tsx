@@ -7,6 +7,8 @@ import SearchInput from '../Common/SearchInput'
 import MyRecordCard from '../Common/MyRecordCard'
 import useDebounce from '@hooks/useDebounce'
 
+const KEYWORD_MAX_LENGTH = 12
+
 export default function SearchRecord() {
   const { keyword: keywordInStore } = useRecoilValue(searchedKeyword)
   const resetSearchedKeyword = useResetRecoilState(searchedKeyword)
@@ -40,6 +42,7 @@ export default function SearchRecord() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           setKeyword={setKeyword}
+          maxLength={KEYWORD_MAX_LENGTH}
         />
       </section>
       <section id="my-today-record">
