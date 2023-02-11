@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { useMyRecordByKeyword } from '@react-query/hooks/useMyRecordByKeyword'
 import { searchedKeyword } from '@store/myRecordAtom'
 import BackButton from '@components/BackButton'
@@ -9,6 +9,7 @@ import useDebounce from '@hooks/useDebounce'
 
 export default function SearchRecord() {
   const { keyword: keywordInStore } = useRecoilValue(searchedKeyword)
+  const resetSearchedKeyword = useResetRecoilState(searchedKeyword)
   const [keyword, setKeyword] = useState(keywordInStore || '')
   const { myRecordByKeyword, setKeywordWithQuery } =
     useMyRecordByKeyword(keywordInStore)
@@ -17,6 +18,9 @@ export default function SearchRecord() {
     () => {
       if (keyword.length > 0) {
         setKeywordWithQuery(keyword)
+      } else {
+        setKeywordWithQuery('')
+        resetSearchedKeyword
       }
     },
     300,
