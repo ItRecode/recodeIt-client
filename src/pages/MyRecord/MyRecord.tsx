@@ -34,7 +34,11 @@ export default function MyRecord() {
           id="search-bar"
           className="sticky top-0 left-0 bg-grey-1 py-4 px-6"
         >
-          <SearchInput onKeyUp={handleSearch} setKeyword={setKeyword} />
+          <SearchInput
+            value={keyword}
+            onKeyUp={handleSearch}
+            setKeyword={setKeyword}
+          />
         </section>
         <section id="my-today-record">
           <div className="mt-3 px-6">
