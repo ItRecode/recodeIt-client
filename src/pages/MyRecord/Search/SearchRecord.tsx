@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { useMyRecordByKeyword } from '@react-query/hooks/useMyRecordByKeyword'
+import { searchedKeyword } from '@store/myRecordAtom'
 import BackButton from '@components/BackButton'
 import SearchInput from '../Common/SearchInput'
 import MyRecordCard from '../Common/MyRecordCard'
 import useDebounce from '@hooks/useDebounce'
-import { useMyRecordByKeyword } from '@react-query/hooks/useMyRecordByKeyword'
 
 export default function SearchRecord() {
-  const { state } = useLocation() // 전역에 저장해놓기 => 검색어 없으면 메인으로 돌리기..?
-  const [keyword, setKeyword] = useState(state || '')
-  const { myRecordByKeyword, setKeywordWithQuery } = useMyRecordByKeyword(state)
+  const { keyword: keywordInStore } = useRecoilValue(searchedKeyword)
+  const [keyword, setKeyword] = useState(keywordInStore || '')
+  const { myRecordByKeyword, setKeywordWithQuery } =
+    useMyRecordByKeyword(keywordInStore)
 
   useDebounce(
     () => {
@@ -26,7 +28,10 @@ export default function SearchRecord() {
       <section id="route-backIcon-button" className="ml-[18px] mt-4">
         <BackButton />
       </section>
-      <section id="search-bar" className="mt-2 bg-grey-1 py-4 px-6">
+      <section
+        id="search-bar"
+        className="sticky top-0 left-0 mt-2 bg-grey-1 py-4 px-6"
+      >
         <SearchInput
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
