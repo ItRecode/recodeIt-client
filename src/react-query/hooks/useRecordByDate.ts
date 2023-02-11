@@ -5,13 +5,13 @@ import { getFormattedDate } from '@utils/getFormattedDate'
 import { getMonthYearDetail } from '@pages/MyRecord/Calendar/getCalendarDetail'
 import { useState } from 'react'
 
-export const useMyRecord = () => {
+export const useRecordByDate = () => {
   const [todayRecordId, setTodayRecordId] = useState<number | null>(null)
   const today = new Date()
   const currentMonthYear = getMonthYearDetail(new Date(today))
 
   const { data: records = null, isLoading } = useQuery(
-    [QUERY_KEYS.todayRecord, todayRecordId],
+    [QUERY_KEYS.myRecord, todayRecordId],
     async () =>
       await getRecordByDate({
         date: getFormattedDate(today, 'hyphen'),

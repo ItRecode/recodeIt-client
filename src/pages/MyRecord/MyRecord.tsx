@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as CalendarIcon } from '@assets/myRecordIcon/calendar.svg'
-import { useMyRecord } from '@react-query/hooks/useMyRecord'
+import { useRecordByDate } from '@react-query/hooks/useRecordByDate'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
 import SearchInput from './Common/SearchInput'
@@ -9,7 +9,7 @@ import Calendar from './Calendar/Calendar'
 
 export default function MyRecord() {
   const navigate = useNavigate()
-  const { isLoading, monthYear } = useMyRecord()
+  const { isLoading, monthYear } = useRecordByDate()
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const [keyword, setKeyword] = useState('')
 
