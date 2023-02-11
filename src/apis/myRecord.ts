@@ -2,9 +2,11 @@ import { AxiosResponse } from 'axios'
 import { baseInstance } from './instance'
 import {
   IMemoryRecordList,
+  IMyRecordByDateList,
+  IMyRecordByKeywordList,
+  IMyRecordByKeywordRequestParam,
   IMyRecordRequestParam,
-  IRecordByDateList,
-} from 'types/recordData'
+} from 'types/myRecord'
 
 const MEMORY_RECORD_SIZE = 7
 const MEMORY_COMMENT_SIZE = 5
@@ -25,7 +27,7 @@ export const getRecordByDate = ({
   date,
   page,
   size,
-}: IMyRecordRequestParam): Promise<AxiosResponse<IRecordByDateList>> => {
+}: IMyRecordRequestParam): Promise<AxiosResponse<IMyRecordByDateList>> => {
   return baseInstance.get(`/record`, {
     params: {
       date,
@@ -35,8 +37,14 @@ export const getRecordByDate = ({
   })
 }
 
-export const getSearchRecord = ({ keyword, page, size }:) => {
-  return baseInstance.get(`/record`, {
+export const getSearchRecord = ({
+  keyword,
+  page,
+  size,
+}: IMyRecordByKeywordRequestParam): Promise<
+  AxiosResponse<IMyRecordByKeywordList>
+> => {
+  return baseInstance.get(`/record/search`, {
     params: {
       searchKeyword: keyword,
       page,
