@@ -23,13 +23,6 @@ export default function SearchRecord() {
     fetchNextPage,
   } = useMyRecordByKeyword(keywordInStore)
 
-  const scrollEndRef = useIntersect(async (entry, observer) => {
-    observer.unobserve(entry.target)
-    if (hasNextPage && !isLoading) {
-      fetchNextPage()
-    }
-  })
-
   useDebounce(
     () => {
       if (keyword.length > 0) {
@@ -42,6 +35,13 @@ export default function SearchRecord() {
     300,
     [keyword]
   )
+
+  const scrollEndRef = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target)
+    if (hasNextPage && !isLoading) {
+      fetchNextPage()
+    }
+  })
 
   return (
     <>
