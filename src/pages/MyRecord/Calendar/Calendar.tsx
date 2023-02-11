@@ -1,9 +1,12 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
+import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
+import { ReactComponent as ArrowUp } from '@assets/myRecordIcon/arrow_up.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import Button from '@components/Button'
 import { MonthYear } from './getCalendarDetail'
 import DateBox from './DateBox'
+import CalendarMonthYear from './CalendarMonthYear'
 
 interface CalendarProps {
   monthYear: MonthYear
@@ -16,6 +19,7 @@ export default function Calendar({
   setIsOpenCalendar,
   monthYear,
 }: CalendarProps) {
+  const [isClickMonthYear, setIsClickMonthYear] = useState(false)
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
   })
@@ -37,31 +41,45 @@ export default function Calendar({
               onClick={() => setIsOpenCalendar(false)}
             />
           </div>
-          <div className="pt-10">
-            {monthYear.year}년 {monthYear.month + 1}월
+          <div
+            className="flex cursor-pointer items-center pt-10"
+            onClick={() => setIsClickMonthYear(!isClickMonthYear)}
+          >
+            <span className="mr-[10px] text-base font-medium">
+              {monthYear.year}년 {monthYear.month + 1}월
+            </span>
+            {isClickMonthYear ? <ArrowUp /> : <ArrowDown />}
           </div>
-          <div className="mt-6 grid grid-cols-7 justify-items-center gap-2">
-            {WEEK_TO_KR.map((day, i) => (
-              <p key={`${day}-${i}`} className="text-xs text-grey-6">
-                {day}
-              </p>
-            ))}
-          </div>
-          <div className="mt-2 grid grid-cols-7 justify-items-center gap-2">
-            <DateBox date={1} gridColumnStart={monthYear.startDayOfMonth + 1} />
-            {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
-              i > 0 ? <DateBox key={i} date={i + 1} /> : null
-            )}
-          </div>
-          <div className="mt-8 w-full">
-            <Button
-              aria-label="select-record-date-button"
-              property={'solid'}
-              active={false}
-            >
-              선택
-            </Button>
-          </div>
+          {!isClickMonthYear && (
+            <>
+              <div className="mt-6 grid grid-cols-7 justify-items-center gap-2">
+                {WEEK_TO_KR.map((day, i) => (
+                  <p key={`${day}-${i}`} className="text-xs text-grey-6">
+                    {day}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-2 grid grid-cols-7 justify-items-center gap-2">
+                <DateBox
+                  date={1}
+                  gridColumnStart={monthYear.startDayOfMonth + 1}
+                />
+                {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
+                  i > 0 ? <DateBox key={i} date={i + 1} /> : null
+                )}
+              </div>
+              <div className="mt-8 w-full">
+                <Button
+                  aria-label="select-record-date-button"
+                  property={'solid'}
+                  active={false}
+                >
+                  선택
+                </Button>
+              </div>
+            </>
+          )}
+          {isClickMonthYear && <CalendarMonthYear />}
         </div>
       </div>
     </div>
