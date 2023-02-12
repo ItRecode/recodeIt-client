@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ReactComponent as Home_icon } from '@assets/nav_icons/home_icon.svg'
-import { ReactComponent as Rank_icon } from '@assets/nav_icons/rank_icon.svg'
+import { ReactComponent as Rank_icon } from '@assets/nav_icons/collect_icon.svg'
 import { ReactComponent as MyRecord_icon } from '@assets/nav_icons/myrecord_icon.svg'
 import { ReactComponent as Setting_icon } from '@assets/nav_icons/setting_icon.svg'
 
@@ -45,7 +45,7 @@ export default function NavbarItem({
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}
           />
         )
-      case '/rank':
+      case '/collect':
         return (
           <Rank_icon
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}

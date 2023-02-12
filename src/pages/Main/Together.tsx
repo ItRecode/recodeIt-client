@@ -48,7 +48,7 @@ export default function Together({
         </p>
         <button
           className="cursor-pointer bg-transparent text-grey-6"
-          onClick={() => navigate('/rank')}
+          onClick={() => navigate('/collect')}
         >
           전체보기
         </button>
