@@ -43,12 +43,7 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
     )
   }
 
-  if (
-    !user &&
-    (route === '/myrecord' ||
-      route === '/myrecord/search' ||
-      route === 'myrecord/date')
-  ) {
+  if (!user && route?.indexOf('myrecord')) {
     return (
       <Alert
         visible={true}
