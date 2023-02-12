@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { getMemoryRecord } from '@apis/record'
+import { getMemoryRecord } from '@apis/myRecord'
 import { useState } from 'react'
 
 export const useMemoryRecord = () => {

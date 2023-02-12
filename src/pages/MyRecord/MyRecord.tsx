@@ -1,21 +1,25 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
 import { ReactComponent as CalendarIcon } from '@assets/myRecordIcon/calendar.svg'
-import { useRecordByDate } from '@react-query/hooks/useRecordByDate'
+import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
 import SearchInput from './Common/SearchInput'
 import Calendar from './Calendar/Calendar'
+import { searchedKeyword } from '@store/myRecordAtom'
 
 export default function MyRecord() {
   const navigate = useNavigate()
-  const { isLoading, monthYear } = useRecordByDate()
+  const { isLoading, monthYear } = useMyRecordByDate()
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const [keyword, setKeyword] = useState('')
+  const setSearchedKeyword = useSetRecoilState(searchedKeyword)
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && keyword.length > 0) {
-      navigate('/myrecord/search', { state: keyword })
+      navigate('/myrecord/search')
+      setSearchedKeyword({ keyword })
     }
   }
 
@@ -30,7 +34,11 @@ export default function MyRecord() {
           id="search-bar"
           className="sticky top-0 left-0 bg-grey-1 py-4 px-6"
         >
-          <SearchInput onKeyUp={handleSearch} setKeyword={setKeyword} />
+          <SearchInput
+            value={keyword}
+            onKeyUp={handleSearch}
+            setKeyword={setKeyword}
+          />
         </section>
         <section id="my-today-record">
           <div className="mt-3 px-6">

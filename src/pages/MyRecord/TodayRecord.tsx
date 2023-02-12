@@ -1,11 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRecordByDate } from '@react-query/hooks/useRecordByDate'
+import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
 import MyRecordCard from './Common/MyRecordCard'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord } = useRecordByDate()
+  const { todayRecord } = useMyRecordByDate()
 
   if (!todayRecord) {
     return (

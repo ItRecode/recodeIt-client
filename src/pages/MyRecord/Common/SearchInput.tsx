@@ -8,9 +8,9 @@ interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export default function SearchInput({
-  value,
   onKeyUp,
   setKeyword,
+  ...props
 }: SearchInputProps) {
   return (
     <div className="relative flex w-full items-center">
@@ -18,10 +18,11 @@ export default function SearchInput({
       <input
         className="w-full rounded-[10px] bg-grey-2 py-[10px] pl-[38px] text-[14px] font-medium outline-none placeholder:text-grey-5"
         id="search-record-input"
-        value={value}
         placeholder="레코드 제목을 입력하세요"
+        autoComplete="off"
         onChange={(e) => setKeyword(e.target.value)}
         onKeyUp={onKeyUp}
+        {...props}
       />
       <CloseIcon
         className="absolute right-[10px] cursor-pointer"

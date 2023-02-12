@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IMemoryRecord } from 'types/recordData'
+import { IMemoryRecord } from 'types/myRecord'
 
 import useSwipe from '@hooks/useSwipe'
 import recordIcons from '@assets/record_icons'
