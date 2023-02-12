@@ -80,3 +80,10 @@ export const getRandomRecordData = async (recordCategoryId: 1 | 2) => {
 export const getMixRecordData = async () => {
   return await baseInstance.get('/record/mix')
 }
+
+export const getRecentRecordData = async (page: number) => {
+  const MAX_RECORD_NUMBER = 10
+  return await baseInstance.get('/record/recent', {
+    params: { page, size: MAX_RECORD_NUMBER },
+  })
+}
