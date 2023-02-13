@@ -31,7 +31,7 @@ import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
-} from '@store/atom'
+} from '@store/detailPageAtom'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)

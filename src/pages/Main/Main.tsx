@@ -1,14 +1,16 @@
-import { CELEBRATION_ID } from '@assets/constant/constant'
 import ParentCategoryTab from '@components/ParrentCategoryTab'
-import React, { useState } from 'react'
+import { parentCategoryIdAtom } from '@store/mainPageAtom'
+import React from 'react'
+import { useRecoilState } from 'recoil'
 import { parentCategoryID } from 'types/category'
 import MixRecord from './MixRecord'
 import Ranking from './Ranking'
 import Together from './Together'
 
 export default function Main() {
-  const [parentCategoryId, setParentCategoryId] =
-    useState<parentCategoryID>(CELEBRATION_ID)
+  const [parentCategoryID, setParentCategoryID] =
+    useRecoilState<parentCategoryID>(parentCategoryIdAtom)
+
   return (
     <>
       <section id="mixRecord">
@@ -16,15 +18,15 @@ export default function Main() {
       </section>
       <section id="tab" className="pt-3.5">
         <ParentCategoryTab
-          parentCategoryId={parentCategoryId}
-          setParentCategoryId={setParentCategoryId}
+          parentCategoryId={parentCategoryID}
+          setParentCategoryId={setParentCategoryID}
         />
       </section>
       <section id="Together">
-        <Together parentCategoryId={parentCategoryId} />
+        <Together parentCategoryId={parentCategoryID} />
       </section>
       <section id="Ranking">
-        <Ranking parentCategoryId={parentCategoryId} />
+        <Ranking parentCategoryId={parentCategoryID} />
       </section>
       <div className="h-[150px] w-full" />
     </>
