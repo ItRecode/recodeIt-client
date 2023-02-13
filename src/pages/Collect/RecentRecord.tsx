@@ -1,16 +1,37 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Front } from '@assets/front.svg'
 import { ReactComponent as Reset } from '@assets/collect_page_icon/reset.svg'
+import { ReactComponent as ResetDisabled } from '@assets/collect_page_icon/reset_disabled.svg'
 import Spinner from '@components/Spinner'
 import RecordCard from '@components/RecordCard'
 import { CategoryCard } from 'types/recordData'
 import { useRecentRecord } from '@react-query/hooks/useRecentRecord'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { getCurrentTime } from '@utils/getCurrentTime'
+import { LocalStorage } from '@utils/localStorage'
 
 function RecentRecord() {
   const { recentRecord, isLoading, hasNextPage, fetchNextPage, reset } =
     useRecentRecord()
+  const [timer, setTimer] = useState(0)
+  const interval: { current: NodeJS.Timeout | undefined } = useRef()
+  useEffect(() => {
+    const getTimer = LocalStorage.get('timer')
+    const RESET_TIME = 180
+    const gap =
+      getTimer !== null &&
+      Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
+    if (gap > RESET_TIME - 1) {
+      setTimer(0)
+      return () => clearInterval(interval.current)
+    }
+    if (gap !== false) {
+      interval.current = setInterval(() => {
+        setTimer(gap + 1)
+      }, 1000)
+      return () => clearInterval(interval.current)
+    }
+  }, [timer])
 
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
 
@@ -27,6 +48,8 @@ function RecentRecord() {
 
   const handleReset = () => {
     reset()
+    LocalStorage.set('timer', JSON.stringify(new Date().getTime()))
+    setTimer(180)
     if (recentRef.current !== null) {
       recentRef.current.scrollIntoView({
         behavior: 'smooth',
@@ -52,7 +75,11 @@ function RecentRecord() {
           <p className="text-[14px] font-medium text-grey-8">
             지금 축하받는 레코드는?
           </p>
-          <Reset onClick={handleReset} className="cursor-pointer" />
+          {timer === 0 ? (
+            <Reset onClick={handleReset} className="cursor-pointer" />
+          ) : (
+            <ResetDisabled />
+          )}
         </div>
       </div>
       <div ref={recentRef} className="flex flex-wrap gap-2">
