@@ -25,11 +25,11 @@ export default function Calendar({
   })
 
   return (
-    <div className="fixed top-0 z-20 block h-full w-full ">
+    <div className="fixed top-0 z-20 block h-full w-full">
       <div className="absolute h-full w-screen max-w-[420px] bg-grey-10 opacity-50" />
       <div
         ref={calendarRef}
-        className="fixed bottom-0 z-20 flex h-[478px] w-full max-w-[420px] animate-[popUp_150ms_linear] flex-col rounded-t-2xl bg-grey-1 px-[24px]"
+        className="fixed bottom-0 flex h-[478px] w-full max-w-[420px] animate-[popUp_150ms_linear] flex-col rounded-t-2xl bg-grey-1 px-[24px]"
       >
         <div className="flex flex-col pt-8">
           <div className="flex items-center justify-between">
