@@ -23,6 +23,7 @@ function RecentRecord() {
       Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
     if (gap > RESET_TIME - 1) {
       setTimer(0)
+      LocalStorage.remove('timer')
       return () => clearInterval(interval.current)
     }
     if (gap !== false) {
