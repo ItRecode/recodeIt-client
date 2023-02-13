@@ -1,10 +1,14 @@
 import { getRecentRecordData } from '@apis/record'
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { getCurrentTime } from '@utils/getCurrentTime'
 import { useState } from 'react'
 
 export const useRecentRecord = () => {
   const [pageCount, setPageCount] = useState(0)
+
+  const dateBehind = `${getCurrentTime.getHours()}:${getCurrentTime.getMinutes()}`
+  const dateTime = `${getCurrentTime.getDates()} ${dateBehind}`
 
   const {
     data: recentRecord = null,
@@ -15,7 +19,8 @@ export const useRecentRecord = () => {
     refetch,
   } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.recentRecord, pageCount],
-    queryFn: async ({ pageParam = 0 }) => await getRecentRecordData(pageParam),
+    queryFn: async ({ pageParam = 0 }) =>
+      await getRecentRecordData(pageParam, dateTime),
     getNextPageParam: (lastPage): number | null => {
       const { data, config } = lastPage
       if (data.totalPages > config.params.page + 1) {

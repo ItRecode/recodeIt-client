@@ -46,9 +46,9 @@ export const getMixRecordData = async () => {
   return await baseInstance.get('/record/mix')
 }
 
-export const getRecentRecordData = async (page: number) => {
+export const getRecentRecordData = async (page: number, dateTime: string) => {
   const MAX_RECORD_NUMBER = 10
   return await baseInstance.get('/record/recent', {
-    params: { page, size: MAX_RECORD_NUMBER },
+    params: { page, size: MAX_RECORD_NUMBER, dateTime },
   })
 }
