@@ -9,16 +9,16 @@ import {
 } from '@assets/constant/constant'
 import { createReply, updateComment } from '@apis/reply'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
-import {
-  DetailPageInputMode,
-  modifyComment,
-  nestedReplyState,
-  scrollTarget,
-} from '@store/atom'
+import { scrollTarget } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import InputSnackBar from './InputSnackBar'
 import ReplyInputAddImage from './InputAddImage'
 import InputTextarea from './InputTextarea'
+import {
+  DetailPageInputMode,
+  modifyComment,
+  nestedReplyState,
+} from '@store/detailPageAtom'
 
 export default function ReplyInput({
   setInputSectionHeight,
