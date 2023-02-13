@@ -1,24 +1,12 @@
 import React from 'react'
-import Slider from 'react-slick'
 import Button from '@components/Button'
 import { MONTH_LISt, YEAR_LIST } from './getMonthYearList'
 
 export default function CalendarMonthYear() {
-  const sliderSettings = {
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    vertical: true,
-    verticalSwiping: true,
-    swipeToSlide: true,
-    Infinity: true,
-    focusOnSelect: true,
-    // variableWidth: true, : select는 조금 높게 가장 끝은 얇게
-  }
-
   return (
     <div className="mt-6">
       <div className="flex">
-        <Slider {...sliderSettings}>
+        <div className="w-1/2">
           {YEAR_LIST.map((year) => (
             <div key={year} className="py-[8px]">
               <span className="text-[20px] font-semibold text-grey-8">
@@ -26,8 +14,8 @@ export default function CalendarMonthYear() {
               </span>
             </div>
           ))}
-        </Slider>
-        <Slider {...sliderSettings}>
+        </div>
+        <div className="w-1/2">
           {MONTH_LISt.map((month) => (
             <div key={month} className="py-[8px]">
               <span className="text-[20px] font-semibold text-grey-8">
@@ -35,7 +23,7 @@ export default function CalendarMonthYear() {
               </span>
             </div>
           ))}
-        </Slider>
+        </div>
       </div>
       <div className="mt-8 flex gap-2">
         <Button aria-label="select-month-year-cancel-button">취소</Button>
