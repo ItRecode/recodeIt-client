@@ -15,20 +15,22 @@ function RecentRecord() {
     useRecentRecord()
   const [timer, setTimer] = useState(0)
   const interval: { current: NodeJS.Timeout | undefined } = useRef()
+
   useEffect(() => {
     const getTimer = LocalStorage.get('timer')
-    const RESET_TIME = 180
-    const gap =
+    const RESET_TIME = 5
+    const timeGapByTimer =
       getTimer !== null &&
       Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
-    if (gap > RESET_TIME - 1) {
+    if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
       LocalStorage.remove('timer')
       return () => clearInterval(interval.current)
     }
-    if (gap !== false) {
+    if (timeGapByTimer !== false) {
       interval.current = setInterval(() => {
-        setTimer(gap + 1)
+        const TIME_GAP_BY_INTERVAL = 1
+        setTimer(timeGapByTimer + TIME_GAP_BY_INTERVAL)
       }, 1000)
       return () => clearInterval(interval.current)
     }

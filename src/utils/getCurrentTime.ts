@@ -1,7 +1,7 @@
 export const getCurrentTime = {
   date: new Date(),
   getZero(dates: number) {
-    return dates < 10 ? `0${dates}` : dates
+    return String(dates).padStart(2, '0')
   },
   getDates() {
     const currentMonth = this.date.getMonth() + 1
