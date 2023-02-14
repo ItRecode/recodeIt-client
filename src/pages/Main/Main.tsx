@@ -1,5 +1,6 @@
 import { CELEBRATION_ID } from '@assets/constant/constant'
 import ParentCategoryTab from '@components/ParrentCategoryTab'
+import { useLocalStorage } from '@react-query/hooks/useLocalStorage'
 import React, { useState } from 'react'
 import { parentCategoryID } from 'types/category'
 import MixRecord from './MixRecord'
@@ -9,6 +10,8 @@ import Together from './Together'
 export default function Main() {
   const [parentCategoryId, setParentCategoryId] =
     useState<parentCategoryID>(CELEBRATION_ID)
+
+  useLocalStorage()
   return (
     <>
       <section id="mixRecord">

@@ -32,6 +32,8 @@ import {
   modifyComment,
   nestedReplyState,
 } from '@store/atom'
+import { SessionStorage } from '@utils/sessionStorage'
+import { PREVIOUS_URL } from '@assets/constant/others'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -131,6 +133,10 @@ export default function DetailRecord() {
     })
   }, [history])
 
+  const handleBackButton = () => {
+    navigate(`/${SessionStorage.get(PREVIOUS_URL)}`)
+  }
+
   return (
     <>
       {isLoading && <Loading />}
@@ -179,7 +185,7 @@ export default function DetailRecord() {
         )}
         <header className="p-4">
           <nav className="flex justify-between">
-            <BackButton />
+            <BackButton onClick={handleBackButton} />
             {user?.data === writer && (
               <button
                 className="cursor-pointer bg-transparent"
