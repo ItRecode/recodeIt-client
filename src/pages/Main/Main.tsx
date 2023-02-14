@@ -8,9 +8,7 @@ import MixRecord from './MixRecord'
 import Ranking from './Ranking'
 import Together from './Together'
 
-export default function Main() 
-
-
+export default function Main() {
   const [parentCategoryID, setParentCategoryID] =
     useRecoilState<parentCategoryID>(parentCategoryIdAtom)
   useStorage('sessionStorage')
