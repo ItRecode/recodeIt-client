@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ReactComponent as Front } from '@assets/front.svg'
 import { ReactComponent as Reset } from '@assets/collect_page_icon/reset.svg'
 import { ReactComponent as ResetDisabled } from '@assets/collect_page_icon/reset_disabled.svg'
 import Spinner from '@components/Spinner'
@@ -67,7 +66,6 @@ function RecentRecord() {
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center   ">
             <p className="mr-3 text-[18px] font-semibold">최신 레코드</p>
-            <Front />
           </div>
           <p className="text-xs font-medium text-grey-8">
             {`${getCurrentTime.getHours()}`}: {`${getCurrentTime.getMinutes()}`}{' '}
