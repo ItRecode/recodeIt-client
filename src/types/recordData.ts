@@ -17,7 +17,7 @@ export interface RecordCategory {
   recordId: number
   title: string
   iconName: string
-  iconColor: string
+  colorName: string
 }
 
 export interface CategoryCard {
@@ -29,9 +29,8 @@ export interface CategoryCard {
 }
 
 export interface IRandomRecordData
-  extends Omit<IMemoryRecord, 'memoryRecordComments' | 'iconColor'> {
+  extends Omit<IMemoryRecord, 'memoryRecordComments'> {
   commentCount: number
-  colorName: string
 }
 
 export interface IMixRecordData {

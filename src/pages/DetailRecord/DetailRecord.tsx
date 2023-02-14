@@ -31,7 +31,7 @@ import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
-} from '@store/atom'
+} from '@store/detailPageAtom'
 import { SessionStorage } from '@utils/sessionStorage'
 import { PREVIOUS_URL } from '@assets/constant/others'
 

@@ -44,7 +44,7 @@ export default function MemoryRecord() {
             recordId={memoryRecord.recordId}
             title={memoryRecord.title}
             iconName={memoryRecord.iconName}
-            iconColor={memoryRecord.iconColor}
+            colorName={memoryRecord.colorName}
             memoryRecordComments={memoryRecord.memoryRecordComments}
           />
         ))
