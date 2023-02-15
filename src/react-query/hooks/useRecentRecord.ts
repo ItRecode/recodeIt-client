@@ -1,9 +1,10 @@
 import { getRecentRecordData } from '@apis/record'
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { getCurrentTime } from '@utils/getCurrentTime'
+import { GetCurrentTime } from '@utils/getCurrentTime'
 
 export const useRecentRecord = () => {
+  const getCurrentTime = new GetCurrentTime()
   const dateBehind = `${getCurrentTime.getHours()}:${getCurrentTime.getMinutes()}`
   const dateTime = `${getCurrentTime.getDates()} ${dateBehind}`
 
