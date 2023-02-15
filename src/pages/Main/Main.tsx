@@ -1,4 +1,5 @@
 import ParentCategoryTab from '@components/ParrentCategoryTab'
+import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import { parentCategoryIdAtom } from '@store/mainPageAtom'
 import React from 'react'
 import { useRecoilState } from 'recoil'
@@ -10,7 +11,7 @@ import Together from './Together'
 export default function Main() {
   const [parentCategoryID, setParentCategoryID] =
     useRecoilState<parentCategoryID>(parentCategoryIdAtom)
-
+  usePreviousUrlWithStorage('sessionStorage')
   return (
     <>
       <section id="mixRecord">

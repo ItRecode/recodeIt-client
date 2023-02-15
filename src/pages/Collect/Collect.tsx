@@ -1,4 +1,6 @@
+
 import React, { useRef, useState } from 'react'
+import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import RecentRecord from './RecentRecord'
 import { ReactComponent as ScrollTop } from '@assets/collect_page_icon/scrollTop.svg'
 
@@ -40,6 +42,7 @@ export default function Collect() {
       VIEWPORT_WIDTH - SCROLL_BUTTON_SIZE - SCROLL_BUTTON_POSITION_X
     }px)]`
   }
+  usePreviousUrlWithStorage('sessionStorage')
   return (
     <div
       onScroll={handleScroll}
