@@ -3,6 +3,12 @@ import { parentCategoryID } from 'types/category'
 import { ReactComponent as Right_Arrow_icon } from '@assets/Expand_right.svg'
 import { useNavigate } from 'react-router-dom'
 import Category from '@components/Category'
+import { useQuery } from '@tanstack/react-query'
+import { getRanking } from '@apis/record'
+import { CELEBRATION_ID } from '@assets/constant/constant'
+import { useEffect } from 'react'
+import { IRandomRecordData } from 'types/recordData'
+import RankingList from './RankingList'
 
 export default function Ranking({
   parentCategoryId,
@@ -10,7 +16,18 @@ export default function Ranking({
   parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
-  const [choosedCategoryId, setChoosedCategoryId] = useState(0)
+  const [rankingData, setRankingData] = useState<IRandomRecordData[]>()
+  const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
+
+  const { data, isSuccess } = useQuery(['ranking', choosedCategoryId], () =>
+    getRanking(choosedCategoryId, 'WEEK')
+  )
+
+  useEffect(() => {
+    if (isSuccess) {
+      setRankingData(data.data.recordRankingDtos)
+    }
+  }, [data, isSuccess])
 
   return (
     <div className="relative mt-[43px]">
@@ -31,6 +48,9 @@ export default function Ranking({
           choosedCategoryId={choosedCategoryId}
           setChoosedCategoryId={setChoosedCategoryId}
         />
+      </section>
+      <section>
+        <RankingList rankingData={rankingData} />
       </section>
     </div>
   )

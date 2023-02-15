@@ -52,3 +52,15 @@ export const getRecentRecordData = async (page: number) => {
     params: { page, size: MAX_RECORD_NUMBER },
   })
 }
+
+export const getRanking = async (
+  recordCategoryId: number,
+  rankingPeriod = 'WEEK'
+) => {
+  return await baseInstance.get('/record/ranking', {
+    params: {
+      rankingPeriod,
+      recordCategoryId,
+    },
+  })
+}
