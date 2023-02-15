@@ -7,7 +7,7 @@ export default function RankingList({
 }: {
   rankingData: IRandomRecordData[] | undefined
 }) {
-  const [rankingState, setRankingState] = useState<0 | 1 | 2>(0)
+  const [rankingState, setRankingState] = useState<number>(0)
   const [rakingList, setRankingList] = useState<IRandomRecordData[]>()
 
   useEffect(() => {
@@ -20,10 +20,10 @@ export default function RankingList({
     }
   }, [rankingState, rankingData])
 
-  console.log(rakingList)
   return (
     <div>
       {rakingList?.map((item, index) => {
+        const ColorName = `bg-${item.colorName}`
         const RecordIcon = recordIcons[`${item.iconName}`]
         return (
           <div
@@ -31,7 +31,9 @@ export default function RankingList({
             className="flex w-full items-center justify-between px-6"
           >
             <p>{index + 1}</p>
-            <div>
+            <div
+              className={`${ColorName} flex aspect-square w-12 items-center justify-center rounded-full`}
+            >
               <RecordIcon width={36} height={36} />
             </div>
             <p>{item.title}</p>
@@ -39,7 +41,15 @@ export default function RankingList({
           </div>
         )
       })}
-      <button>더보기</button>
+      {rankingState !== 2 && (
+        <button
+          onClick={() => {
+            if (rankingState !== 2) setRankingState((prev) => prev + 1)
+          }}
+        >
+          더보기
+        </button>
+      )}
     </div>
   )
 }
