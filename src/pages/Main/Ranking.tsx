@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getRanking } from '@apis/record'
 import { CELEBRATION_ID } from '@assets/constant/constant'
 import { useEffect } from 'react'
-import { IRandomRecordData } from 'types/recordData'
+import { IRankingRecordData } from 'types/recordData'
 import RankingList from './RankingList'
 
 export default function Ranking({
@@ -16,7 +16,7 @@ export default function Ranking({
   parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
-  const [rankingData, setRankingData] = useState<IRandomRecordData[]>()
+  const [rankingData, setRankingData] = useState<IRankingRecordData[]>()
   const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
 
   const { data, isSuccess } = useQuery(['ranking', choosedCategoryId], () =>
@@ -34,7 +34,7 @@ export default function Ranking({
       <section id="title" className="flex items-center justify-between px-6">
         <button
           className="flex cursor-pointer items-center bg-transparent p-0"
-          onClick={() => navigate('/rank')}
+          onClick={() => navigate('/collect')}
         >
           <p className="text-lg font-semibold">레코드 랭킹</p>
           <Right_Arrow_icon className="mb-1" />
@@ -50,7 +50,10 @@ export default function Ranking({
         />
       </section>
       <section>
-        <RankingList rankingData={rankingData} />
+        <RankingList
+          rankingData={rankingData}
+          parentCategoryId={parentCategoryId}
+        />
       </section>
     </div>
   )
