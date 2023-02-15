@@ -1,4 +1,3 @@
-
 import React, { useRef, useState } from 'react'
 import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import RecentRecord from './RecentRecord'
