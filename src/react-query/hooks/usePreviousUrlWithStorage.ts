@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { LocalStorage } from '@utils/localStorage'
 import { PREVIOUS_URL } from '@assets/constant/others'
@@ -5,14 +6,14 @@ import { SessionStorage } from '@utils/sessionStorage'
 
 type StorageType = 'sessionStorage' | 'localStorage'
 
-export const useStorage = (type: StorageType) => {
-  const currentUrl = window.location.href.split('/')
+export const usePreviousUrlWithStorage = (type: StorageType) => {
+  const { pathname } = useLocation()
   useEffect(() => {
-    if (currentUrl[3] === 'collect' || currentUrl[3] === '') {
+    if (pathname === '/collect' || pathname === '/') {
       if (type === 'localStorage') {
-        LocalStorage.set(PREVIOUS_URL, currentUrl[3])
+        LocalStorage.set(PREVIOUS_URL, pathname)
       } else if (type === 'sessionStorage') {
-        SessionStorage.set(PREVIOUS_URL, currentUrl[3])
+        SessionStorage.set(PREVIOUS_URL, pathname)
       }
     }
     return () => {

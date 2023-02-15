@@ -1,9 +1,9 @@
-import { useStorage } from '@react-query/hooks/useStorage'
+import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import React from 'react'
 import RecentRecord from './RecentRecord'
 
 export default function Collect() {
-  useStorage('sessionStorage')
+  usePreviousUrlWithStorage('sessionStorage')
   return (
     <div className="relative flex flex-col ">
       <div className="h-[1000px] bg-primary-6">1</div>
