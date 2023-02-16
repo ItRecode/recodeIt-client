@@ -7,6 +7,12 @@ export default function Collect() {
   const collectRef: React.RefObject<HTMLDivElement> = useRef(null)
   const [isScroll, setIsScroll] = useState(false)
 
+  const NAVBAR_HEIGHT = 60
+  const SCROLL_BUTTON_SIZE = 39
+  const SCROLL_BUTTON_POSITION_Y = 12
+  const VIEWPORT_WIDTH = (window.innerWidth > 420 ? 420 : window.innerWidth) / 2
+  const SCROLL_BUTTON_POSITION_X = 16
+
   const handleScrollTop = () => {
     if (collectRef.current !== null) {
       collectRef.current.scrollTo({
@@ -25,22 +31,21 @@ export default function Collect() {
     setIsScroll(true)
   }
 
-  const getViewPort = () => {
-    const NAVBAR_HEIGHT = 60
-    const SCROLL_BUTTON_SIZE = 39
-    const SCROLL_BUTTON_POSITION_Y = 12
-    const VIEWPORT_WIDTH =
-      (window.innerWidth > 420 ? 420 : window.innerWidth) / 2
-    const SCROLL_BUTTON_POSITION_X = 16
-    return `top-[${
+  const getLeftValue = () => {
+    return `calc(50% + ${
+      VIEWPORT_WIDTH - SCROLL_BUTTON_SIZE - SCROLL_BUTTON_POSITION_X
+    }px)`
+  }
+
+  const getTopValue = () => {
+    return `${
       window.innerHeight -
       NAVBAR_HEIGHT -
       SCROLL_BUTTON_SIZE -
       SCROLL_BUTTON_POSITION_Y
-    }px] left-[calc(50%+${
-      VIEWPORT_WIDTH - SCROLL_BUTTON_SIZE - SCROLL_BUTTON_POSITION_X
-    }px)]`
+    }px`
   }
+
   usePreviousUrlWithStorage('sessionStorage')
   return (
     <div
@@ -52,7 +57,8 @@ export default function Collect() {
         {isScroll && (
           <ScrollTop
             onClick={() => handleScrollTop()}
-            className={`fixed ${getViewPort()} z-[9999] cursor-pointer`}
+            style={{ left: getLeftValue(), top: getTopValue() }}
+            className={`fixed z-[20] cursor-pointer`}
           />
         )}
         <div className="h-[1000px] bg-primary-6">1</div>
