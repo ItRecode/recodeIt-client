@@ -7,6 +7,7 @@ interface CardProps {
   title: string
   recordId: number
   colorName: string
+  type: 'recentRecord' | 'mainRecord'
   iconName: string
   commentCount: number
   isDragging?: boolean
@@ -16,6 +17,7 @@ interface CardProps {
 function RecordCard({
   recordId,
   title,
+  type,
   colorName,
   iconName,
   commentCount,
@@ -37,7 +39,9 @@ function RecordCard({
   return (
     <div
       key={recordId}
-      className={`h-full w-[164px] shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
+      className={`h-full ${
+        type === 'recentRecord' ? 'w-[50%]' : 'w-[164px]'
+      } shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
       onClick={() => handleClickRecord(recordId)}
     >
       <RecordIcon width={100} height={100} />
