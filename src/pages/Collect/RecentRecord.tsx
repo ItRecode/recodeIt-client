@@ -7,7 +7,7 @@ import { CategoryCard } from 'types/recordData'
 import { useRecentRecord } from '@react-query/hooks/useRecentRecord'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { GetCurrentTime } from '@utils/getCurrentTime'
-import { LocalStorage } from '@utils/localStorage'
+import { SessionStorage } from '@utils/sessionStorage'
 
 function RecentRecord() {
   const { recentRecord, isLoading, hasNextPage, fetchNextPage, reset } =
@@ -17,14 +17,14 @@ function RecentRecord() {
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
 
   useEffect(() => {
-    const getTimer = LocalStorage.get('timer')
+    const getTimer = SessionStorage.get('timer')
     const RESET_TIME = 180
     const timeGapByTimer =
       getTimer !== null &&
       Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
     if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
-      LocalStorage.remove('timer')
+      SessionStorage.remove('timer')
       return () => clearInterval(interval.current)
     }
     if (timeGapByTimer !== false) {
@@ -57,7 +57,7 @@ function RecentRecord() {
 
   const handleReset = () => {
     reset()
-    LocalStorage.set('timer', JSON.stringify(new Date().getTime()))
+    SessionStorage.set('timer', JSON.stringify(new Date().getTime()))
     setTimer(180)
     scrollRecentViewTop()
   }
