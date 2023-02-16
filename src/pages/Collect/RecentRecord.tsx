@@ -51,7 +51,6 @@ function RecentRecord() {
     if (recentRef.current !== null) {
       recentRef.current.scrollIntoView({
         block: 'start',
-        behavior: 'smooth',
       })
     }
   }
@@ -107,6 +106,7 @@ function RecentRecord() {
                       key={recordId}
                     >
                       <RecordCard
+                        type="recentRecord"
                         recordId={recordId}
                         title={title}
                         colorName={colorName}
