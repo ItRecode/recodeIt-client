@@ -8,6 +8,9 @@ import { useRecentRecord } from '@react-query/hooks/useRecentRecord'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { GetCurrentTime } from '@utils/getCurrentTime'
 import { SessionStorage } from '@utils/sessionStorage'
+import { getTimeGap } from '@utils/getTimeGap'
+import Timer from './Timer'
+import { RESET_TIME } from '@assets/constant/collect'
 
 function RecentRecord() {
   const { recentRecord, isLoading, hasNextPage, fetchNextPage, reset } =
@@ -15,27 +18,10 @@ function RecentRecord() {
   const [timer, setTimer] = useState(0)
   const interval: { current: NodeJS.Timeout | undefined } = useRef()
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
-  const RESET_TIME = 180
-
-  const getTimeGap = (): number | false => {
-    const getTimer = SessionStorage.get('timer')
-    const timeGapByTimer =
-      getTimer !== null &&
-      Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
-    return timeGapByTimer
-  }
-
-  const getTimerUI = () => {
-    const timeGapByTimer = getTimeGap() as number
-
-    const REMAIN_TIME = RESET_TIME - timeGapByTimer
-    return `${
-      REMAIN_TIME / 60 >= 1 ? Math.floor(REMAIN_TIME / 60) : '00'
-    }:${String(REMAIN_TIME % 60).padStart(2, '0')}`
-  }
 
   useEffect(() => {
-    const timeGapByTimer = getTimeGap()
+    const getTimer = Number(SessionStorage.get('timer')) as number
+    const timeGapByTimer = getTimeGap(getTimer)
     if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
       SessionStorage.remove('timer')
@@ -72,7 +58,7 @@ function RecentRecord() {
   const handleReset = () => {
     reset()
     SessionStorage.set('timer', JSON.stringify(new Date().getTime()))
-    setTimer(180)
+    setTimer(RESET_TIME)
     scrollRecentViewTop()
   }
 
@@ -101,11 +87,7 @@ function RecentRecord() {
               ) : (
                 <ResetDisabled />
               )}
-              {timer !== 0 ? (
-                <p className="text-[10px] font-medium">{getTimerUI()}</p>
-              ) : (
-                ''
-              )}
+              {timer !== 0 ? <Timer /> : ''}
             </div>
           </div>
         </div>
