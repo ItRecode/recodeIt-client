@@ -40,3 +40,12 @@ export interface IMixRecordData {
   commentId: number
   commentContent: string
 }
+
+export interface IRankingRecordData {
+  colorName: string
+  iconName: string
+  numOfComment: number
+  recordId: number
+  title: string
+  writer: string
+}

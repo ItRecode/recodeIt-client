@@ -27,7 +27,12 @@ export default function Category({
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
 
   useEffect(() => {
-    if (slider) setChoosedCategoryId(0)
+    if (slider) {
+      if (parentCategoryId === CELEBRATION_ID)
+        setChoosedCategoryId(CELEBRATION_ID)
+      if (parentCategoryId === CONSOLATION_ID)
+        setChoosedCategoryId(CONSOLATION_ID)
+    }
     if (!slider) {
       if (parentCategoryId === CELEBRATION_ID) setChoosedCategoryId(3)
       if (parentCategoryId === CONSOLATION_ID) setChoosedCategoryId(7)
@@ -42,7 +47,7 @@ export default function Category({
     if (id !== undefined) {
       setChoosedCategoryId(id)
     } else {
-      setChoosedCategoryId(0)
+      setChoosedCategoryId(parentCategoryId)
     }
   }
   return (
@@ -58,7 +63,7 @@ export default function Category({
       {slider && (
         <Chip
           icon={null}
-          active={choosedCategoryId === 0}
+          active={choosedCategoryId === 1 || choosedCategoryId === 2}
           message="전체"
           type={'button'}
           onClick={() => handleClickChip()}
