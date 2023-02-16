@@ -15,13 +15,27 @@ function RecentRecord() {
   const [timer, setTimer] = useState(0)
   const interval: { current: NodeJS.Timeout | undefined } = useRef()
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
+  const RESET_TIME = 180
 
-  useEffect(() => {
+  const getTimeGap = (): number | false => {
     const getTimer = SessionStorage.get('timer')
-    const RESET_TIME = 180
     const timeGapByTimer =
       getTimer !== null &&
       Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
+    return timeGapByTimer
+  }
+
+  const getTimerUI = () => {
+    const timeGapByTimer = getTimeGap() as number
+
+    const REMAIN_TIME = RESET_TIME - timeGapByTimer
+    return `${
+      REMAIN_TIME / 60 >= 1 ? Math.floor(REMAIN_TIME / 60) : '00'
+    }:${String(REMAIN_TIME % 60).padStart(2, '0')}`
+  }
+
+  useEffect(() => {
+    const timeGapByTimer = getTimeGap()
     if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
       SessionStorage.remove('timer')
@@ -79,13 +93,20 @@ function RecentRecord() {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-[14px] font-medium text-grey-8">
-              지금 축하받는 레코드는?
+              지금 올라오고 있는 레코드는?
             </p>
-            {timer === 0 ? (
-              <Reset onClick={handleReset} className="cursor-pointer" />
-            ) : (
-              <ResetDisabled />
-            )}
+            <div className=" flex flex-col items-center">
+              {timer === 0 ? (
+                <Reset onClick={handleReset} className="cursor-pointer" />
+              ) : (
+                <ResetDisabled />
+              )}
+              {timer !== 0 ? (
+                <p className="text-[10px] font-medium">{getTimerUI()}</p>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
