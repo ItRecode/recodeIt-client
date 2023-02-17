@@ -1,4 +1,3 @@
-export const getTimeGap = (time: number): number | false => {
-  const timeGapByTimer = Math.floor((new Date().getTime() - time) / 1000)
-  return timeGapByTimer
+export const getTimeGap = (time: number): number => {
+  return Math.floor((new Date().getTime() - time) / 1000)
 }

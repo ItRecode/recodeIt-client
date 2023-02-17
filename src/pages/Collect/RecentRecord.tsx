@@ -20,20 +20,18 @@ function RecentRecord() {
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
 
   useEffect(() => {
-    const getTimer = Number(SessionStorage.get('timer')) as number
+    const getTimer = Number(SessionStorage.get('resetTime')) as number
     const timeGapByTimer = getTimeGap(getTimer)
     if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
-      SessionStorage.remove('timer')
+      SessionStorage.remove('resetTime')
       return () => clearInterval(interval.current)
     }
-    if (timeGapByTimer !== false) {
-      interval.current = setInterval(() => {
-        const TIME_GAP_BY_INTERVAL = 1
-        setTimer(timeGapByTimer + TIME_GAP_BY_INTERVAL)
-      }, 1000)
-      return () => clearInterval(interval.current)
-    }
+    interval.current = setInterval(() => {
+      const TIME_GAP_BY_INTERVAL = 1
+      setTimer(timeGapByTimer + TIME_GAP_BY_INTERVAL)
+    }, 1000)
+    return () => clearInterval(interval.current)
   }, [timer])
 
   const scrollEndRef = useIntersect(async (entry, observer) => {
@@ -57,7 +55,7 @@ function RecentRecord() {
 
   const handleReset = () => {
     reset()
-    SessionStorage.set('timer', JSON.stringify(new Date().getTime()))
+    SessionStorage.set('resetTime', JSON.stringify(new Date().getTime()))
     setTimer(RESET_TIME)
     scrollRecentViewTop()
   }
