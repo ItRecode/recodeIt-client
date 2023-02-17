@@ -8,6 +8,9 @@ import { useRecentRecord } from '@react-query/hooks/useRecentRecord'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import { GetCurrentTime } from '@utils/getCurrentTime'
 import { SessionStorage } from '@utils/sessionStorage'
+import { getTimeGap } from '@utils/getTimeGap'
+import Timer from './Timer'
+import { RESET_TIME } from '@assets/constant/collect'
 
 function RecentRecord() {
   const { recentRecord, isLoading, hasNextPage, fetchNextPage, reset } =
@@ -17,23 +20,18 @@ function RecentRecord() {
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
 
   useEffect(() => {
-    const getTimer = SessionStorage.get('timer')
-    const RESET_TIME = 180
-    const timeGapByTimer =
-      getTimer !== null &&
-      Math.floor((new Date().getTime() - JSON.parse(getTimer)) / 1000)
+    const getTimer = Number(SessionStorage.get('resetTime')) as number
+    const timeGapByTimer = getTimeGap(getTimer)
     if (timeGapByTimer >= RESET_TIME) {
       setTimer(0)
-      SessionStorage.remove('timer')
+      SessionStorage.remove('resetTime')
       return () => clearInterval(interval.current)
     }
-    if (timeGapByTimer !== false) {
-      interval.current = setInterval(() => {
-        const TIME_GAP_BY_INTERVAL = 1
-        setTimer(timeGapByTimer + TIME_GAP_BY_INTERVAL)
-      }, 1000)
-      return () => clearInterval(interval.current)
-    }
+    interval.current = setInterval(() => {
+      const TIME_GAP_BY_INTERVAL = 1
+      setTimer(timeGapByTimer + TIME_GAP_BY_INTERVAL)
+    }, 1000)
+    return () => clearInterval(interval.current)
   }, [timer])
 
   const scrollEndRef = useIntersect(async (entry, observer) => {
@@ -57,8 +55,8 @@ function RecentRecord() {
 
   const handleReset = () => {
     reset()
-    SessionStorage.set('timer', JSON.stringify(new Date().getTime()))
-    setTimer(180)
+    SessionStorage.set('resetTime', JSON.stringify(new Date().getTime()))
+    setTimer(RESET_TIME)
     scrollRecentViewTop()
   }
 
@@ -79,13 +77,16 @@ function RecentRecord() {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-[14px] font-medium text-grey-8">
-              지금 축하받는 레코드는?
+              지금 올라오고 있는 레코드는?
             </p>
-            {timer === 0 ? (
-              <Reset onClick={handleReset} className="cursor-pointer" />
-            ) : (
-              <ResetDisabled />
-            )}
+            <div className=" flex flex-col items-center justify-center">
+              {timer === 0 ? (
+                <Reset onClick={handleReset} className="cursor-pointer" />
+              ) : (
+                <ResetDisabled />
+              )}
+              {timer !== 0 ? <Timer /> : ''}
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
