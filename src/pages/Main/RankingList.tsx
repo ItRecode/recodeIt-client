@@ -31,7 +31,7 @@ export default function RankingList({
         return (
           <RankingItem
             key={item.recordId}
-            index={index}
+            index={index + 1}
             parentCategoryId={parentCategoryId}
             recordId={item.recordId}
             colorName={colorName}

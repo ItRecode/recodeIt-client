@@ -36,7 +36,7 @@ export default function RankingItem({
   return (
     <div className="relative mb-5 flex h-12 w-full items-center justify-between px-6">
       <div className="flex w-full items-center">
-        <p>{index + 1}</p>
+        <p>{index}</p>
         <div
           className={`${colorName} ml-4 flex aspect-square w-12 items-center justify-center rounded-full`}
         >
