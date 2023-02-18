@@ -2,10 +2,16 @@ import React, { useRef, useState } from 'react'
 import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import RecentRecord from './RecentRecord'
 import { ReactComponent as ScrollTop } from '@assets/collect_page_icon/scrollTop.svg'
+import CollectRanking from './CollectRanking'
+import PeriodModal from './PeriodModal'
+import { keyOfRankingPeriod } from '@assets/constant/ranking'
 
 export default function Collect() {
   const collectRef: React.RefObject<HTMLDivElement> = useRef(null)
   const [isScroll, setIsScroll] = useState(false)
+
+  const [rankingPeriod, setRankingPeriod] = useState<keyOfRankingPeriod>('DAY')
+  const [openModal, setOpenModal] = useState(false)
 
   const NAVBAR_HEIGHT = 60
   const SCROLL_BUTTON_SIZE = 39
@@ -53,6 +59,12 @@ export default function Collect() {
       ref={collectRef}
       className="flex h-screen flex-col overflow-scroll"
     >
+      {openModal && (
+        <PeriodModal
+          setRankingPeriod={setRankingPeriod}
+          setOpenModal={setOpenModal}
+        />
+      )}
       <div>
         {isScroll && (
           <ScrollTop
@@ -61,8 +73,12 @@ export default function Collect() {
             className={`fixed z-[20] cursor-pointer`}
           />
         )}
-        <div className="h-[1000px] bg-primary-6">1</div>
-        <div className="h-[1000px] bg-primary-6">1</div>
+        <section id="ranking" className="w-full">
+          <CollectRanking
+            setOpenModal={setOpenModal}
+            rankingPeriod={rankingPeriod}
+          />
+        </section>
         <RecentRecord />
       </div>
     </div>

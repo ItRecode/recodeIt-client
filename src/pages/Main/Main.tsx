@@ -29,7 +29,7 @@ export default function Main() {
       <section id="Ranking">
         <Ranking parentCategoryId={parentCategoryID} />
       </section>
-      <div className="h-[150px] w-full" />
+      <div className="h-[120px] w-full" />
     </>
   )
 }

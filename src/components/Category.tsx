@@ -63,7 +63,10 @@ export default function Category({
       {slider && (
         <Chip
           icon={null}
-          active={choosedCategoryId === 1 || choosedCategoryId === 2}
+          active={
+            choosedCategoryId === CELEBRATION_ID ||
+            choosedCategoryId === CONSOLATION_ID
+          }
           message="전체"
           type={'button'}
           onClick={() => handleClickChip()}
