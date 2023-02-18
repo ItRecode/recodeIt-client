@@ -23,6 +23,7 @@ export default function CollectRanking({
   const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
   const [rankingData, setRankingData] = useState<IRankingRecordData[]>()
   const [rankingState, setRankingState] = useState(0)
+  const [plusBtnState, setPlusBtnState] = useState(false)
 
   const { data, isSuccess } = useQuery(
     ['ranking', choosedCategoryId, rankingPeriod],
@@ -37,11 +38,15 @@ export default function CollectRanking({
 
   useEffect(() => {
     if (isSuccess) {
-      if (rankingState === 0) {
+      if (rankingState === 0 && data.data.recordRankingDtos.length > 5) {
         setRankingData(data.data.recordRankingDtos.slice(0, 5))
+        setPlusBtnState(true)
       } else {
         setRankingData(data.data.recordRankingDtos)
       }
+    }
+    if (rankingState === 1) {
+      setPlusBtnState(false)
     }
   }, [data, isSuccess, rankingPeriod, choosedCategoryId, rankingState])
 
@@ -99,7 +104,7 @@ export default function CollectRanking({
               />
             )
           })}
-        {rankingState < 1 && (
+        {plusBtnState && (
           <button
             className="flex w-full cursor-pointer items-center justify-center border-t border-solid border-grey-3 bg-transparent p-4 text-primary-2"
             onClick={() => {

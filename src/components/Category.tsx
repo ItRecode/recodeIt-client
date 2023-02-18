@@ -32,6 +32,7 @@ export default function Category({
         setChoosedCategoryId(CELEBRATION_ID)
       if (parentCategoryId === CONSOLATION_ID)
         setChoosedCategoryId(CONSOLATION_ID)
+      dragRef.current.scrollLeft = 0
     }
     if (!slider) {
       if (parentCategoryId === CELEBRATION_ID) setChoosedCategoryId(3)

@@ -36,16 +36,16 @@ export default function RankingItem({
   return (
     <div className="relative mb-5 flex h-12 w-full items-center justify-between px-6">
       <div className="flex w-full items-center">
-        <p>{index}</p>
+        <p className="w-[16px] text-center">{index}</p>
         <div
-          className={`${colorName} ml-4 flex aspect-square w-12 items-center justify-center rounded-full`}
+          className={`${colorName} ml-3 flex aspect-square w-12 items-center justify-center rounded-full`}
         >
           <RecordIcon width={36} height={36} />
         </div>
-        <div className={`ml-2 ${titleRelativeWidth}`}>
+        <div className={`ml-2 ${titleRelativeWidth} shrink`}>
           <p className="truncate text-base font-semibold">{title}</p>
-          <div className="flex whitespace-nowrap text-xs">
-            <p className="text-grey-9">{writer}</p>
+          <div className="flex w-full text-xs">
+            <p className="max-w-[85%] truncate text-grey-9">{writer}</p>
             <p className="ml-1.5 text-primary-2">+{numOfComment}</p>
           </div>
         </div>
