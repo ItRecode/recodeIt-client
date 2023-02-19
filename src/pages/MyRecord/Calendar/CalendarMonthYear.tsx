@@ -61,10 +61,7 @@ export default function CalendarMonthYear({
   return (
     <div className="mt-6">
       <div className="flex gap-1">
-        <Slider
-          {...sliderSettings}
-          className="w-1/2 cursor-pointer text-center"
-        >
+        <Slider {...sliderSettings} className="w-1/2 text-center">
           {YEAR_LIST.map((year) => (
             <li
               key={year}
@@ -74,17 +71,14 @@ export default function CalendarMonthYear({
             >
               <span
                 data-value={year}
-                className="text-[20px] font-semibold text-grey-8"
+                className="cursor-pointer text-[20px] font-semibold text-grey-8"
               >
                 {year}년
               </span>
             </li>
           ))}
         </Slider>
-        <Slider
-          {...sliderSettings}
-          className="w-1/2 cursor-pointer text-center"
-        >
+        <Slider {...sliderSettings} className="w-1/2 text-center">
           {MONTH_LIST.map((month) => (
             <li
               key={month}
@@ -94,7 +88,7 @@ export default function CalendarMonthYear({
             >
               <span
                 data-value={month}
-                className="text-[20px] font-semibold text-grey-8"
+                className="cursor-pointer text-[20px] font-semibold text-grey-8"
               >
                 {month}월
               </span>
