@@ -19,6 +19,14 @@ function RecentRecord() {
   const interval: { current: NodeJS.Timeout | undefined } = useRef()
   const recentRef: React.RefObject<HTMLDivElement> = useRef(null)
 
+  const scrollRecentViewTop = () => {
+    if (recentRef.current !== null) {
+      recentRef.current.scrollIntoView({
+        block: 'start',
+      })
+    }
+  }
+
   useEffect(() => {
     const getTimer = Number(SessionStorage.get('resetTime')) as number
     const timeGapByTimer = getTimeGap(getTimer)
@@ -43,14 +51,6 @@ function RecentRecord() {
 
   if (isLoading) {
     return <Spinner size="large" />
-  }
-
-  const scrollRecentViewTop = () => {
-    if (recentRef.current !== null) {
-      recentRef.current.scrollIntoView({
-        block: 'start',
-      })
-    }
   }
 
   const handleReset = () => {
