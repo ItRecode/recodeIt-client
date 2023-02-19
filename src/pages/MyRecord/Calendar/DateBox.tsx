@@ -3,7 +3,7 @@ import React from 'react'
 interface DateBoxProps {
   date: number
   gridColumnStart?: number
-  hasRecord: boolean
+  hasRecord?: boolean
 }
 
 export default function DateBox({

@@ -11,3 +11,7 @@ export const getFormattedDate = (date: Date, type: string) => {
 
   return `${year}-${month}-${day}`
 }
+
+export const getFormattedDateWithMonthYear = (year: number, month: number) => {
+  return `${year}-${month.toString().padStart(2, '0')}`
+}
