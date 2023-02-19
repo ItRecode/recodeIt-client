@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import recordIcons from '@assets/record_icons'
-import { useCheckMobile } from '@hooks/useCheckMobile'
 import { useNavigate } from 'react-router-dom'
 
 interface CardProps {
@@ -24,7 +23,6 @@ function RecordCard({
   isDragging,
   setIsDragging,
 }: CardProps) {
-  const { isMobile } = useCheckMobile()
   const ColorName = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]
   const navigate = useNavigate()
@@ -46,7 +44,7 @@ function RecordCard({
     >
       <RecordIcon width={100} height={100} />
       <div className="mt-4 text-sm font-semibold text-grey-10">
-        {!isMobile && title.length > 6 ? (
+        {title.length > 6 ? (
           <>
             <p>{title.substring(0, 6)}</p>
             <p className="text-center">
