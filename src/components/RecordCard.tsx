@@ -1,12 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import recordIcons from '@assets/record_icons'
-import { useCheckMobile } from '@hooks/useCheckMobile'
 import { useNavigate } from 'react-router-dom'
 
 interface CardProps {
   title: string
   recordId: number
   colorName: string
+  type: 'recentRecord' | 'mainRecord'
   iconName: string
   commentCount: number
   isDragging?: boolean
@@ -16,13 +16,13 @@ interface CardProps {
 function RecordCard({
   recordId,
   title,
+  type,
   colorName,
   iconName,
   commentCount,
   isDragging,
   setIsDragging,
 }: CardProps) {
-  const { isMobile } = useCheckMobile()
   const ColorName = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]
   const navigate = useNavigate()
@@ -37,12 +37,14 @@ function RecordCard({
   return (
     <div
       key={recordId}
-      className={`h-full w-[164px] shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
+      className={`h-full ${
+        type === 'recentRecord' ? 'w-[50%]' : 'w-[164px]'
+      } shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
       onClick={() => handleClickRecord(recordId)}
     >
       <RecordIcon width={100} height={100} />
       <div className="mt-4 text-sm font-semibold text-grey-10">
-        {!isMobile && title.length > 6 ? (
+        {title.length > 6 ? (
           <>
             <p>{title.substring(0, 6)}</p>
             <p className="text-center">

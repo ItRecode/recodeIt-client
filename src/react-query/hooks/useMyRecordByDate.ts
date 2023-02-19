@@ -1,10 +1,10 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
-import { getRecordByDate } from '@apis/record'
+import { getRecordByDate } from '@apis/myRecord'
 import { getFormattedDate } from '@utils/getFormattedDate'
 import { useState } from 'react'
 
-export const useRecordByDate = () => {
+export const useMyRecordByDate = () => {
   const [todayRecordId, setTodayRecordId] = useState<number | null>(null)
   const today = new Date()
 

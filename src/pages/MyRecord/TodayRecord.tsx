@@ -1,12 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRecordByDate } from '@react-query/hooks/useRecordByDate'
+import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
 import MyRecordCard from './Common/MyRecordCard'
 import Loading from '@components/Loading'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { isLoading, todayRecord } = useRecordByDate()
+  const { isLoading, todayRecord } = useMyRecordByDate()
 
   if (isLoading) {
     return <Loading />

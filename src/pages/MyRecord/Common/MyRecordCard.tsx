@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IRecordByDate } from 'types/recordData'
+import { IMyRecord } from 'types/myRecord'
 import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import { getFormattedDate } from '@utils/getFormattedDate'
 import Chip from '@components/Chip'
@@ -14,7 +14,7 @@ export default function MyRecordCard({
   iconName,
   colorName,
   createdAt,
-}: IRecordByDate) {
+}: IMyRecord) {
   const navigate = useNavigate()
   const background_color = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]

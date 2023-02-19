@@ -1,7 +1,7 @@
 import { deleteReply } from '@apis/reply'
 import Alert from '@components/Alert'
 import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode, modifyComment } from '@store/atom'
+import { DetailPageInputMode, modifyComment } from '@store/detailPageAtom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useSetRecoilState } from 'recoil'

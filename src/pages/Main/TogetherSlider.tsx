@@ -33,6 +33,7 @@ export default function TogetherSlider({
         randomRecordData.map((item) => {
           return (
             <RecordCard
+              type="mainRecord"
               key={item.recordId}
               isDragging={isDragging}
               setIsDragging={setIsDragging}

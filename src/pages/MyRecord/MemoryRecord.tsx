@@ -1,5 +1,5 @@
 import React from 'react'
-import { IMemoryRecord } from 'types/recordData'
+import { IMemoryRecord } from 'types/myRecord'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
 import { ReactComponent as Gift } from '@assets/record_icons/gift.svg'
 import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
@@ -44,7 +44,7 @@ export default function MemoryRecord() {
             recordId={memoryRecord.recordId}
             title={memoryRecord.title}
             iconName={memoryRecord.iconName}
-            iconColor={memoryRecord.iconColor}
+            colorName={memoryRecord.colorName}
             memoryRecordComments={memoryRecord.memoryRecordComments}
           />
         ))

@@ -1,3 +1,5 @@
+import { IMemoryRecord } from './myRecord'
+
 export interface IRecordDataType {
   recordId: number
   categoryId: number
@@ -11,21 +13,11 @@ export interface IRecordDataType {
   imageUrls: string[]
 }
 
-export interface IMemoryRecordList {
-  memoryRecordList: IMemoryRecord[]
-  totalCount: number
-  totalPage: number
-}
-
-interface RecordCategory {
+export interface RecordCategory {
   recordId: number
   title: string
   iconName: string
-  iconColor: string
-}
-
-export interface IMemoryRecord extends RecordCategory {
-  memoryRecordComments: IRecordMemoryComment[]
+  colorName: string
 }
 
 export interface CategoryCard {
@@ -36,37 +28,9 @@ export interface CategoryCard {
   title: string
 }
 
-export interface IRecordMemoryComment {
-  commentId: number
-  content: string
-}
-
-export interface IRecordByDate {
-  recordId: number
-  title: string
-  categoryName: string
-  commentCount: number
-  iconName: string
-  colorName: string
-  createdAt: string
-}
-
-export interface IRecordByDateList {
-  recordByDateDtos: IRecordByDate[]
-  totalCount: number
-  totalPage: number
-}
-
-export interface IMyRecordRequestParam {
-  date: string
-  page: number
-  size: number
-}
-
 export interface IRandomRecordData
-  extends Omit<IMemoryRecord, 'memoryRecordComments' | 'iconColor'> {
+  extends Omit<IMemoryRecord, 'memoryRecordComments'> {
   commentCount: number
-  colorName: string
 }
 
 export interface IMixRecordData {
@@ -75,4 +39,13 @@ export interface IMixRecordData {
   iconName: string
   commentId: number
   commentContent: string
+}
+
+export interface IRankingRecordData {
+  colorName: string
+  iconName: string
+  numOfComment: number
+  recordId: number
+  title: string
+  writer: string
 }

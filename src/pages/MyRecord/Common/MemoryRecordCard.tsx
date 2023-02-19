@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IMemoryRecord } from 'types/recordData'
+import { IMemoryRecord } from 'types/myRecord'
 
 import useSwipe from '@hooks/useSwipe'
 import recordIcons from '@assets/record_icons'
@@ -12,7 +12,7 @@ export default function MemoryRecordCard({
   recordId,
   title,
   iconName,
-  iconColor,
+  colorName,
   memoryRecordComments,
 }: IMemoryRecord) {
   const dragRef = useRef<HTMLDivElement | null>(
@@ -20,7 +20,7 @@ export default function MemoryRecordCard({
   ) as React.MutableRefObject<HTMLDivElement>
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
   const navigate = useNavigate()
-  const background_color = `bg-${iconColor}`
+  const background_color = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]
   const setScrollTargetId = useSetRecoilState(scrollTarget)
 
