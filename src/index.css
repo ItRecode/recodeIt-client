@@ -160,6 +160,15 @@ textarea {
   justify-content: center !important;
 }
 
+.slick-current .slick-select {
+  background-color: #efe9fb;
+  width: 200px !important;
+}
+
+.slick-current .slick-select span {
+  color: #703cde;
+}
+
 .line-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 3;
