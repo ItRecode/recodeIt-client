@@ -1,21 +1,16 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { CELEBRATION_ID, INPUT_DETAILS } from '@assets/constant/constant'
-import { IsInputsHasValueType } from './AddRecord'
 import { parentCategoryID } from 'types/category'
 
 type userProps = {
   recordContent: string
   setRecordContent: Dispatch<SetStateAction<string>>
   currentRecordType: parentCategoryID
-  setIsInputsHasValue: Dispatch<SetStateAction<IsInputsHasValueType>>
-  isInputsHasValue: IsInputsHasValueType
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
   modifyTitle: string
 }
 
 function AddRecordTextArea({
-  setIsInputsHasValue,
-  isInputsHasValue,
   currentRecordType,
   setIsInputFocus,
   recordContent,
@@ -41,12 +36,6 @@ function AddRecordTextArea({
     const inputValueLength = e.target.value.length
     if (inputValueLength > INPUT_DETAILS.MAX_TEXTAREA_TYPING) {
       return
-    }
-    if (inputValueLength > 0) {
-      setIsInputsHasValue({ ...isInputsHasValue, textArea: true })
-    }
-    if (inputValueLength === 0) {
-      setIsInputsHasValue({ ...isInputsHasValue, textArea: false })
     }
     setRecordContent(e.target.value)
   }

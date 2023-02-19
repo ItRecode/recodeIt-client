@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import BackButton from '@components/BackButton'
 import AddRecordCategory from './AddRecordCategory'
-
 import AddRecordTextArea from './AddRecordTextArea'
 import AddRecordColor from './AddRecordColor'
 import AddRecordFile from './AddRecordFile'
-
 import AddRecordIcon from './AddRecordIcon'
 import Button from '@components/Button'
 import { useNavigate } from 'react-router-dom'
@@ -22,11 +20,6 @@ import ParentCategoryTab from '@components/ParrentCategoryTab'
 import AddRecordTitle from './AddRecordTitle'
 import AddRecordInput from './AddRecordInput'
 import { useCheckMobile } from '@hooks/useCheckMobile'
-
-export type IsInputsHasValueType = {
-  input: boolean
-  textArea: boolean
-}
 
 export type FormDataType = {
   selectedCategory: number
@@ -63,11 +56,6 @@ export default function AddRecord() {
   const [parentCategoryId, setParentCategoryId] =
     useState<parentCategoryID>(CELEBRATION_ID)
 
-  const [isInputsHasValue, setIsInputsHasValue] =
-    useState<IsInputsHasValueType>({
-      input: false,
-      textArea: false,
-    })
   const [formData, setFormData] = useRecoilState(formDataAtom)
   const { selectedCategory, selectedColor, selectedIcon }: FormDataType =
     formData
@@ -99,7 +87,6 @@ export default function AddRecord() {
         selectedCategory: parentCategoryId === CELEBRATION_ID ? 3 : 7,
         selectedColor: 'icon-purple',
       })
-      setIsInputsHasValue({ input: false, textArea: false })
     }
   }, [parentCategoryId])
 
@@ -131,10 +118,6 @@ export default function AddRecord() {
           setParentCategoryId(2)
         }
       }
-      setIsInputsHasValue({
-        input: recordData.title,
-        textArea: recordData.content,
-      })
       setFormData({ ...formData, selectedColor: recordData.colorName })
     }
   }, [recordData])
@@ -261,8 +244,6 @@ export default function AddRecord() {
               modifyTitle={recordData?.title}
               recordTitle={recordTitle}
               setRecordTitle={setRecordTitle}
-              isInputsHasValue={isInputsHasValue}
-              setIsInputsHasValue={setIsInputsHasValue}
               setIsInputFocus={setIsInputFocus}
               parentCategoryId={parentCategoryId}
               isModify={isModify}
@@ -272,8 +253,6 @@ export default function AddRecord() {
               modifyTitle={recordData?.content}
               recordContent={recordContent}
               setRecordContent={setRecordContent}
-              isInputsHasValue={isInputsHasValue}
-              setIsInputsHasValue={setIsInputsHasValue}
               currentRecordType={parentCategoryId}
               setIsInputFocus={setIsInputFocus}
             />

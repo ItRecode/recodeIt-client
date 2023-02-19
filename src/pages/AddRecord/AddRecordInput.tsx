@@ -1,11 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { CELEBRATION_ID, INPUT_DETAILS } from '@assets/constant/constant'
-import { IsInputsHasValueType } from './AddRecord'
 import { parentCategoryID } from 'types/category'
 
 interface Props {
-  setIsInputsHasValue: Dispatch<SetStateAction<IsInputsHasValueType>>
-  isInputsHasValue: IsInputsHasValueType
   setIsInputFocus: Dispatch<SetStateAction<boolean>>
   recordTitle: string
   setRecordTitle: Dispatch<SetStateAction<string>>
@@ -15,8 +12,6 @@ interface Props {
 }
 
 function AddRecordInput({
-  setIsInputsHasValue,
-  isInputsHasValue,
   setIsInputFocus,
   recordTitle,
   setRecordTitle,
@@ -35,14 +30,8 @@ function AddRecordInput({
   }, [parentCategoryId])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (recordTitle.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
+    if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
       return
-    }
-    if (recordTitle.length > INPUT_DETAILS.MIN_TYPING) {
-      setIsInputsHasValue({ ...isInputsHasValue, input: true })
-    }
-    if (recordTitle.length === INPUT_DETAILS.MIN_TYPING) {
-      setIsInputsHasValue({ ...isInputsHasValue, input: false })
     }
     setRecordTitle(e.target.value)
   }
