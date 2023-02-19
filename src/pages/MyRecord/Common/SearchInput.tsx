@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useRef } from 'react'
 import { ReactComponent as SearchIcon } from '@assets/myRecordIcon/search.svg'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
+import { RECORD_TITLE_MAX_LENGTH } from '@assets/constant/constant'
 
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void
@@ -14,7 +15,6 @@ export default function SearchInput({
   setIsClickedInput,
   ...props
 }: SearchInputProps) {
-  const KEYWORD_MAX_LENGTH = 12
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -28,7 +28,7 @@ export default function SearchInput({
         onChange={(e) => setKeyword(e.target.value)}
         onFocus={() => setIsClickedInput(true)}
         onKeyUp={onKeyUp}
-        maxLength={KEYWORD_MAX_LENGTH}
+        maxLength={RECORD_TITLE_MAX_LENGTH}
         {...props}
       />
       <CloseIcon
