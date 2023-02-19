@@ -82,8 +82,8 @@ function AddRecordCategory({
   //data를 만들면 > 이걸 categoryState에 저장 > 화면 리렌더링 > 레코드 타입이 생성됨 > 화면 다시리렌더링
 
   const makeCategoryData = (data: CategoryDatas) => {
-    const CELEBRATION_INDEX = 1
-    const CONSOLATION_INDEX = 0
+    const CELEBRATION_INDEX = 0
+    const CONSOLATION_INDEX = 1
     if (data) {
       const categoryData: CategoryDataType = {
         [TEXT_DETAILS.CELEBRATION]: data[CELEBRATION_INDEX].subcategories.map(
