@@ -9,8 +9,6 @@ import useDebounce from '@hooks/useDebounce'
 import { useIntersect } from '@hooks/useIntersectionObserver'
 import Spinner from '@components/Spinner'
 
-const KEYWORD_MAX_LENGTH = 12
-
 export default function SearchRecord() {
   const { keyword: keywordInStore } = useRecoilValue(searchedKeyword)
   const resetSearchedKeyword = useResetRecoilState(searchedKeyword)
@@ -57,7 +55,6 @@ export default function SearchRecord() {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           setKeyword={setKeyword}
-          maxLength={KEYWORD_MAX_LENGTH}
           setIsClickedInput={setIsClickedInput}
           placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
         />

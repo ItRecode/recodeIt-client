@@ -14,6 +14,7 @@ export default function SearchInput({
   setIsClickedInput,
   ...props
 }: SearchInputProps) {
+  const KEYWORD_MAX_LENGTH = 12
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -27,6 +28,7 @@ export default function SearchInput({
         onChange={(e) => setKeyword(e.target.value)}
         onFocus={() => setIsClickedInput(true)}
         onKeyUp={onKeyUp}
+        maxLength={KEYWORD_MAX_LENGTH}
         {...props}
       />
       <CloseIcon
