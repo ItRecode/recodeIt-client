@@ -4,12 +4,11 @@ import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg
 import { ReactComponent as ArrowUp } from '@assets/myRecordIcon/arrow_up.svg'
 import useClickOutside from '@hooks/useClickOutside'
 import Button from '@components/Button'
-import { MonthYear } from './getCalendarDetail'
 import DateBox from './DateBox'
 import CalendarMonthYear from './CalendarMonthYear'
+import { useRecordsByMonthYear } from '@react-query/hooks/useRecordsByMonthYear'
 
 interface CalendarProps {
-  monthYear: MonthYear
   setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
 }
 
@@ -21,6 +20,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
   })
+  const hasRecordList = [1, 3, 5, 8, 10]
 
   return (
     <div className="fixed top-0 z-20 block h-full w-full">
@@ -44,7 +44,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
             onClick={() => setIsClickMonthYear(!isClickMonthYear)}
           >
             <span className="mr-[10px] text-base font-medium">
-              {monthYear.year}년 {monthYear.month + 1}월
+              {monthYear.year}년 {monthYear.month}월
             </span>
             {isClickMonthYear ? <ArrowUp /> : <ArrowDown />}
           </div>
@@ -61,9 +61,16 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                 <DateBox
                   date={1}
                   gridColumnStart={monthYear.startDayOfMonth + 1}
+                  hasRecord={true}
                 />
                 {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
-                  i > 0 ? <DateBox key={i} date={i + 1} /> : null
+                  i > 0 ? (
+                    <DateBox
+                      key={i}
+                      date={i + 1}
+                      hasRecord={hasRecordList.includes(i + 1)}
+                    />
+                  ) : null
                 )}
               </div>
               <div className="mt-8 w-full">
@@ -77,7 +84,14 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               </div>
             </>
           )}
-          {isClickMonthYear && <CalendarMonthYear />}
+          {isClickMonthYear && (
+            <CalendarMonthYear
+              month={monthYear.month}
+              year={monthYear.year}
+              setIsChangedMonthYear={setIsClickMonthYear}
+              setMonthYear={setMonthYear}
+            />
+          )}
         </div>
       </div>
     </div>
