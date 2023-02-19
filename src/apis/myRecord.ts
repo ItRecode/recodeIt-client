@@ -5,6 +5,7 @@ import {
   IMyRecordByDateList,
   IMyRecordByKeywordList,
   IMyRecordRequestParam,
+  IRecordWithMonthYear,
 } from 'types/myRecord'
 
 const MEMORY_RECORD_SIZE = 7
@@ -46,6 +47,16 @@ export const getRecordByKeyword = (
       searchKeyword: keyword,
       page: pageParam,
       size: MY_RECORD_KEYWORD_SIZE,
+    },
+  })
+}
+
+export const getRecordByMonthYear = (
+  yearMonth: string
+): Promise<AxiosResponse<IRecordWithMonthYear>> => {
+  return baseInstance.get(`/record/days`, {
+    params: {
+      yearMonth,
     },
   })
 }
