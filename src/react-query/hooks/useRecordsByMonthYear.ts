@@ -2,14 +2,18 @@ import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { getRecordByDate } from '@apis/myRecord'
 import { getFormattedDate } from '@utils/getFormattedDate'
+import { getMonthYearDetail } from '@pages/MyRecord/Calendar/getCalendarDetail'
 import { useState } from 'react'
 
-export const useMyRecordByDate = () => {
-  const [todayRecordId, setTodayRecordId] = useState<number | null>(null)
+export const useRecordsByMonthYear = () => {
   const today = new Date()
+  const [monthYear, setMonthYear] = useState(
+    getMonthYearDetail(new Date(today))
+  )
 
+  // TODO: 우선 임시로 아무 API 연결해놓았습니당 :) ㅎㅎ
   const { data: records = null, isLoading } = useQuery(
-    [QUERY_KEYS.myRecord, todayRecordId],
+    [QUERY_KEYS.myRecord, monthYear.month, monthYear],
     async () =>
       await getRecordByDate({
         date: getFormattedDate(today, 'hyphen'),
@@ -18,18 +22,13 @@ export const useMyRecordByDate = () => {
       }),
     {
       retry: false,
-      onSuccess: ({ data }) => {
-        if (data.totalCount) {
-          setTodayRecordId(data.recordByDateDtos[0].recordId)
-        } else {
-          setTodayRecordId(null)
-        }
-      },
     }
   )
 
   return {
-    todayRecord: records?.data.recordByDateDtos[0],
+    monthYearRecords: records?.data.recordByDateDtos[0],
     isLoading,
+    monthYear,
+    setMonthYear,
   }
 }

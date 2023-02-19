@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { ReactComponent as CalendarIcon } from '@assets/myRecordIcon/calendar.svg'
-import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
 import SearchInput from './Common/SearchInput'
@@ -11,7 +10,6 @@ import { searchedKeyword } from '@store/myRecordAtom'
 
 export default function MyRecord() {
   const navigate = useNavigate()
-  const { isLoading, monthYear } = useMyRecordByDate()
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const [keyword, setKeyword] = useState('')
   const [isClickedInput, setIsClickedInput] = useState(false)
@@ -22,10 +20,6 @@ export default function MyRecord() {
       navigate('/myrecord/search')
       setSearchedKeyword({ keyword })
     }
-  }
-
-  if (isLoading) {
-    return <></>
   }
 
   return (
@@ -56,15 +50,16 @@ export default function MyRecord() {
             </h2>
             <CalendarIcon
               className="cursor-pointer"
-              onClick={() => setIsOpenCalendar(true)}
+              onClick={() => {
+                navigate('/notservice')
+                // setIsOpenCalendar(true)
+              }}
             />
           </div>
           <MemoryRecord />
         </section>
       </div>
-      {isOpenCalendar && (
-        <Calendar monthYear={monthYear} setIsOpenCalendar={setIsOpenCalendar} />
-      )}
+      {isOpenCalendar && <Calendar setIsOpenCalendar={setIsOpenCalendar} />}
     </>
   )
 }
