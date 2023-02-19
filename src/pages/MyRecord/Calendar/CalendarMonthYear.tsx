@@ -40,16 +40,26 @@ export default function CalendarMonthYear({
     focusOnSelect: true,
   }
 
-  const handleSelectYear = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    const target = e.currentTarget as HTMLLIElement
-    setSelectedYear(parseInt(target.getAttribute('data-value') as string, 10))
+  const handleAfterChangeInYear = (index: number) => {
+    const yearSliderElement = document.querySelector('.year-slider')
+    const selectedSlideElement = yearSliderElement?.querySelector(
+      `.slick-slide[data-index="${index}"]`
+    )
+    const newYear = selectedSlideElement
+      ?.querySelector('.slick-select')
+      ?.getAttribute('data-value')
+    setSelectedYear(parseInt(newYear as string, 10))
   }
 
-  const handleSelectMonth = (
-    e: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    const target = e.currentTarget as HTMLLIElement
-    setSelectedMonth(parseInt(target.getAttribute('data-value') as string, 10))
+  const handleAfterChangeInMonth = (index: number) => {
+    const monthSliderElement = document.querySelector('.month-slider')
+    const selectedSlideElement = monthSliderElement?.querySelector(
+      `.slick-slide[data-index="${index}"]`
+    )
+    const newMonth = selectedSlideElement
+      ?.querySelector('.slick-select')
+      ?.getAttribute('data-value')
+    setSelectedMonth(parseInt(newMonth as string, 10))
   }
 
   const setSelectedMonthYear = () => {
@@ -61,34 +71,40 @@ export default function CalendarMonthYear({
   return (
     <div className="mt-6">
       <div className="flex gap-1">
-        <Slider {...sliderSettings} className="w-1/2 text-center">
+        <Slider
+          {...sliderSettings}
+          className="year-slider w-1/2 cursor-pointer text-center"
+          afterChange={handleAfterChangeInYear}
+        >
           {YEAR_LIST.map((year) => (
             <li
               key={year}
               data-value={year}
               className="slick-select w-full py-[10px]"
-              onClick={(e) => handleSelectYear(e)}
             >
               <span
                 data-value={year}
-                className="cursor-pointer text-[20px] font-semibold text-grey-8"
+                className=" text-[20px] font-semibold text-grey-8"
               >
                 {year}년
               </span>
             </li>
           ))}
         </Slider>
-        <Slider {...sliderSettings} className="w-1/2 text-center">
+        <Slider
+          {...sliderSettings}
+          className="month-slider w-1/2 cursor-pointer text-center"
+          afterChange={handleAfterChangeInMonth}
+        >
           {MONTH_LIST.map((month) => (
             <li
               key={month}
               data-value={month}
               className="slick-select w-full py-[10px]"
-              onClick={(e) => handleSelectMonth(e)}
             >
               <span
                 data-value={month}
-                className="cursor-pointer text-[20px] font-semibold text-grey-8"
+                className=" text-[20px] font-semibold text-grey-8"
               >
                 {month}월
               </span>
