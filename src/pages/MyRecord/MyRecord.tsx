@@ -14,6 +14,7 @@ export default function MyRecord() {
   const { isLoading, monthYear } = useMyRecordByDate()
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const [keyword, setKeyword] = useState('')
+  const [isClickedInput, setIsClickedInput] = useState(false)
   const setSearchedKeyword = useSetRecoilState(searchedKeyword)
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -38,6 +39,8 @@ export default function MyRecord() {
             value={keyword}
             onKeyUp={handleSearch}
             setKeyword={setKeyword}
+            setIsClickedInput={setIsClickedInput}
+            placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
           />
         </section>
         <section id="my-today-record">

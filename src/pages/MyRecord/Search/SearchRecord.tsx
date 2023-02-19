@@ -15,6 +15,7 @@ export default function SearchRecord() {
   const { keyword: keywordInStore } = useRecoilValue(searchedKeyword)
   const resetSearchedKeyword = useResetRecoilState(searchedKeyword)
   const [keyword, setKeyword] = useState(keywordInStore || '')
+  const [isClickedInput, setIsClickedInput] = useState(false)
   const {
     myRecordByKeyword,
     setKeywordWithQuery,
@@ -57,6 +58,8 @@ export default function SearchRecord() {
           onChange={(e) => setKeyword(e.target.value)}
           setKeyword={setKeyword}
           maxLength={KEYWORD_MAX_LENGTH}
+          setIsClickedInput={setIsClickedInput}
+          placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
         />
       </section>
       <section id="my-today-record">
