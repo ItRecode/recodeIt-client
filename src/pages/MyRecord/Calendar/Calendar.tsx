@@ -23,7 +23,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   const hasRecordList = [1, 3, 5, 8, 10]
 
   return (
-    <div className="fixed top-0 z-20 block h-full w-full">
+    <div className="fixed top-0 z-30 block h-full w-full">
       <div className="absolute h-full w-screen max-w-[420px] bg-grey-10 opacity-50" />
       <div
         ref={calendarRef}
