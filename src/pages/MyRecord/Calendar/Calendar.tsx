@@ -15,10 +15,8 @@ interface CalendarProps {
 
 const WEEK_TO_KR = ['일', '월', '화', '수', '목', '금', '토']
 
-export default function Calendar({
-  setIsOpenCalendar,
-  monthYear,
-}: CalendarProps) {
+export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
+  const { monthYear, setMonthYear } = useRecordsByMonthYear()
   const [isClickMonthYear, setIsClickMonthYear] = useState(false)
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
