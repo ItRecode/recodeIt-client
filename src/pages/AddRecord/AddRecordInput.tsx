@@ -1,5 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { CELEBRATION_ID, INPUT_DETAILS } from '@assets/constant/constant'
+import {
+  CELEBRATION_ID,
+  INPUT_DETAILS,
+  RECORD_TITLE_MAX_LENGTH,
+} from '@assets/constant/constant'
 import { IsInputsHasValueType } from './AddRecord'
 import { parentCategoryID } from 'types/category'
 
@@ -71,6 +75,7 @@ function AddRecordInput({
         onChange={(e) => handleChange(e)}
         type="text"
         value={modifyTitle ? modifyTitle : recordTitle}
+        maxLength={RECORD_TITLE_MAX_LENGTH}
       />
       <span className=" text-xs text-grey-4">{`${recordTitle.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
     </div>
