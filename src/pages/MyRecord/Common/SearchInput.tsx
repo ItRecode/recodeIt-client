@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useRef } from 'react'
 import { ReactComponent as SearchIcon } from '@assets/myRecordIcon/search.svg'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 
