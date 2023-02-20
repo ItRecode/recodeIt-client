@@ -62,7 +62,7 @@ function RecentRecord() {
 
   const getTime = () => {
     const getCurrentTime = new GetCurrentTime()
-    return `${getCurrentTime.getHours()}: ${getCurrentTime.getMinutes()}`
+    return `${getCurrentTime.getHours()} : ${getCurrentTime.getMinutes()}`
   }
 
   return (
@@ -79,7 +79,7 @@ function RecentRecord() {
             <p className="text-[14px] font-medium text-grey-8">
               지금 올라오고 있는 레코드는?
             </p>
-            <div className=" flex flex-col items-center justify-center">
+            <div className=" flex w-[10%] flex-col items-center justify-center">
               {timer === 0 ? (
                 <Reset onClick={handleReset} className="cursor-pointer" />
               ) : (
