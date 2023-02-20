@@ -28,6 +28,13 @@ function RecentRecord() {
   }
 
   useEffect(() => {
+    if (SessionStorage.get('previousPage') === 'detailPage') {
+      scrollRecentViewTop()
+      SessionStorage.remove('previousPage')
+    }
+  }, [])
+
+  useEffect(() => {
     const getTimer = Number(SessionStorage.get('resetTime')) as number
     const timeGapByTimer = getTimeGap(getTimer)
     if (timeGapByTimer >= RESET_TIME) {

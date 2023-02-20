@@ -64,6 +64,12 @@ export default function DetailRecord() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  useEffect(() => {
+    if (location.state?.previousUrl === '/collect') {
+      SessionStorage.set('previousPage', 'detailPage')
+    }
+  }, [])
+
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
     () => getRecord(recordIdParams),
