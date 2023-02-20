@@ -64,3 +64,7 @@ export const getRanking = async (
     },
   })
 }
+
+export const getTotalRecordCount = async () => {
+  return await baseInstance.get('/record/count')
+}
