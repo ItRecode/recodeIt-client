@@ -27,6 +27,7 @@ export default function SearchInput({
         autoComplete="off"
         onChange={(e) => setKeyword(e.target.value)}
         onFocus={() => setIsClickedInput(true)}
+        onBlur={() => setIsClickedInput(false)}
         onKeyUp={onKeyUp}
         maxLength={RECORD_TITLE_MAX_LENGTH}
         {...props}
