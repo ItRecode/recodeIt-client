@@ -38,7 +38,7 @@ function RecordCard({
     <div
       key={recordId}
       className={`h-full ${
-        type === 'recentRecord' ? 'w-[50%]' : 'w-[164px]'
+        type === 'recentRecord' ? 'w-full' : 'w-[164px]'
       } shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
       onClick={() => handleClickRecord(recordId)}
     >
