@@ -1,16 +1,10 @@
-import { AxiosResponse } from 'axios'
-import {
-  IMemoryRecordList,
-  IMyRecordRequestParam,
-  IRecordByDateList,
-} from 'types/recordData'
+import { parentCategoryID } from './../types/category'
 import { baseInstance } from './instance'
 
-const MEMORY_RECORD_SIZE = 7
-const MEMORY_COMMENT_SIZE = 5
-
-export const getCategory = () => {
-  return baseInstance.get('/record/category')
+export const getCategory = async (categoryId?: parentCategoryID) => {
+  return await baseInstance.get('/record/category', {
+    params: { parentRecordCategoryId: categoryId },
+  })
 }
 
 export const enrollRecord = async (data: FormData) => {
@@ -24,18 +18,6 @@ export const getRecord = async (recordId: string | undefined) => {
     const res = await baseInstance.get(`/record/${recordId}`)
     return res.data
   }
-}
-
-export const getMemoryRecord = (
-  pageParam: number
-): Promise<AxiosResponse<IMemoryRecordList>> => {
-  return baseInstance.get(`/record/memory`, {
-    params: {
-      memoryRecordPage: pageParam,
-      memoryRecordSize: MEMORY_RECORD_SIZE,
-      sizeOfCommentPerRecord: MEMORY_COMMENT_SIZE,
-    },
-  })
 }
 
 export const deleteRecord = async (recordId: string | undefined) => {
@@ -54,20 +36,6 @@ export const modifyRecord = async (
   })
 }
 
-export const getRecordByDate = ({
-  date,
-  page,
-  size,
-}: IMyRecordRequestParam): Promise<AxiosResponse<IRecordByDateList>> => {
-  return baseInstance.get(`/record`, {
-    params: {
-      date,
-      page,
-      size,
-    },
-  })
-}
-
 export const getRandomRecordData = async (recordCategoryId: 1 | 2) => {
   return await baseInstance.get('/record/random', {
     params: { recordCategoryId, size: 5 },
@@ -76,4 +44,27 @@ export const getRandomRecordData = async (recordCategoryId: 1 | 2) => {
 
 export const getMixRecordData = async () => {
   return await baseInstance.get('/record/mix')
+}
+
+export const getRecentRecordData = async (page: number, dateTime: string) => {
+  const MAX_RECORD_NUMBER = 10
+  return await baseInstance.get('/record/recent', {
+    params: { page, size: MAX_RECORD_NUMBER, dateTime },
+  })
+}
+
+export const getRanking = async (
+  recordCategoryId: number,
+  rankingPeriod = 'WEEK'
+) => {
+  return await baseInstance.get('/record/ranking', {
+    params: {
+      rankingPeriod,
+      recordCategoryId,
+    },
+  })
+}
+
+export const getTotalRecordCount = async () => {
+  return await baseInstance.get('/record/count')
 }

@@ -6,14 +6,14 @@ function BackButton({ onClick }: { onClick?: () => void }) {
   const navigate = useNavigate()
 
   const handleLocateBack = () => {
-    if (onClick) {
-      return onClick()
-    }
-
     if (navigate(-1) === undefined) {
       navigate('/')
     } else {
       navigate(-1)
+
+      if (onClick) {
+        return onClick()
+      }
     }
   }
 

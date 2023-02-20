@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
 import NavBar from '@components/Navbar'
 import Main from '@pages/Main/Main'
-import Rank from '@pages/Rank/Rank'
+import Collect from '@pages/Collect/Collect'
 import MyRecord from '@pages/MyRecord/MyRecord'
 import Login from '@pages/Login/Login'
 import AddRecord from '@pages/AddRecord/AddRecord'
@@ -15,6 +15,8 @@ import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
 import NotRecord from '@pages/NotRecord/NotRecord'
 import ScrollTop from '@components/ScrollTop'
+import SearchRecord from '@pages/MyRecord/Search/SearchRecord'
+import CalendarRecord from '@pages/MyRecord/Calendar/CalendarRecord'
 
 const router = createBrowserRouter([
   {
@@ -26,14 +28,35 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Main /> },
-      { path: 'rank', element: <Rank /> },
+      { path: 'collect', element: <Collect /> },
       {
         path: 'myrecord',
-        element: (
-          <ProtectedRoute route={'/myrecord'}>
-            <MyRecord />
-          </ProtectedRoute>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <ProtectedRoute route={'/myrecord'}>
+                <MyRecord />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'search',
+            element: (
+              <ProtectedRoute route={'/myrecord/search'}>
+                <SearchRecord />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'date',
+            element: (
+              <ProtectedRoute route={'/myrecord/date'}>
+                <CalendarRecord />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
       {
         path: 'setting',

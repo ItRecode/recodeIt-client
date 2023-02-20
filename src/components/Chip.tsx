@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface chipProps {
+interface chipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   type?: 'button' | 'submit' | 'reset' | undefined
   active: boolean
   icon: string | null
@@ -18,11 +18,13 @@ function Chip({
   pointer = true,
   property = 'default',
   isModify,
+  ...props
 }: chipProps) {
   return (
     <button
+      {...props}
       type={type}
-      className={`flex items-center justify-between rounded-full
+      className={`flex shrink-0 items-center justify-between rounded-full
         ${pointer && 'cursor-pointer'}
         ${
           active

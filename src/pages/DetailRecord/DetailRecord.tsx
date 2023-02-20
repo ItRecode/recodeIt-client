@@ -4,7 +4,7 @@ import Chip from '@components/Chip'
 import MoreButton from '@components/MoreButton'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
   INITIAL_RECORD_DATA,
@@ -26,12 +26,15 @@ import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
 import { AxiosError } from 'axios'
 import { createBrowserHistory } from 'history'
-import { useResetRecoilState } from 'recoil'
+import { useResetRecoilState, useSetRecoilState } from 'recoil'
 import {
+  checkFromDetailPage,
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
-} from '@store/atom'
+} from '@store/detailPageAtom'
+import { SessionStorage } from '@utils/sessionStorage'
+import { PREVIOUS_URL } from '@assets/constant/others'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -60,6 +63,13 @@ export default function DetailRecord() {
   const { recordIdParams } = useParams()
 
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state?.previousUrl === '/collect') {
+      SessionStorage.set('previousPage', 'detailPage')
+    }
+  }, [])
 
   const { data, isLoading, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
@@ -70,7 +80,8 @@ export default function DetailRecord() {
       refetchOnWindowFocus: false,
     }
   )
-  const POST_ID = window.location.href.split('/')[4]
+  const POST_ID = location.pathname.substring(8)
+
   const [isDelete, setIsDelete] = useState(false)
   useEffect(() => {
     if (isError) {
@@ -117,17 +128,24 @@ export default function DetailRecord() {
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
   const resetNestedReplyState = useResetRecoilState(nestedReplyState)
   const resetModifyComment = useResetRecoilState(modifyComment)
+  const fromDetailPage = useSetRecoilState(checkFromDetailPage)
 
   useEffect(() => {
+    fromDetailPage(true)
     const unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === 'POP' || action === 'PUSH') {
         resetInputMode()
         resetNestedReplyState()
         resetModifyComment()
+        fromDetailPage(false)
       }
       return unlistenHistoryEvent
     })
   }, [history])
+
+  const handleBackButton = () => {
+    navigate(`/${SessionStorage.get(PREVIOUS_URL)}`)
+  }
 
   return (
     <>
@@ -177,7 +195,7 @@ export default function DetailRecord() {
         )}
         <header className="p-4">
           <nav className="flex justify-between">
-            <BackButton />
+            <BackButton onClick={handleBackButton} />
             {user?.data === writer && (
               <button
                 className="cursor-pointer bg-transparent"

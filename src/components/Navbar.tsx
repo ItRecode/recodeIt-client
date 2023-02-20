@@ -9,10 +9,10 @@ export default function NavBar() {
   return (
     <>
       <Outlet />
-      <nav className="fixed bottom-0 flex h-[60px] w-full max-w-[420px] justify-between rounded-t-xl border border-solid border-grey-3 bg-white px-3 pt-1.5">
+      <nav className="fixed bottom-0 z-20 flex h-[60px] w-full max-w-[420px] justify-between rounded-t-xl border border-solid border-grey-3 bg-white px-3 pt-1.5">
         <nav className="left-3 flex">
           <NavbarItem pageName="홈" linkSrc="/" className="mr-5" />
-          <NavbarItem pageName="모아보기" linkSrc="/rank" />
+          <NavbarItem pageName="모아보기" linkSrc="/collect" />
         </nav>
         <Record_icon
           className="relative bottom-[50px] cursor-pointer"

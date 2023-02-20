@@ -13,34 +13,12 @@ export default function MixRecord() {
   const navigate = useNavigate()
   const setScrollTargetId = useSetRecoilState(scrollTarget)
 
-  const [mixRecordData, setMixRecordData1] = useState<IMixRecordData[] | null>(
+  const [mixRecordData, setMixRecordData] = useState<IMixRecordData[] | null>(
     null
   )
   const stopRef = useRef<Slider>(null)
-  const [dataState, setDataState] = useState({
-    activeSlide: 0,
-    activeSlide2: 0,
-  })
+  const [sliderState, setSliderState] = useState(0)
   const [sliderStop, setSliderStop] = useState(false)
-
-  const sliderSettings = {
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    // autoplay: true,
-    autoplaySpeed: 4000,
-    nextArrow: <div style={{ display: 'none' }} />,
-    prevArrow: <div style={{ display: 'none' }} />,
-    beforeChange: (current: number, next: number) =>
-      setDataState((prev) => {
-        return { ...prev, activeSlide: next }
-      }),
-    afterChange: (current: number) =>
-      setDataState((prev) => {
-        return { ...prev, activeSlide2: current }
-      }),
-  }
 
   const {
     data: initialMixData,
@@ -49,26 +27,28 @@ export default function MixRecord() {
   } = useQuery(['mixRecordData'], getMixRecordData, {
     retry: false,
     refetchOnMount: false,
+    refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   })
 
   useEffect(() => {
     if (initialMixData) {
       if (mixRecordData !== null) {
-        setMixRecordData1((prev) => {
+        setMixRecordData((prev) => {
           if (prev !== null) {
             return [...prev, ...initialMixData.data.mixRecordDto]
           }
           return prev
         })
       } else {
-        setMixRecordData1(initialMixData.data.mixRecordDto)
+        setMixRecordData(initialMixData.data.mixRecordDto)
       }
     }
   }, [initialMixData])
 
   const deleteData = () => {
-    setMixRecordData1((prev) => {
+    setMixRecordData((prev) => {
       if (prev !== null) {
         return prev.slice(10)
       }
@@ -97,13 +77,25 @@ export default function MixRecord() {
   }
 
   useEffect(() => {
-    if (dataState.activeSlide === 8 && dataState.activeSlide2 === 8) {
+    if (sliderState === 8) {
       refetch()
     }
-    if (dataState.activeSlide === 18 && dataState.activeSlide2 === 18) {
+    if (sliderState === 18) {
       deleteData()
     }
-  }, [dataState])
+  }, [sliderState])
+
+  const sliderSettings = {
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    arrows: false,
+    afterChange: (current: number) => setSliderState(current),
+  }
 
   return (
     <div className="relative flex w-full items-center justify-center">
@@ -114,7 +106,7 @@ export default function MixRecord() {
           <Slider
             ref={stopRef}
             {...sliderSettings}
-            className="h-[326px] w-full"
+            className="aspect-[420/326] w-full"
           >
             {mixRecordData !== null &&
               mixRecordData.map((item, index) => {
@@ -123,7 +115,7 @@ export default function MixRecord() {
                 return (
                   <div
                     key={index}
-                    className={`!flex h-[326px] !w-[420px] flex-col items-center ${colorName}`}
+                    className={`!flex !h-[326px] !w-[420px] !max-w-[420px] flex-col items-center ${colorName}`}
                   >
                     <RecordIcon
                       width={100}
@@ -131,12 +123,31 @@ export default function MixRecord() {
                       className="mt-20 cursor-pointer"
                       onClick={() => handleClick(item.recordId)}
                     />
-                    <p
-                      className="line-clamp mt-2 h-[54px] w-[143px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
+                    <div
+                      className="mt-2 cursor-pointer text-center text-[12px] leading-normal text-grey-1"
                       onClick={() => handleClick(item.recordId, item.commentId)}
                     >
-                      {item.commentContent}
-                    </p>
+                      <p>
+                        {item.commentContent
+                          .substring(0, 15)
+                          .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                      </p>
+                      {item.commentContent.length > 15 && (
+                        <p>
+                          {item.commentContent
+                            .substring(15, 30)
+                            .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                        </p>
+                      )}
+                      {item.commentContent.length > 30 && (
+                        <p>
+                          {item.commentContent
+                            .substring(30, 44)
+                            .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                          {item.commentContent.length > 44 && <span>...</span>}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )
               })}

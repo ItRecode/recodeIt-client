@@ -1,11 +1,6 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
-import {
-  DetailPageInputMode,
-  modifyComment,
-  nestedReplyState,
-  scrollTarget,
-} from '@store/atom'
+import { scrollTarget } from '@store/atom'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
@@ -16,6 +11,11 @@ import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteReply, getReply } from '@apis/reply'
 import Alert from '@components/Alert'
+import {
+  DetailPageInputMode,
+  modifyComment,
+  nestedReplyState,
+} from '@store/detailPageAtom'
 
 export default function ReplyItem({
   content,

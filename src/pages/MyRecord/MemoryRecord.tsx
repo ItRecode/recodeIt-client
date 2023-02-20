@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
-import { IMemoryRecord } from 'types/recordData'
-import MemoryRecordItem from './MemoryRecordItem'
+import React from 'react'
+import { IMemoryRecord } from 'types/myRecord'
 import { useMemoryRecord } from '@react-query/hooks/useMemoryRecord'
 import { ReactComponent as Gift } from '@assets/record_icons/gift.svg'
 import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
 import Spinner from '@components/Spinner'
+import MemoryRecordCard from './Common/MemoryRecordCard'
 
 export default function MemoryRecord() {
   const {
@@ -13,12 +13,7 @@ export default function MemoryRecord() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    refetch,
   } = useMemoryRecord()
-
-  useEffect(() => {
-    refetch()
-  }, [memoryRecord])
 
   if (isLoading) {
     return <></>
@@ -44,12 +39,12 @@ export default function MemoryRecord() {
     <>
       {memoryRecord.pages.map(({ data }) =>
         data.memoryRecordList.map((memoryRecord: IMemoryRecord) => (
-          <MemoryRecordItem
+          <MemoryRecordCard
             key={memoryRecord.recordId}
             recordId={memoryRecord.recordId}
             title={memoryRecord.title}
             iconName={memoryRecord.iconName}
-            iconColor={memoryRecord.iconColor}
+            colorName={memoryRecord.colorName}
             memoryRecordComments={memoryRecord.memoryRecordComments}
           />
         ))

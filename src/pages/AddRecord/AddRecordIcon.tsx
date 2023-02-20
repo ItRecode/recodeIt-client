@@ -8,6 +8,8 @@ import 'slick-carousel/slick/slick-theme.css'
 import { useRecoilState } from 'recoil'
 import { formDataAtom } from '@store/atom'
 import { useThrottle } from '@hooks/useThrottle'
+import { parentCategoryID } from 'types/category'
+import { CELEBRATION_ID } from '@assets/constant/constant'
 
 type IconSource = {
   src: string
@@ -20,18 +22,21 @@ export type IconType = {
 }
 
 interface Props {
-  currentRecordType: keyof IconType
+  parentCategoryId: parentCategoryID
   recordIcon: string
 }
 
-function AddRecordIcon({ currentRecordType, recordIcon }: Props) {
+function AddRecordIcon({ parentCategoryId, recordIcon }: Props) {
   const [iconState, setIconState] = useState<IconType>(ADD_RECORD_ICONS)
   const [currentFocus, setCurrentFocus] = useState<number>(0)
   const [formData, setFormData] = useRecoilState(formDataAtom)
-  const MAX_FOCUS = currentRecordType === 'celebration' ? 6 : 5
+  const MAX_FOCUS = parentCategoryId === CELEBRATION_ID ? 6 : 5
   const MIN_FOCUS = 0
   const slickRef = useRef<Slider | null>(null)
   const TIME_DELAY_MS = 500
+
+  const currentRecordType =
+    parentCategoryId === CELEBRATION_ID ? 'celebration' : 'consolation'
 
   useEffect(() => {
     const recordIconData = ADD_RECORD_ICONS[currentRecordType]?.filter(

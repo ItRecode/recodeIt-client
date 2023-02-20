@@ -1,30 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMyRecord } from '@react-query/hooks/useMyRecord'
-import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
-import Chip from '@components/Chip'
-import recordIcons from '@assets/record_icons'
-import { getFormattedDate } from '@utils/getFormattedDate'
-import MyRecordCalendar from './MyRecordCalendar'
+import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
+import MyRecordCard from './Common/MyRecordCard'
+import Loading from '@components/Loading'
 
 export default function TodayRecord() {
   const navigate = useNavigate()
-  const { todayRecord, isLoading, refetch } = useMyRecord()
-  const background_color = `bg-${todayRecord?.colorName}`
-  const RecordIcon = recordIcons[`${todayRecord?.iconName}`]
-
-  useEffect(() => {
-    refetch()
-  }, [todayRecord])
+  const { isLoading, todayRecord } = useMyRecordByDate()
 
   if (isLoading) {
-    return <></>
+    return <Loading />
   }
 
   if (!todayRecord) {
     return (
       <>
-        <MyRecordCalendar />
         <div className="mt-10 mb-[49px] w-full text-center">
           <span className="text-xs leading-5">
             오늘 쓴 레코드가 없어요!
@@ -43,43 +33,16 @@ export default function TodayRecord() {
   }
 
   return (
-    <>
-      <MyRecordCalendar />
-      <div className="mt-4 mb-10 w-full px-6">
-        <div
-          className="cursor-pointer text-xs"
-          onClick={() => navigate(`/record/${todayRecord.recordId}`)}
-        >
-          {getFormattedDate(new Date(todayRecord.createdAt), 'point')}
-        </div>
-        <div
-          className="mt-4 flex w-fit cursor-pointer"
-          onClick={() => navigate(`/record/${todayRecord.recordId}`)}
-        >
-          <div
-            className={`${background_color} flex h-[86px] w-[86px] items-center rounded-2xl`}
-          >
-            <RecordIcon className="flex aspect-square w-full" />
-          </div>
-          <div className="ml-4 flex flex-col">
-            <div className="inline">
-              <Chip
-                property="small"
-                icon={getChipIconName(todayRecord.categoryName)}
-                message={`${todayRecord.categoryName}`}
-                active={true}
-                pointer={false}
-              />
-            </div>
-            <h2 className="mt-3 text-lg font-semibold leading-[18px]">
-              {todayRecord.title}
-            </h2>
-            <div className="mt-[14px] text-xs leading-4">
-              댓글 {todayRecord.commentCount}개
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="mt-4 mb-10 w-full px-6">
+      <MyRecordCard
+        recordId={todayRecord.recordId}
+        title={todayRecord.title}
+        categoryName={todayRecord.categoryName}
+        commentCount={todayRecord.commentCount}
+        iconName={todayRecord.iconName}
+        colorName={todayRecord.colorName}
+        createdAt={todayRecord.createdAt}
+      />
+    </div>
   )
 }

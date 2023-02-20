@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IMemoryRecord } from 'types/recordData'
+import { IMemoryRecord } from 'types/myRecord'
 
 import useSwipe from '@hooks/useSwipe'
 import recordIcons from '@assets/record_icons'
@@ -8,11 +8,11 @@ import { ReactComponent as PlusIcons } from '@assets/myRecordIcon/comment_plus.s
 import { useSetRecoilState } from 'recoil'
 import { scrollTarget } from '@store/atom'
 
-export default function MemoryRecordItem({
+export default function MemoryRecordCard({
   recordId,
   title,
   iconName,
-  iconColor,
+  colorName,
   memoryRecordComments,
 }: IMemoryRecord) {
   const dragRef = useRef<HTMLDivElement | null>(
@@ -20,7 +20,7 @@ export default function MemoryRecordItem({
   ) as React.MutableRefObject<HTMLDivElement>
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
   const navigate = useNavigate()
-  const background_color = `bg-${iconColor}`
+  const background_color = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]
   const setScrollTargetId = useSetRecoilState(scrollTarget)
 

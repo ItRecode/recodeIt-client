@@ -1,7 +1,7 @@
-import { DetailPageInputMode } from '@store/atom'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import { ReactComponent as CloseIcon } from '@assets/detail_page_icon/Close.svg'
+import { DetailPageInputMode } from '@store/detailPageAtom'
 
 interface Iprops {
   setText: Dispatch<SetStateAction<string>>

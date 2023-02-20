@@ -1,18 +1,17 @@
+import React, { useEffect, useState } from 'react'
 import { getRandomRecordData } from '@apis/record'
+import { CELEBRATION_ID } from '@assets/constant/constant'
 import Spinner from '@components/Spinner'
 import { useQuery } from '@tanstack/react-query'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { parentCategoryID } from 'types/category'
 import { IRandomRecordData } from 'types/recordData'
 import TogetherSlider from './TogetherSlider'
-import TogetherTab from './TogetherTab'
 
 export default function Together({
-  categoryId,
-  setCategoryId,
+  parentCategoryId,
 }: {
-  categoryId: 1 | 2
-  setCategoryId: Dispatch<SetStateAction<1 | 2>>
+  parentCategoryId: parentCategoryID
 }) {
   const navigate = useNavigate()
 
@@ -21,11 +20,12 @@ export default function Together({
   >(null)
 
   const { data, isLoading, isSuccess } = useQuery(
-    ['randomRecordData', categoryId],
-    () => getRandomRecordData(categoryId),
+    ['randomRecordData', parentCategoryId],
+    () => getRandomRecordData(parentCategoryId),
     {
       retry: false,
       refetchOnMount: false,
+      refetchOnReconnect: false,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
     }
@@ -38,20 +38,17 @@ export default function Together({
   }, [data, isSuccess])
 
   return (
-    <div className="h-[50px] w-full pt-3.5">
-      <section id="tab">
-        <TogetherTab categoryId={categoryId} setCategoryId={setCategoryId} />
-      </section>
+    <div className="w-full">
       <section
         id="title"
         className="mt-10 mb-6 flex w-full justify-between px-6"
       >
         <p className="text-[24px] font-semibold leading-none">
-          함께 {categoryId === 1 ? '축하' : '위로'}해보세요!
+          함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}해보세요!
         </p>
         <button
           className="cursor-pointer bg-transparent text-grey-6"
-          onClick={() => navigate('/rank')}
+          onClick={() => navigate('/collect')}
         >
           전체보기
         </button>
@@ -65,7 +62,7 @@ export default function Together({
         ) : (
           <TogetherSlider
             randomRecordData={randomRecordData}
-            categoryId={categoryId}
+            parentCategoryId={parentCategoryId}
           />
         )}
       </section>

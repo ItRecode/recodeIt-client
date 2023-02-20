@@ -1,42 +1,29 @@
 import React, { useEffect, useRef } from 'react'
 import { IRandomRecordData } from 'types/recordData'
-import recordIcons from '@assets/record_icons'
-import { useNavigate } from 'react-router-dom'
 import useSwipe from '@hooks/useSwipe'
-import { useCheckMobile } from '@hooks/useCheckMobile'
+import { parentCategoryID } from 'types/category'
+import RecordCard from '@components/RecordCard'
 
 export default function TogetherSlider({
   randomRecordData,
-  categoryId,
+  parentCategoryId,
 }: {
   randomRecordData: IRandomRecordData[] | null
-  categoryId: 1 | 2
+  parentCategoryId: parentCategoryID
 }) {
-  const navigate = useNavigate()
-
   const dragRef = useRef<HTMLDivElement | null>(
     null
   ) as React.MutableRefObject<HTMLDivElement>
 
-  const { isMobile } = useCheckMobile()
-
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
-
-  const handleClickRecord = (recordId: number) => {
-    if (isDragging) {
-      setIsDragging(false)
-      return
-    }
-    navigate(`/record/${recordId}`)
-  }
 
   useEffect(() => {
     dragRef.current.scrollLeft = 0
-  }, [categoryId])
+  }, [parentCategoryId])
 
   return (
     <div
-      className="relative ml-6 flex h-full flex-nowrap overflow-scroll"
+      className="relative ml-6 flex h-full flex-nowrap gap-1.5 overflow-scroll pr-4"
       ref={dragRef}
       onMouseDownCapture={(e) => {
         handleMouseDown(e)
@@ -44,33 +31,18 @@ export default function TogetherSlider({
     >
       {randomRecordData !== null &&
         randomRecordData.map((item) => {
-          const colorName = `bg-${item.colorName}`
-          const RecordIcon = recordIcons[`${item.iconName}`]
           return (
-            <div
+            <RecordCard
+              type="mainRecord"
               key={item.recordId}
-              className={`mr-1.5 h-full w-[164px] shrink-0 rounded-2xl ${colorName} flex cursor-pointer flex-col items-center justify-center`}
-              onClick={() => handleClickRecord(item.recordId)}
-            >
-              <RecordIcon width={100} height={100} />
-              <p className="mt-4 text-sm font-semibold leading-none text-grey-10">
-                {!isMobile && item.title.length > 6 ? (
-                  <>
-                    <p>{item.title.substring(0, 6)}</p>
-                    <p className="text-center">
-                      {item.title
-                        .substring(6)
-                        .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
-                    </p>
-                  </>
-                ) : (
-                  item.title
-                )}
-              </p>
-              <p className="mt-2.5 text-xs leading-none">
-                댓글 {item.commentCount}개
-              </p>
-            </div>
+              isDragging={isDragging}
+              setIsDragging={setIsDragging}
+              title={item.title}
+              colorName={item.colorName}
+              iconName={item.iconName}
+              commentCount={item.commentCount}
+              recordId={item.recordId}
+            />
           )
         })}
     </div>

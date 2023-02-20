@@ -4,10 +4,15 @@ export const INPUT_DETAILS = Object.freeze({
   MIN_TYPING: 0,
 })
 
+export const RECORD_TITLE_MAX_LENGTH = 12
+
 export const TEXT_DETAILS = Object.freeze({
   CELEBRATION: 'celebration',
   CONSOLATION: 'consolation',
 })
+
+export const CELEBRATION_ID = 1
+export const CONSOLATION_ID = 2
 
 export const INITIAL_RECORD_DATA = {
   recordId: 0,

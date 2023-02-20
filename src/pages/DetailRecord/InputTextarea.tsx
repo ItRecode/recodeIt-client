@@ -1,7 +1,7 @@
 import { RECORD_DETAIL_INPUT_HEIGHT_WITHOUT_TEXTAREA } from '@assets/constant/constant'
 import Alert from '@components/Alert'
 import { useUser } from '@react-query/hooks/useUser'
-import { DetailPageInputMode } from '@store/atom'
+import { DetailPageInputMode } from '@store/detailPageAtom'
 import { LocalStorage } from '@utils/localStorage'
 import React, {
   Dispatch,
