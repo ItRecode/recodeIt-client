@@ -26,8 +26,9 @@ import { useUser } from '@react-query/hooks/useUser'
 import Alert from '@components/Alert'
 import { AxiosError } from 'axios'
 import { createBrowserHistory } from 'history'
-import { useResetRecoilState } from 'recoil'
+import { useResetRecoilState, useSetRecoilState } from 'recoil'
 import {
+  checkFromDetailPage,
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
@@ -121,13 +122,16 @@ export default function DetailRecord() {
   const resetInputMode = useResetRecoilState(DetailPageInputMode)
   const resetNestedReplyState = useResetRecoilState(nestedReplyState)
   const resetModifyComment = useResetRecoilState(modifyComment)
+  const fromDetailPage = useSetRecoilState(checkFromDetailPage)
 
   useEffect(() => {
+    fromDetailPage(true)
     const unlistenHistoryEvent = history.listen(({ action }) => {
       if (action === 'POP' || action === 'PUSH') {
         resetInputMode()
         resetNestedReplyState()
         resetModifyComment()
+        fromDetailPage(false)
       }
       return unlistenHistoryEvent
     })

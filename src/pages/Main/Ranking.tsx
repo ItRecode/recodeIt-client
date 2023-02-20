@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import Category from '@components/Category'
 import { useQuery } from '@tanstack/react-query'
 import { getRanking } from '@apis/record'
-import { CELEBRATION_ID } from '@assets/constant/constant'
 import { useEffect } from 'react'
 import { IRankingRecordData } from 'types/recordData'
 import RankingList from './RankingList'
+import { useRecoilState } from 'recoil'
+import { subCategoryIdAtomMainPage } from '@store/mainPageAtom'
 
 export default function Ranking({
   parentCategoryId,
@@ -17,10 +18,19 @@ export default function Ranking({
 }) {
   const navigate = useNavigate()
   const [rankingData, setRankingData] = useState<IRankingRecordData[]>()
-  const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
+  const [choosedCategoryId, setChoosedCategoryId] = useRecoilState<number>(
+    subCategoryIdAtomMainPage
+  )
 
-  const { data, isSuccess } = useQuery(['ranking', choosedCategoryId], () =>
-    getRanking(choosedCategoryId, 'WEEK')
+  const { data, isSuccess } = useQuery(
+    ['ranking', choosedCategoryId],
+    () => getRanking(choosedCategoryId, 'WEEK'),
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
   )
 
   useEffect(() => {
@@ -33,11 +43,13 @@ export default function Ranking({
     <div className="relative mt-[43px]">
       <section id="title" className="flex items-center justify-between px-6">
         <button
-          className="flex cursor-pointer items-center bg-transparent p-0"
+          className="flex h-6 cursor-pointer items-center bg-transparent p-0"
           onClick={() => navigate('/collect')}
         >
-          <p className="text-lg font-semibold">레코드 랭킹</p>
-          <Right_Arrow_icon className="mb-1" />
+          <p className="h-full pt-[4px] text-lg font-semibold leading-none">
+            레코드 랭킹
+          </p>
+          <Right_Arrow_icon />
         </button>
         <p className="text-xs text-grey-6">최근 일주일</p>
       </section>

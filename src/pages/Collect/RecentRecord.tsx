@@ -50,7 +50,11 @@ function RecentRecord() {
   })
 
   if (isLoading) {
-    return <Spinner size="large" />
+    return (
+      <div className="flex w-full justify-center">
+        <Spinner size="large" />
+      </div>
+    )
   }
 
   const handleReset = () => {

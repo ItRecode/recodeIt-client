@@ -34,7 +34,10 @@ export default function RankingItem({
       : 'max-w-[35%]'
 
   return (
-    <div className="relative mb-5 flex h-12 w-full items-center justify-between px-6">
+    <div
+      className="relative mb-5 flex h-12 w-full cursor-pointer items-center justify-between px-6"
+      onClick={() => navigate(`/record/${recordId}`)}
+    >
       <div className="flex w-full items-center">
         <p className="w-[16px] text-center">{index}</p>
         <div
@@ -51,10 +54,7 @@ export default function RankingItem({
         </div>
       </div>
 
-      <button
-        className="absolute right-6 flex cursor-pointer items-center whitespace-nowrap bg-transparent p-0"
-        onClick={() => navigate(`/record/${recordId}`)}
-      >
+      <button className="absolute right-6 flex items-center whitespace-nowrap bg-transparent p-0">
         <p>함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}하기</p>
         <Arrow className="ml-4" />
       </button>

@@ -5,6 +5,8 @@ import { getChipIconName } from '@pages/DetailRecord/getChipIconName'
 import Chip from './Chip'
 import useSwipe from '@hooks/useSwipe'
 import { CELEBRATION_ID, CONSOLATION_ID } from '@assets/constant/constant'
+import { useRecoilValue } from 'recoil'
+import { checkFromDetailPage } from '@store/detailPageAtom'
 
 export default function Category({
   slider,
@@ -26,12 +28,20 @@ export default function Category({
   ) as React.MutableRefObject<HTMLDivElement>
   const { handleMouseDown, isDragging, setIsDragging } = useSwipe(dragRef)
 
+  const isFromDetailPage = useRecoilValue(checkFromDetailPage)
+
   useEffect(() => {
     if (slider) {
-      if (parentCategoryId === CELEBRATION_ID)
-        setChoosedCategoryId(CELEBRATION_ID)
-      if (parentCategoryId === CONSOLATION_ID)
-        setChoosedCategoryId(CONSOLATION_ID)
+      if (
+        choosedCategoryId !== CELEBRATION_ID &&
+        choosedCategoryId !== CONSOLATION_ID &&
+        !isFromDetailPage
+      ) {
+        if (parentCategoryId === CELEBRATION_ID)
+          setChoosedCategoryId(CELEBRATION_ID)
+        if (parentCategoryId === CONSOLATION_ID)
+          setChoosedCategoryId(CONSOLATION_ID)
+      }
       dragRef.current.scrollLeft = 0
     }
     if (!slider) {
@@ -51,6 +61,7 @@ export default function Category({
       setChoosedCategoryId(parentCategoryId)
     }
   }
+
   return (
     <div
       className={`flex pr-4 ${

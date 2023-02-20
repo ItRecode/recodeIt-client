@@ -43,17 +43,8 @@ function RecordCard({
       onClick={() => handleClickRecord(recordId)}
     >
       <RecordIcon width={100} height={100} />
-      <div className="mt-4 text-sm font-semibold text-grey-10">
-        {title.length > 6 ? (
-          <>
-            <p>{title.substring(0, 6)}</p>
-            <p className="text-center">
-              {title.substring(6).replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
-            </p>
-          </>
-        ) : (
-          title
-        )}
+      <div className="mt-4 w-full text-sm font-semibold text-grey-10">
+        <p className="w-full truncate px-5 text-center">{title}</p>
       </div>
       <p className="mt-2.5 text-xs leading-none">댓글 {commentCount}개</p>
     </div>

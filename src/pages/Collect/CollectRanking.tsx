@@ -6,24 +6,36 @@ import { parentCategoryID } from 'types/category'
 import { ReactComponent as Collapse } from '@assets/collect_page_icon/collapse.svg'
 import { keyOfRankingPeriod, RANKINGPERIOD } from '@assets/constant/ranking'
 import { useQuery } from '@tanstack/react-query'
-import { getRanking } from '@apis/record'
+import { getRanking, getTotalRecordCount } from '@apis/record'
 import { IRankingRecordData } from 'types/recordData'
 import RankingItem from '@components/RankingItem'
 import { ReactComponent as DownArrow } from '@assets/ranking_down_arrow.svg'
+import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil'
+import {
+  parentCategoryIdAtomColletPage,
+  subCategoryIdAtomCollectPage,
+} from '@store/collectPageAtom'
+import { checkFromDetailPage } from '@store/detailPageAtom'
 
 export default function CollectRanking({
   setOpenModal,
   rankingPeriod,
+  setRankingPeriod,
 }: {
   setOpenModal: Dispatch<SetStateAction<boolean>>
   rankingPeriod: keyOfRankingPeriod
+  setRankingPeriod: SetterOrUpdater<keyOfRankingPeriod>
 }) {
   const [parentCategoryId, setParentCategoryId] =
-    useState<parentCategoryID>(CELEBRATION_ID)
-  const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
+    useRecoilState<parentCategoryID>(parentCategoryIdAtomColletPage)
+  const [choosedCategoryId, setChoosedCategoryId] = useRecoilState(
+    subCategoryIdAtomCollectPage
+  )
   const [rankingData, setRankingData] = useState<IRankingRecordData[]>()
   const [rankingState, setRankingState] = useState(0)
+  const [rankingList, setRankingList] = useState<IRankingRecordData[]>()
   const [plusBtnState, setPlusBtnState] = useState(false)
+  const isFromDetailPage = useRecoilValue(checkFromDetailPage)
 
   const { data, isSuccess } = useQuery(
     ['ranking', choosedCategoryId, rankingPeriod],
@@ -36,25 +48,42 @@ export default function CollectRanking({
     }
   )
 
+  const { data: totalRecordCount } = useQuery(
+    ['totalRecordCount'],
+    getTotalRecordCount
+  )
+
   useEffect(() => {
     if (isSuccess) {
-      if (rankingState === 0 && data.data.recordRankingDtos.length > 5) {
-        setRankingData(data.data.recordRankingDtos.slice(0, 5))
-        setPlusBtnState(true)
+      setRankingData(data.data.recordRankingDtos)
+    }
+  }, [data, isSuccess])
+
+  useEffect(() => {
+    if (rankingData !== undefined) {
+      if (rankingState === 0) {
+        setRankingList(rankingData.slice(0, 5))
+        if (rankingData.length > 5) setPlusBtnState(true)
       } else {
-        setRankingData(data.data.recordRankingDtos)
+        setRankingList(rankingData)
+        setPlusBtnState(false)
       }
     }
-    if (rankingState === 1) {
-      setPlusBtnState(false)
+  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData])
+
+  useEffect(() => {
+    if (!isFromDetailPage) {
+      setParentCategoryId(CELEBRATION_ID)
+      setRankingPeriod('DAY')
     }
-  }, [data, isSuccess, rankingPeriod, choosedCategoryId, rankingState])
+  }, [])
 
   return (
     <div className="mt-4 w-full">
       <div className="pl-[26px]">
         <p className="text-sm leading-none">
-          총 <span className="text-primary-2">개</span> 의 레코딧
+          총 <span className="text-primary-2">{totalRecordCount?.data}개</span>{' '}
+          의 레코딧
         </p>
         <p className="mt-6 text-2xl font-semibold leading-none">
           많이 레코딧 받고 있어요!
@@ -87,8 +116,8 @@ export default function CollectRanking({
         <Collapse />
       </section>
       <section id="rankingList" className="mt-8">
-        {rankingData &&
-          rankingData.map((item, index) => {
+        {rankingList &&
+          rankingList.map((item, index) => {
             const colorName = `bg-${item.colorName}`
             return (
               <RankingItem
