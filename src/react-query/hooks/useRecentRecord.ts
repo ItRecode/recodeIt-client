@@ -13,7 +13,6 @@ export const useRecentRecord = () => {
     isLoading,
     hasNextPage,
     fetchNextPage,
-    remove,
     refetch,
   } = useInfiniteQuery({
     queryKey: [QUERY_KEYS.recentRecord],
@@ -32,7 +31,6 @@ export const useRecentRecord = () => {
   })
 
   const reset = () => {
-    remove()
     refetch({ refetchPage: (page, index) => index === 0 })
   }
 

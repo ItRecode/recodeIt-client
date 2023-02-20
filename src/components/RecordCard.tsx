@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import recordIcons from '@assets/record_icons'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 interface CardProps {
   title: string
@@ -26,13 +26,14 @@ function RecordCard({
   const ColorName = `bg-${colorName}`
   const RecordIcon = recordIcons[`${iconName}`]
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const handleClickRecord = (recordId: number) => {
     if (isDragging && setIsDragging) {
       setIsDragging(false)
       return
     }
-    navigate(`/record/${recordId}`)
+    navigate(`/record/${recordId}`, { state: { previousUrl: pathname } })
   }
   return (
     <div
