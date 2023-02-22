@@ -189,7 +189,7 @@ export default function DetailRecord() {
             onCancel={() => setIsDelete(false)}
             onConfirm={() => {
               deleteRecordById(POST_ID)
-              navigate('/myrecord')
+              navigate('/')
             }}
           />
         )}
