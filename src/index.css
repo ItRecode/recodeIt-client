@@ -178,3 +178,11 @@ textarea {
 body {
   min-height: -webkit-fill-available;
 }
+
+.year-slider {
+  display: block;
+}
+
+.month-slider {
+  display: block;
+}

@@ -42,3 +42,7 @@ export interface IMyRecordRequestParam extends PaginationRequest {
 export interface IMyRecordByKeywordRequestParam extends PaginationRequest {
   keyword: string
 }
+
+export interface IRecordWithMonthYear {
+  writtenRecordDayDto: number[]
+}
