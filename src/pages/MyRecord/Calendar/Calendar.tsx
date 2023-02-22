@@ -7,6 +7,7 @@ import Button from '@components/Button'
 import DateBox from './DateBox'
 import CalendarMonthYear from './CalendarMonthYear'
 import { useMyRecordByMonthYear } from '@react-query/hooks/useMyRecordByMonthYear'
+import { useNavigate } from 'react-router-dom'
 
 interface CalendarProps {
   setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
@@ -15,6 +16,7 @@ interface CalendarProps {
 const WEEK_TO_KR = ['일', '월', '화', '수', '목', '금', '토']
 
 export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
+  const navigate = useNavigate()
   const { monthYear, setMonthYear, recordsWithMonthYear } =
     useMyRecordByMonthYear()
   const [isClickMonthYear, setIsClickMonthYear] = useState(false)
@@ -40,11 +42,11 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               onClick={() => setIsOpenCalendar(false)}
             />
           </div>
-          <div className="flex  items-center pt-10">
-            <span
-              className="mr-[10px] cursor-pointer text-base font-medium"
-              onClick={() => setIsClickMonthYear(!isClickMonthYear)}
-            >
+          <div
+            className="flex  cursor-pointer items-center pt-10"
+            onClick={() => setIsClickMonthYear(!isClickMonthYear)}
+          >
+            <span className="mr-[10px] text-base font-medium">
               {monthYear.year}년 {monthYear.month}월
             </span>
             {isClickMonthYear ? <ArrowUp /> : <ArrowDown />}
@@ -83,6 +85,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                   aria-label="select-record-date-button"
                   property={'solid'}
                   active={selectedDate !== 0}
+                  onClick={() => navigate('/myrecord/date')}
                 >
                   선택
                 </Button>
