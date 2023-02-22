@@ -57,6 +57,7 @@ export default function SearchRecord() {
           setKeyword={setKeyword}
           setIsClickedInput={setIsClickedInput}
           placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
+          autoFocus
         />
       </section>
       <section id="my-today-record">
