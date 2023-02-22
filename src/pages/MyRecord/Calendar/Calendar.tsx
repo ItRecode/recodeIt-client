@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
 import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
 import { ReactComponent as ArrowUp } from '@assets/myRecordIcon/arrow_up.svg'
@@ -18,6 +18,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   const { monthYear, setMonthYear, recordsWithMonthYear } =
     useMyRecordByMonthYear()
   const [isClickMonthYear, setIsClickMonthYear] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(0)
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
   })
@@ -39,11 +40,11 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               onClick={() => setIsOpenCalendar(false)}
             />
           </div>
-          <div
-            className="flex cursor-pointer items-center pt-10"
-            onClick={() => setIsClickMonthYear(!isClickMonthYear)}
-          >
-            <span className="mr-[10px] text-base font-medium">
+          <div className="flex  items-center pt-10">
+            <span
+              className="mr-[10px] cursor-pointer text-base font-medium"
+              onClick={() => setIsClickMonthYear(!isClickMonthYear)}
+            >
               {monthYear.year}년 {monthYear.month}월
             </span>
             {isClickMonthYear ? <ArrowUp /> : <ArrowDown />}
@@ -57,18 +58,22 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                   </p>
                 ))}
               </div>
-              <div className="mt-2 grid grid-cols-7 justify-items-center gap-2">
+              <div className="mt-2 grid grid-cols-7 justify-items-center gap-y-1 gap-x-2">
                 <DateBox
                   date={1}
                   gridColumnStart={monthYear.startDayOfMonth + 1}
                   hasRecord={recordsWithMonthYear?.includes(1)}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
                 />
                 {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
                   i > 0 ? (
                     <DateBox
                       key={i}
                       date={i + 1}
+                      selectedDate={selectedDate}
                       hasRecord={recordsWithMonthYear?.includes(i + 1)}
+                      setSelectedDate={setSelectedDate}
                     />
                   ) : null
                 )}
@@ -77,7 +82,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                 <Button
                   aria-label="select-record-date-button"
                   property={'solid'}
-                  active={false}
+                  active={selectedDate !== 0}
                 >
                   선택
                 </Button>
