@@ -24,6 +24,7 @@ export const useMyRecordByMonthYear = () => {
   return {
     recordsWithMonthYear: data?.data.writtenRecordDayDto,
     isLoading,
+    today: { ...getMonthYearDetail(today), day: today.getDate() },
     monthYear,
     setMonthYear,
   }

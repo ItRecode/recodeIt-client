@@ -17,13 +17,15 @@ const WEEK_TO_KR = ['일', '월', '화', '수', '목', '금', '토']
 
 export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   const navigate = useNavigate()
-  const { monthYear, setMonthYear, recordsWithMonthYear } =
+  const { today, monthYear, setMonthYear, recordsWithMonthYear } =
     useMyRecordByMonthYear()
   const [isClickMonthYear, setIsClickMonthYear] = useState(false)
   const [selectedDate, setSelectedDate] = useState(0)
   const calendarRef = useClickOutside<HTMLDivElement>(() => {
     setIsOpenCalendar(false)
   })
+  const isTodayMonthYear =
+    monthYear.month === today.month && monthYear.year && today.month
 
   return (
     <div className="fixed top-0 z-30 block h-full w-full">
@@ -63,6 +65,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               <div className="mt-2 grid grid-cols-7 justify-items-center gap-y-1 gap-x-2">
                 <DateBox
                   date={1}
+                  todayDate={isTodayMonthYear ? today.day : null}
                   gridColumnStart={monthYear.startDayOfMonth + 1}
                   hasRecord={recordsWithMonthYear?.includes(1)}
                   selectedDate={selectedDate}
@@ -73,6 +76,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                     <DateBox
                       key={i}
                       date={i + 1}
+                      todayDate={isTodayMonthYear ? today.day : null}
                       selectedDate={selectedDate}
                       hasRecord={recordsWithMonthYear?.includes(i + 1)}
                       setSelectedDate={setSelectedDate}
