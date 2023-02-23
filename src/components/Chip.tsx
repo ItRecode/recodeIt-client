@@ -1,6 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import { checkFromDetailPage } from '@store/detailPageAtom'
-import { useRecoilValue } from 'recoil'
 
 interface chipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   type?: 'button' | 'submit' | 'reset' | undefined
