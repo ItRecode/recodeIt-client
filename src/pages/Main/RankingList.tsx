@@ -3,6 +3,7 @@ import { IRankingRecordData } from 'types/recordData'
 import { ReactComponent as DownArrow } from '@assets/ranking_down_arrow.svg'
 import { parentCategoryID } from 'types/category'
 import RankingItem from '@components/RankingItem'
+import RankingItemNoData from '@components/RankingItemNoData'
 
 export default function RankingList({
   rankingData,
@@ -32,22 +33,26 @@ export default function RankingList({
 
   return (
     <div className="mt-8">
-      {rankingList?.map((item, index) => {
-        const colorName = `bg-${item.colorName}`
-        return (
-          <RankingItem
-            key={item.recordId}
-            index={index + 1}
-            parentCategoryId={parentCategoryId}
-            recordId={item.recordId}
-            colorName={colorName}
-            title={item.title}
-            writer={item.writer}
-            numOfComment={item.numOfComment}
-            iconName={item.iconName}
-          />
-        )
-      })}
+      {rankingList?.length !== 0 ? (
+        rankingList?.map((item, index) => {
+          const colorName = `bg-${item.colorName}`
+          return (
+            <RankingItem
+              key={item.recordId}
+              index={index + 1}
+              parentCategoryId={parentCategoryId}
+              recordId={item.recordId}
+              colorName={colorName}
+              title={item.title}
+              writer={item.writer}
+              numOfComment={item.numOfComment}
+              iconName={item.iconName}
+            />
+          )
+        })
+      ) : (
+        <RankingItemNoData />
+      )}
       {plusBtnState && (
         <button
           className="flex w-full cursor-pointer items-center justify-center border-t border-grey-3 bg-transparent p-4 text-primary-2"

@@ -16,6 +16,7 @@ import {
   subCategoryIdAtomCollectPage,
 } from '@store/collectPageAtom'
 import { checkFromDetailPage } from '@store/detailPageAtom'
+import RankingItemNoData from '@components/RankingItemNoData'
 
 export default function CollectRanking({
   setOpenModal,
@@ -69,7 +70,8 @@ export default function CollectRanking({
         setPlusBtnState(false)
       }
     }
-  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData])
+    if (rankingList?.length === 0) setPlusBtnState(false)
+  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData, rankingList])
 
   useEffect(() => {
     if (!isFromDetailPage) {
@@ -116,8 +118,8 @@ export default function CollectRanking({
         <Collapse />
       </section>
       <section id="rankingList" className="mt-8">
-        {rankingList &&
-          rankingList.map((item, index) => {
+        {rankingList?.length !== 0 ? (
+          rankingList?.map((item, index) => {
             const colorName = `bg-${item.colorName}`
             return (
               <RankingItem
@@ -132,7 +134,12 @@ export default function CollectRanking({
                 iconName={item.iconName}
               />
             )
-          })}
+          })
+        ) : (
+          <div className="mb-8">
+            <RankingItemNoData />
+          </div>
+        )}
         {plusBtnState && (
           <button
             className="flex w-full cursor-pointer items-center justify-center border-t border-solid border-grey-3 bg-transparent p-4 text-primary-2"
