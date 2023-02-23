@@ -31,6 +31,9 @@ export default function RankingList({
     }
   }, [rankingState, rankingData])
 
+  useEffect(() => {
+    if (rankingList?.length === 0) setPlusBtnState(false)
+  }, [rankingList])
   return (
     <div className="mt-8">
       {rankingList?.length !== 0 ? (
