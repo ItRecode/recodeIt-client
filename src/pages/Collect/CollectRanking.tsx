@@ -70,8 +70,8 @@ export default function CollectRanking({
         setPlusBtnState(false)
       }
     }
-    if (rankingList?.length === 0) setPlusBtnState(false)
-  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData, rankingList])
+    if (rankingData?.length === 0) setPlusBtnState(false)
+  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData])
 
   useEffect(() => {
     if (!isFromDetailPage) {
@@ -84,7 +84,10 @@ export default function CollectRanking({
     <div className="mt-4 w-full">
       <div className="pl-[26px]">
         <p className="text-sm leading-none">
-          총 <span className="text-primary-2">{totalRecordCount?.data}개</span>{' '}
+          총{' '}
+          <span className="text-primary-2">
+            {totalRecordCount?.data.toLocaleString()} 개
+          </span>
           의 레코딧
         </p>
         <p className="mt-6 text-2xl font-semibold leading-none">
