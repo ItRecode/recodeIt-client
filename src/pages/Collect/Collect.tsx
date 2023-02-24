@@ -76,7 +76,7 @@ export default function Collect() {
             className={`fixed z-[20] cursor-pointer`}
           />
         )}
-        <section id="ranking" className="w-full">
+        <section id="ranking" className="w-full pt-4">
           <CollectRanking
             setOpenModal={setOpenModal}
             rankingPeriod={rankingPeriod}
