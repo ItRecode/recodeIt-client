@@ -63,9 +63,19 @@ const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
+  {
+    path: 'setting',
+    children: [
       {
-        path: 'setting',
-        element: <Setting />,
+        index: true,
+        element: (
+          <ScrollTop>
+            <NavBar />
+            <Setting />
+          </ScrollTop>
+        ),
       },
       {
         path: 'modifyinfo',
@@ -82,6 +92,18 @@ const router = createBrowserRouter([
             <ManageComment />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'teamintroduction',
+        element: <TeamIntroduction />,
+      },
+      {
+        path: 'feedbackmail',
+        element: <FeedbackMail />,
+      },
+      {
+        path: 'withdraw',
+        element: <Withdraw />,
       },
     ],
   },
@@ -113,18 +135,6 @@ const router = createBrowserRouter([
   {
     path: '/notservice',
     element: <NotService />,
-  },
-  {
-    path: '/teamintroduction',
-    element: <TeamIntroduction />,
-  },
-  {
-    path: '/feedbackmail',
-    element: <FeedbackMail />,
-  },
-  {
-    path: '/withdraw',
-    element: <Withdraw />,
   },
 ])
 
