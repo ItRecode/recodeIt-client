@@ -2,9 +2,8 @@ import { AxiosResponse } from 'axios'
 import { baseInstance } from './instance'
 import {
   IMemoryRecordList,
-  IMyRecordByDateList,
+  IMyRecord,
   IMyRecordByKeywordList,
-  IMyRecordRequestParam,
   IRecordWithMonthYear,
 } from 'types/myRecord'
 
@@ -24,18 +23,8 @@ export const getMemoryRecord = (
   })
 }
 
-export const getRecordByDate = ({
-  date,
-  page,
-  size,
-}: IMyRecordRequestParam): Promise<AxiosResponse<IMyRecordByDateList>> => {
-  return baseInstance.get(`/record`, {
-    params: {
-      date,
-      page,
-      size,
-    },
-  })
+export const getRecordOnToday = (): Promise<AxiosResponse<IMyRecord>> => {
+  return baseInstance.get(`/record/today`)
 }
 
 export const getRecordByKeyword = (

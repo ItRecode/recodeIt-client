@@ -27,10 +27,6 @@ export interface IMyRecord {
   createdAt: string
 }
 
-export interface IMyRecordByDateList extends PaginationResponse {
-  recordByDateDtos: IMyRecord[]
-}
-
 export interface IMyRecordByKeywordList extends PaginationResponse {
   recordBySearchDtos: IMyRecord[]
 }
