@@ -19,7 +19,6 @@ export const useMemoryRecord = () => {
       }
       return null
     },
-    refetchOnMount: true,
   })
 
   return {
