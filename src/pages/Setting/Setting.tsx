@@ -25,10 +25,13 @@ export default function Setting() {
               </p>
               <p>안녕하세요</p>
             </div>
-            <SettingSection routeText="내 정보 수정" routeUrl="/modifyinfo" />
+            <SettingSection
+              routeText="내 정보 수정"
+              routeUrl="/setting/modifyinfo"
+            />
             <SettingSection
               routeText="내 댓글 관리"
-              routeUrl="/managecomment"
+              routeUrl="/setting/managecomment"
             />
           </section>
           <div className={`h-[15px] ${getPaddingIgnoreWidth()} bg-grey-2`} />
@@ -51,15 +54,21 @@ export default function Setting() {
             <Front />
           </div>
         )}
-        <SettingSection routeText="팀 소개" routeUrl="/teamintroduction" />
-        <SettingSection routeText="피드백 메일" routeUrl="/feedbackmail" />
+        <SettingSection
+          routeText="팀 소개"
+          routeUrl="/setting/teamintroduction"
+        />
+        <SettingSection
+          routeText="피드백 메일"
+          routeUrl="/setting/feedbackmail"
+        />
       </section>
       {user && (
         <div>
           <div className={`h-[15px] ${getPaddingIgnoreWidth()} bg-grey-2`} />
           <section>
             <SettingSection routeText="로그아웃" />
-            <SettingSection routeText="회원탈퇴" routeUrl="/withdraw" />
+            <SettingSection routeText="회원탈퇴" routeUrl="/setting/withdraw" />
           </section>
         </div>
       )}
