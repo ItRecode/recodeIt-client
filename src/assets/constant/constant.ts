@@ -38,3 +38,6 @@ export const INPUT_MODE = Object.freeze({
   REPLY: 'reply',
   NESTEDREPLY: 'nestedReply',
 })
+
+export const NICKNAME_MIN_LENGTH = 2
+export const NICKNAME_MAX_LENGTH = 8
