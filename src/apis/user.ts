@@ -5,5 +5,5 @@ export const getUserInfo = () => {
 }
 
 export const updateUserInfo = (nickname: string) => {
-  return baseInstance.put(`/member`, { params: { nickname } })
+  return baseInstance.put(`/member`, { nickName: nickname })
 }
