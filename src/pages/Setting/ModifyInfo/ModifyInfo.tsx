@@ -3,41 +3,52 @@ import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { updateUserInfo } from '@apis/user'
 import useDebounce from '@hooks/useDebounce'
 import BackButton from '@components/BackButton'
-import { useUser } from '@react-query/hooks/useUser'
 import { getIsValidateNickname } from '@utils/getIsValidateNickname'
 import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import Button from '@components/Button'
-import { useCheckMobile } from '@hooks/useCheckMobile'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function ModifyInfo() {
-  const { user } = useUser()
-  const { isMobile } = useCheckMobile()
+  const navigate = useNavigate()
+  const { state } = useLocation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
-  const [nickname, setNickname] = useState(user?.data)
+  const [nickname, setNickname] = useState(state.nickname || '')
   const [errorMessage, setErrorMessage] = useState('')
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+  const [inputBorderStyle, setInputBorderStyle] = useState('')
 
   useDebounce(
     async () => {
       setErrorMessage('')
+      setInputBorderStyle('')
       setIsCheckedNickname(false)
-      if (
-        nickname.length > 0 &&
-        getIsValidateNickname(nickname, setErrorMessage)
-      ) {
-        try {
-          // await updateUserInfo(nickname)
-          setIsCheckedNickname(true)
-        } catch (e) {
-          setErrorMessage('이미 사용중인 닉네임이에요.')
-          setIsCheckedNickname(false)
+      if (getIsValidateNickname(nickname, setErrorMessage)) {
+        if (nickname.length > 0) {
+          try {
+            setIsCheckedNickname(true)
+            setInputBorderStyle('border border-solid border-primary-2')
+          } catch (e) {
+            setErrorMessage('이미 사용중인 닉네임이에요.')
+            setIsCheckedNickname(false)
+            setInputBorderStyle('border border-solid border-sub-1')
+          }
         }
+      } else {
+        setInputBorderStyle('border border-solid border-sub-1')
       }
     },
     300,
     [nickname]
   )
+
+  const handleClickUpdateButton = async () => {
+    try {
+      await updateUserInfo(nickname)
+      navigate('/setting')
+    } catch (e) {
+      setIsCheckedNickname(false)
+    }
+  }
 
   return (
     <div className="relative h-screen w-full">
@@ -52,13 +63,7 @@ function ModifyInfo() {
             id="modify-nickname-input"
             value={nickname}
             className={`w-full rounded-[8px] bg-grey-2 py-[17px] pl-[12px] text-[14px] font-medium placeholder:text-grey-5 focus:outline-none
-              ${
-                nickname.length === 0
-                  ? 'border-none'
-                  : isCheckedNickname
-                  ? 'border border-solid border-primary-2'
-                  : 'border border-sub-1 outline-primary-2'
-              }`}
+              ${inputBorderStyle}`}
             autoComplete="off"
             onChange={(e) => setNickname(e.target.value)}
             maxLength={NICKNAME_MAX_LENGTH}
@@ -80,35 +85,17 @@ function ModifyInfo() {
           {isCheckedNickname ? '사용 가능한 닉네임이에요.' : errorMessage}
         </p>
       </section>
-      {isMobile && isKeyboardOpen ? (
-        <div className="fixed bottom-0 left-0 w-full">
-          <Button
-            type="submit"
-            property="solid"
-            active={isCheckedNickname}
-            // onClick={handleSignUp}
-            // loading={isLoading}
-            // disabled={isLoading}
-            onFocus={() => setIsKeyboardOpen(true)}
-            onBlur={() => setIsKeyboardOpen(false)}
-          >
-            수정 완료
-          </Button>
-        </div>
-      ) : (
-        <div className="relative mt-[104px] px-6">
-          <Button
-            type="submit"
-            property="solid"
-            active={isCheckedNickname}
-            // onClick={handleSignUp}
-            // loading={isLoading}
-            // disabled={isLoading}
-          >
-            수정 완료
-          </Button>
-        </div>
-      )}
+      <div className="relative mt-[104px] px-6">
+        <Button
+          type="submit"
+          property="solid"
+          active={isCheckedNickname}
+          onClick={handleClickUpdateButton}
+          disabled={!isCheckedNickname}
+        >
+          수정 완료
+        </Button>
+      </div>
     </div>
   )
 }
