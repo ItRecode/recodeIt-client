@@ -28,6 +28,7 @@ export default function Setting() {
             <SettingSection
               routeText="내 정보 수정"
               routeUrl="/setting/modifyinfo"
+              state={{ nickname: user.data }}
             />
             <SettingSection
               routeText="내 댓글 관리"
