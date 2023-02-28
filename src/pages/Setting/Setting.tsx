@@ -1,14 +1,25 @@
 import { useUser } from '@react-query/hooks/useUser'
-import React from 'react'
+import React, { useState } from 'react'
 import SettingSection from './SettingSection'
 import { ReactComponent as Front } from '@assets/front_white.svg'
 import { useNavigate } from 'react-router-dom'
+import Alert from '@components/Alert'
 
 export default function Setting() {
-  const { user } = useUser()
+  const { user, logoutUser } = useUser()
+  const [isClickedLogout, setIsClickedLogout] = useState(false)
   const PADDING_VALUE = 24
 
   const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      logoutUser()
+      navigate('/')
+    } catch (e) {
+      alert('로그아웃에 실패하였습니다.')
+    }
+  }
 
   const getPaddingIgnoreWidth = () => {
     return `ml-[-${PADDING_VALUE}px] w-[calc(100%+${PADDING_VALUE * 2}px)]`
@@ -66,11 +77,31 @@ export default function Setting() {
       {user && (
         <div>
           <div className={`h-[15px] ${getPaddingIgnoreWidth()} bg-grey-2`} />
-          <section>
+          <section
+            id="logout-item-section"
+            onClick={() => setIsClickedLogout(true)}
+          >
             <SettingSection routeText="로그아웃" />
+          </section>
+          <section id="withdraw-item-section">
             <SettingSection routeText="회원탈퇴" routeUrl="/setting/withdraw" />
           </section>
         </div>
+      )}
+      {isClickedLogout && (
+        <Alert
+          visible={true}
+          mainMessage={
+            <>
+              <span className="text-sub-1">로그아웃</span> 하시겠어요?
+            </>
+          }
+          confirmMessage="둘러보기"
+          cancelMessage="로그아웃"
+          onConfirm={() => setIsClickedLogout(false)}
+          onClose={() => setIsClickedLogout(false)}
+          onCancel={handleLogout}
+        />
       )}
     </div>
   )
