@@ -19,3 +19,7 @@ export const getIsDuplicatedNickname = (nickname: string) => {
     params: { nickname },
   })
 }
+
+export const logout = () => {
+  return baseInstance.post(`/member/logout`)
+}
