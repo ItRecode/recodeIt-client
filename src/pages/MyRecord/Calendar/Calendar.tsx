@@ -125,6 +125,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
               year={monthYear.year}
               setIsChangedMonthYear={setIsClickMonthYear}
               setMonthYear={setMonthYear}
+              setSelectedDate={setSelectedDate}
             />
           )}
         </div>
