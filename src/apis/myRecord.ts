@@ -12,10 +12,12 @@ const MEMORY_COMMENT_SIZE = 5
 const MY_RECORD_KEYWORD_SIZE = 10
 
 export const getMemoryRecord = (
-  pageParam: number
+  pageParam: number,
+  date: string
 ): Promise<AxiosResponse<IMemoryRecordList>> => {
   return baseInstance.get(`/record/memory`, {
     params: {
+      date,
       memoryRecordPage: pageParam,
       memoryRecordSize: MEMORY_RECORD_SIZE,
       sizeOfCommentPerRecord: MEMORY_COMMENT_SIZE,

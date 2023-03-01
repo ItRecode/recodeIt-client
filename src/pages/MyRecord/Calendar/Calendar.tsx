@@ -89,7 +89,15 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                   aria-label="select-record-date-button"
                   property={'solid'}
                   active={selectedDate !== 0}
-                  onClick={() => navigate('/myrecord/date')}
+                  onClick={() =>
+                    navigate('/myrecord/date', {
+                      state: {
+                        year: monthYear.year,
+                        month: monthYear.month,
+                        day: selectedDate,
+                      },
+                    })
+                  }
                 >
                   선택
                 </Button>
