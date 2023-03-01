@@ -11,7 +11,7 @@ export const useMyRecordByMonthYear = () => {
   )
 
   const { data = null, isLoading } = useQuery(
-    [monthYear.month, monthYear],
+    [monthYear.month, monthYear.year],
     async () =>
       await getRecordByMonthYear(
         getFormattedDateWithMonthYear(monthYear.year, monthYear.month)

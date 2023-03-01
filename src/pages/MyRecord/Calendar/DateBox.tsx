@@ -25,8 +25,10 @@ export default function DateBox({
   useEffect(() => {
     if ((todayDate && date > todayDate) || isFutureMonthYear) {
       setDisabledDay(true)
+    } else {
+      setDisabledDay(false)
     }
-  }, [])
+  }, [disabledDay])
 
   useEffect(() => {
     if (selectedDate === date) {
