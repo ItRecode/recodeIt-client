@@ -27,7 +27,9 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
     setIsOpenCalendar(false)
   })
   const isTodayMonthYear =
-    monthYear.month === today.month && monthYear.year && today.month
+    monthYear.month === today.month && monthYear.year === today.year
+  const isFutureMonthYear =
+    monthYear.month > today.month && monthYear.year === today.year
 
   useEffect(() => {
     if (state) {
@@ -80,6 +82,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                   hasRecord={recordsWithMonthYear?.includes(1)}
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
+                  isFutureMonthYear={isFutureMonthYear}
                 />
                 {[...Array(monthYear.lastDayOfMonth)].map((_, i) =>
                   i > 0 ? (
@@ -90,6 +93,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                       selectedDate={selectedDate}
                       hasRecord={recordsWithMonthYear?.includes(i + 1)}
                       setSelectedDate={setSelectedDate}
+                      isFutureMonthYear={isFutureMonthYear}
                     />
                   ) : null
                 )}
