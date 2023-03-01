@@ -4,10 +4,12 @@ import SettingSection from './SettingSection'
 import { ReactComponent as Front } from '@assets/front_white.svg'
 import { useNavigate } from 'react-router-dom'
 import Alert from '@components/Alert'
+import Loading from '@components/Loading'
 
 export default function Setting() {
-  const { user, logoutUser } = useUser()
+  const { user, isLoading, logoutUser } = useUser()
   const [isClickedLogout, setIsClickedLogout] = useState(false)
+
   const PADDING_VALUE = 24
 
   const navigate = useNavigate()
@@ -24,6 +26,11 @@ export default function Setting() {
   const getPaddingIgnoreWidth = () => {
     return `ml-[-${PADDING_VALUE}px] w-[calc(100%+${PADDING_VALUE * 2}px)]`
   }
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <div className="flex  h-full flex-col px-6 pt-10">
       {user !== null ? (
@@ -39,6 +46,7 @@ export default function Setting() {
             <SettingSection
               routeText="내 정보 수정"
               routeUrl="/setting/modifyinfo"
+              state={{ nickname: user.data }}
             />
             <SettingSection
               routeText="내 댓글 관리"

@@ -6,8 +6,8 @@ import Input from '@components/Input'
 import { useAuth } from '@react-query/hooks/useAuth'
 import { getIsDuplicatedNickname } from '@apis/auth'
 import useDebounce from '@hooks/useDebounce'
-
-const NICKNAME_MIN_LENGTH = 2
+import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
+import { getIsValidateNickname } from '@utils/getIsValidateNickname'
 
 export default function SignUp() {
   const location = useLocation()
@@ -28,7 +28,10 @@ export default function SignUp() {
     async () => {
       setErrorMessage('')
       setIsCheckedNickname(false)
-      if (nickname.length > 0 && validateNickname(nickname)) {
+      if (
+        nickname.length > 0 &&
+        getIsValidateNickname(nickname, setErrorMessage)
+      ) {
         try {
           await getIsDuplicatedNickname(nickname)
           setIsCheckedNickname(true)
@@ -41,41 +44,6 @@ export default function SignUp() {
     300,
     [nickname]
   )
-
-  const validateNickname = (nickname: string) => {
-    const spacePattern = /\s/g
-    const consonantAndVowelPattern = /[ㄱ-ㅎㅏ-ㅣ]/
-    const specialPattern = /[`~!@#$%^&*()_|+\-=?;:'",.<>\\{}[\]\\/₩]/gim
-    const emojiPattern =
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
-
-    if (nickname.length < NICKNAME_MIN_LENGTH) {
-      setErrorMessage(`${NICKNAME_MIN_LENGTH}글자 이상 입력해주세요.`)
-      return false
-    }
-
-    if (nickname.match(spacePattern)) {
-      setErrorMessage('공백은 사용할 수 없어요.')
-      return false
-    }
-
-    if (nickname.match(specialPattern)) {
-      setErrorMessage('특수문자는 사용할 수 없어요.')
-      return false
-    }
-
-    if (nickname.match(consonantAndVowelPattern)) {
-      setErrorMessage('자음이나 모음만은 사용할 수 없어요.')
-      return false
-    }
-
-    if (nickname.match(emojiPattern)) {
-      setErrorMessage('이모지는 사용할 수 없어요.')
-      return false
-    }
-
-    return true
-  }
 
   const setPropertyWithIsCheckedNickname = () => {
     if (nickname.length < 1 && !isInputClicked) return 'default'
@@ -107,7 +75,7 @@ export default function SignUp() {
           name="nickname"
           label="닉네임"
           value={nickname}
-          maxLength={8}
+          maxLength={NICKNAME_MAX_LENGTH}
           placeholder={isInputClicked ? '' : `국문, 영문, 숫자 포함 2~8자`}
           message={
             isCheckedNickname ? '사용 가능한 닉네임입니다.' : errorMessage
