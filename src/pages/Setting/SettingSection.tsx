@@ -1,18 +1,18 @@
 import React from 'react'
 import { ReactComponent as Front } from '@assets/front.svg'
 import { useNavigate } from 'react-router-dom'
-
 interface SettingSectionProps {
   routeUrl?: string
   routeText: string
+  state?: Record<string, string>
 }
 
-function SettingSection({ routeUrl, routeText }: SettingSectionProps) {
+function SettingSection({ routeUrl, routeText, state }: SettingSectionProps) {
   const navigate = useNavigate()
 
   const handleClickSection = () => {
     if (routeUrl) {
-      navigate(routeUrl)
+      navigate(routeUrl, { state })
     }
   }
 
