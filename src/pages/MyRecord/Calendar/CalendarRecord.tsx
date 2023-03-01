@@ -24,6 +24,7 @@ export default function CalendarRecord() {
 
   useEffect(() => {
     if (state) {
+      setIsOpenCalendar(false)
       setDate(
         getFormattedDate(
           new Date(`${state.year}-${state.month}-${state.day}`),
@@ -31,7 +32,7 @@ export default function CalendarRecord() {
         )
       )
     }
-  }, [])
+  }, [state])
 
   if (isLoading) {
     return <></>

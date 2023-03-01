@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ReactComponent as CloseIcon } from '@assets/myRecordIcon/close.svg'
 import { ReactComponent as ArrowDown } from '@assets/myRecordIcon/arrow_down.svg'
 import { ReactComponent as ArrowUp } from '@assets/myRecordIcon/arrow_up.svg'
@@ -7,7 +7,8 @@ import Button from '@components/Button'
 import DateBox from './DateBox'
 import CalendarMonthYear from './CalendarMonthYear'
 import { useMyRecordByMonthYear } from '@react-query/hooks/useMyRecordByMonthYear'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getMonthYearDetail } from './getCalendarDetail'
 
 interface CalendarProps {
   setIsOpenCalendar: Dispatch<SetStateAction<boolean>>
@@ -16,6 +17,7 @@ interface CalendarProps {
 const WEEK_TO_KR = ['일', '월', '화', '수', '목', '금', '토']
 
 export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
+  const { state } = useLocation()
   const navigate = useNavigate()
   const { today, monthYear, setMonthYear, recordsWithMonthYear } =
     useMyRecordByMonthYear()
@@ -26,6 +28,14 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
   })
   const isTodayMonthYear =
     monthYear.month === today.month && monthYear.year && today.month
+
+  useEffect(() => {
+    if (state) {
+      setIsClickMonthYear(false)
+      setMonthYear(getMonthYearDetail(new Date(`${state.year}-${state.month}`)))
+      setSelectedDate(state.day)
+    }
+  }, [])
 
   return (
     <div className="fixed top-0 z-30 block h-full w-full">
@@ -96,6 +106,7 @@ export default function Calendar({ setIsOpenCalendar }: CalendarProps) {
                         month: monthYear.month,
                         day: selectedDate,
                       },
+                      replace: state ? true : false,
                     })
                   }
                 >
