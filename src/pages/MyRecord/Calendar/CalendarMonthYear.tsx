@@ -6,6 +6,7 @@ import { getMonthYearDetail, MonthYear } from './getCalendarDetail'
 interface CalendarMonthYearProps extends Pick<MonthYear, 'month' | 'year'> {
   setMonthYear: Dispatch<SetStateAction<MonthYear>>
   setIsChangedMonthYear: Dispatch<SetStateAction<boolean>>
+  setSelectedDate: Dispatch<SetStateAction<number>>
 }
 
 export default function CalendarMonthYear({
@@ -13,6 +14,7 @@ export default function CalendarMonthYear({
   year,
   setMonthYear,
   setIsChangedMonthYear,
+  setSelectedDate,
 }: CalendarMonthYearProps) {
   const [selectedMonth, setSelectedMonth] = useState(month)
   const [selectedYear, setSelectedYear] = useState(year)
@@ -65,6 +67,7 @@ export default function CalendarMonthYear({
   const setSelectedMonthYear = () => {
     const selectedDate = new Date(selectedYear, selectedMonth - 1)
     setMonthYear(getMonthYearDetail(selectedDate))
+    setSelectedDate(0)
     setIsChangedMonthYear(false)
   }
 

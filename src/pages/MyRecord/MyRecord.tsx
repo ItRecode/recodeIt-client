@@ -54,10 +54,7 @@ export default function MyRecord() {
             </h2>
             <CalendarIcon
               className="cursor-pointer"
-              onClick={() => {
-                navigate('/notservice')
-                // setIsOpenCalendar(true)
-              }}
+              onClick={() => setIsOpenCalendar(true)}
             />
           </div>
           <MemoryRecord />

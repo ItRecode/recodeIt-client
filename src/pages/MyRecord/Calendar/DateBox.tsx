@@ -7,6 +7,7 @@ interface DateBoxProps {
   hasRecord?: boolean
   selectedDate: number
   setSelectedDate: Dispatch<SetStateAction<number>>
+  isFutureMonthYear: boolean
 }
 
 export default function DateBox({
@@ -16,15 +17,18 @@ export default function DateBox({
   hasRecord,
   selectedDate,
   setSelectedDate,
+  isFutureMonthYear,
 }: DateBoxProps) {
   const [isClickedDay, setIsClickedDay] = useState(false)
   const [disabledDay, setDisabledDay] = useState(false)
 
   useEffect(() => {
-    if (todayDate && date > todayDate) {
+    if ((todayDate && date > todayDate) || isFutureMonthYear) {
       setDisabledDay(true)
+    } else {
+      setDisabledDay(false)
     }
-  }, [])
+  }, [disabledDay])
 
   useEffect(() => {
     if (selectedDate === date) {
