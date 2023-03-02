@@ -27,9 +27,9 @@ function TeamIntroduction() {
               'https://itrecord.notion.site/itrecord/b55dba4e491144d5b62efd0bdbe15b36'
             )
           }
-          className="mt-8 flex w-full cursor-pointer items-center justify-between bg-transparent p-0 text-base font-semibold"
+          className="mt-8 flex w-full cursor-pointer items-center justify-between bg-transparent p-0"
         >
-          <p>
+          <p className="text-base font-semibold">
             더 자세한 팀 <span className="text-primary-2">텐져스의 이야기</span>{' '}
             보러가기
           </p>
