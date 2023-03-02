@@ -133,8 +133,8 @@ function FeedbackMail() {
         </div>
         <div
           className={`${
-            window.innerHeight > 680 ? 'absolute' : 'my-10 block'
-          } bottom-10 w-full cursor-pointer px-6`}
+            window.innerHeight > 680 ? 'absolute bottom-10' : 'my-10 block'
+          } w-full cursor-pointer px-6`}
         >
           <Button
             property="solid"
