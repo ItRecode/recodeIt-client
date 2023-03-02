@@ -39,13 +39,14 @@ function AddRecordInput({
   }, [parentCategoryId])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (recordTitle.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
+    const inputValueLength = e.target.value.length
+    if (inputValueLength > INPUT_DETAILS.MAX_INPUT_TYPING) {
       return
     }
-    if (recordTitle.length > INPUT_DETAILS.MIN_TYPING) {
+    if (inputValueLength > INPUT_DETAILS.MIN_TYPING) {
       setIsInputsHasValue({ ...isInputsHasValue, input: true })
     }
-    if (recordTitle.length === INPUT_DETAILS.MIN_TYPING) {
+    if (inputValueLength === INPUT_DETAILS.MIN_TYPING) {
       setIsInputsHasValue({ ...isInputsHasValue, input: false })
     }
     setRecordTitle(e.target.value)
