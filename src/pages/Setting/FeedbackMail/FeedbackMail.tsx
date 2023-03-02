@@ -13,7 +13,7 @@ function FeedbackMail() {
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
+    if (subject === '' || body === '') return
     const {
       REACT_APP_EMAILJS_SERVICE_ID,
       REACT_APP_EMAILJS_TEMPLATE_ID,
@@ -49,14 +49,16 @@ function FeedbackMail() {
           message={
             <>
               <div className="mt-6 font-semibold">
-                <p>
+                <p className="whitespace-nowrap">
                   <span className="text-primary-2">피드백 전송</span>이
                 </p>
-                <p>완료되었어요</p>
+                <p className="whitespace-nowrap">완료되었어요</p>
               </div>
               <div className="mt-4 text-xs font-medium leading-normal text-grey-8">
-                <p>더 편리한 이용을 하실 수 있도록</p>
-                <p>빠르게 개선할게요!</p>
+                <p className="whitespace-nowrap">
+                  더 편리한 이용을 하실 수 있도록
+                </p>
+                <p className="whitespace-nowrap">빠르게 개선할게요!</p>
               </div>
             </>
           }
@@ -99,6 +101,7 @@ function FeedbackMail() {
                 placeholder="제목을 작성해주세요."
                 onChange={(e) => setSubject(e.target.value)}
                 value={subject}
+                maxLength={20}
               />
               <span className="absolute right-6 text-xs text-grey-4">
                 {subject.length}/20
@@ -124,8 +127,17 @@ function FeedbackMail() {
             </div>
           </section>
         </div>
-        <div className="absolute bottom-10 w-full cursor-pointer px-6">
-          <Button property="solid" type="submit">
+        <div
+          className={`${
+            window.innerHeight > 680 ? 'absolute' : 'my-10 block'
+          } bottom-10 w-full cursor-pointer px-6`}
+        >
+          <Button
+            property="solid"
+            type="submit"
+            disabled={subject === '' || body === ''}
+            active={subject !== '' && body !== ''}
+          >
             피드백 보내기
           </Button>
         </div>
