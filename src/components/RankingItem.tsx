@@ -55,7 +55,9 @@ export default function RankingItem({
       </div>
 
       <button className="absolute right-6 flex items-center whitespace-nowrap bg-transparent p-0">
-        <p>함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}하기</p>
+        <p className="text-grey-10">
+          함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}하기
+        </p>
         <Arrow className="ml-4" />
       </button>
     </div>
