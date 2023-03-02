@@ -12,7 +12,7 @@ function FeedbackMail() {
   const formRef = useRef<HTMLFormElement>(null)
 
   const handleChangeSubjectInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (subject.length > 20) return
+    if (e.target.value.length > 20) return
     setSubject(e.target.value)
   }
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
