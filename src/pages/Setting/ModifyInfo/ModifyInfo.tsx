@@ -13,17 +13,19 @@ function ModifyInfo() {
   const { state } = useLocation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
-  const [nickname, setNickname] = useState(state.nickname || '')
+  const [nickname, setNickname] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [inputBorderStyle, setInputBorderStyle] = useState('')
+  const [isFocusInput, setIsFocusInput] = useState(false)
 
   useDebounce(
     async () => {
       setErrorMessage('')
       setInputBorderStyle('')
       setIsCheckedNickname(false)
-      if (getIsValidateNickname(nickname, setErrorMessage)) {
-        if (nickname.length > 0) {
+
+      if (nickname.length > 0) {
+        if (getIsValidateNickname(nickname, setErrorMessage)) {
           try {
             setIsCheckedNickname(true)
             setInputBorderStyle('border border-solid border-primary-2')
@@ -32,9 +34,9 @@ function ModifyInfo() {
             setIsCheckedNickname(false)
             setInputBorderStyle('border border-solid border-sub-1')
           }
+        } else {
+          setInputBorderStyle('border border-solid border-sub-1')
         }
-      } else {
-        setInputBorderStyle('border border-solid border-sub-1')
       }
     },
     300,
@@ -55,19 +57,24 @@ function ModifyInfo() {
       <section id="route-backIcon-button" className="ml-[18px] mt-4">
         <BackButton />
       </section>
-      <section id="modify-info-nickname" className="relative mt-11 px-6">
+      <section
+        id="modify-info-nickname"
+        className="relative mt-11 h-[104px] px-6"
+      >
         <p className="font-medium">닉네임</p>
         <div className="relative mt-[9px] flex w-full items-center">
           <input
             ref={inputRef}
             id="modify-nickname-input"
             value={nickname}
+            placeholder={isFocusInput ? '' : state.nickname}
             className={`w-full rounded-[8px] bg-grey-2 py-[17px] pl-[12px] text-[14px] font-medium placeholder:text-grey-5 focus:outline-none
               ${inputBorderStyle}`}
             autoComplete="off"
             onChange={(e) => setNickname(e.target.value)}
+            onFocus={() => setIsFocusInput(true)}
+            onBlur={() => setIsFocusInput(false)}
             maxLength={NICKNAME_MAX_LENGTH}
-            autoFocus
           />
           <CloseIcon
             className="absolute right-[10px] cursor-pointer"
@@ -77,15 +84,17 @@ function ModifyInfo() {
             }}
           />
         </div>
-        <p
-          className={`pt-3 text-sm ${
-            isCheckedNickname ? 'text-primary-2' : 'text-sub-1'
-          }`}
-        >
-          {isCheckedNickname ? '사용 가능한 닉네임이에요.' : errorMessage}
-        </p>
+        {nickname.length > 0 && (
+          <p
+            className={`pt-3 text-sm ${
+              isCheckedNickname ? 'text-primary-2' : 'text-sub-1'
+            }`}
+          >
+            {isCheckedNickname ? '사용 가능한 닉네임이에요.' : errorMessage}
+          </p>
+        )}
       </section>
-      <div className="relative mt-[104px] px-6">
+      <div className="mt-[104px] w-full px-6">
         <Button
           type="submit"
           property="solid"
