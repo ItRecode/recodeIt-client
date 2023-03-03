@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
+import { ReactComponent as Back } from '@assets/back.svg'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { updateUserInfo } from '@apis/user'
 import useDebounce from '@hooks/useDebounce'
-import BackButton from '@components/BackButton'
 import { getIsValidateNickname } from '@utils/getIsValidateNickname'
 import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import Button from '@components/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Alert from '@components/Alert'
 
 function ModifyInfo() {
   const navigate = useNavigate()
@@ -17,6 +18,7 @@ function ModifyInfo() {
   const [errorMessage, setErrorMessage] = useState('')
   const [inputBorderStyle, setInputBorderStyle] = useState('')
   const [isFocusInput, setIsFocusInput] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
 
   useDebounce(
     async () => {
@@ -49,13 +51,22 @@ function ModifyInfo() {
       navigate('/setting')
     } catch (e) {
       setIsCheckedNickname(false)
+      navigate(-1)
+    }
+  }
+
+  const handleClickBackButton = () => {
+    if (nickname.length > 0 && isCheckedNickname) {
+      setAlertOpen(true)
+    } else {
+      navigate(-1)
     }
   }
 
   return (
     <div className="relative h-screen w-full">
       <section id="route-backIcon-button" className="ml-[18px] mt-4">
-        <BackButton />
+        <Back className="cursor-pointer" onClick={handleClickBackButton} />
       </section>
       <section
         id="modify-info-nickname"
@@ -105,6 +116,23 @@ function ModifyInfo() {
           수정 완료
         </Button>
       </div>
+      <Alert
+        visible={alertOpen}
+        mainMessage={
+          <>
+            정보를 <span className="text-primary-2">저장</span>할까요?
+          </>
+        }
+        subMessage={<>바꾼 정보를 저장합니다.</>}
+        confirmMessage="예"
+        cancelMessage="아니오"
+        onConfirm={handleClickUpdateButton}
+        onClose={() => setAlertOpen(false)}
+        onCancel={() => {
+          setAlertOpen(false)
+          navigate(-1)
+        }}
+      />
     </div>
   )
 }
