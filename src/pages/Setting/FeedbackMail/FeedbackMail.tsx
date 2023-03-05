@@ -16,7 +16,7 @@ function FeedbackMail() {
     setSubject(e.target.value)
   }
 
-  const handleChangeBodyInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeBodyInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 200) return
     setBody(e.target.value)
   }
@@ -128,7 +128,7 @@ function FeedbackMail() {
                 className="mt-4 h-[130px] w-full resize-none rounded-lg bg-grey-2 p-4 leading-normal text-grey-9 outline-0 placeholder:text-grey-5 focus:placeholder:text-transparent"
                 placeholder="피드백 내용을 자유롭게 작성해주세요."
                 maxLength={200}
-                onChange={(e) => setBody(e.target.value)}
+                onChange={(e) => handleChangeBodyInput(e)}
                 value={body}
               />
               <span className="absolute bottom-2 right-4 text-xs font-normal leading-none text-grey-4">
