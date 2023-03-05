@@ -15,6 +15,12 @@ function FeedbackMail() {
     if (e.target.value.length > 20) return
     setSubject(e.target.value)
   }
+
+  const handleChangeBodyInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 200) return
+    setBody(e.target.value)
+  }
+
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (subject === '' || body === '') return
@@ -101,7 +107,7 @@ function FeedbackMail() {
               <input
                 name="subject"
                 type="text"
-                className="w-full border-b border-solid border-grey-4  py-1.5 text-grey-9 outline-none placeholder:text-grey-4 focus:placeholder:text-transparent"
+                className="w-full border-b border-solid border-grey-4  py-1.5 text-grey-9 outline-none placeholder:text-grey-4 focus:border-primary-2 focus:placeholder:text-transparent"
                 placeholder="제목을 작성해주세요."
                 onChange={(e) => handleChangeSubjectInput(e)}
                 value={subject}
