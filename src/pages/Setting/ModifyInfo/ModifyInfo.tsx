@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ReactComponent as Back } from '@assets/back.svg'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { updateUserInfo } from '@apis/user'
@@ -8,6 +8,7 @@ import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import Button from '@components/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Alert from '@components/Alert'
+import { getIsDuplicatedNickname } from '@apis/auth'
 
 function ModifyInfo() {
   const navigate = useNavigate()
@@ -20,15 +21,21 @@ function ModifyInfo() {
   const [isFocusInput, setIsFocusInput] = useState(false)
   const [alertOpen, setAlertOpen] = useState(false)
 
+  useEffect(() => {
+    if (!state.nickname) {
+      navigate('/setting')
+    }
+  }, [])
+
   useDebounce(
     async () => {
       setErrorMessage('')
       setInputBorderStyle('')
       setIsCheckedNickname(false)
-
       if (nickname.length > 0) {
         if (getIsValidateNickname(nickname, setErrorMessage)) {
           try {
+            await getIsDuplicatedNickname(nickname)
             setIsCheckedNickname(true)
             setInputBorderStyle('border border-solid border-primary-2')
           } catch (e) {
