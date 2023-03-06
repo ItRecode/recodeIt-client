@@ -1,12 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { parentCategoryID } from 'types/category'
 import { IRankingRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
 
 interface RankingItemType extends IRankingRecordData {
   index?: number
-  parentCategoryId: parentCategoryID
 }
 
 export default function CommentSection({
