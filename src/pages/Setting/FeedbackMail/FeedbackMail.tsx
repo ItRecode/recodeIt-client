@@ -3,11 +3,13 @@ import Button from '@components/Button'
 import React, { useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import Toast from '@components/Toast'
+import { useCheckMobile } from '@hooks/useCheckMobile'
 
 function FeedbackMail() {
   const [isOpenToast, setIsOpenToast] = useState(false)
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
+  const { isMobile } = useCheckMobile()
 
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -50,6 +52,7 @@ function FeedbackMail() {
         )
     }
   }
+
   return (
     <>
       {isOpenToast && (
@@ -139,7 +142,9 @@ function FeedbackMail() {
         </div>
         <div
           className={`${
-            window.innerHeight > 680 ? 'absolute bottom-10' : 'my-10 block'
+            window.innerHeight > 675 || !isMobile
+              ? 'absolute bottom-10'
+              : 'my-10 block'
           } w-full cursor-pointer px-6`}
         >
           <Button
