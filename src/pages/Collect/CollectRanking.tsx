@@ -37,6 +37,7 @@ export default function CollectRanking({
   const [rankingList, setRankingList] = useState<IRankingRecordData[]>()
   const [plusBtnState, setPlusBtnState] = useState(false)
   const isFromDetailPage = useRecoilValue(checkFromDetailPage)
+  const [rankingAggregationTime, setRankingAggregationTime] = useState<string>()
 
   const { data, isSuccess } = useQuery(
     ['ranking', choosedCategoryId, rankingPeriod],
@@ -57,6 +58,9 @@ export default function CollectRanking({
   useEffect(() => {
     if (isSuccess) {
       setRankingData(data.data.recordRankingDtos)
+      if (rankingPeriod === 'DAY') {
+        setRankingAggregationTime(data.data.rankingAggregationTime)
+      }
     }
   }, [data, isSuccess])
 
@@ -112,13 +116,28 @@ export default function CollectRanking({
       </section>
       <section
         id="periodCategory"
-        className="mt-4 flex cursor-pointer justify-end px-6"
-        onClick={() => setOpenModal(true)}
+        className={`${
+          rankingPeriod === 'DAY' ? 'justify-between' : 'justify-end'
+        } mt-4 flex cursor-pointer px-6`}
       >
-        <p className="mr-1.5 text-xs leading-6 text-grey-8">
-          {RANKINGPERIOD[rankingPeriod]}
-        </p>
-        <Collapse />
+        {rankingPeriod === 'DAY' && (
+          <div className="text-xs leading-6 text-grey-8">
+            {rankingAggregationTime !== undefined &&
+              `${new Date(rankingAggregationTime)
+                .getHours()
+                .toString()
+                .padStart(2, '0')}:${new Date(rankingAggregationTime)
+                .getMinutes()
+                .toString()
+                .padStart(2, '0')} 기준`}
+          </div>
+        )}
+        <div className="flex" onClick={() => setOpenModal(true)}>
+          <p className="mr-1.5 text-xs leading-6 text-grey-8">
+            {RANKINGPERIOD[rankingPeriod]}
+          </p>
+          <Collapse />
+        </div>
       </section>
       <section id="rankingList" className="mt-8">
         {rankingList?.length !== 0 ? (
