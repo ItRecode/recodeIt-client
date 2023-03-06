@@ -76,7 +76,7 @@ export default function CollectRanking({
   useEffect(() => {
     if (!isFromDetailPage) {
       setParentCategoryId(CELEBRATION_ID)
-      setRankingPeriod('DAY')
+      setRankingPeriod('TOTAL')
     }
   }, [])
 
