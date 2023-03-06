@@ -1,4 +1,4 @@
-const DATE_JOIN_POINT = 'point'
+export const DATE_JOIN_POINT = 'point'
 
 export const getFormattedDate = (date: Date, type: string) => {
   const year = date.getFullYear()
@@ -10,6 +10,13 @@ export const getFormattedDate = (date: Date, type: string) => {
   }
 
   return `${year}-${month}-${day}`
+}
+
+export const getFormattedDateByString = (date: string, type: string) => {
+  if (type === DATE_JOIN_POINT) {
+    return date.split('T')[0].replaceAll('-', '.')
+  }
+  return date.split('T')[0]
 }
 
 export const getFormattedDateWithMonthYear = (year: number, month: number) => {
