@@ -54,7 +54,7 @@ export default function CollectRanking({
     ['totalRecordCount'],
     getTotalRecordCount
   )
-  console.log(new Date(data?.data.rankingAggregationTime).getHours())
+
   useEffect(() => {
     if (isSuccess) {
       setRankingData(data.data.recordRankingDtos)
