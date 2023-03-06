@@ -12,11 +12,12 @@ import {
   getFormattedDateByString,
 } from '@utils/getFormattedDate'
 import SmallToast from '@components/SmallToast'
+import Loading from '@components/Loading'
 
 function ManageComment() {
   const navigate = useNavigate()
 
-  const { data, isSuccess } = useQuery(
+  const { data, isLoading, isSuccess } = useQuery(
     ['getMyReply'],
     () => getMyReply(0, 10),
     {
@@ -95,6 +96,11 @@ function ManageComment() {
     }
     return 'w-full'
   }
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <div className="relative h-full px-6">
       {isToast && (
