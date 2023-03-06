@@ -10,7 +10,6 @@ function FeedbackMail() {
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const { isMobile } = useCheckMobile()
-  console.log(isMobile)
 
   const formRef = useRef<HTMLFormElement>(null)
 
