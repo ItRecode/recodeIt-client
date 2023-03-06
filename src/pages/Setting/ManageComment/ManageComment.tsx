@@ -1,8 +1,7 @@
 import { deleteReply, getMyReply } from '@apis/reply'
 import BackButton from '@components/BackButton'
-import Toast from '@components/Toast'
 import { ReactComponent as ReplyCheckButton } from '@assets/settings_icon/reply_check.svg'
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DeleteReplyType, MyCommentType, MyRepliesType } from 'types/replyData'
@@ -11,14 +10,22 @@ import {
   DATE_JOIN_POINT,
   getFormattedDateByString,
 } from '@utils/getFormattedDate'
+import SmallToast from '@components/SmallToast'
 
 function ManageComment() {
   const navigate = useNavigate()
 
-  const { data, isSuccess } = useQuery(['getMyReply'], () => getMyReply(0, 10))
+  const { data, isSuccess } = useQuery(
+    ['getMyReply'],
+    () => getMyReply(0, 10),
+    {
+      refetchOnMount: true,
+    }
+  )
   const [isDeletedMode, setIsDeleteMode] = useState(false)
   const [toDeleteReply, setToDeleteReply] = useState<DeleteReplyType[]>([])
   const [isToast, setIsToast] = useState(false)
+  const [deletedReply, setDeletedReply] = useState(0)
 
   const handleClickCancel = () => {
     setIsDeleteMode(false)
@@ -64,25 +71,38 @@ function ManageComment() {
     )
   }
 
+  const queryClient = new QueryClient()
+
   const handleClickDeleteReplyButton = (toDeleteReply: DeleteReplyType[]) => {
     const DeleteReplies = async () => {
-      await toDeleteReply.forEach((reply, index) => {
+      toDeleteReply.forEach((reply, index) => {
         deleteReply(reply.commentId, String(reply.recordId))
         if (index === toDeleteReply.length - 1) {
+          queryClient.invalidateQueries(['getMyReply'])
+          setIsDeleteMode(false)
+          setDeletedReply(toDeleteReply.length)
+          setToDeleteReply([])
           setIsToast(true)
         }
       })
     }
     DeleteReplies()
   }
+
+  const getWidth = () => {
+    if (window.innerWidth >= 420) {
+      return 'w-[420px]'
+    }
+    return 'w-full'
+  }
   return (
-    <div className="relative px-6">
+    <div className="relative h-full px-6">
       {isToast && (
-        <Toast
-          message={<div>댓글 1개 삭제 완료</div>}
-          onClose={() => setIsToast(false)}
-          visible={isToast}
-        />
+        <SmallToast onClose={() => setIsToast(false)}>
+          <div className="fixed top-[50%] left-[50%] w-[161px] translate-x-[-81.5px] rounded-full bg-sub-10  py-3 px-5 font-semibold leading-6 text-sub-1">
+            {`댓글 ${deletedReply}개 삭제 완료`}
+          </div>
+        </SmallToast>
       )}
       <div className="sticky top-0 left-0 z-20 mb-4 flex justify-between bg-grey-1 py-4">
         <BackButton />
@@ -171,7 +191,7 @@ function ManageComment() {
       {toDeleteReply.length > 0 && (
         <button
           onClick={() => handleClickDeleteReplyButton(toDeleteReply)}
-          className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] cursor-pointer bg-sub-10 py-4 font-semibold text-sub-1"
+          className={`fixed bottom-0 left-[50%] translate-x-[-50%] ${getWidth()} cursor-pointer bg-sub-10 py-4 font-semibold text-sub-1`}
         >{`댓글 삭제 (${toDeleteReply.length}개)`}</button>
       )}
     </div>
