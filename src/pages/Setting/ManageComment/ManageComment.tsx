@@ -1,5 +1,6 @@
-import { getMyReply } from '@apis/reply'
+import { deleteReply, getMyReply } from '@apis/reply'
 import BackButton from '@components/BackButton'
+import Toast from '@components/Toast'
 import { ReactComponent as ReplyCheckButton } from '@assets/settings_icon/reply_check.svg'
 import { useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
@@ -17,8 +18,7 @@ function ManageComment() {
   const { data, isSuccess } = useQuery(['getMyReply'], () => getMyReply(0, 10))
   const [isDeletedMode, setIsDeleteMode] = useState(false)
   const [toDeleteReply, setToDeleteReply] = useState<DeleteReplyType[]>([])
-  console.log(data, isSuccess)
-  console.log(isDeletedMode)
+  const [isToast, setIsToast] = useState(false)
 
   const handleClickCancel = () => {
     setIsDeleteMode(false)
@@ -63,9 +63,28 @@ function ManageComment() {
       />
     )
   }
+
+  const handleClickDeleteReplyButton = (toDeleteReply: DeleteReplyType[]) => {
+    const DeleteReplies = async () => {
+      await toDeleteReply.forEach((reply, index) => {
+        deleteReply(reply.commentId, String(reply.recordId))
+        if (index === toDeleteReply.length - 1) {
+          setIsToast(true)
+        }
+      })
+    }
+    DeleteReplies()
+  }
   return (
-    <div className="px-6 pt-4">
-      <div className="flex justify-between pb-8">
+    <div className="relative px-6">
+      {isToast && (
+        <Toast
+          message={<div>댓글 1개 삭제 완료</div>}
+          onClose={() => setIsToast(false)}
+          visible={isToast}
+        />
+      )}
+      <div className="sticky top-0 left-0 z-20 mb-4 flex justify-between bg-grey-1 py-4">
         <BackButton />
         {isDeletedMode ? (
           <p
@@ -84,7 +103,7 @@ function ManageComment() {
         )}
       </div>
       <div className="flex justify-end">
-        <p>최신순</p>
+        <p className="text-xs font-medium text-grey-6">최신순</p>
       </div>
       <div>
         {isSuccess &&
@@ -108,7 +127,7 @@ function ManageComment() {
                 iconName={reply.iconName}
               />
               <section className="flex w-full flex-col pl-[56px]">
-                <div className="flex flex-col gap-2">
+                <div className="mb-2 flex flex-col gap-2">
                   {reply.myCommentDtos.map(
                     ({
                       content,
@@ -149,6 +168,12 @@ function ManageComment() {
             </section>
           ))}
       </div>
+      {toDeleteReply.length > 0 && (
+        <button
+          onClick={() => handleClickDeleteReplyButton(toDeleteReply)}
+          className="sticky bottom-0 left-0 ml-[-24px] w-[calc(100%+48px)] cursor-pointer bg-sub-10 py-4 font-semibold text-sub-1"
+        >{`댓글 삭제 (${toDeleteReply.length}개)`}</button>
+      )}
     </div>
   )
 }
