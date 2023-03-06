@@ -1,19 +1,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { parentCategoryID } from 'types/category'
 import { IRankingRecordData } from 'types/recordData'
 import recordIcons from '@assets/record_icons'
-import { CELEBRATION_ID } from '@assets/constant/constant'
-import { ReactComponent as Arrow } from '@assets/ranking_btn_arrow.svg'
 
 interface RankingItemType extends IRankingRecordData {
-  index: number
-  parentCategoryId: parentCategoryID
+  index?: number
 }
 
-export default function RankingItem({
-  index,
-  parentCategoryId,
+export default function CommentSection({
   recordId,
   colorName,
   title,
@@ -35,13 +29,12 @@ export default function RankingItem({
 
   return (
     <div
-      className="relative mb-5 flex h-12 w-full cursor-pointer items-center justify-between px-6"
+      className="relative mb-5 flex h-12 w-full cursor-pointer items-center justify-between"
       onClick={() => navigate(`/record/${recordId}`)}
     >
       <div className="flex w-full items-center">
-        <p className="w-[16px] text-center">{index}</p>
         <div
-          className={`${colorName} ml-3 flex aspect-square w-12 items-center justify-center rounded-full`}
+          className={`${colorName} flex aspect-square w-12 items-center justify-center rounded-full`}
         >
           <RecordIcon width={36} height={36} />
         </div>
@@ -53,13 +46,6 @@ export default function RankingItem({
           </div>
         </div>
       </div>
-
-      <button className="absolute right-6 flex items-center whitespace-nowrap bg-transparent p-0">
-        <p className="text-grey-10">
-          함께 {parentCategoryId === CELEBRATION_ID ? '축하' : '위로'}하기
-        </p>
-        <Arrow className="ml-4" />
-      </button>
     </div>
   )
 }

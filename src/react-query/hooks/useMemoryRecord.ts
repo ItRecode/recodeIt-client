@@ -4,7 +4,7 @@ import { getMemoryRecord } from '@apis/myRecord'
 import { useState } from 'react'
 
 export const useMemoryRecord = () => {
-  const [pageCount, setPageCount] = useState(0)
+  const [date, setDate] = useState('')
 
   const {
     data: memoryRecord = null,
@@ -13,20 +13,15 @@ export const useMemoryRecord = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: [QUERY_KEYS.memoryRecord, pageCount],
-    queryFn: async ({ pageParam = 0 }) => await getMemoryRecord(pageParam),
+    queryKey: [QUERY_KEYS.memoryRecord, date],
+    queryFn: async ({ pageParam = 0 }) =>
+      await getMemoryRecord(pageParam, date),
     getNextPageParam: (lastPage): number | null => {
       const { data, config } = lastPage
       if (data.totalPage > config.params.memoryRecordPage + 1) {
         return config.params.memoryRecordPage + 1
       }
       return null
-    },
-    retry: false,
-    onSuccess: ({ pages }) => {
-      if (pages[0]) {
-        setPageCount(pages[0].data.totalCount)
-      }
     },
   })
 
@@ -36,5 +31,6 @@ export const useMemoryRecord = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    setDate,
   }
 }

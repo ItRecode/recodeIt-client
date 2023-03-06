@@ -1,26 +1,19 @@
+import { getRecordOnToday } from '@apis/myRecord'
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery } from '@tanstack/react-query'
-import { getRecordByDate } from '@apis/myRecord'
-import { getFormattedDate } from '@utils/getFormattedDate'
 import { useState } from 'react'
 
 export const useMyRecordByDate = () => {
   const [todayRecordId, setTodayRecordId] = useState<number | null>(null)
-  const today = new Date()
 
-  const { data: records = null, isLoading } = useQuery(
+  const { data: record = null, isLoading } = useQuery(
     [QUERY_KEYS.myRecord, todayRecordId],
-    async () =>
-      await getRecordByDate({
-        date: getFormattedDate(today, 'hyphen'),
-        page: 0,
-        size: 1,
-      }),
+    async () => await getRecordOnToday(),
     {
       retry: false,
       onSuccess: ({ data }) => {
-        if (data.totalCount) {
-          setTodayRecordId(data.recordByDateDtos[0].recordId)
+        if (data) {
+          setTodayRecordId(data.recordId)
         } else {
           setTodayRecordId(null)
         }
@@ -29,7 +22,7 @@ export const useMyRecordByDate = () => {
   )
 
   return {
-    todayRecord: records?.data.recordByDateDtos[0],
+    todayRecord: record?.data,
     isLoading,
   }
 }

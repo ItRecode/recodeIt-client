@@ -40,3 +40,12 @@ export const updateComment = async ({
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
+
+export const getMyReply = async (pageParam?: number, size?: number) => {
+  return await baseInstance.get('/comment/my', {
+    params: {
+      page: pageParam ? pageParam : 0,
+      size: size ? size : 10,
+    },
+  })
+}

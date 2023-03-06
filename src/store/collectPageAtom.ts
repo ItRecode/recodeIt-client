@@ -15,5 +15,5 @@ export const subCategoryIdAtomCollectPage = atom<number>({
 
 export const rankingPeriodAtom = atom<keyOfRankingPeriod>({
   key: 'rankingPeriodAtom',
-  default: 'DAY',
+  default: 'TOTAL',
 })

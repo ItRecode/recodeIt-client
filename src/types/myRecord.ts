@@ -27,10 +27,6 @@ export interface IMyRecord {
   createdAt: string
 }
 
-export interface IMyRecordByDateList extends PaginationResponse {
-  recordByDateDtos: IMyRecord[]
-}
-
 export interface IMyRecordByKeywordList extends PaginationResponse {
   recordBySearchDtos: IMyRecord[]
 }
@@ -41,4 +37,8 @@ export interface IMyRecordRequestParam extends PaginationRequest {
 
 export interface IMyRecordByKeywordRequestParam extends PaginationRequest {
   keyword: string
+}
+
+export interface IRecordWithMonthYear {
+  writtenRecordDayDto: number[]
 }

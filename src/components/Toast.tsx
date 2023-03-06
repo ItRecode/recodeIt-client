@@ -6,9 +6,18 @@ interface IToastProps {
   message: ReactNode
   timeLimit?: number
   onClose: () => void
+  hasSecondMessage?: boolean
+  size?: 'big' | 'basic'
 }
 
-function Toast({ visible, message, timeLimit = 2, onClose }: IToastProps) {
+function Toast({
+  visible,
+  message,
+  timeLimit = 2,
+  onClose,
+  hasSecondMessage = true,
+  size = 'basic',
+}: IToastProps) {
   const [times, setTimes] = useState(timeLimit)
   const interval: { current: NodeJS.Timeout | undefined } = useRef()
   useEffect(() => {
@@ -24,13 +33,19 @@ function Toast({ visible, message, timeLimit = 2, onClose }: IToastProps) {
 
   return (
     <Modal visible={visible} onClose={onClose}>
-      <div className="flex h-[124px] w-[270px] flex-col justify-center px-12 py-6">
-        <p className="mb-4 text-center font-semibold leading-normal text-grey-10">
+      <div
+        className={`flex ${
+          size === 'basic' ? 'h-[124px]' : 'h-[148px]'
+        } w-[270px] flex-col justify-center px-12 py-6`}
+      >
+        <div className="mb-4 text-center font-semibold leading-normal text-grey-10">
           {message}
-        </p>
-        <p className="text-center text-xs font-medium text-grey-8">
-          <span className="text-primary-2">{times}</span>초 뒤에 사라집니다.
-        </p>
+        </div>
+        {hasSecondMessage && (
+          <p className="text-center text-xs font-medium text-grey-8">
+            <span className="text-primary-2">{times}</span>초 뒤에 사라집니다.
+          </p>
+        )}
       </div>
     </Modal>
   )

@@ -1,15 +1,11 @@
-export type keyOfRankingPeriod = 'DAY' | 'WEEK' | 'MONTH' | 'TOTAL'
+export type keyOfRankingPeriod = 'TOTAL' | 'DAY' | 'WEEK' | 'MONTH'
 
 export type rankingPeriodType = {
-  [key in keyOfRankingPeriod]:
-    | '하루 기준'
-    | '일주일 기준'
-    | '한 달 기준'
-    | '누적 기준'
+  [key in keyOfRankingPeriod]: '하루' | '일주일' | '한 달' | '누적'
 }
 export const RANKINGPERIOD: rankingPeriodType = {
-  DAY: '하루 기준',
-  WEEK: '일주일 기준',
-  MONTH: '한 달 기준',
-  TOTAL: '누적 기준',
+  DAY: '하루',
+  WEEK: '일주일',
+  MONTH: '한 달',
+  TOTAL: '누적',
 }

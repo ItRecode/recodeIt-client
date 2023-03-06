@@ -7,6 +7,7 @@ import MemoryRecord from './MemoryRecord'
 import SearchInput from './Common/SearchInput'
 import Calendar from './Calendar/Calendar'
 import { searchedKeyword } from '@store/myRecordAtom'
+import useDebounce from '@hooks/useDebounce'
 
 export default function MyRecord() {
   const navigate = useNavigate()
@@ -15,12 +16,16 @@ export default function MyRecord() {
   const [isClickedInput, setIsClickedInput] = useState(false)
   const setSearchedKeyword = useSetRecoilState(searchedKeyword)
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && keyword.length > 0) {
-      navigate('/myrecord/search')
-      setSearchedKeyword({ keyword })
-    }
-  }
+  useDebounce(
+    () => {
+      if (keyword.length > 0) {
+        navigate('/myrecord/search')
+        setSearchedKeyword({ keyword })
+      }
+    },
+    500,
+    [keyword]
+  )
 
   return (
     <>
@@ -31,7 +36,6 @@ export default function MyRecord() {
         >
           <SearchInput
             value={keyword}
-            onKeyUp={handleSearch}
             setKeyword={setKeyword}
             setIsClickedInput={setIsClickedInput}
             placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
@@ -50,10 +54,7 @@ export default function MyRecord() {
             </h2>
             <CalendarIcon
               className="cursor-pointer"
-              onClick={() => {
-                navigate('/notservice')
-                // setIsOpenCalendar(true)
-              }}
+              onClick={() => setIsOpenCalendar(true)}
             />
           </div>
           <MemoryRecord />

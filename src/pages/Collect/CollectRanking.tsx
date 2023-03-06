@@ -16,6 +16,7 @@ import {
   subCategoryIdAtomCollectPage,
 } from '@store/collectPageAtom'
 import { checkFromDetailPage } from '@store/detailPageAtom'
+import RankingItemNoData from '@components/RankingItemNoData'
 
 export default function CollectRanking({
   setOpenModal,
@@ -36,6 +37,7 @@ export default function CollectRanking({
   const [rankingList, setRankingList] = useState<IRankingRecordData[]>()
   const [plusBtnState, setPlusBtnState] = useState(false)
   const isFromDetailPage = useRecoilValue(checkFromDetailPage)
+  const [rankingAggregationTime, setRankingAggregationTime] = useState<string>()
 
   const { data, isSuccess } = useQuery(
     ['ranking', choosedCategoryId, rankingPeriod],
@@ -56,6 +58,9 @@ export default function CollectRanking({
   useEffect(() => {
     if (isSuccess) {
       setRankingData(data.data.recordRankingDtos)
+      if (rankingPeriod === 'DAY') {
+        setRankingAggregationTime(data.data.rankingAggregationTime)
+      }
     }
   }, [data, isSuccess])
 
@@ -69,12 +74,13 @@ export default function CollectRanking({
         setPlusBtnState(false)
       }
     }
+    if (rankingData?.length === 0) setPlusBtnState(false)
   }, [rankingPeriod, choosedCategoryId, rankingState, rankingData])
 
   useEffect(() => {
     if (!isFromDetailPage) {
       setParentCategoryId(CELEBRATION_ID)
-      setRankingPeriod('DAY')
+      setRankingPeriod('TOTAL')
     }
   }, [])
 
@@ -82,7 +88,10 @@ export default function CollectRanking({
     <div className="mt-4 w-full">
       <div className="pl-[26px]">
         <p className="text-sm leading-none">
-          총 <span className="text-primary-2">{totalRecordCount?.data}개</span>{' '}
+          총{' '}
+          <span className="text-primary-2">
+            {totalRecordCount?.data.toLocaleString()} 개
+          </span>
           의 레코딧
         </p>
         <p className="mt-6 text-2xl font-semibold leading-none">
@@ -107,17 +116,32 @@ export default function CollectRanking({
       </section>
       <section
         id="periodCategory"
-        className="mt-4 flex cursor-pointer justify-end px-6"
-        onClick={() => setOpenModal(true)}
+        className={`${
+          rankingPeriod === 'DAY' ? 'justify-between' : 'justify-end'
+        } mt-4 flex cursor-pointer px-6`}
       >
-        <p className="mr-1.5 text-xs leading-6 text-grey-8">
-          {RANKINGPERIOD[rankingPeriod]}
-        </p>
-        <Collapse />
+        {rankingPeriod === 'DAY' && (
+          <div className="text-xs leading-6 text-grey-8">
+            {rankingAggregationTime !== undefined &&
+              `${new Date(rankingAggregationTime)
+                .getHours()
+                .toString()
+                .padStart(2, '0')}:${new Date(rankingAggregationTime)
+                .getMinutes()
+                .toString()
+                .padStart(2, '0')} 기준`}
+          </div>
+        )}
+        <div className="flex" onClick={() => setOpenModal(true)}>
+          <p className="mr-1.5 text-xs leading-6 text-grey-8">
+            {RANKINGPERIOD[rankingPeriod]}
+          </p>
+          <Collapse />
+        </div>
       </section>
       <section id="rankingList" className="mt-8">
-        {rankingList &&
-          rankingList.map((item, index) => {
+        {rankingList?.length !== 0 ? (
+          rankingList?.map((item, index) => {
             const colorName = `bg-${item.colorName}`
             return (
               <RankingItem
@@ -132,7 +156,12 @@ export default function CollectRanking({
                 iconName={item.iconName}
               />
             )
-          })}
+          })
+        ) : (
+          <div className="mb-8">
+            <RankingItemNoData />
+          </div>
+        )}
         {plusBtnState && (
           <button
             className="flex w-full cursor-pointer items-center justify-center border-t border-solid border-grey-3 bg-transparent p-4 text-primary-2"

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 interface chipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   type?: 'button' | 'submit' | 'reset' | undefined
@@ -20,8 +20,21 @@ function Chip({
   isModify,
   ...props
 }: chipProps) {
+  const scrollRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (active) {
+      scrollRef.current?.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'center',
+      })
+    }
+  }, [])
+
   return (
     <button
+      ref={scrollRef}
       {...props}
       type={type}
       className={`flex shrink-0 items-center justify-between rounded-full

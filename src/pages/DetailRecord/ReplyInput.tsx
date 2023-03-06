@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
@@ -164,6 +164,10 @@ export default function ReplyInput({
       alert('수정에 실패했습니다.')
     },
   })
+
+  useEffect(() => {
+    if (updateReply.commentId !== 0) setText(updateReply.content)
+  }, [updateReply])
 
   return (
     <>

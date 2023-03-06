@@ -17,6 +17,11 @@ import NotRecord from '@pages/NotRecord/NotRecord'
 import ScrollTop from '@components/ScrollTop'
 import SearchRecord from '@pages/MyRecord/Search/SearchRecord'
 import CalendarRecord from '@pages/MyRecord/Calendar/CalendarRecord'
+import ModifyInfo from '@pages/Setting/ModifyInfo/ModifyInfo'
+import ManageComment from '@pages/Setting/ManageComment/ManageComment'
+import TeamIntroduction from '@pages/Setting/TeamIntroduction/TeamIntroduction'
+import FeedbackMail from '@pages/Setting/FeedbackMail/FeedbackMail'
+import Withdraw from '@pages/Setting/Withdraw/Withdraw'
 
 const router = createBrowserRouter([
   {
@@ -58,13 +63,47 @@ const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
+  {
+    path: 'setting',
+    children: [
       {
-        path: 'setting',
+        index: true,
         element: (
-          <ProtectedRoute route={'/setting'}>
+          <ScrollTop>
+            <NavBar />
             <Setting />
+          </ScrollTop>
+        ),
+      },
+      {
+        path: 'modifyinfo',
+        element: (
+          <ProtectedRoute route={'/modifyinfo'}>
+            <ModifyInfo />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'managecomment',
+        element: (
+          <ProtectedRoute route={'/managecomment'}>
+            <ManageComment />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'teamintroduction',
+        element: <TeamIntroduction />,
+      },
+      {
+        path: 'feedbackmail',
+        element: <FeedbackMail />,
+      },
+      {
+        path: 'withdraw',
+        element: <Withdraw />,
       },
     ],
   },
