@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { ReactComponent as Back } from '@assets/back.svg'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { updateUserInfo } from '@apis/user'
@@ -20,12 +20,6 @@ function ModifyInfo() {
   const [inputBorderStyle, setInputBorderStyle] = useState('')
   const [isFocusInput, setIsFocusInput] = useState(false)
   const [alertOpen, setAlertOpen] = useState(false)
-
-  useEffect(() => {
-    if (!state.nickname) {
-      navigate('/setting')
-    }
-  }, [])
 
   useDebounce(
     async () => {
@@ -85,7 +79,7 @@ function ModifyInfo() {
             ref={inputRef}
             id="modify-nickname-input"
             value={nickname}
-            placeholder={isFocusInput ? '' : state.nickname}
+            placeholder={isFocusInput || !state ? '' : state.nickname}
             className={`w-full rounded-[8px] bg-grey-2 py-[17px] pl-[12px] text-[14px] font-medium placeholder:text-grey-5 focus:outline-none
               ${inputBorderStyle}`}
             autoComplete="off"
