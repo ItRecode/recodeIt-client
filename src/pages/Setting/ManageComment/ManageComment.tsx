@@ -1,6 +1,7 @@
 import { deleteReply, getMyReply } from '@apis/reply'
 import BackButton from '@components/BackButton'
 import { ReactComponent as ReplyCheckButton } from '@assets/settings_icon/reply_check.svg'
+import { ReactComponent as CheckBoxButton } from '@assets/settings_icon/check_box.svg'
 import { QueryClient, useQuery } from '@tanstack/react-query'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -62,11 +63,10 @@ function ManageComment() {
       }
     }
     return (
-      <div
+      <CheckBoxButton
         onClick={() =>
           handleClickDetailDelete(currentReplyCommentId, String(reply.recordId))
         }
-        className="h-[18px] w-[18px] rounded-full border border-grey-4"
       />
     )
   }
