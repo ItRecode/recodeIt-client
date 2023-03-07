@@ -91,9 +91,9 @@ export default function Setting() {
           >
             <SettingSection routeText="로그아웃" />
           </section>
-          {/* <section id="withdraw-item-section">
+          <section id="withdraw-item-section">
             <SettingSection routeText="회원탈퇴" routeUrl="/setting/withdraw" />
-          </section> */}
+          </section>
         </div>
       )}
       {isClickedLogout && (
