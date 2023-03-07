@@ -1,12 +1,12 @@
 import React from 'react'
-import { ReactComponent as Back } from '@assets/back.svg'
 import Button from '@components/Button'
+import BackButton from '@components/BackButton'
 
 const Withdraw = () => {
   return (
     <>
       <section id="route-backIcon-button" className="ml-[18px] mt-4">
-        <Back className="cursor-pointer" />
+        <BackButton />
       </section>
       <section id="before-withdraw-info" className="mt-11  px-6 ">
         <h1 className="text-[20px] font-medium leading-[30px]">
