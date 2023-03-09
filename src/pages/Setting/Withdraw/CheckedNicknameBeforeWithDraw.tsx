@@ -4,6 +4,7 @@ import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { ReactComponent as Back } from '@assets/back.svg'
 import useDebounce from '@hooks/useDebounce'
+import Button from '@components/Button'
 
 export default function CheckedNicknameBeforeWithDraw() {
   const navigate = useNavigate()
@@ -52,7 +53,7 @@ export default function CheckedNicknameBeforeWithDraw() {
           <br />
           닉네임을 입력해 확인해주세요
         </h1>
-        <div className="mt-10">
+        <div className="mt-10 h-[70px]">
           <p className="font-medium">닉네임</p>
           <div className="relative mt-[9px] flex w-full items-center">
             <input
@@ -85,6 +86,16 @@ export default function CheckedNicknameBeforeWithDraw() {
               {isCheckedNickname ? '닉네임이 일치해요.' : message}
             </p>
           )}
+        </div>
+        <div className="mt-[104px] w-full">
+          <Button
+            property="danger"
+            type="submit"
+            active={isCheckedNickname}
+            disabled={!isCheckedNickname}
+          >
+            탈퇴하기
+          </Button>
         </div>
       </section>
     </>
