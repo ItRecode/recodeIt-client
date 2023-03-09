@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { ReactComponent as Back } from '@assets/back.svg'
+import useDebounce from '@hooks/useDebounce'
 
 export default function CheckedNicknameBeforeWithDraw() {
   const navigate = useNavigate()
@@ -10,9 +11,29 @@ export default function CheckedNicknameBeforeWithDraw() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState('')
   const [inputBorderStyle, setInputBorderStyle] = useState('')
   const [isFocusInput, setIsFocusInput] = useState(false)
+
+  useDebounce(
+    async () => {
+      setMessage('')
+      setInputBorderStyle('')
+      setIsCheckedNickname(false)
+      if (nickname.length > 0) {
+        if (state.nickname === nickname) {
+          setIsCheckedNickname(true)
+          setInputBorderStyle('border border-solid border-grey-10')
+        } else {
+          setMessage('닉네임이 일치하지 않아요.')
+          setInputBorderStyle('border border-solid border-sub-1')
+          setIsCheckedNickname(false)
+        }
+      }
+    },
+    300,
+    [nickname]
+  )
 
   return (
     <>
@@ -55,6 +76,15 @@ export default function CheckedNicknameBeforeWithDraw() {
               }}
             />
           </div>
+          {nickname.length > 0 && (
+            <p
+              className={`pt-3 text-sm ${
+                isCheckedNickname ? 'text-grey-10' : 'text-sub-1'
+              }`}
+            >
+              {isCheckedNickname ? '닉네임이 일치해요.' : message}
+            </p>
+          )}
         </div>
       </section>
     </>
