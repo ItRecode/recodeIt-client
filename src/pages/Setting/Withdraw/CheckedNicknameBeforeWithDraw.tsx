@@ -5,6 +5,7 @@ import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { ReactComponent as Back } from '@assets/back.svg'
 import useDebounce from '@hooks/useDebounce'
 import Button from '@components/Button'
+import Alert from '@components/Alert'
 
 export default function CheckedNicknameBeforeWithDraw() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function CheckedNicknameBeforeWithDraw() {
   const [message, setMessage] = useState('')
   const [inputBorderStyle, setInputBorderStyle] = useState('')
   const [isFocusInput, setIsFocusInput] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
 
   useDebounce(
     async () => {
@@ -93,11 +95,31 @@ export default function CheckedNicknameBeforeWithDraw() {
             type="submit"
             active={isCheckedNickname}
             disabled={!isCheckedNickname}
+            onClick={() => setAlertOpen(true)}
           >
             탈퇴하기
           </Button>
         </div>
       </section>
+      <Alert
+        visible={alertOpen}
+        mainMessage={
+          <>
+            {nickname}님, <br /> 탈퇴하신다니 너무 아쉬워요
+          </>
+        }
+        subMessage={
+          <>
+            탈퇴 후 <span className="text-sub-1">1주일 간</span>
+            <br /> 재가입이 불가능해요.
+          </>
+        }
+        confirmMessage="예"
+        cancelMessage="아니오"
+        onConfirm={() => setAlertOpen(false)}
+        onClose={() => setAlertOpen(false)}
+        onCancel={() => setAlertOpen(false)}
+      />
     </>
   )
 }
