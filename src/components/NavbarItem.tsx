@@ -43,24 +43,28 @@ export default function NavbarItem({
         return (
           <Home_icon
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}
+            aria-label={pageName}
           />
         )
       case '/collect':
         return (
           <Rank_icon
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}
+            aria-label={pageName}
           />
         )
       case '/myrecord':
         return (
           <MyRecord_icon
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}
+            aria-label={pageName}
           />
         )
       case '/setting':
         return (
           <Setting_icon
             className={`${iconFormat} ${checkPathWithIconImg(linkSrc)}`}
+            aria-label={pageName}
           />
         )
     }

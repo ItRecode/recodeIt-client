@@ -223,6 +223,7 @@ export default function DetailRecord() {
                 icon={getChipIconName(categoryName)}
                 message={`${categoryName}`}
                 property="small"
+                pointer={false}
               />
             </div>
           </section>
