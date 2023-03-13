@@ -30,9 +30,11 @@ export default function Alert({
     <Modal visible={visible} onClose={onClose}>
       <div className="flex h-auto w-[270px] flex-col justify-center">
         <div className="flex flex-col items-center justify-center border-b border-grey-2 py-6 text-center">
-          <div className="text-base font-semibold leading-6">{mainMessage}</div>
+          <div className="text-[18px] font-semibold leading-[24px]">
+            {mainMessage}
+          </div>
           {subMessage && (
-            <div className="pt-4 text-xs font-medium text-grey-8">
+            <div className="pt-4 text-[12px] font-medium leading-[18px] text-grey-8">
               {subMessage}
             </div>
           )}

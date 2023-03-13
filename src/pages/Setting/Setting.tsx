@@ -92,7 +92,11 @@ export default function Setting() {
             <SettingSection routeText="로그아웃" />
           </section>
           <section id="withdraw-item-section">
-            <SettingSection routeText="회원탈퇴" routeUrl="/setting/withdraw" />
+            <SettingSection
+              routeText="회원탈퇴"
+              routeUrl="/setting/withdraw"
+              state={{ nickname: user.data }}
+            />
           </section>
         </div>
       )}

@@ -1,8 +1,12 @@
 import React from 'react'
 import Button from '@components/Button'
 import BackButton from '@components/BackButton'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const Withdraw = () => {
+  const navigate = useNavigate()
+  const { state } = useLocation()
+
   return (
     <>
       <section id="route-backIcon-button" className="ml-[18px] mt-4">
@@ -37,7 +41,12 @@ const Withdraw = () => {
         </ul>
       </section>
       <section id="withdraw-navigate-button" className="mt-[180px] px-6">
-        <Button property="danger">탈퇴하기</Button>
+        <Button
+          property="danger"
+          onClick={() => navigate('/setting/withdraw/check', { state })}
+        >
+          탈퇴하기
+        </Button>
       </section>
     </>
   )
