@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { parentCategoryID } from 'types/category'
 import { IRandomRecordData } from 'types/recordData'
-import TogetherSlider from './TogetherSlider'
+import { MemoizedTogetherSlider } from './TogetherSlider'
 
 export default function Together({
   parentCategoryId,
@@ -60,7 +60,7 @@ export default function Together({
         {isLoading ? (
           <Spinner size="large" />
         ) : (
-          <TogetherSlider
+          <MemoizedTogetherSlider
             randomRecordData={randomRecordData}
             parentCategoryId={parentCategoryId}
           />
