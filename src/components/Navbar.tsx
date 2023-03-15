@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
 import Loading from './Loading'
 
-export default function NavBar() {
+function NavBar() {
   const navigate = useNavigate()
 
   return (
@@ -33,3 +33,5 @@ export default function NavBar() {
     </>
   )
 }
+
+export const MemoizedNavbar = React.memo(NavBar)

@@ -29,11 +29,11 @@ export default function ImageContainer({
         )}
       </div>
       {imageState !== 0 && (
-        <div className="absolute aspect-square w-full rounded-2xl object-cover">
+        <div className="absolute aspect-square w-full overflow-hidden rounded-2xl">
           <img
             src={imageUrls[imageState - 1]}
             alt={`img-${imageState}`}
-            className="w-full"
+            className="h-full w-full object-cover"
           />
         </div>
       )}

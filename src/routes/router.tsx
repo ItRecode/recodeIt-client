@@ -1,7 +1,7 @@
-import React, { Suspense } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
-import NavBar from '@components/Navbar'
+import { MemoizedNavbar } from '@components/Navbar'
 import Login from '@pages/Login/Login'
 import NotFound from '@pages/NotFound/NotFound'
 import OauthLogin from '@pages/Login/[type]'
@@ -9,40 +9,34 @@ import SignUp from '@pages/SignUp/SignUp'
 import ScrollTop from '@components/ScrollTop'
 import Loading from '@components/Loading'
 
-const Main = React.lazy(() => import('@pages/Main/Main'))
-const Collect = React.lazy(() => import('@pages/Collect/Collect'))
-const MyRecord = React.lazy(() => import('@pages/MyRecord/MyRecord'))
-const SearchRecord = React.lazy(
-  () => import('@pages/MyRecord/Search/SearchRecord')
-)
-const CalendarRecord = React.lazy(
+const Main = lazy(() => import('@pages/Main/Main'))
+const Collect = lazy(() => import('@pages/Collect/Collect'))
+const MyRecord = lazy(() => import('@pages/MyRecord/MyRecord'))
+const SearchRecord = lazy(() => import('@pages/MyRecord/Search/SearchRecord'))
+const CalendarRecord = lazy(
   () => import('@pages/MyRecord/Calendar/CalendarRecord')
 )
-const Setting = React.lazy(() => import('@pages/Setting/Setting'))
-const ModifyInfo = React.lazy(
-  () => import('@pages/Setting/ModifyInfo/ModifyInfo')
-)
-const ManageComment = React.lazy(
+const Setting = lazy(() => import('@pages/Setting/Setting'))
+const ModifyInfo = lazy(() => import('@pages/Setting/ModifyInfo/ModifyInfo'))
+const ManageComment = lazy(
   () => import('@pages/Setting/ManageComment/ManageComment')
 )
-const TeamIntroduction = React.lazy(
+const TeamIntroduction = lazy(
   () => import('@pages/Setting/TeamIntroduction/TeamIntroduction')
 )
-const FeedbackMail = React.lazy(
+const FeedbackMail = lazy(
   () => import('@pages/Setting/FeedbackMail/FeedbackMail')
 )
-const Withdraw = React.lazy(() => import('@pages/Setting/Withdraw/Withdraw'))
-const AddRecord = React.lazy(() => import('@pages/AddRecord/AddRecord'))
-const DetailRecord = React.lazy(
-  () => import('@pages/DetailRecord/DetailRecord')
-)
+const Withdraw = lazy(() => import('@pages/Setting/Withdraw/Withdraw'))
+const AddRecord = lazy(() => import('@pages/AddRecord/AddRecord'))
+const DetailRecord = lazy(() => import('@pages/DetailRecord/DetailRecord'))
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <ScrollTop>
-        <NavBar />
+        <MemoizedNavbar />
       </ScrollTop>
     ),
     children: [

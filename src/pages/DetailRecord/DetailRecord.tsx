@@ -150,8 +150,6 @@ export default function DetailRecord() {
     <>
       {isError ? (
         <NotFound />
-      ) : isLoading ? (
-        <Loading />
       ) : (
         <div className="relative h-screen w-full">
           {shareStatus && (

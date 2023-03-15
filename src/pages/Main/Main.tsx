@@ -1,4 +1,3 @@
-import ParentCategoryTab from '@components/ParrentCategoryTab'
 import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
 import { parentCategoryIdAtomMainPage } from '@store/mainPageAtom'
 import React, { useEffect } from 'react'
@@ -11,6 +10,7 @@ import { ReactComponent as HomeImg } from '@assets/home_img.svg'
 import { useNavigate } from 'react-router-dom'
 import { checkFromDetailPage } from '@store/detailPageAtom'
 import { CELEBRATION_ID } from '@assets/constant/constant'
+import MemoizedParentCategoryTab from '@components/ParrentCategoryTab'
 
 export default function Main() {
   const [parentCategoryID, setParentCategoryID] =
@@ -40,7 +40,7 @@ export default function Main() {
         </div>
       </section>
       <section id="tab" className="pt-3.5">
-        <ParentCategoryTab
+        <MemoizedParentCategoryTab
           parentCategoryId={parentCategoryID}
           setParentCategoryId={setParentCategoryID}
         />
