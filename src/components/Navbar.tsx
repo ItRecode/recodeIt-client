@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ReactComponent as Record_icon } from '@assets/nav_icons/record_icon.svg'
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
+import Loading from './Loading'
 
 export default function NavBar() {
   const navigate = useNavigate()
 
   return (
     <>
-      <Outlet />
+      <Suspense fallback={<Loading />}>
+        <Outlet />
+      </Suspense>
       <nav className="fixed bottom-0 z-20 flex h-[60px] w-full max-w-[420px] justify-between rounded-t-xl border border-solid border-grey-3 bg-white px-3 pt-1.5">
         <nav className="left-3 flex">
           <NavbarItem pageName="홈" linkSrc="/" className="mr-5" />

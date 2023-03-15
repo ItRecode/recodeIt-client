@@ -20,11 +20,22 @@ export default function ImageContainer({
   const RecordIcon = recordIcons[`${iconName}`]
 
   return (
-    <div
-      className={`${background_color} relative my-4 flex aspect-square w-full items-center justify-center rounded-2xl`}
-    >
-      {imageState === 0 && iconName !== '' && (
-        <RecordIcon width={160} height={160} />
+    <div className="relative my-4 flex aspect-square w-full items-center">
+      <div
+        className={`${background_color} absolute flex aspect-square w-full items-center justify-center rounded-2xl`}
+      >
+        {imageState === 0 && iconName !== '' && (
+          <RecordIcon width={160} height={160} />
+        )}
+      </div>
+      {imageState !== 0 && (
+        <div className="absolute aspect-square w-full rounded-2xl object-cover">
+          <img
+            src={imageUrls[imageState - 1]}
+            alt={`img-${imageState}`}
+            className="w-full"
+          />
+        </div>
       )}
       {haveNext && imageUrls?.length !== 0 && (
         <button
@@ -41,12 +52,6 @@ export default function ImageContainer({
         >
           <Left_Arrow_icon />
         </button>
-      )}
-      {imageState !== 0 && (
-        <img
-          src={imageUrls[imageState - 1]}
-          className="aspect-square h-full w-full rounded-2xl object-cover"
-        />
       )}
     </div>
   )

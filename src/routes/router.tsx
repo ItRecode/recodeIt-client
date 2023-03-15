@@ -1,27 +1,41 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
 import NavBar from '@components/Navbar'
-import Main from '@pages/Main/Main'
-import Collect from '@pages/Collect/Collect'
-import MyRecord from '@pages/MyRecord/MyRecord'
 import Login from '@pages/Login/Login'
-import AddRecord from '@pages/AddRecord/AddRecord'
-import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import NotFound from '@pages/NotFound/NotFound'
-import Setting from '@pages/Setting/Setting'
-import NotService from '@pages/NotService/NotService'
 import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
-import NotRecord from '@pages/NotRecord/NotRecord'
 import ScrollTop from '@components/ScrollTop'
-import SearchRecord from '@pages/MyRecord/Search/SearchRecord'
-import CalendarRecord from '@pages/MyRecord/Calendar/CalendarRecord'
-import ModifyInfo from '@pages/Setting/ModifyInfo/ModifyInfo'
-import ManageComment from '@pages/Setting/ManageComment/ManageComment'
-import TeamIntroduction from '@pages/Setting/TeamIntroduction/TeamIntroduction'
-import FeedbackMail from '@pages/Setting/FeedbackMail/FeedbackMail'
-import Withdraw from '@pages/Setting/Withdraw/Withdraw'
+import Loading from '@components/Loading'
+
+const Main = React.lazy(() => import('@pages/Main/Main'))
+const Collect = React.lazy(() => import('@pages/Collect/Collect'))
+const MyRecord = React.lazy(() => import('@pages/MyRecord/MyRecord'))
+const SearchRecord = React.lazy(
+  () => import('@pages/MyRecord/Search/SearchRecord')
+)
+const CalendarRecord = React.lazy(
+  () => import('@pages/MyRecord/Calendar/CalendarRecord')
+)
+const Setting = React.lazy(() => import('@pages/Setting/Setting'))
+const ModifyInfo = React.lazy(
+  () => import('@pages/Setting/ModifyInfo/ModifyInfo')
+)
+const ManageComment = React.lazy(
+  () => import('@pages/Setting/ManageComment/ManageComment')
+)
+const TeamIntroduction = React.lazy(
+  () => import('@pages/Setting/TeamIntroduction/TeamIntroduction')
+)
+const FeedbackMail = React.lazy(
+  () => import('@pages/Setting/FeedbackMail/FeedbackMail')
+)
+const Withdraw = React.lazy(() => import('@pages/Setting/Withdraw/Withdraw'))
+const AddRecord = React.lazy(() => import('@pages/AddRecord/AddRecord'))
+const DetailRecord = React.lazy(
+  () => import('@pages/DetailRecord/DetailRecord')
+)
 
 const router = createBrowserRouter([
   {
@@ -63,50 +77,46 @@ const router = createBrowserRouter([
           },
         ],
       },
-    ],
-  },
-  {
-    path: 'setting',
-    children: [
       {
-        index: true,
-        element: (
-          <ScrollTop>
-            <NavBar />
-            <Setting />
-          </ScrollTop>
-        ),
-      },
-      {
-        path: 'modifyinfo',
-        element: (
-          <ProtectedRoute route={'/modifyinfo'}>
-            <ModifyInfo />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'managecomment',
-        element: (
-          <ProtectedRoute route={'/managecomment'}>
-            <ManageComment />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'teamintroduction',
-        element: <TeamIntroduction />,
-      },
-      {
-        path: 'feedbackmail',
-        element: <FeedbackMail />,
-      },
-      {
-        path: 'withdraw',
-        element: <Withdraw />,
+        path: 'setting',
+        children: [
+          {
+            index: true,
+            element: <Setting />,
+          },
+          {
+            path: 'modifyinfo',
+            element: (
+              <ProtectedRoute route={'/modifyinfo'}>
+                <ModifyInfo />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'managecomment',
+            element: (
+              <ProtectedRoute route={'/managecomment'}>
+                <ManageComment />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'teamintroduction',
+            element: <TeamIntroduction />,
+          },
+          {
+            path: 'feedbackmail',
+            element: <FeedbackMail />,
+          },
+          {
+            path: 'withdraw',
+            element: <Withdraw />,
+          },
+        ],
       },
     ],
   },
+
   {
     path: '/login',
     element: <Login />,
@@ -124,18 +134,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute route={'/record/add'}>
         <ScrollTop>
-          <AddRecord />
+          <Suspense fallback={<Loading />}>
+            <AddRecord />
+          </Suspense>
         </ScrollTop>
       </ProtectedRoute>
     ),
   },
-  { path: 'record/:recordIdParams', element: <DetailRecord /> },
-  { path: '*', element: <NotFound /> },
-  { path: '/notrecord', element: <NotRecord /> },
   {
-    path: '/notservice',
-    element: <NotService />,
+    path: 'record/:recordIdParams',
+    element: (
+      <Suspense fallback={<Loading />}>
+        <DetailRecord />
+      </Suspense>
+    ),
   },
+  { path: '*', element: <NotFound /> },
 ])
 
 export default router
