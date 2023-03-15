@@ -37,6 +37,8 @@ const DetailRecord = React.lazy(
   () => import('@pages/DetailRecord/DetailRecord')
 )
 
+import CheckedNicknameBeforeWithDraw from '@pages/Setting/Withdraw/CheckedNicknameBeforeWithDraw'
+
 const router = createBrowserRouter([
   {
     path: '/',
