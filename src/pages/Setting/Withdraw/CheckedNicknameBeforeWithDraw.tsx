@@ -114,8 +114,8 @@ export default function CheckedNicknameBeforeWithDraw() {
             <br /> 재가입이 불가능해요.
           </>
         }
-        confirmMessage="예"
-        cancelMessage="아니오"
+        confirmMessage="둘러보기"
+        cancelMessage="탈퇴하기"
         onConfirm={() => setAlertOpen(false)}
         onClose={() => setAlertOpen(false)}
         onCancel={() => setAlertOpen(false)}
