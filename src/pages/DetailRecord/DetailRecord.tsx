@@ -19,7 +19,6 @@ import { useRef } from 'react'
 import Modal from '@components/Modal'
 import { deleteRecord, getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
-import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
@@ -72,7 +71,7 @@ export default function DetailRecord() {
     }
   }, [])
 
-  const { data, isLoading, isError, isSuccess } = useQuery(
+  const { data, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
     () => getRecord(recordIdParams),
     {
