@@ -13,13 +13,12 @@ import {
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
-import ShareModal from './ShareModal'
+import MemoizedShareModal from './ShareModal'
 import EditModal from './EditModal'
 import { useRef } from 'react'
 import Modal from '@components/Modal'
 import { deleteRecord, getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
-import Loading from '@components/Loading'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
@@ -35,6 +34,7 @@ import {
 } from '@store/detailPageAtom'
 import { SessionStorage } from '@utils/sessionStorage'
 import { PREVIOUS_URL } from '@assets/constant/others'
+import NotFound from '@pages/NotFound/NotFound'
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -71,7 +71,7 @@ export default function DetailRecord() {
     }
   }, [])
 
-  const { data, isLoading, isError, isSuccess } = useQuery(
+  const { data, isError, isSuccess } = useQuery(
     ['getRecordData', recordIdParams],
     () => getRecord(recordIdParams),
     {
@@ -83,10 +83,8 @@ export default function DetailRecord() {
   const POST_ID = location.pathname.substring(8)
 
   const [isDelete, setIsDelete] = useState(false)
+
   useEffect(() => {
-    if (isError) {
-      navigate('/notrecord')
-    }
     if (isSuccess) {
       setRecordData(data)
     }
@@ -149,114 +147,118 @@ export default function DetailRecord() {
 
   return (
     <>
-      {isLoading && <Loading />}
-      <div className="relative h-screen w-full">
-        {shareStatus && (
-          <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
-            <ShareModal
-              setShareStatus={setShareStatus}
-              recordId={recordId}
-              title={title}
-              description={content}
-              backgroundColor={background_color}
-              iconName={iconName}
-              imageUrl={imageUrls[0]}
-            />
-          </Modal>
-        )}
-        {editModalState && (
-          <EditModal
-            POST_ID={POST_ID}
-            setIsDelete={setIsDelete}
-            setEditModalState={setEditModalState}
-          />
-        )}
-        {isDelete && (
-          <Alert
-            mainMessage={
-              <div className="text-base font-semibold leading-6">
-                정말로 이 레코드를
-                <br />
-                <span className="text-sub-1">삭제</span>하시겠어요?
-              </div>
-            }
-            subMessage={<>삭제 후 복구는 불가능해요.</>}
-            visible={isDelete}
-            cancelMessage="취소"
-            confirmMessage="삭제"
-            danger={true}
-            onClose={() => setIsDelete(false)}
-            onCancel={() => setIsDelete(false)}
-            onConfirm={() => {
-              deleteRecordById(POST_ID)
-              navigate(-1)
-            }}
-          />
-        )}
-        <header className="p-4">
-          <nav className="flex justify-between">
-            <BackButton onClick={handleBackButton} />
-            {user?.data === writer && (
-              <button
-                className="cursor-pointer bg-transparent"
-                onClick={() => setEditModalState(true)}
-              >
-                <MoreButton />
-              </button>
-            )}
-          </nav>
-        </header>
-        <div className="overflow-y-auto">
-          <section id="title" className="flex flex-col px-[18px]">
-            <div className="flex justify-between whitespace-nowrap">
-              <p className="flex items-center whitespace-nowrap text-2xl font-semibold leading-none">
-                {title}
-              </p>
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <div className="flex">
-                <p className="flex items-center text-[14px]">{writer}</p>
-                <p className="px-2 text-xs text-grey-5">{date}</p>
-              </div>
-              <Chip
-                active={true}
-                icon={getChipIconName(categoryName)}
-                message={`${categoryName}`}
-                property="small"
+      {isError ? (
+        <NotFound />
+      ) : (
+        <div className="relative h-screen w-full">
+          {shareStatus && (
+            <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
+              <MemoizedShareModal
+                setShareStatus={setShareStatus}
+                recordId={recordId}
+                title={title}
+                description={content}
+                backgroundColor={background_color}
+                iconName={iconName}
+                imageUrl={imageUrls[0]}
               />
-            </div>
-          </section>
-          <section
-            id="record_context"
-            className="flex w-full flex-col items-center px-[18px]"
-          >
-            <ImageContainer
-              background_color={background_color}
-              iconName={iconName}
-              imageUrls={imageUrls}
+            </Modal>
+          )}
+          {editModalState && (
+            <EditModal
+              POST_ID={POST_ID}
+              setIsDelete={setIsDelete}
+              setEditModalState={setEditModalState}
             />
-            <Button onClick={() => setShareStatus(true)}>
-              <p className="text-base font-semibold">공유하기</p>
-            </Button>
-            <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
-              <p className="w-full whitespace-pre-wrap break-words">{text}</p>
-            </div>
+          )}
+          {isDelete && (
+            <Alert
+              mainMessage={
+                <div className="text-base font-semibold leading-6">
+                  정말로 이 레코드를
+                  <br />
+                  <span className="text-sub-1">삭제</span>하시겠어요?
+                </div>
+              }
+              subMessage={<>삭제 후 복구는 불가능해요.</>}
+              visible={isDelete}
+              cancelMessage="취소"
+              confirmMessage="삭제"
+              danger={true}
+              onClose={() => setIsDelete(false)}
+              onCancel={() => setIsDelete(false)}
+              onConfirm={() => {
+                deleteRecordById(POST_ID)
+                navigate(-1)
+              }}
+            />
+          )}
+          <header className="p-4">
+            <nav className="flex justify-between">
+              <BackButton onClick={handleBackButton} />
+              {user?.data === writer && (
+                <button
+                  className="cursor-pointer bg-transparent"
+                  onClick={() => setEditModalState(true)}
+                >
+                  <MoreButton />
+                </button>
+              )}
+            </nav>
+          </header>
+          <div className="overflow-y-auto">
+            <section id="title" className="flex flex-col px-[18px]">
+              <div className="flex justify-between whitespace-nowrap">
+                <p className="flex items-center whitespace-nowrap text-2xl font-semibold leading-none">
+                  {title}
+                </p>
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <div className="flex">
+                  <p className="flex items-center text-[14px]">{writer}</p>
+                  <p className="px-2 text-xs text-grey-5">{date}</p>
+                </div>
+                <Chip
+                  active={true}
+                  icon={getChipIconName(categoryName)}
+                  message={`${categoryName}`}
+                  property="small"
+                  pointer={false}
+                />
+              </div>
+            </section>
+            <section
+              id="record_context"
+              className="flex w-full flex-col items-center px-[18px]"
+            >
+              <ImageContainer
+                background_color={background_color}
+                iconName={iconName}
+                imageUrls={imageUrls}
+              />
+              <Button onClick={() => setShareStatus(true)}>
+                <p className="text-base font-semibold">공유하기</p>
+              </Button>
+              <div className="mt-6 mb-10 w-full px-1.5 text-[14px] leading-normal">
+                <p className="w-full whitespace-pre-wrap break-words">{text}</p>
+              </div>
+            </section>
+            <section id="record_reply_list">
+              <ReplyList recordId={recordIdParams} Recordwriter={writer} />
+            </section>
+            <div ref={scrollSectionFragments} />
+          </div>
+          <section
+            id="record_reply_input"
+            className="fixed bottom-0 w-full max-w-[420px] border-t border-solid border-t-grey-2 bg-grey-1"
+          >
+            <ReplyInput
+              setInputSectionHeight={setInputSectionHeight}
+              recordIdParams={recordIdParams}
+            />
           </section>
-          <section id="record_reply_list">
-            <ReplyList recordId={recordIdParams} Recordwriter={writer} />
-          </section>
-          <div ref={scrollSectionFragments} />
         </div>
-        <section
-          id="record_reply_input"
-          className="fixed bottom-0 w-full max-w-[420px] border-t border-solid border-t-grey-2 bg-grey-1"
-        >
-          <ReplyInput
-            setInputSectionHeight={setInputSectionHeight}
-            recordIdParams={recordIdParams}
-          />
-        </section>
-      </div>
+      )}
     </>
   )
 }

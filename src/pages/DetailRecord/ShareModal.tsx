@@ -15,7 +15,7 @@ interface IModalProps {
   iconName: string
 }
 
-export default function ShareModal({
+const MemoizedShareModal = React.memo(function ShareModal({
   setShareStatus,
   recordId,
   title,
@@ -77,4 +77,6 @@ export default function ShareModal({
       </div>
     </section>
   )
-}
+})
+
+export default MemoizedShareModal
