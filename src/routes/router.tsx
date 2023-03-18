@@ -23,6 +23,7 @@ import TeamIntroduction from '@pages/Setting/TeamIntroduction/TeamIntroduction'
 import FeedbackMail from '@pages/Setting/FeedbackMail/FeedbackMail'
 import Withdraw from '@pages/Setting/Withdraw/Withdraw'
 import CheckedNicknameBeforeWithDraw from '@pages/Setting/Withdraw/CheckedNicknameBeforeWithDraw'
+import CompletedWithdraw from '@pages/Setting/Withdraw/CompletedWithdraw'
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Withdraw /> },
           { path: 'check', element: <CheckedNicknameBeforeWithDraw /> },
+          { path: 'complete', element: <CompletedWithdraw /> },
         ],
       },
     ],
