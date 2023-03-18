@@ -10,7 +10,7 @@ export default function CompletedWithdraw() {
   return (
     <>
       <CloseIcon
-        className="ml-6 mt-4"
+        className="ml-6 mt-4 cursor-pointer"
         onClick={() => navigate('/', { replace: true })}
       />
       <div className="flex h-full flex-col items-center justify-center px-5">
