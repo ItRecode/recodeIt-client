@@ -24,7 +24,7 @@ export const useUser = () => {
 
   const deleteUser = async () => {
     await withdrawUser()
-    queryClient.setQueriesData([QUERY_KEYS.user], null)
+    queryClient.invalidateQueries()
   }
 
   return { user, refetch, isLoading, logoutUser, deleteUser }
