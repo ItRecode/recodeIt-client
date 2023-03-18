@@ -1,7 +1,7 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserInfo } from '@apis/user'
-import { logout } from '@apis/auth'
+import { logout, withdrawUser } from '@apis/auth'
 
 export const useUser = () => {
   const queryClient = useQueryClient()
@@ -20,7 +20,7 @@ export const useUser = () => {
   }
 
   const deleteUser = async () => {
-    await deleteUser()
+    await withdrawUser()
     queryClient.setQueriesData([QUERY_KEYS.user], null)
   }
 

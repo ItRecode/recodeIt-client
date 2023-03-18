@@ -24,6 +24,6 @@ export const logout = () => {
   return baseInstance.post(`/member/logout`)
 }
 
-export const deleteUser = () => {
+export const withdrawUser = () => {
   return baseInstance.delete(`/member/delete`)
 }

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { NICKNAME_MAX_LENGTH } from '@assets/constant/constant'
 import { ReactComponent as CloseIcon } from '@assets/icon_closed.svg'
 import { ReactComponent as Back } from '@assets/back.svg'
+import { useUser } from '@react-query/hooks/useUser'
 import useDebounce from '@hooks/useDebounce'
 import Button from '@components/Button'
 import Alert from '@components/Alert'
@@ -10,6 +11,7 @@ import Alert from '@components/Alert'
 export default function CheckedNicknameBeforeWithDraw() {
   const navigate = useNavigate()
   const { state } = useLocation()
+  const { deleteUser } = useUser()
   const inputRef = useRef<HTMLInputElement>(null)
   const [isCheckedNickname, setIsCheckedNickname] = useState(false)
   const [nickname, setNickname] = useState('')
@@ -37,6 +39,15 @@ export default function CheckedNicknameBeforeWithDraw() {
     300,
     [nickname]
   )
+
+  const handleWithdraw = () => {
+    try {
+      deleteUser()
+      navigate('/setting/withdraw/complete')
+    } catch (e) {
+      alert('로그아웃에 실패하였습니다.')
+    }
+  }
 
   return (
     <>
@@ -118,7 +129,7 @@ export default function CheckedNicknameBeforeWithDraw() {
         cancelMessage="탈퇴하기"
         onConfirm={() => setAlertOpen(false)}
         onClose={() => setAlertOpen(false)}
-        onCancel={() => setAlertOpen(false)}
+        onCancel={handleWithdraw}
       />
     </>
   )
