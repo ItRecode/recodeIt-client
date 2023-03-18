@@ -1,6 +1,5 @@
 import { CELEBRATION_ID } from '@assets/constant/constant'
 import Category from '@components/Category'
-import ParentCategoryTab from '@components/ParrentCategoryTab'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { parentCategoryID } from 'types/category'
 import { ReactComponent as Collapse } from '@assets/collect_page_icon/collapse.svg'
@@ -17,6 +16,7 @@ import {
 } from '@store/collectPageAtom'
 import { checkFromDetailPage } from '@store/detailPageAtom'
 import RankingItemNoData from '@components/RankingItemNoData'
+import MemoizedParentCategoryTab from '@components/ParrentCategoryTab'
 
 export default function CollectRanking({
   setOpenModal,
@@ -100,7 +100,7 @@ export default function CollectRanking({
       </div>
 
       <section id="parentCategory" className="mt-[22px]">
-        <ParentCategoryTab
+        <MemoizedParentCategoryTab
           parentCategoryId={parentCategoryId}
           setParentCategoryId={setParentCategoryId}
         />

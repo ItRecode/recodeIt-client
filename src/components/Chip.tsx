@@ -48,7 +48,13 @@ function Chip({
       `}
     >
       {icon && (
-        <img className="mr-2 aspect-square w-[14px] object-cover" src={icon} />
+        <div className="mr-2 aspect-square w-[14px]">
+          <img
+            className="h-full w-full object-cover"
+            src={icon}
+            alt={message}
+          />
+        </div>
       )}
       <p className="flex items-center text-[14px] leading-none">{message}</p>
     </button>

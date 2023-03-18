@@ -5,7 +5,9 @@ interface ISpinnerProps {
   size?: 'small' | 'large' | 'button'
 }
 
-export default function Spinner({ size = 'small' }: ISpinnerProps) {
+const Spinner = React.memo(function SpinnerComponent({
+  size = 'small',
+}: ISpinnerProps) {
   const setSpinnerSize = (size: string) => {
     switch (size) {
       case 'small':
@@ -18,4 +20,6 @@ export default function Spinner({ size = 'small' }: ISpinnerProps) {
   }
 
   return <SpinnerIcon className={`z-10 animate-spin ${setSpinnerSize(size)}`} />
-}
+})
+
+export default Spinner

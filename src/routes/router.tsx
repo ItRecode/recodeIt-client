@@ -1,36 +1,48 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
-import NavBar from '@components/Navbar'
-import Main from '@pages/Main/Main'
-import Collect from '@pages/Collect/Collect'
-import MyRecord from '@pages/MyRecord/MyRecord'
+import { MemoizedNavbar } from '@components/Navbar'
 import Login from '@pages/Login/Login'
-import AddRecord from '@pages/AddRecord/AddRecord'
-import DetailRecord from '@pages/DetailRecord/DetailRecord'
 import NotFound from '@pages/NotFound/NotFound'
-import Setting from '@pages/Setting/Setting'
-import NotService from '@pages/NotService/NotService'
 import OauthLogin from '@pages/Login/[type]'
 import SignUp from '@pages/SignUp/SignUp'
-import NotRecord from '@pages/NotRecord/NotRecord'
 import ScrollTop from '@components/ScrollTop'
-import SearchRecord from '@pages/MyRecord/Search/SearchRecord'
-import CalendarRecord from '@pages/MyRecord/Calendar/CalendarRecord'
-import ModifyInfo from '@pages/Setting/ModifyInfo/ModifyInfo'
-import ManageComment from '@pages/Setting/ManageComment/ManageComment'
-import TeamIntroduction from '@pages/Setting/TeamIntroduction/TeamIntroduction'
-import FeedbackMail from '@pages/Setting/FeedbackMail/FeedbackMail'
-import Withdraw from '@pages/Setting/Withdraw/Withdraw'
-import CheckedNicknameBeforeWithDraw from '@pages/Setting/Withdraw/CheckedNicknameBeforeWithDraw'
-import CompletedWithdraw from '@pages/Setting/Withdraw/CompletedWithdraw'
+import Loading from '@components/Loading'
+
+const Main = lazy(() => import('@pages/Main/Main'))
+const Collect = lazy(() => import('@pages/Collect/Collect'))
+const MyRecord = lazy(() => import('@pages/MyRecord/MyRecord'))
+const SearchRecord = lazy(() => import('@pages/MyRecord/Search/SearchRecord'))
+const CalendarRecord = lazy(
+  () => import('@pages/MyRecord/Calendar/CalendarRecord')
+)
+const Setting = lazy(() => import('@pages/Setting/Setting'))
+const ModifyInfo = lazy(() => import('@pages/Setting/ModifyInfo/ModifyInfo'))
+const ManageComment = lazy(
+  () => import('@pages/Setting/ManageComment/ManageComment')
+)
+const TeamIntroduction = lazy(
+  () => import('@pages/Setting/TeamIntroduction/TeamIntroduction')
+)
+const FeedbackMail = lazy(
+  () => import('@pages/Setting/FeedbackMail/FeedbackMail')
+)
+const Withdraw = lazy(() => import('@pages/Setting/Withdraw/Withdraw'))
+const CheckedNicknameBeforeWithDraw = lazy(
+  () => import('@pages/Setting/Withdraw/CheckedNicknameBeforeWithDraw')
+)
+const CompletedWithdraw = lazy(
+  () => import('@pages/Setting/Withdraw/CompletedWithdraw')
+)
+const AddRecord = lazy(() => import('@pages/AddRecord/AddRecord'))
+const DetailRecord = lazy(() => import('@pages/DetailRecord/DetailRecord'))
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <ScrollTop>
-        <NavBar />
+        <MemoizedNavbar />
       </ScrollTop>
     ),
     children: [
@@ -65,54 +77,50 @@ const router = createBrowserRouter([
           },
         ],
       },
-    ],
-  },
-  {
-    path: 'setting',
-    children: [
       {
-        index: true,
-        element: (
-          <ScrollTop>
-            <NavBar />
-            <Setting />
-          </ScrollTop>
-        ),
-      },
-      {
-        path: 'modifyinfo',
-        element: (
-          <ProtectedRoute route={'/modifyinfo'}>
-            <ModifyInfo />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'managecomment',
-        element: (
-          <ProtectedRoute route={'/managecomment'}>
-            <ManageComment />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'teamintroduction',
-        element: <TeamIntroduction />,
-      },
-      {
-        path: 'feedbackmail',
-        element: <FeedbackMail />,
-      },
-      {
-        path: 'withdraw',
+        path: 'setting',
         children: [
-          { index: true, element: <Withdraw /> },
-          { path: 'check', element: <CheckedNicknameBeforeWithDraw /> },
-          { path: 'complete', element: <CompletedWithdraw /> },
+          {
+            index: true,
+            element: <Setting />,
+          },
+          {
+            path: 'modifyinfo',
+            element: (
+              <ProtectedRoute route={'/modifyinfo'}>
+                <ModifyInfo />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'managecomment',
+            element: (
+              <ProtectedRoute route={'/managecomment'}>
+                <ManageComment />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'teamintroduction',
+            element: <TeamIntroduction />,
+          },
+          {
+            path: 'feedbackmail',
+            element: <FeedbackMail />,
+          },
+          {
+            path: 'withdraw',
+            children: [
+              { index: true, element: <Withdraw /> },
+              { path: 'check', element: <CheckedNicknameBeforeWithDraw /> },
+              { path: 'complete', element: <CompletedWithdraw /> },
+            ],
+          },
         ],
       },
     ],
   },
+
   {
     path: '/login',
     element: <Login />,
@@ -130,18 +138,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute route={'/record/add'}>
         <ScrollTop>
-          <AddRecord />
+          <Suspense fallback={<Loading />}>
+            <AddRecord />
+          </Suspense>
         </ScrollTop>
       </ProtectedRoute>
     ),
   },
-  { path: 'record/:recordIdParams', element: <DetailRecord /> },
-  { path: '*', element: <NotFound /> },
-  { path: '/notrecord', element: <NotRecord /> },
   {
-    path: '/notservice',
-    element: <NotService />,
+    path: 'record/:recordIdParams',
+    element: (
+      <Suspense fallback={<Loading />}>
+        <DetailRecord />
+      </Suspense>
+    ),
   },
+  { path: '*', element: <NotFound /> },
 ])
 
 export default router
