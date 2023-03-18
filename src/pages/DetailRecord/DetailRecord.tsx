@@ -1,8 +1,7 @@
 import BackButton from '@components/BackButton'
 import Button from '@components/Button'
 import Chip from '@components/Chip'
-import React, { Suspense, useState } from 'react'
-import { useEffect } from 'react'
+import React, { Suspense, lazy, useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
@@ -30,12 +29,12 @@ import {
 import { SessionStorage } from '@utils/sessionStorage'
 import { PREVIOUS_URL } from '@assets/constant/others'
 
-const MoreButton = React.lazy(() => import('@components/MoreButton'))
-const NotFound = React.lazy(() => import('@pages/NotFound/NotFound'))
-const Alert = React.lazy(() => import('@components/Alert'))
-const Modal = React.lazy(() => import('@components/Modal'))
-const MemoizedShareModal = React.lazy(() => import('./ShareModal'))
-const EditModal = React.lazy(() => import('./EditModal'))
+const MoreButton = lazy(() => import('@components/MoreButton'))
+const NotFound = lazy(() => import('@pages/NotFound/NotFound'))
+const Alert = lazy(() => import('@components/Alert'))
+const Modal = lazy(() => import('@components/Modal'))
+const MemoizedShareModal = lazy(() => import('./ShareModal'))
+const EditModal = lazy(() => import('./EditModal'))
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
