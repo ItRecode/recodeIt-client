@@ -19,5 +19,10 @@ export const useUser = () => {
     queryClient.setQueriesData([QUERY_KEYS.user], null)
   }
 
-  return { user, refetch, isLoading, logoutUser }
+  const deleteUser = async () => {
+    await deleteUser()
+    queryClient.setQueriesData([QUERY_KEYS.user], null)
+  }
+
+  return { user, refetch, isLoading, logoutUser, deleteUser }
 }
