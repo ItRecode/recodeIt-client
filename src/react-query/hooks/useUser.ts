@@ -1,7 +1,7 @@
 import { QUERY_KEYS } from '@react-query/queryKeys'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserInfo } from '@apis/user'
-import { logout } from '@apis/auth'
+import { logout, withdrawUser } from '@apis/auth'
 
 export const useUser = () => {
   const queryClient = useQueryClient()
@@ -15,6 +15,9 @@ export const useUser = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    onError: () => {
+      queryClient.setQueriesData([QUERY_KEYS.user], null)
+    },
   })
 
   const logoutUser = async () => {
@@ -22,5 +25,10 @@ export const useUser = () => {
     queryClient.setQueriesData([QUERY_KEYS.user], null)
   }
 
-  return { user, refetch, isLoading, logoutUser }
+  const deleteUser = async () => {
+    await withdrawUser()
+    queryClient.invalidateQueries()
+  }
+
+  return { user, refetch, isLoading, logoutUser, deleteUser }
 }
