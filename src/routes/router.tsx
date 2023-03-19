@@ -111,9 +111,30 @@ const router = createBrowserRouter([
           {
             path: 'withdraw',
             children: [
-              { index: true, element: <Withdraw /> },
-              { path: 'check', element: <CheckedNicknameBeforeWithDraw /> },
-              { path: 'complete', element: <CompletedWithdraw /> },
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw'}>
+                    <Withdraw />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: 'check',
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw/check'}>
+                    <CheckedNicknameBeforeWithDraw />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: 'complete',
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw/complete'}>
+                    <CompletedWithdraw />
+                  </ProtectedRoute>
+                ),
+              },
             ],
           },
         ],

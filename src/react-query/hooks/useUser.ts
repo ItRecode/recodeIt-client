@@ -15,6 +15,9 @@ export const useUser = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    onError: () => {
+      queryClient.setQueriesData([QUERY_KEYS.user], null)
+    },
   })
 
   const logoutUser = async () => {

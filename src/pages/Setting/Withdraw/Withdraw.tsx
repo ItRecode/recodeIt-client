@@ -43,9 +43,7 @@ const Withdraw = () => {
       <section id="withdraw-navigate-button" className="mt-[180px] px-6">
         <Button
           property="danger"
-          onClick={() =>
-            navigate('/setting/withdraw/check', { state, replace: true })
-          }
+          onClick={() => navigate('/setting/withdraw/check', { state })}
         >
           탈퇴하기
         </Button>
