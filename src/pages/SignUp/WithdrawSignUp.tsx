@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
-import { ReactComponent as MoonIcon } from '@assets/heart_large.svg'
+import { ReactComponent as HeartIcon } from '@assets/heart_large.svg'
 import { ReactComponent as CloseIcon } from '@assets/close_icon.svg'
 import { getFormattedDate } from '@utils/getFormattedDate'
 
@@ -16,7 +16,7 @@ export default function WithdrawSignUp() {
         onClick={() => navigate('/', { replace: true })}
       />
       <div className="flex h-full flex-col items-center justify-center px-5">
-        <MoonIcon className="mb-10" />
+        <HeartIcon className="mb-10" />
         <p className="mb-14 text-center text-[20px] font-semibold leading-[30px] text-grey-10">
           <span className="text-primary-2">
             {getFormattedDate(new Date(state.date), 'point')}{' '}
