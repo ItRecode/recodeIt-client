@@ -52,7 +52,12 @@ export const useAuth = () => {
       onSuccess: () => {
         redirectPage()
       },
-      onError: () => {
+      onError: (error: AxiosError) => {
+        if (error.response?.status === 403) {
+          navigate('/sign-up/fail', { state: { date: error.message } })
+          return
+        }
+
         navigate('/login')
       },
     }
