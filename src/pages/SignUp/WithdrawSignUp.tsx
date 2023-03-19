@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Button from '@components/Button'
 import { ReactComponent as MoonIcon } from '@assets/heart_large.svg'
 import { ReactComponent as CloseIcon } from '@assets/close_icon.svg'
+import { getFormattedDate } from '@utils/getFormattedDate'
 
 export default function WithdrawSignUp() {
   const navigate = useNavigate()
   const { state } = useLocation()
 
-  // {getFormattedDate(new Date(createdAt), 'point')}
   return (
     <>
       <CloseIcon
@@ -18,7 +18,10 @@ export default function WithdrawSignUp() {
       <div className="flex h-full flex-col items-center justify-center px-5">
         <MoonIcon className="mb-10" />
         <p className="mb-14 text-[20px] font-semibold leading-[30px] text-grey-10">
-          <span className="text-primary-2">{state} </span>이후로
+          <span className="text-primary-2">
+            {getFormattedDate(new Date(state.date), 'point')}{' '}
+          </span>
+          이후로
           <br />
           재가입이 가능해요
         </p>
