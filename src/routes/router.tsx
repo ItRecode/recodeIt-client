@@ -36,6 +36,7 @@ const CompletedWithdraw = lazy(
 )
 const AddRecord = lazy(() => import('@pages/AddRecord/AddRecord'))
 const DetailRecord = lazy(() => import('@pages/DetailRecord/DetailRecord'))
+const WithdrawSignUp = lazy(() => import('@pages/SignUp/WithdrawSignUp'))
 
 const router = createBrowserRouter([
   {
@@ -146,17 +147,19 @@ const router = createBrowserRouter([
           {
             path: 'check',
             element: (
-              <ProtectedRoute route={'/setting/withdraw/check'}>
-                <CheckedNicknameBeforeWithDraw />
-              </ProtectedRoute>
+              <Suspense fallback={<Loading />}>
+                <ProtectedRoute route={'/setting/withdraw/check'}>
+                  <CheckedNicknameBeforeWithDraw />
+                </ProtectedRoute>
+              </Suspense>
             ),
           },
           {
             path: 'complete',
             element: (
-              <ProtectedRoute route={'/setting/withdraw/complete'}>
+              <Suspense fallback={<Loading />}>
                 <CompletedWithdraw />
-              </ProtectedRoute>
+              </Suspense>
             ),
           },
         ],
@@ -184,6 +187,14 @@ const router = createBrowserRouter([
     element: (
       <Suspense fallback={<Loading />}>
         <SignUp />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/sign-up/fail',
+    element: (
+      <Suspense fallback={<Loading />}>
+        <WithdrawSignUp />
       </Suspense>
     ),
   },
