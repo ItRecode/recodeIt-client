@@ -3,7 +3,7 @@ import BackButton from '@components/BackButton'
 import { ReactComponent as ReplyCheckButton } from '@assets/settings_icon/reply_check.svg'
 import { ReactComponent as CheckBoxButton } from '@assets/settings_icon/check_box.svg'
 import { QueryClient, useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { DeleteReplyType, MyCommentType, MyRepliesType } from 'types/replyData'
 import CommentSection from './CommentSection'
@@ -17,17 +17,18 @@ import Loading from '@components/Loading'
 function ManageComment() {
   const navigate = useNavigate()
 
-  const { data, isLoading, isSuccess } = useQuery(
-    ['getMyReply'],
+  const [isDeletedMode, setIsDeleteMode] = useState(false)
+  const [toDeleteReply, setToDeleteReply] = useState<DeleteReplyType[]>([])
+  const [isToast, setIsToast] = useState(false)
+  const [deletedReply, setDeletedReply] = useState(0)
+
+  const { data, isLoading, isSuccess, refetch } = useQuery(
+    ['getMyReply', isToast === true],
     () => getMyReply(0, 10),
     {
       refetchOnMount: true,
     }
   )
-  const [isDeletedMode, setIsDeleteMode] = useState(false)
-  const [toDeleteReply, setToDeleteReply] = useState<DeleteReplyType[]>([])
-  const [isToast, setIsToast] = useState(false)
-  const [deletedReply, setDeletedReply] = useState(0)
 
   const handleClickCancel = () => {
     setIsDeleteMode(false)
@@ -58,6 +59,7 @@ function ManageComment() {
       if (currentReplyCommentId === toDeleteReply[tdr].commentId) {
         return (
           <ReplyCheckButton
+            className="w-[18px]"
             onClick={() => handleClickDetailDeleteCancel(currentReplyCommentId)}
           />
         )
@@ -79,16 +81,21 @@ function ManageComment() {
       toDeleteReply.forEach((reply, index) => {
         deleteReply(reply.commentId, String(reply.recordId))
         if (index === toDeleteReply.length - 1) {
-          queryClient.invalidateQueries(['getMyReply'])
           setIsDeleteMode(false)
           setDeletedReply(toDeleteReply.length)
           setToDeleteReply([])
           setIsToast(true)
+          refetch()
         }
       })
     }
     DeleteReplies()
   }
+  useEffect(() => {
+    if (isToast) {
+      queryClient.invalidateQueries(['getMyReply'])
+    }
+  }, [isToast])
 
   const getWidth = () => {
     if (window.innerWidth >= 420) {
@@ -148,7 +155,7 @@ function ManageComment() {
                 recordId={reply.recordId}
                 colorName={`bg-${reply.colorName}`}
                 title={reply.title}
-                writer={'모송'}
+                writer={reply.recordWriterNickname}
                 numOfComment={reply.commentsCount}
                 iconName={reply.iconName}
               />
