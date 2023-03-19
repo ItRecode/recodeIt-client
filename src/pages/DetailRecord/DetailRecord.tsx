@@ -1,9 +1,7 @@
 import BackButton from '@components/BackButton'
 import Button from '@components/Button'
 import Chip from '@components/Chip'
-import MoreButton from '@components/MoreButton'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
+import React, { Suspense, lazy, useState, useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IRecordDataType } from 'types/recordData'
 import {
@@ -13,16 +11,12 @@ import {
 import { getCreatedDate } from './getCreatedDate'
 import ReplyList from './ReplyList'
 import ReplyInput from './ReplyInput'
-import MemoizedShareModal from './ShareModal'
-import EditModal from './EditModal'
 import { useRef } from 'react'
-import Modal from '@components/Modal'
 import { deleteRecord, getRecord } from '@apis/record'
 import { useQuery } from '@tanstack/react-query'
 import { getChipIconName } from './getChipIconName'
 import ImageContainer from './ImageContainer'
 import { useUser } from '@react-query/hooks/useUser'
-import Alert from '@components/Alert'
 import { AxiosError } from 'axios'
 import { createBrowserHistory } from 'history'
 import { useResetRecoilState, useSetRecoilState } from 'recoil'
@@ -34,7 +28,13 @@ import {
 } from '@store/detailPageAtom'
 import { SessionStorage } from '@utils/sessionStorage'
 import { PREVIOUS_URL } from '@assets/constant/others'
-import NotFound from '@pages/NotFound/NotFound'
+
+const MoreButton = lazy(() => import('@components/MoreButton'))
+const NotFound = lazy(() => import('@pages/NotFound/NotFound'))
+const Alert = lazy(() => import('@components/Alert'))
+const Modal = lazy(() => import('@components/Modal'))
+const MemoizedShareModal = lazy(() => import('./ShareModal'))
+const EditModal = lazy(() => import('./EditModal'))
 
 export default function DetailRecord() {
   const [shareStatus, setShareStatus] = useState(false)
@@ -144,54 +144,64 @@ export default function DetailRecord() {
   const handleBackButton = () => {
     navigate(`/${SessionStorage.get(PREVIOUS_URL)}`)
   }
-
   return (
     <>
       {isError ? (
-        <NotFound />
+        <Suspense>
+          <NotFound />
+        </Suspense>
       ) : (
         <div className="relative h-screen w-full">
           {shareStatus && (
-            <Modal visible={shareStatus} onClose={() => setShareStatus(false)}>
-              <MemoizedShareModal
-                setShareStatus={setShareStatus}
-                recordId={recordId}
-                title={title}
-                description={content}
-                backgroundColor={background_color}
-                iconName={iconName}
-                imageUrl={imageUrls[0]}
-              />
-            </Modal>
+            <Suspense>
+              <Modal
+                visible={shareStatus}
+                onClose={() => setShareStatus(false)}
+              >
+                <MemoizedShareModal
+                  setShareStatus={setShareStatus}
+                  recordId={recordId}
+                  title={title}
+                  description={content}
+                  backgroundColor={background_color}
+                  iconName={iconName}
+                  imageUrl={imageUrls[0]}
+                />
+              </Modal>
+            </Suspense>
           )}
           {editModalState && (
-            <EditModal
-              POST_ID={POST_ID}
-              setIsDelete={setIsDelete}
-              setEditModalState={setEditModalState}
-            />
+            <Suspense>
+              <EditModal
+                POST_ID={POST_ID}
+                setIsDelete={setIsDelete}
+                setEditModalState={setEditModalState}
+              />
+            </Suspense>
           )}
           {isDelete && (
-            <Alert
-              mainMessage={
-                <div className="text-base font-semibold leading-6">
-                  정말로 이 레코드를
-                  <br />
-                  <span className="text-sub-1">삭제</span>하시겠어요?
-                </div>
-              }
-              subMessage={<>삭제 후 복구는 불가능해요.</>}
-              visible={isDelete}
-              cancelMessage="취소"
-              confirmMessage="삭제"
-              danger={true}
-              onClose={() => setIsDelete(false)}
-              onCancel={() => setIsDelete(false)}
-              onConfirm={() => {
-                deleteRecordById(POST_ID)
-                navigate(-1)
-              }}
-            />
+            <Suspense>
+              <Alert
+                mainMessage={
+                  <div className="text-base font-semibold leading-6">
+                    정말로 이 레코드를
+                    <br />
+                    <span className="text-sub-1">삭제</span>하시겠어요?
+                  </div>
+                }
+                subMessage={<>삭제 후 복구는 불가능해요.</>}
+                visible={isDelete}
+                cancelMessage="취소"
+                confirmMessage="삭제"
+                danger={true}
+                onClose={() => setIsDelete(false)}
+                onCancel={() => setIsDelete(false)}
+                onConfirm={() => {
+                  deleteRecordById(POST_ID)
+                  navigate(-1)
+                }}
+              />
+            </Suspense>
           )}
           <header className="p-4">
             <nav className="flex justify-between">

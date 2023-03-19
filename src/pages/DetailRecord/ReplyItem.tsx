@@ -1,21 +1,22 @@
 import { INPUT_MODE } from '@assets/constant/constant'
 import { useUser } from '@react-query/hooks/useUser'
 import { scrollTarget } from '@store/atom'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { CommentData } from 'types/replyData'
 import { getCreatedDate } from './getCreatedDate'
-import NestedReplyList from './NestedReplyList'
 import { ReactComponent as Arrow_Down_icon } from '@assets/detail_page_icon/arrow_down.svg'
 import { ReactComponent as Arrow_Up_icon } from '@assets/detail_page_icon/arrow_up.svg'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteReply, getReply } from '@apis/reply'
-import Alert from '@components/Alert'
 import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
 } from '@store/detailPageAtom'
+
+const NestedReplyList = React.lazy(() => import('./NestedReplyList'))
+const Alert = React.lazy(() => import('@components/Alert'))
 
 export default function ReplyItem({
   content,
@@ -165,31 +166,35 @@ export default function ReplyItem({
         )}
 
         {openNestedReplyList && (
-          <NestedReplyList
-            nestedReplyData={
-              nestedReplyData && nestedReplyData.data.commentList
-            }
-            isLoading={isLoading}
-            recordwriter={recordwriter}
-            recordId={recordId}
-            parentId={commentId}
-          />
+          <Suspense>
+            <NestedReplyList
+              nestedReplyData={
+                nestedReplyData && nestedReplyData.data.commentList
+              }
+              isLoading={isLoading}
+              recordwriter={recordwriter}
+              recordId={recordId}
+              parentId={commentId}
+            />
+          </Suspense>
         )}
       </div>
       {deleteAlert && (
-        <Alert
-          visible={deleteAlert}
-          mainMessage={<>댓글을 삭제하시겠습니까?</>}
-          subMessage={<>삭제 후 복구는 불가능해요.</>}
-          cancelMessage="아니오"
-          confirmMessage="예"
-          onClose={() => setDeleteAlert(false)}
-          onCancel={() => setDeleteAlert(false)}
-          onConfirm={() => {
-            onDeleteReply()
-          }}
-          danger={true}
-        />
+        <Suspense>
+          <Alert
+            visible={deleteAlert}
+            mainMessage={<>댓글을 삭제하시겠습니까?</>}
+            subMessage={<>삭제 후 복구는 불가능해요.</>}
+            cancelMessage="아니오"
+            confirmMessage="예"
+            onClose={() => setDeleteAlert(false)}
+            onCancel={() => setDeleteAlert(false)}
+            onConfirm={() => {
+              onDeleteReply()
+            }}
+            danger={true}
+          />
+        </Suspense>
       )}
     </div>
   )

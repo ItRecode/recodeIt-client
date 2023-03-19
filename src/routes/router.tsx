@@ -77,65 +77,87 @@ const router = createBrowserRouter([
           },
         ],
       },
+    ],
+  },
+  {
+    path: 'setting',
+    children: [
       {
-        path: 'setting',
+        index: true,
+        element: (
+          <>
+            <MemoizedNavbar />
+            <Suspense fallback={<Loading />}>
+              <Setting />
+            </Suspense>
+          </>
+        ),
+      },
+      {
+        path: 'modifyinfo',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ProtectedRoute route={'/modifyinfo'}>
+              <ModifyInfo />
+            </ProtectedRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'managecomment',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ProtectedRoute route={'/managecomment'}>
+              <ManageComment />
+            </ProtectedRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: 'teamintroduction',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <TeamIntroduction />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'feedbackmail',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <FeedbackMail />
+          </Suspense>
+        ),
+      },
+
+      {
+        path: 'withdraw',
         children: [
           {
             index: true,
-            element: <Setting />,
+            element: (
+              <Suspense fallback={<Loading />}>
+                <ProtectedRoute route={'/setting/withdraw'}>
+                  <Withdraw />
+                </ProtectedRoute>
+              </Suspense>
+            ),
           },
           {
-            path: 'modifyinfo',
+            path: 'check',
             element: (
-              <ProtectedRoute route={'/modifyinfo'}>
-                <ModifyInfo />
+              <ProtectedRoute route={'/setting/withdraw/check'}>
+                <CheckedNicknameBeforeWithDraw />
               </ProtectedRoute>
             ),
           },
           {
-            path: 'managecomment',
+            path: 'complete',
             element: (
-              <ProtectedRoute route={'/managecomment'}>
-                <ManageComment />
+              <ProtectedRoute route={'/setting/withdraw/complete'}>
+                <CompletedWithdraw />
               </ProtectedRoute>
             ),
-          },
-          {
-            path: 'teamintroduction',
-            element: <TeamIntroduction />,
-          },
-          {
-            path: 'feedbackmail',
-            element: <FeedbackMail />,
-          },
-          {
-            path: 'withdraw',
-            children: [
-              {
-                index: true,
-                element: (
-                  <ProtectedRoute route={'/setting/withdraw'}>
-                    <Withdraw />
-                  </ProtectedRoute>
-                ),
-              },
-              {
-                path: 'check',
-                element: (
-                  <ProtectedRoute route={'/setting/withdraw/check'}>
-                    <CheckedNicknameBeforeWithDraw />
-                  </ProtectedRoute>
-                ),
-              },
-              {
-                path: 'complete',
-                element: (
-                  <ProtectedRoute route={'/setting/withdraw/complete'}>
-                    <CompletedWithdraw />
-                  </ProtectedRoute>
-                ),
-              },
-            ],
           },
         ],
       },
@@ -143,15 +165,27 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: '/login/:type',
-    element: <OauthLogin />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <OauthLogin />
+      </Suspense>
+    ),
   },
   {
     path: '/sign-up',
-    element: <SignUp />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <SignUp />
+      </Suspense>
+    ),
   },
   {
     path: '/record/add',
@@ -173,7 +207,14 @@ const router = createBrowserRouter([
       </Suspense>
     ),
   },
-  { path: '*', element: <NotFound /> },
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<Loading />}>
+        <NotFound />
+      </Suspense>
+    ),
+  },
 ])
 
 export default router
