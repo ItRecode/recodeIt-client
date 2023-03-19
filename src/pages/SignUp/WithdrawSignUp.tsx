@@ -17,7 +17,7 @@ export default function WithdrawSignUp() {
       />
       <div className="flex h-full flex-col items-center justify-center px-5">
         <MoonIcon className="mb-10" />
-        <p className="mb-14 text-[20px] font-semibold leading-[30px] text-grey-10">
+        <p className="mb-14 text-center text-[20px] font-semibold leading-[30px] text-grey-10">
           <span className="text-primary-2">
             {getFormattedDate(new Date(state.date), 'point')}{' '}
           </span>
