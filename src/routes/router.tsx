@@ -28,6 +28,12 @@ const FeedbackMail = lazy(
   () => import('@pages/Setting/FeedbackMail/FeedbackMail')
 )
 const Withdraw = lazy(() => import('@pages/Setting/Withdraw/Withdraw'))
+const CheckedNicknameBeforeWithDraw = lazy(
+  () => import('@pages/Setting/Withdraw/CheckedNicknameBeforeWithDraw')
+)
+const CompletedWithdraw = lazy(
+  () => import('@pages/Setting/Withdraw/CompletedWithdraw')
+)
 const AddRecord = lazy(() => import('@pages/AddRecord/AddRecord'))
 const DetailRecord = lazy(() => import('@pages/DetailRecord/DetailRecord'))
 
@@ -104,13 +110,37 @@ const router = createBrowserRouter([
           },
           {
             path: 'withdraw',
-            element: <Withdraw />,
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw'}>
+                    <Withdraw />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: 'check',
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw/check'}>
+                    <CheckedNicknameBeforeWithDraw />
+                  </ProtectedRoute>
+                ),
+              },
+              {
+                path: 'complete',
+                element: (
+                  <ProtectedRoute route={'/setting/withdraw/complete'}>
+                    <CompletedWithdraw />
+                  </ProtectedRoute>
+                ),
+              },
+            ],
           },
         ],
       },
     ],
   },
-
   {
     path: '/login',
     element: <Login />,
