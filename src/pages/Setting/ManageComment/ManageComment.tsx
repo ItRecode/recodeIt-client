@@ -55,8 +55,8 @@ function ManageComment() {
     toDeleteReply: DeleteReplyType[],
     reply: MyRepliesType
   ): React.ReactNode => {
-    for (let tdr = 0; tdr < toDeleteReply.length; tdr++) {
-      if (currentReplyCommentId === toDeleteReply[tdr].commentId) {
+    for (let replyIndex = 0; replyIndex < toDeleteReply.length; replyIndex++) {
+      if (currentReplyCommentId === toDeleteReply[replyIndex].commentId) {
         return (
           <ReplyCheckButton
             className="w-[18px]"
