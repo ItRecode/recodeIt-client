@@ -144,8 +144,10 @@ function AddRecordFile({
     <div className="mb-8 flex items-center gap-2">
       {isToast && makeToast()}
       <label className="h-[66px] w-[66px]" htmlFor="file">
-        <div className="mr-4  flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
-          <img className=" mb-1" src={Camera} alt="camera" />
+        <div className="mr-4 flex h-[66px] w-[66px] flex-col items-center justify-center  rounded-2xl border-2 border-dashed border-grey-4 py-3 px-5">
+          <div className="mb-1 h-[24px] w-[24px]">
+            <img className="h-full w-full" src={Camera} alt="camera" />
+          </div>
           <p className=" text-xs text-grey-4">
             <span
               className={`${!currentImg ? 'text-grey-4' : 'text-primary-2'}`}

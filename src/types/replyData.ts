@@ -33,6 +33,7 @@ export interface MyRepliesType {
   recordCreatedAt: string
   recordId: number
   title: string
+  recordWriterNickname: string
 }
 
 export interface DeleteReplyType {

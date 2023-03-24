@@ -43,7 +43,9 @@ function RecordCard({
       } shrink-0 rounded-2xl ${ColorName} flex cursor-pointer flex-col items-center justify-center`}
       onClick={() => handleClickRecord(recordId)}
     >
-      <RecordIcon width={100} height={100} />
+      <div className="aspect-square w-[100px]">
+        <RecordIcon className="h-full w-full" />
+      </div>
       <div className="mt-4 w-full text-sm font-semibold text-grey-10">
         <p className="w-full truncate px-5 text-center">{title}</p>
       </div>
