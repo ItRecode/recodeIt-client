@@ -4,7 +4,7 @@ import useSwipe from '@hooks/useSwipe'
 import { parentCategoryID } from 'types/category'
 import RecordCard from '@components/RecordCard'
 
-export default function TogetherSlider({
+function TogetherSlider({
   randomRecordData,
   parentCategoryId,
 }: {
@@ -48,3 +48,5 @@ export default function TogetherSlider({
     </div>
   )
 }
+
+export const MemoizedTogetherSlider = React.memo(TogetherSlider)

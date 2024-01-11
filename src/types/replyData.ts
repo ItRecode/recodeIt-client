@@ -16,3 +16,27 @@ export interface CommentRequestDtoType {
   recordId: number
   size: number
 }
+
+export interface MyCommentType {
+  commentCreatedAt: string
+  commentId: number
+  content: string
+  nickname: string
+}
+
+export interface MyRepliesType {
+  categoryName: string
+  colorName: string
+  commentsCount: number
+  iconName: string
+  myCommentDtos: []
+  recordCreatedAt: string
+  recordId: number
+  title: string
+  recordWriterNickname: string
+}
+
+export interface DeleteReplyType {
+  commentId: number
+  recordId: string | undefined
+}

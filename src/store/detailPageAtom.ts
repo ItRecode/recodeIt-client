@@ -33,3 +33,8 @@ export const modifyComment = atom<{
     imageUrl: '',
   },
 })
+
+export const checkFromDetailPage = atom<boolean>({
+  key: 'fromDetailPage',
+  default: false,
+})

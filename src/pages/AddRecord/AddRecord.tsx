@@ -16,10 +16,10 @@ import { useQuery } from '@tanstack/react-query'
 import Loading from '@components/Loading'
 import { parentCategoryID } from 'types/category'
 import { CELEBRATION_ID } from '@assets/constant/constant'
-import ParentCategoryTab from '@components/ParrentCategoryTab'
 import AddRecordTitle from './AddRecordTitle'
 import AddRecordInput from './AddRecordInput'
 import { useCheckMobile } from '@hooks/useCheckMobile'
+import MemoizedParentCategoryTab from '@components/ParrentCategoryTab'
 
 export type FormDataType = {
   selectedCategory: number
@@ -223,7 +223,7 @@ export default function AddRecord() {
               isModify && 'pointer-events-none'
             } sticky top-0 left-0 z-[5] bg-grey-1`}
           >
-            <ParentCategoryTab
+            <MemoizedParentCategoryTab
               parentCategoryId={parentCategoryId}
               setParentCategoryId={setParentCategoryId}
               isModify={isModify}

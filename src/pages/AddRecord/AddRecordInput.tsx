@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { CELEBRATION_ID, INPUT_DETAILS } from '@assets/constant/constant'
+
 import { parentCategoryID } from 'types/category'
 
 interface Props {
@@ -30,9 +30,7 @@ function AddRecordInput({
   }, [parentCategoryId])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > INPUT_DETAILS.MAX_INPUT_TYPING) {
-      return
-    }
+
     setRecordTitle(e.target.value)
   }
 
@@ -60,6 +58,7 @@ function AddRecordInput({
         onChange={(e) => handleChange(e)}
         type="text"
         value={modifyTitle ? modifyTitle : recordTitle}
+        maxLength={RECORD_TITLE_MAX_LENGTH}
       />
       <span className=" text-xs text-grey-4">{`${recordTitle.length}/${INPUT_DETAILS.MAX_INPUT_TYPING}`}</span>
     </div>

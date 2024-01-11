@@ -1,28 +1,43 @@
 import { CELEBRATION_ID } from '@assets/constant/constant'
 import Category from '@components/Category'
-import ParentCategoryTab from '@components/ParrentCategoryTab'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { parentCategoryID } from 'types/category'
 import { ReactComponent as Collapse } from '@assets/collect_page_icon/collapse.svg'
 import { keyOfRankingPeriod, RANKINGPERIOD } from '@assets/constant/ranking'
 import { useQuery } from '@tanstack/react-query'
-import { getRanking } from '@apis/record'
+import { getRanking, getTotalRecordCount } from '@apis/record'
 import { IRankingRecordData } from 'types/recordData'
 import RankingItem from '@components/RankingItem'
 import { ReactComponent as DownArrow } from '@assets/ranking_down_arrow.svg'
+import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil'
+import {
+  parentCategoryIdAtomColletPage,
+  subCategoryIdAtomCollectPage,
+} from '@store/collectPageAtom'
+import { checkFromDetailPage } from '@store/detailPageAtom'
+import RankingItemNoData from '@components/RankingItemNoData'
+import MemoizedParentCategoryTab from '@components/ParrentCategoryTab'
 
 export default function CollectRanking({
   setOpenModal,
   rankingPeriod,
+  setRankingPeriod,
 }: {
   setOpenModal: Dispatch<SetStateAction<boolean>>
   rankingPeriod: keyOfRankingPeriod
+  setRankingPeriod: SetterOrUpdater<keyOfRankingPeriod>
 }) {
   const [parentCategoryId, setParentCategoryId] =
-    useState<parentCategoryID>(CELEBRATION_ID)
-  const [choosedCategoryId, setChoosedCategoryId] = useState(CELEBRATION_ID)
+    useRecoilState<parentCategoryID>(parentCategoryIdAtomColletPage)
+  const [choosedCategoryId, setChoosedCategoryId] = useRecoilState(
+    subCategoryIdAtomCollectPage
+  )
   const [rankingData, setRankingData] = useState<IRankingRecordData[]>()
   const [rankingState, setRankingState] = useState(0)
+  const [rankingList, setRankingList] = useState<IRankingRecordData[]>()
+  const [plusBtnState, setPlusBtnState] = useState(false)
+  const isFromDetailPage = useRecoilValue(checkFromDetailPage)
+  const [rankingAggregationTime, setRankingAggregationTime] = useState<string>()
 
   const { data, isSuccess } = useQuery(
     ['ranking', choosedCategoryId, rankingPeriod],
@@ -35,21 +50,49 @@ export default function CollectRanking({
     }
   )
 
+  const { data: totalRecordCount } = useQuery(
+    ['totalRecordCount'],
+    getTotalRecordCount
+  )
+
   useEffect(() => {
     if (isSuccess) {
-      if (rankingState === 0) {
-        setRankingData(data.data.recordRankingDtos.slice(0, 5))
-      } else {
-        setRankingData(data.data.recordRankingDtos)
+      setRankingData(data.data.recordRankingDtos)
+      if (rankingPeriod === 'DAY') {
+        setRankingAggregationTime(data.data.rankingAggregationTime)
       }
     }
-  }, [data, isSuccess, rankingPeriod, choosedCategoryId, rankingState])
+  }, [data, isSuccess])
+
+  useEffect(() => {
+    if (rankingData !== undefined) {
+      if (rankingState === 0) {
+        setRankingList(rankingData.slice(0, 5))
+        if (rankingData.length > 5) setPlusBtnState(true)
+      } else {
+        setRankingList(rankingData)
+        setPlusBtnState(false)
+      }
+    }
+    if (rankingData?.length === 0) setPlusBtnState(false)
+  }, [rankingPeriod, choosedCategoryId, rankingState, rankingData])
+
+  useEffect(() => {
+    if (!isFromDetailPage) {
+      setParentCategoryId(CELEBRATION_ID)
+      setRankingPeriod('TOTAL')
+    }
+  }, [])
 
   return (
     <div className="mt-4 w-full">
       <div className="pl-[26px]">
         <p className="text-sm leading-none">
-          총 <span className="text-primary-2">개</span> 의 레코딧
+          총{' '}
+          <span className="text-primary-2">
+            {totalRecordCount?.data.toLocaleString()} 개
+          </span>
+          의 레코딧
         </p>
         <p className="mt-6 text-2xl font-semibold leading-none">
           많이 레코딧 받고 있어요!
@@ -57,7 +100,7 @@ export default function CollectRanking({
       </div>
 
       <section id="parentCategory" className="mt-[22px]">
-        <ParentCategoryTab
+        <MemoizedParentCategoryTab
           parentCategoryId={parentCategoryId}
           setParentCategoryId={setParentCategoryId}
         />
@@ -73,17 +116,32 @@ export default function CollectRanking({
       </section>
       <section
         id="periodCategory"
-        className="mt-4 flex cursor-pointer justify-end px-6"
-        onClick={() => setOpenModal(true)}
+        className={`${
+          rankingPeriod === 'DAY' ? 'justify-between' : 'justify-end'
+        } mt-4 flex cursor-pointer px-6`}
       >
-        <p className="mr-1.5 text-xs leading-6 text-grey-8">
-          {RANKINGPERIOD[rankingPeriod]}
-        </p>
-        <Collapse />
+        {rankingPeriod === 'DAY' && (
+          <div className="text-xs leading-6 text-grey-8">
+            {rankingAggregationTime !== undefined &&
+              `${new Date(rankingAggregationTime)
+                .getHours()
+                .toString()
+                .padStart(2, '0')}:${new Date(rankingAggregationTime)
+                .getMinutes()
+                .toString()
+                .padStart(2, '0')} 기준`}
+          </div>
+        )}
+        <div className="flex" onClick={() => setOpenModal(true)}>
+          <p className="mr-1.5 text-xs leading-6 text-grey-8">
+            {RANKINGPERIOD[rankingPeriod]}
+          </p>
+          <Collapse />
+        </div>
       </section>
       <section id="rankingList" className="mt-8">
-        {rankingData &&
-          rankingData.map((item, index) => {
+        {rankingList?.length !== 0 ? (
+          rankingList?.map((item, index) => {
             const colorName = `bg-${item.colorName}`
             return (
               <RankingItem
@@ -98,8 +156,13 @@ export default function CollectRanking({
                 iconName={item.iconName}
               />
             )
-          })}
-        {rankingState < 1 && (
+          })
+        ) : (
+          <div className="mb-8">
+            <RankingItemNoData />
+          </div>
+        )}
+        {plusBtnState && (
           <button
             className="flex w-full cursor-pointer items-center justify-center border-t border-solid border-grey-3 bg-transparent p-4 text-primary-2"
             onClick={() => {

@@ -43,7 +43,7 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
     )
   }
 
-  if (!user && route?.indexOf('myrecord')) {
+  if (!user && route?.indexOf('myrecord') !== -1) {
     return (
       <Alert
         visible={true}
@@ -60,6 +60,26 @@ const ProtectedRoute = ({ children, route }: RouteProps) => {
         onClose={() => navigate('/')}
         onCancel={() => navigate('/')}
         onConfirm={() => redirectPage('/myrecord')}
+      />
+    )
+  }
+
+  if (!user && route?.indexOf('withdraw') !== -1) {
+    return (
+      <Alert
+        visible={true}
+        mainMessage={
+          <div className="text-base font-semibold leading-6">
+            비회원은 계정을
+            <br />
+            <span className="text-sub-1">탈퇴</span> 할 수 없어요
+          </div>
+        }
+        cancelMessage="닫기"
+        confirmMessage="로그인"
+        onClose={() => navigate('/')}
+        onCancel={() => navigate('/')}
+        onConfirm={() => redirectPage('/setting')}
       />
     )
   }

@@ -2,30 +2,30 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { ReactComponent as CalendarIcon } from '@assets/myRecordIcon/calendar.svg'
-import { useMyRecordByDate } from '@react-query/hooks/useMyRecordByDate'
 import TodayRecord from './TodayRecord'
 import MemoryRecord from './MemoryRecord'
 import SearchInput from './Common/SearchInput'
 import Calendar from './Calendar/Calendar'
 import { searchedKeyword } from '@store/myRecordAtom'
+import useDebounce from '@hooks/useDebounce'
 
 export default function MyRecord() {
   const navigate = useNavigate()
-  const { isLoading, monthYear } = useMyRecordByDate()
   const [isOpenCalendar, setIsOpenCalendar] = useState(false)
   const [keyword, setKeyword] = useState('')
+  const [isClickedInput, setIsClickedInput] = useState(false)
   const setSearchedKeyword = useSetRecoilState(searchedKeyword)
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && keyword.length > 0) {
-      navigate('/myrecord/search')
-      setSearchedKeyword({ keyword })
-    }
-  }
-
-  if (isLoading) {
-    return <></>
-  }
+  useDebounce(
+    () => {
+      if (keyword.length > 0) {
+        navigate('/myrecord/search')
+        setSearchedKeyword({ keyword })
+      }
+    },
+    500,
+    [keyword]
+  )
 
   return (
     <>
@@ -36,8 +36,9 @@ export default function MyRecord() {
         >
           <SearchInput
             value={keyword}
-            onKeyUp={handleSearch}
             setKeyword={setKeyword}
+            setIsClickedInput={setIsClickedInput}
+            placeholder={isClickedInput ? `` : `레코드 제목을 입력하세요`}
           />
         </section>
         <section id="my-today-record">
@@ -59,9 +60,7 @@ export default function MyRecord() {
           <MemoryRecord />
         </section>
       </div>
-      {isOpenCalendar && (
-        <Calendar monthYear={monthYear} setIsOpenCalendar={setIsOpenCalendar} />
-      )}
+      {isOpenCalendar && <Calendar setIsOpenCalendar={setIsOpenCalendar} />}
     </>
   )
 }

@@ -5,12 +5,15 @@ import { ReactComponent as ScrollTop } from '@assets/collect_page_icon/scrollTop
 import CollectRanking from './CollectRanking'
 import PeriodModal from './PeriodModal'
 import { keyOfRankingPeriod } from '@assets/constant/ranking'
+import { useRecoilState } from 'recoil'
+import { rankingPeriodAtom } from '@store/collectPageAtom'
 
 export default function Collect() {
   const collectRef: React.RefObject<HTMLDivElement> = useRef(null)
   const [isScroll, setIsScroll] = useState(false)
 
-  const [rankingPeriod, setRankingPeriod] = useState<keyOfRankingPeriod>('DAY')
+  const [rankingPeriod, setRankingPeriod] =
+    useRecoilState<keyOfRankingPeriod>(rankingPeriodAtom)
   const [openModal, setOpenModal] = useState(false)
 
   const NAVBAR_HEIGHT = 60
@@ -73,10 +76,11 @@ export default function Collect() {
             className={`fixed z-[20] cursor-pointer`}
           />
         )}
-        <section id="ranking" className="w-full">
+        <section id="ranking" className="w-full pt-4">
           <CollectRanking
             setOpenModal={setOpenModal}
             rankingPeriod={rankingPeriod}
+            setRankingPeriod={setRankingPeriod}
           />
         </section>
         <RecentRecord />

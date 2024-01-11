@@ -2,7 +2,7 @@ import { CELEBRATION_ID, CONSOLATION_ID } from '@assets/constant/constant'
 import React, { Dispatch, SetStateAction } from 'react'
 import { parentCategoryID } from 'types/category'
 
-export default function ParentCategoryTab({
+const MemoizedParentCategoryTab = React.memo(function ParentCategoryTab({
   parentCategoryId,
   setParentCategoryId,
   isModify,
@@ -60,4 +60,6 @@ export default function ParentCategoryTab({
       <hr className="m-0 h-[1px] border-0 bg-grey-3" />
     </>
   )
-}
+})
+
+export default MemoizedParentCategoryTab

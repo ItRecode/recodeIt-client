@@ -4,6 +4,8 @@ export const INPUT_DETAILS = Object.freeze({
   MIN_TYPING: 0,
 })
 
+export const RECORD_TITLE_MAX_LENGTH = 12
+
 export const TEXT_DETAILS = Object.freeze({
   CELEBRATION: 'celebration',
   CONSOLATION: 'consolation',
@@ -36,3 +38,6 @@ export const INPUT_MODE = Object.freeze({
   REPLY: 'reply',
   NESTEDREPLY: 'nestedReply',
 })
+
+export const NICKNAME_MIN_LENGTH = 2
+export const NICKNAME_MAX_LENGTH = 8

@@ -1,24 +1,46 @@
-import ParentCategoryTab from '@components/ParrentCategoryTab'
 import { usePreviousUrlWithStorage } from '@react-query/hooks/usePreviousUrlWithStorage'
-import { parentCategoryIdAtom } from '@store/mainPageAtom'
-import React from 'react'
-import { useRecoilState } from 'recoil'
+import { parentCategoryIdAtomMainPage } from '@store/mainPageAtom'
+import React, { useEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { parentCategoryID } from 'types/category'
-import MixRecord from './MixRecord'
+// import MixRecord from './MixRecord'
 import Ranking from './Ranking'
 import Together from './Together'
+import { ReactComponent as HomeImg } from '@assets/home_img.svg'
+import { useNavigate } from 'react-router-dom'
+import { checkFromDetailPage } from '@store/detailPageAtom'
+import { CELEBRATION_ID } from '@assets/constant/constant'
+import MemoizedParentCategoryTab from '@components/ParrentCategoryTab'
 
 export default function Main() {
   const [parentCategoryID, setParentCategoryID] =
-    useRecoilState<parentCategoryID>(parentCategoryIdAtom)
+    useRecoilState<parentCategoryID>(parentCategoryIdAtomMainPage)
+
   usePreviousUrlWithStorage('sessionStorage')
+
+  const navigate = useNavigate()
+  const isFromDetailPage = useRecoilValue(checkFromDetailPage)
+
+  useEffect(() => {
+    if (!isFromDetailPage) {
+      setParentCategoryID(CELEBRATION_ID)
+    }
+  }, [])
+
   return (
     <>
       <section id="mixRecord">
-        <MixRecord />
+        {/* <MixRecord /> */}
+        <div className="w-full cursor-pointer p-0">
+          <HomeImg
+            width="100%"
+            height="100%"
+            onClick={() => navigate('/record/31')}
+          />
+        </div>
       </section>
       <section id="tab" className="pt-3.5">
-        <ParentCategoryTab
+        <MemoizedParentCategoryTab
           parentCategoryId={parentCategoryID}
           setParentCategoryId={setParentCategoryID}
         />

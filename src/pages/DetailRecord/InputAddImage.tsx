@@ -2,21 +2,28 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ReactComponent as Camera } from '@assets/camera.svg'
 import { ReactComponent as Plus } from '@assets/plus.svg'
 import { RECORD_DETAIL_INPUT_IMAGE_HEIGHT } from '@assets/constant/constant'
+import { checkFileSize } from '@utils/fileSize'
 
 interface AddImageType {
   image: string
   setImage: Dispatch<SetStateAction<string>>
   setImageFile: Dispatch<SetStateAction<File | null>>
   setInputSectionHeight: Dispatch<SetStateAction<number>>
+  setIsOpenToast: Dispatch<SetStateAction<boolean>>
 }
 
-export default function ReplyInputAddImage({
+export default function InputAddImage({
   image,
   setImage,
   setImageFile,
   setInputSectionHeight,
+  setIsOpenToast,
 }: AddImageType) {
   const handleSelectImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (checkFileSize(e, () => setIsOpenToast(true))) {
+      return
+    }
+
     encodeFile((e.target.files as FileList)[0])
 
     setImage(e.target.value)

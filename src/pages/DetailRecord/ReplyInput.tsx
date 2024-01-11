@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { ReactComponent as Close } from '@assets/icon_closed.svg'
 import { useState } from 'react'
 import { useRef } from 'react'
@@ -12,13 +12,14 @@ import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { scrollTarget } from '@store/atom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import InputSnackBar from './InputSnackBar'
-import ReplyInputAddImage from './InputAddImage'
+import InputAddImage from './InputAddImage'
 import InputTextarea from './InputTextarea'
 import {
   DetailPageInputMode,
   modifyComment,
   nestedReplyState,
 } from '@store/detailPageAtom'
+import Toast from '@components/Toast'
 
 export default function ReplyInput({
   setInputSectionHeight,
@@ -28,6 +29,8 @@ export default function ReplyInput({
   recordIdParams: string | undefined
 }) {
   const queryClient = useQueryClient()
+
+  const [isOpenToast, setIsOpenToast] = useState(false)
 
   const [image, setImage] = useState<string>('')
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -162,8 +165,25 @@ export default function ReplyInput({
     },
   })
 
+  useEffect(() => {
+    if (updateReply.commentId !== 0) setText(updateReply.content)
+  }, [updateReply])
+
   return (
     <>
+      {isOpenToast && (
+        <Toast
+          visible={true}
+          timeLimit={2}
+          message={
+            <>
+              5MB 이상은 {<br />}
+              첨부할 수 없습니다.
+            </>
+          }
+          onClose={() => setIsOpenToast(false)}
+        />
+      )}
       <InputSnackBar
         setText={setText}
         setImage={setImage}
@@ -174,11 +194,12 @@ export default function ReplyInput({
         encType="multipart/form-data"
         onSubmit={handleSubmitReplyData}
       >
-        <ReplyInputAddImage
+        <InputAddImage
           image={image}
           setImage={setImage}
           setImageFile={setImageFile}
           setInputSectionHeight={setInputSectionHeight}
+          setIsOpenToast={setIsOpenToast}
         />
         <div className=" w-full rounded-lg bg-grey-2 py-4 px-3">
           {image !== '' && (

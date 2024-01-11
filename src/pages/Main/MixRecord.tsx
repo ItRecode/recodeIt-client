@@ -90,6 +90,7 @@ export default function MixRecord() {
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
+    adaptiveHeight: true,
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: false,
@@ -105,7 +106,7 @@ export default function MixRecord() {
           <Slider
             ref={stopRef}
             {...sliderSettings}
-            className="h-[326px] w-full"
+            className="aspect-[420/326] w-full"
           >
             {mixRecordData !== null &&
               mixRecordData.map((item, index) => {
@@ -114,7 +115,7 @@ export default function MixRecord() {
                 return (
                   <div
                     key={index}
-                    className={`!flex h-[326px] !w-[420px] flex-col items-center ${colorName}`}
+                    className={`!flex !h-[326px] !w-[420px] !max-w-[420px] flex-col items-center ${colorName}`}
                   >
                     <RecordIcon
                       width={100}
@@ -122,12 +123,31 @@ export default function MixRecord() {
                       className="mt-20 cursor-pointer"
                       onClick={() => handleClick(item.recordId)}
                     />
-                    <p
-                      className="line-clamp mt-2 h-[54px] w-[143px] cursor-pointer overflow-hidden text-center text-[12px] leading-normal text-grey-1"
+                    <div
+                      className="mt-2 cursor-pointer text-center text-[12px] leading-normal text-grey-1"
                       onClick={() => handleClick(item.recordId, item.commentId)}
                     >
-                      {item.commentContent}
-                    </p>
+                      <p>
+                        {item.commentContent
+                          .substring(0, 15)
+                          .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                      </p>
+                      {item.commentContent.length > 15 && (
+                        <p>
+                          {item.commentContent
+                            .substring(15, 30)
+                            .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                        </p>
+                      )}
+                      {item.commentContent.length > 30 && (
+                        <p>
+                          {item.commentContent
+                            .substring(30, 44)
+                            .replaceAll('(^\\p{Z}+|\\p{Z}+$)', '')}
+                          {item.commentContent.length > 44 && <span>...</span>}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )
               })}
